@@ -105,7 +105,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
           ),
         ),
-        SizedBox(width: 10,),
+        SizedBox(
+          width: 10,
+        ),
         _selectedSurah != null
             ? Expanded(
                 child: Padding(
@@ -182,7 +184,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       ],
                     )),
                   ),
-                  Text(e.tr, style: const TextStyle(color: Colors.black54, fontSize: 20)),
+                  Text(
+                    e.tr,
+                    style: const TextStyle(color: Colors.black54, fontSize: 20),
+                    textDirection: TextDirection.ltr,
+                  ),
                 ],
               ),
             ))
