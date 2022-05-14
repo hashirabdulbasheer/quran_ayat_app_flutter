@@ -203,13 +203,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         Expanded(
                           child: Text(
                             e.ar,
-                            style: const TextStyle(color: Colors.black, fontSize: 25),
+                            style: const TextStyle(color: Colors.black, fontSize: 30),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       ],
                     )),
                   ),
+                  const SizedBox(height: 10,),
                   Text(
                     e.tr,
                     style: const TextStyle(color: Colors.black54, fontSize: 20),
