@@ -20,6 +20,32 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Quran Ayat"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                if (_selectedSurah != null) {
+                  int prevAyat = _selectedAyat - 1;
+                  if (prevAyat > 0) {
+                    setState(() {
+                      _selectedAyat = prevAyat;
+                    });
+                  }
+                }
+              },
+              icon: const Icon(Icons.arrow_back)),
+          IconButton(
+              onPressed: () {
+                if (_selectedSurah != null) {
+                  int nextAyat = _selectedAyat + 1;
+                  if (nextAyat <= _selectedSurah!.totalVerses) {
+                    setState(() {
+                      _selectedAyat = nextAyat;
+                    });
+                  }
+                }
+              },
+              icon: const Icon(Icons.arrow_forward))
+        ],
       ),
       body: FutureBuilder<List<NQSurahTitle>>(
         future: NobleQuran.getSurahList(), // async work
