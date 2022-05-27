@@ -131,8 +131,18 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                 Row(
                                   children: [Expanded(child: Text(words[index].word.ar))],
                                 ),
+                                const SizedBox(height: 10),
                                 Row(
-                                  children: [Expanded(child: Text(words[index].word.tr))],
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                        child: Directionality(
+                                            textDirection: TextDirection.ltr,
+                                            child: Text(
+                                              words[index].word.tr,
+                                              textAlign: TextAlign.right,
+                                            )))
+                                  ],
                                 ),
                               ]));
                             },
@@ -172,7 +182,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
 
   /// search part 1
   _search(String enteredText) {
-    if (enteredText.length > 3) {
+    if (enteredText.length > 2) {
       _watchDogTimer?.cancel();
       _watchDogTimer = Timer(const Duration(seconds: watchDogTimeoutSecs), () {
         List<String> words = enteredText.split(" ");
@@ -211,7 +221,11 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
   /// initialize
   Future<void> _initialize() async {
     stt.SpeechToText speech = stt.SpeechToText();
-    _isSpeechAvailable = await speech.initialize(onStatus: (status) {}, onError: (error) {});
+    _isSpeechAvailable = await speech.initialize(onStatus: (status) {
+      // print(status);
+    }, onError: (error) {
+      print(error);
+    });
     _log("Click record button for voice search or type");
   }
 
