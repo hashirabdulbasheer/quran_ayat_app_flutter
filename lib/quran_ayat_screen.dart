@@ -4,6 +4,8 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 
+import 'quran_search_screen.dart';
+
 class QuranAyatScreen extends StatefulWidget {
   const QuranAyatScreen({Key? key}) : super(key: key);
 
@@ -23,28 +25,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         actions: [
           IconButton(
               onPressed: () {
-                if (_selectedSurah != null) {
-                  int prevAyat = _selectedAyat - 1;
-                  if (prevAyat > 0) {
-                    setState(() {
-                      _selectedAyat = prevAyat;
-                    });
-                  }
-                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const QuranSearchScreen()),
+                );
               },
-              icon: const Icon(Icons.arrow_back)),
-          IconButton(
-              onPressed: () {
-                if (_selectedSurah != null) {
-                  int nextAyat = _selectedAyat + 1;
-                  if (nextAyat <= _selectedSurah!.totalVerses) {
-                    setState(() {
-                      _selectedAyat = nextAyat;
-                    });
-                  }
-                }
-              },
-              icon: const Icon(Icons.arrow_forward))
+              icon: const Icon(Icons.search)),
         ],
       ),
       body: FutureBuilder<List<NQSurahTitle>>(
@@ -74,8 +60,57 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.black12,
+                          shadowColor: Colors.transparent,
+                          textStyle:
+                              const TextStyle(color: Colors.deepPurple) // This is what you need!
+                          ),
+                      onPressed: () {
+                        if (_selectedSurah != null) {
+                          int prevAyat = _selectedAyat - 1;
+                          if (prevAyat > 0) {
+                            setState(() {
+                              _selectedAyat = prevAyat;
+                            });
+                          }
+                        }
+                      },
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.deepPurple,
+                      )),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.black12,
+                          shadowColor: Colors.transparent // This is what you need!
+                          ),
+                      onPressed: () {
+                        if (_selectedSurah != null) {
+                          int nextAyat = _selectedAyat + 1;
+                          if (nextAyat <= _selectedSurah!.totalVerses) {
+                            setState(() {
+                              _selectedAyat = nextAyat;
+                            });
+                          }
+                        }
+                      },
+                      child: const Icon(Icons.arrow_forward, color: Colors.deepPurple)),
+                ),
+              ],
+            ),
+
             /// header
             _displayHeader(surahTitles),
+
+            const SizedBox(height: 10),
 
             /// body
             Card(
@@ -115,8 +150,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             height: 80,
             child: DropdownSearch<NQSurahTitle>(
               items: surahTitles,
-              mode: Mode.MENU,
-              itemAsString: (surah) => "${surah?.number}) ${surah?.transliterationEn}",
+              popupProps: const PopupPropsMultiSelection.menu(),
+              itemAsString: (surah) => "${surah.number}) ${surah.transliterationEn}",
               dropdownSearchDecoration:
                   const InputDecoration(labelText: "Surah", hintText: "select surah"),
               onChanged: (value) {
@@ -131,21 +166,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
           ),
         ),
-        SizedBox(
-          width: 10,
-        ),
+        const SizedBox(width: 10),
         _selectedSurah != null
             ? Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
                   child: SizedBox(
                     width: 100,
                     height: 80,
                     child: DropdownSearch<int>(
-                      mode: Mode.MENU,
+                      popupProps: const PopupPropsMultiSelection.menu(showSearchBox: true),
                       dropdownSearchDecoration:
                           const InputDecoration(labelText: "Ayat", hintText: "ayat index"),
-                      showSearchBox: true,
                       items: List<int>.generate(_selectedSurah?.totalVerses ?? 0, (i) => i + 1),
                       onChanged: (value) {
                         setState(() {
@@ -210,7 +242,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       ],
                     )),
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     e.tr,
                     style: const TextStyle(color: Colors.black54, fontSize: 20),

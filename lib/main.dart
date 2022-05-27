@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:noble_quran/models/word.dart';
+import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/quran_search_screen.dart';
 
 import 'quran_ayat_screen.dart';
 
+List<NQWord> qrWords = [];
+
 void main() {
   runApp(const MyApp());
+  _loadQuranWords();
 }
 
 class MyApp extends StatelessWidget {
@@ -18,5 +24,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: const QuranAyatScreen(),
     );
+  }
+}
+
+/// load and save the quran words in memory
+_loadQuranWords() async {
+  for (var i = 0; i < 114; i++) {
+    List<List<NQWord>> words = await NobleQuran.getSurahWordByWord(i);
+    for (List<NQWord> aya in words) {
+      qrWords.addAll(aya);
+    }
   }
 }

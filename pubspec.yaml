@@ -29,7 +29,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  dropdown_search:
+  dropdown_search: ^4.0.1
+  speech_to_text: ^5.5.0
+  string_similarity: ^2.0.0
   noble_quran:
     git:
       url: https://github.com/hashirabdulbasheer/noble_quran_flutter_package.git
@@ -61,6 +63,11 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/sounds/speech_to_text_listening.m4r
+    - assets/sounds/speech_to_text_cancel.m4r
+    - assets/sounds/speech_to_text_stop.m4r
 
   # To add assets to your application, add an assets section, like this:
   # assets:
