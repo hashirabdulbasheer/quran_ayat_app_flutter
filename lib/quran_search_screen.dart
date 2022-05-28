@@ -151,10 +151,10 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                       ),
                     );
                   } else {
-                    return const Expanded(child: Center(child: CircularProgressIndicator()));
+                    return const Expanded(child: Center(child: Text("Waiting")));
                   }
                 } else {
-                  return const Expanded(child: Center(child: CircularProgressIndicator()));
+                  return const Expanded(child: Center(child: Text("Waiting")));
                 }
               })
         ],
@@ -201,13 +201,15 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     Future.delayed(const Duration(seconds: 1)).then((value) {
       List<QuranWord> results = qrWords
           .where((element) {
-            String normalized = QuranUtils.normalise(element.ar);
-            return normalized.similarityTo(enteredText) > 0.5;
+            String normalizedWord = QuranUtils.normalise(element.ar);
+            String normalizedEntered = QuranUtils.normalise(enteredText);
+            return normalizedWord.similarityTo(normalizedEntered) > 0.5;
           })
           .toList()
           .map((e) {
-            String normalized = QuranUtils.normalise(e.ar);
-            double score = normalized.similarityTo(enteredText);
+            String normalizedWord = QuranUtils.normalise(e.ar);
+            String normalizedEntered = QuranUtils.normalise(enteredText);
+            double score = normalizedWord.similarityTo(normalizedEntered);
             return QuranWord(word: e, similarityScore: score);
           })
           .toList();
