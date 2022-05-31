@@ -1,5 +1,3 @@
-import 'package:noble_quran/models/word.dart';
-
 import '../models/qr_word_model.dart';
 
 class QuranUtils {

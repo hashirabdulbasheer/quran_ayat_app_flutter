@@ -15,7 +15,7 @@ class QuranSearchScreen extends StatefulWidget {
 
 class QuranSearchScreenState extends State<QuranSearchScreen> {
   static const int listeningTimeoutSecs = 5;
-  static const int watchDogTimeoutSecs = 2;
+  static const int watchDogTimeoutSecs = 3;
 
   final TextEditingController _searchController = TextEditingController();
   bool _isSpeechAvailable = false;
@@ -60,12 +60,21 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                     child: TextField(
                         textAlign: TextAlign.right,
                         autofocus: true,
+                        style: const TextStyle(fontSize: 25),
                         textDirection: TextDirection.rtl,
                         onChanged: (value) => _search(value),
                         decoration: InputDecoration(
                             labelText: "Search a word",
-                            suffixIcon: IconButton(
-                                onPressed: () => _clear(), icon: const Icon(Icons.clear)),
+                            suffixIcon: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(
+                                    onPressed: () => _startListening(),
+                                    icon: const Icon(Icons.mic)),
+                                IconButton(
+                                    onPressed: () => _clear(), icon: const Icon(Icons.clear))
+                              ],
+                            ),
                             enabledBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey, width: 0.0),
                             ),
@@ -77,12 +86,6 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                             )),
                         controller: _searchController..text = _enteredText),
                   ),
-                  const SizedBox(width: 20),
-                  SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () => _startListening(), child: const Icon(Icons.mic)),
-                  )
                 ],
               ),
             ),
@@ -122,14 +125,20 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                           textDirection: TextDirection.rtl,
                           child: ListView.separated(
                             separatorBuilder: (context, index) {
-                              return const Divider();
+                              return const Divider(thickness: 1,);
                             },
                             itemCount: words.length,
                             itemBuilder: (context, index) {
                               return ListTile(
                                   title: Column(children: [
                                 Row(
-                                  children: [Expanded(child: Text(words[index].word.ar))],
+                                  children: [
+                                    Expanded(
+                                        child: Text(
+                                      words[index].word.ar,
+                                      style: const TextStyle(fontSize: 25),
+                                    ))
+                                  ],
                                 ),
                                 const SizedBox(height: 10),
                                 Row(
@@ -140,6 +149,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                             textDirection: TextDirection.ltr,
                                             child: Text(
                                               words[index].word.tr,
+                                              style: const TextStyle(fontSize: 25),
                                               textAlign: TextAlign.right,
                                             )))
                                   ],
@@ -213,6 +223,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
             return QuranWord(word: e, similarityScore: score);
           })
           .toList();
+      results = QuranUtils.removeDuplicates(results);
       results.sort((QuranWord a, QuranWord b) => b.similarityScore.compareTo(a.similarityScore));
       _resultsController.sink.add(results);
       _resultsController.done;
