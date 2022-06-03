@@ -7,7 +7,10 @@ import 'package:noble_quran/noble_quran.dart';
 import 'quran_search_screen.dart';
 
 class QuranAyatScreen extends StatefulWidget {
-  const QuranAyatScreen({Key? key}) : super(key: key);
+  final int? surahIndex;
+  final int? ayaIndex;
+
+  const QuranAyatScreen({Key? key, this.surahIndex, this.ayaIndex}) : super(key: key);
 
   @override
   QuranAyatScreenState createState() => QuranAyatScreenState();
@@ -16,6 +19,12 @@ class QuranAyatScreen extends StatefulWidget {
 class QuranAyatScreenState extends State<QuranAyatScreen> {
   NQSurahTitle? _selectedSurah;
   int _selectedAyat = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedAyat = widget.ayaIndex ?? 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,103 +61,103 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   Widget _body(List<NQSurahTitle> surahTitles) {
-    _selectedSurah ??= surahTitles[0];
+    int actualSurahIndex = widget.surahIndex != null ? widget.surahIndex!-1 : 0;
+    _selectedSurah ??= surahTitles[actualSurahIndex];
     return Scaffold(
-      bottomSheet: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.black12,
-                      shadowColor: Colors.transparent,
-                      textStyle:
-                      const TextStyle(color: Colors.deepPurple) // This is what you need!
-                  ),
-                  onPressed: () {
-                    if (_selectedSurah != null) {
-                      int prevAyat = _selectedAyat - 1;
-                      if (prevAyat > 0) {
-                        setState(() {
-                          _selectedAyat = prevAyat;
-                        });
-                      }
-                    }
-                  },
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.deepPurple,
-                  )),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.black12,
-                      shadowColor: Colors.transparent // This is what you need!
-                  ),
-                  onPressed: () {
-                    if (_selectedSurah != null) {
-                      int nextAyat = _selectedAyat + 1;
-                      if (nextAyat <= _selectedSurah!.totalVerses) {
-                        setState(() {
-                          _selectedAyat = nextAyat;
-                        });
-                      }
-                    }
-                  },
-                  child: const Icon(Icons.arrow_forward, color: Colors.deepPurple)),
-            ),
-          ],
-        ),
-      ),
-        body: SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-        child: Column(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-
-                /// header
-                _displayHeader(surahTitles),
-
-                const SizedBox(height: 10),
-
-                /// body
-                Card(
-                  elevation: 5,
-                  child: FutureBuilder<List<List<NQWord>>>(
-                    future: NobleQuran.getSurahWordByWord((_selectedSurah?.number ?? 1) - 1),
-                    // async work
-                    builder: (BuildContext context, AsyncSnapshot<List<List<NQWord>>> snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return const Padding(
-                              padding: EdgeInsets.all(8.0), child: Text('Loading....'));
-                        default:
-                          if (snapshot.hasError) {
-                            return Center(child: Text('Error: ${snapshot.error}'));
-                          } else {
-                            List<List<NQWord>> surahWords = snapshot.data as List<List<NQWord>>;
-                            return _ayatWidget(surahWords[_selectedAyat - 1]);
-                          }
+        bottomSheet: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.black12,
+                        shadowColor: Colors.transparent,
+                        textStyle:
+                            const TextStyle(color: Colors.deepPurple) // This is what you need!
+                        ),
+                    onPressed: () {
+                      if (_selectedSurah != null) {
+                        int prevAyat = _selectedAyat - 1;
+                        if (prevAyat > 0) {
+                          setState(() {
+                            _selectedAyat = prevAyat;
+                          });
+                        }
                       }
                     },
-                  ),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.deepPurple,
+                    )),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.black12,
+                        shadowColor: Colors.transparent // This is what you need!
+                        ),
+                    onPressed: () {
+                      if (_selectedSurah != null) {
+                        int nextAyat = _selectedAyat + 1;
+                        if (nextAyat <= _selectedSurah!.totalVerses) {
+                          setState(() {
+                            _selectedAyat = nextAyat;
+                          });
+                        }
+                      }
+                    },
+                    child: const Icon(Icons.arrow_forward, color: Colors.deepPurple)),
+              ),
+            ],
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+            child: Column(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    /// header
+                    _displayHeader(surahTitles),
+
+                    const SizedBox(height: 10),
+
+                    /// body
+                    Card(
+                      elevation: 5,
+                      child: FutureBuilder<List<List<NQWord>>>(
+                        future: NobleQuran.getSurahWordByWord((_selectedSurah?.number ?? 1) - 1),
+                        // async work
+                        builder:
+                            (BuildContext context, AsyncSnapshot<List<List<NQWord>>> snapshot) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return const Padding(
+                                  padding: EdgeInsets.all(8.0), child: Text('Loading....'));
+                            default:
+                              if (snapshot.hasError) {
+                                return Center(child: Text('Error: ${snapshot.error}'));
+                              } else {
+                                List<List<NQWord>> surahWords = snapshot.data as List<List<NQWord>>;
+                                return _ayatWidget(surahWords[_selectedAyat - 1]);
+                              }
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-
-
+                const SizedBox(
+                  height: 50,
+                ),
               ],
             ),
-            const SizedBox(height: 50,),
-
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 
   Widget _displayHeader(List<NQSurahTitle> surahTitles) {
@@ -238,7 +247,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-                    width: 100,
+                    width: 120,
                     child: Center(
                         child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

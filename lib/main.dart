@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/quran_search_screen.dart';
 
 import 'quran_ayat_screen.dart';
 

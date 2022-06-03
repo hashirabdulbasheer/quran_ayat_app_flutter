@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:quran_ayat/quran_ayat_screen.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/material.dart';
 import 'package:string_similarity/string_similarity.dart';
@@ -22,7 +23,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
   String _enteredText = "";
 
   final StreamController<List<QuranWord>> _resultsController =
-      StreamController<List<QuranWord>>.broadcast();
+  StreamController<List<QuranWord>>.broadcast();
 
   final StreamController<String> _logController = StreamController<String>.broadcast();
 
@@ -71,8 +72,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                 IconButton(
                                     onPressed: () => _startListening(),
                                     icon: const Icon(Icons.mic)),
-                                IconButton(
-                                    onPressed: () => _clear(), icon: const Icon(Icons.clear))
+                                IconButton(onPressed: () => _clear(), icon: const Icon(Icons.clear))
                               ],
                             ),
                             enabledBorder: const OutlineInputBorder(
@@ -125,36 +125,59 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                           textDirection: TextDirection.rtl,
                           child: ListView.separated(
                             separatorBuilder: (context, index) {
-                              return const Divider(thickness: 1,);
+                              return const Divider(
+                                thickness: 1,
+                              );
                             },
                             itemCount: words.length,
                             itemBuilder: (context, index) {
                               return ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>
+                                          QuranAyatScreen(surahIndex: words[index].word.sura,
+                                              ayaIndex: words[index].word.aya)),
+                                    );
+                                  },
                                   title: Column(children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                        child: Text(
-                                      words[index].word.ar,
-                                      style: const TextStyle(fontSize: 25),
-                                    ))
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Expanded(
-                                        child: Directionality(
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                            child: Text(
+                                              words[index].word.ar,
+                                              style: const TextStyle(fontSize: 25),
+                                            ))
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Expanded(
+                                            child: Directionality(
+                                                textDirection: TextDirection.ltr,
+                                                child: Text(
+                                                  words[index].word.tr,
+                                                  style: const TextStyle(fontSize: 25),
+                                                  textAlign: TextAlign.right,
+                                                )))
+                                      ],
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Directionality(
                                             textDirection: TextDirection.ltr,
                                             child: Text(
-                                              words[index].word.tr,
-                                              style: const TextStyle(fontSize: 25),
+                                              "${words[index].word.sura}:${words[index].word.aya}",
+                                              style: const TextStyle(
+                                                  fontSize: 15, color: Colors.black54),
                                               textAlign: TextAlign.right,
-                                            )))
-                                  ],
-                                ),
-                              ]));
+                                            ))
+                                      ],
+                                    )
+                                  ]));
                             },
                           ),
                         ),
@@ -211,17 +234,17 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     Future.delayed(const Duration(seconds: 1)).then((value) {
       List<QuranWord> results = qrWords
           .where((element) {
-            String normalizedWord = QuranUtils.normalise(element.ar);
-            String normalizedEntered = QuranUtils.normalise(enteredText);
-            return normalizedWord.similarityTo(normalizedEntered) > 0.5;
-          })
+        String normalizedWord = QuranUtils.normalise(element.ar);
+        String normalizedEntered = QuranUtils.normalise(enteredText);
+        return normalizedWord.similarityTo(normalizedEntered) > 0.5;
+      })
           .toList()
           .map((e) {
-            String normalizedWord = QuranUtils.normalise(e.ar);
-            String normalizedEntered = QuranUtils.normalise(enteredText);
-            double score = normalizedWord.similarityTo(normalizedEntered);
-            return QuranWord(word: e, similarityScore: score);
-          })
+        String normalizedWord = QuranUtils.normalise(e.ar);
+        String normalizedEntered = QuranUtils.normalise(enteredText);
+        double score = normalizedWord.similarityTo(normalizedEntered);
+        return QuranWord(word: e, similarityScore: score);
+      })
           .toList();
       results = QuranUtils.removeDuplicates(results);
       results.sort((QuranWord a, QuranWord b) => b.similarityScore.compareTo(a.similarityScore));
