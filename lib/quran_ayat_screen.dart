@@ -43,8 +43,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         primary: Colors.black12,
                         shadowColor: Colors.transparent,
                         textStyle:
-                            const TextStyle(color: Colors.deepPurple) // This is what you need!
-                        ),
+                        const TextStyle(color: Colors.deepPurple) // This is what you need!
+                    ),
                     onPressed: () {
                       if (_selectedSurah != null) {
                         int prevAyat = _selectedAyat - 1;
@@ -66,7 +66,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     style: ElevatedButton.styleFrom(
                         primary: Colors.black12,
                         shadowColor: Colors.transparent // This is what you need!
-                        ),
+                    ),
                     onPressed: () {
                       if (_selectedSurah != null) {
                         int nextAyat = _selectedAyat + 1;
@@ -125,6 +125,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+
                 /// header
                 _displayHeader(surahTitles),
 
@@ -176,7 +177,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               popupProps: const PopupPropsMultiSelection.menu(),
               itemAsString: (surah) => "${surah.number}) ${surah.transliterationEn}",
               dropdownSearchDecoration:
-                  const InputDecoration(labelText: "Surah", hintText: "select surah"),
+              const InputDecoration(labelText: "Surah", hintText: "select surah"),
               onChanged: (value) {
                 setState(() {
                   if (value != null) {
@@ -192,33 +193,35 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         const SizedBox(width: 10),
         _selectedSurah != null
             ? Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                  child: SizedBox(
-                    width: 100,
-                    height: 80,
-                    child: DropdownSearch<int>(
-                      popupProps: const PopupPropsMultiSelection.menu(showSearchBox: true),
-                      filterFn: (item, filter) {
-                        print("filter $filter -> ${QuranUtils.replaceFarsiNumber(filter)}");
-                        if ("$item" == QuranUtils.replaceFarsiNumber(filter)) {
-                          return true;
-                        }
-                        return false;
-                      },
-                      dropdownSearchDecoration:
-                          const InputDecoration(labelText: "Ayat", hintText: "ayat index"),
-                      items: List<int>.generate(_selectedSurah?.totalVerses ?? 0, (i) => i + 1),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedAyat = value ?? 1;
-                        });
-                      },
-                      selectedItem: _selectedAyat,
-                    ),
-                  ),
-                ),
-              )
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+            child: SizedBox(
+              width: 100,
+              height: 80,
+              child: DropdownSearch<int>(
+                popupProps: const PopupPropsMultiSelection.menu(showSearchBox: true),
+                filterFn: (item, filter) {
+                  if (filter.isEmpty) {
+                    return true;
+                  }
+                  if ("$item" == QuranUtils.replaceFarsiNumber(filter)) {
+                    return true;
+                  }
+                  return false;
+                },
+                dropdownSearchDecoration:
+                const InputDecoration(labelText: "Ayat", hintText: "ayat index"),
+                items: List<int>.generate(_selectedSurah?.totalVerses ?? 0, (i) => i + 1),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedAyat = value ?? 1;
+                  });
+                },
+                selectedItem: _selectedAyat,
+              ),
+            ),
+          ),
+        )
             : Container(),
       ],
     );
@@ -250,16 +253,17 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   List<Widget> _wordsWidgetList(List<NQWord> words) {
     return words
-        .map((e) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    width: 120,
-                    child: Center(
-                        child: Row(
+        .map((e) =>
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                width: 120,
+                child: Center(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
@@ -271,18 +275,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         ),
                       ],
                     )),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    e.tr,
-                    style: const TextStyle(color: Colors.black54, fontSize: 20),
-                    textDirection: TextDirection.ltr,
-                  ),
-                ],
               ),
-            ))
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                e.tr,
+                style: const TextStyle(color: Colors.black54, fontSize: 20),
+                textDirection: TextDirection.ltr,
+              ),
+            ],
+          ),
+        ))
         .toList();
   }
 }
