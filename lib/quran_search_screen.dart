@@ -47,113 +47,107 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Quran Search")),
-      bottomSheet: SizedBox(
-        height: 140,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Divider(
-              thickness: 2,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Row(
-                children: [
-                  StreamBuilder<String>(
-                      stream: _logController.stream,
-                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                        if (snapshot.hasData) {
-                          return Wrap(
-                            children: [
-                              Text(snapshot.data ?? ""),
-                            ],
-                          );
-                        }
-                        return Container();
-                      }),
-                ],
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(title: const Text("Quran Search")),
+        bottomSheet: SizedBox(
+          height: 140,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Divider(
+                thickness: 2,
               ),
-            ),
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                            textAlign: TextAlign.right,
-                            autofocus: true,
-                            style: const TextStyle(fontSize: 25),
-                            textDirection: TextDirection.rtl,
-                            onSubmitted: (value) {
-                              if (value.isNotEmpty) {
-                                FocusManager.instance.primaryFocus?.unfocus();
-                                _searchStep2(value);
-                              }
-                            },
-                            decoration: InputDecoration(
-                                suffixIcon: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                        onPressed: () => _startListening(),
-                                        icon: const Icon(Icons.mic)),
-                                    IconButton(
-                                        onPressed: () => _clear(), icon: const Icon(Icons.clear)),
-                                    IconButton(
-                                        onPressed: () {
-                                          if (_searchController.text.isNotEmpty) {
-                                            FocusManager.instance.primaryFocus?.unfocus();
-                                            _searchStep2(_searchController.text);
-                                          }
-                                        },
-                                        icon: const Icon(Icons.send))
-                                  ],
-                                ),
-                                hintText: "input a word",
-                                enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.0),
-                                ),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.0),
-                                ),
-                                border: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.0),
-                                )),
-                            controller: _searchController..text = _enteredText),
-                      ),
-                    ],
-                  ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Row(
+                  children: [
+                    StreamBuilder<String>(
+                        stream: _logController.stream,
+                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                          if (snapshot.hasData) {
+                            return Wrap(
+                              children: [
+                                Text(snapshot.data ?? ""),
+                              ],
+                            );
+                          }
+                          return Container();
+                        }),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            )
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
-          StreamBuilder<List<QuranWord>>(
-              stream: _resultsController.stream,
-              builder: (BuildContext context, AsyncSnapshot<List<QuranWord>> snapshot) {
-                if (snapshot.hasError) {
-                  return Expanded(child: Center(child: Text('Error: ${snapshot.error}')));
-                } else if (snapshot.hasData) {
-                  List<QuranWord> words = snapshot.data as List<QuranWord>;
-                  if (words.isNotEmpty) {
-                    return Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 150),
-                        child: Directionality(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                          textAlign: TextAlign.right,
+                          autofocus: true,
+                          style: const TextStyle(fontSize: 25),
                           textDirection: TextDirection.rtl,
+                          onSubmitted: (value) {
+                            if (value.isNotEmpty) {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              _searchStep2(value);
+                            }
+                          },
+                          decoration: InputDecoration(
+                              suffixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                      onPressed: () => _startListening(),
+                                      icon: const Icon(Icons.mic)),
+                                  IconButton(
+                                      onPressed: () => _clear(), icon: const Icon(Icons.clear)),
+                                  IconButton(
+                                      onPressed: () {
+                                        if (_searchController.text.isNotEmpty) {
+                                          FocusManager.instance.primaryFocus?.unfocus();
+                                          _searchStep2(_searchController.text);
+                                        }
+                                      },
+                                      icon: const Icon(Icons.send))
+                                ],
+                              ),
+                              hintText: "input a word",
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                              ),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey, width: 0.0),
+                              )),
+                          controller: _searchController..text = _enteredText),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              )
+            ],
+          ),
+        ),
+        body: Column(
+          children: [
+            StreamBuilder<List<QuranWord>>(
+                stream: _resultsController.stream,
+                builder: (BuildContext context, AsyncSnapshot<List<QuranWord>> snapshot) {
+                  if (snapshot.hasError) {
+                    return Expanded(child: Center(child: Text('Error: ${snapshot.error}')));
+                  } else if (snapshot.hasData) {
+                    List<QuranWord> words = snapshot.data as List<QuranWord>;
+                    if (words.isNotEmpty) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 150),
                           child: SizedBox(
                             height: MediaQuery.of(context).size.height - 100,
                             child: ListView.separated(
@@ -217,22 +211,22 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                             ),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      return Expanded(
+                          child: SizedBox(
+                              height: MediaQuery.of(context).size.height - 100,
+                              child: const Center(child: Text("Waiting"))));
+                    }
                   } else {
                     return Expanded(
                         child: SizedBox(
                             height: MediaQuery.of(context).size.height - 100,
                             child: const Center(child: Text("Waiting"))));
                   }
-                } else {
-                  return Expanded(
-                      child: SizedBox(
-                          height: MediaQuery.of(context).size.height - 100,
-                          child: const Center(child: Text("Waiting"))));
-                }
-              })
-        ],
+                })
+          ],
+        ),
       ),
     );
   }
