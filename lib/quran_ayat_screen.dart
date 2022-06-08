@@ -254,37 +254,45 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   List<Widget> _wordsWidgetList(List<NQWord> words) {
     return words
         .map((e) =>
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                width: 120,
-                child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            e.ar,
-                            style: const TextStyle(color: Colors.black, fontSize: 30),
-                            textAlign: TextAlign.center,
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => QuranSearchScreen(searchString: e.ar,)),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  width: 120,
+                  child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              e.ar,
+                              style: const TextStyle(color: Colors.black, fontSize: 30),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                      ],
-                    )),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                e.tr,
-                style: const TextStyle(color: Colors.black54, fontSize: 20),
-                textDirection: TextDirection.ltr,
-              ),
-            ],
+                        ],
+                      )),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  e.tr,
+                  style: const TextStyle(color: Colors.black54, fontSize: 20),
+                  textDirection: TextDirection.ltr,
+                ),
+              ],
+            ),
           ),
         ))
         .toList();

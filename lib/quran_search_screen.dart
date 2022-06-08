@@ -8,7 +8,9 @@ import 'models/qr_word_model.dart';
 import 'utils/utils.dart';
 
 class QuranSearchScreen extends StatefulWidget {
-  const QuranSearchScreen({Key? key}) : super(key: key);
+  final String? searchString;
+
+  const QuranSearchScreen({Key? key, this.searchString}) : super(key: key);
 
   @override
   QuranSearchScreenState createState() => QuranSearchScreenState();
@@ -33,6 +35,13 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
   void initState() {
     super.initState();
     _initialize();
+    if (widget.searchString != null && widget.searchString!.isNotEmpty) {
+      Future.delayed(const Duration(seconds: 1)).then((value) {
+        _enteredText = widget.searchString!;
+        _searchController.text = _enteredText;
+        _searchStep2(_enteredText);
+      });
+    }
   }
 
   @override
@@ -70,7 +79,10 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                           if (snapshot.hasData) {
                             return Wrap(
                               children: [
-                                Text(snapshot.data ?? ""),
+                                Directionality(
+                                  textDirection: TextDirection.ltr,
+                                  child: Text(snapshot.data ?? ""),
+                                ),
                               ],
                             );
                           }
@@ -266,8 +278,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
 
   /// search part 2
   _searchStep2(String enteredText) {
-    _log("Searching $enteredText");
-    Future.delayed(const Duration(seconds: 1)).then((value) {
+    _log("Searching  $enteredText  ");
+    Future.delayed(const Duration(seconds: 2)).then((value) {
       List<QuranWord> results = qrWords
           .where((element) {
             String normalizedWord = QuranUtils.normalise(element.ar);
@@ -286,7 +298,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
       results.sort((QuranWord a, QuranWord b) => b.similarityScore.compareTo(a.similarityScore));
       _resultsController.sink.add(results);
       _resultsController.done;
-      _log("Searching $enteredText ... Found ${results.length}");
+      _log("Searching  $enteredText ... Found ${results.length}");
     });
   }
 
