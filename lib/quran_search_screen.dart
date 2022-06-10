@@ -94,7 +94,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                         Expanded(
                                             child: Text(
                                           words[index].word.ar,
-                                          style: const TextStyle(fontSize: 25),
+                                          style: const TextStyle(fontSize: 30, fontFamily: "Alvi"),
                                         ))
                                       ],
                                     ),
