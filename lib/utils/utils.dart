@@ -1,6 +1,10 @@
+import 'package:noble_quran/models/bookmark.dart';
+
 import '../models/qr_word_model.dart';
 
 class QuranUtils {
+
+
   static String replaceFarsiNumber(String input) {
     var sb = StringBuffer();
     for (int i = 0; i < input.length; i++) {

@@ -32,6 +32,7 @@ dependencies:
   dropdown_search: ^4.0.1
   speech_to_text: ^5.5.0
   string_similarity: ^2.0.0
+  shared_preferences: ^2.0.15
   noble_quran:
     git:
       url: https://github.com/hashirabdulbasheer/noble_quran_flutter_package.git
