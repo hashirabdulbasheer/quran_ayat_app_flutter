@@ -3,8 +3,7 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 
 import 'quran_ayat_screen.dart';
-
-List<NQWord> qrWords = [];
+import 'utils/search_utils.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,10 +27,11 @@ class MyApp extends StatelessWidget {
 
 /// load and save the quran words in memory
 _loadQuranWords() async {
+  QuranSearch.globalQRWords = [];
   for (var i = 0; i < 114; i++) {
     List<List<NQWord>> words = await NobleQuran.getSurahWordByWord(i);
     for (List<NQWord> aya in words) {
-      qrWords.addAll(aya);
+      QuranSearch.globalQRWords.addAll(aya);
     }
   }
 }
