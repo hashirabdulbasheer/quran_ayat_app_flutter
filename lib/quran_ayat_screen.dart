@@ -1,5 +1,4 @@
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
@@ -153,6 +152,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     },
                   ),
                 ),
+
+                const SizedBox(height: 30),
               ],
             ),
             const SizedBox(
