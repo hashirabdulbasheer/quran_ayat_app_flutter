@@ -7,6 +7,7 @@ import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/utils/prefs_utils.dart';
 import 'package:quran_ayat/utils/utils.dart';
 
+import 'main.dart';
 import 'quran_search_screen.dart';
 
 class QuranAyatScreen extends StatefulWidget {
@@ -41,50 +42,64 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       child: Scaffold(
         bottomSheet: Padding(
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-          child: Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.black12,
-                        shadowColor: Colors.transparent,
-                        textStyle:
-                            const TextStyle(color: Colors.deepPurple) // This is what you need!
-                        ),
-                    onPressed: () {
-                      if (_selectedSurah != null) {
-                        int prevAyat = _selectedAyat - 1;
-                        if (prevAyat > 0) {
-                          setState(() {
-                            _selectedAyat = prevAyat;
-                          });
-                        }
-                      }
-                    },
-                    child: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.deepPurple,
-                    )),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.black12,
+                            shadowColor: Colors.transparent,
+                            textStyle:
+                                const TextStyle(color: Colors.deepPurple) // This is what you need!
+                            ),
+                        onPressed: () {
+                          if (_selectedSurah != null) {
+                            int prevAyat = _selectedAyat - 1;
+                            if (prevAyat > 0) {
+                              setState(() {
+                                _selectedAyat = prevAyat;
+                              });
+                            }
+                          }
+                        },
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.deepPurple,
+                        )),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.black12,
+                            shadowColor: Colors.transparent // This is what you need!
+                            ),
+                        onPressed: () {
+                          if (_selectedSurah != null) {
+                            int nextAyat = _selectedAyat + 1;
+                            if (nextAyat <= _selectedSurah!.totalVerses) {
+                              setState(() {
+                                _selectedAyat = nextAyat;
+                              });
+                            }
+                          }
+                        },
+                        child: const Icon(Icons.arrow_forward, color: Colors.deepPurple)),
+                  ),
+                ],
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.black12,
-                        shadowColor: Colors.transparent // This is what you need!
-                        ),
-                    onPressed: () {
-                      if (_selectedSurah != null) {
-                        int nextAyat = _selectedAyat + 1;
-                        if (nextAyat <= _selectedSurah!.totalVerses) {
-                          setState(() {
-                            _selectedAyat = nextAyat;
-                          });
-                        }
-                      }
-                    },
-                    child: const Icon(Icons.arrow_forward, color: Colors.deepPurple)),
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: Text(appVersion, style: TextStyle(fontSize: 10),),
+                  ),
+                ],
+              )
             ],
           ),
         ),

@@ -5,6 +5,9 @@ import 'package:noble_quran/noble_quran.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
 
+// TODO: Update before release
+const String appVersion = "v1.1";
+
 void main() {
   runApp(const MyApp());
   _loadQuranWords();
