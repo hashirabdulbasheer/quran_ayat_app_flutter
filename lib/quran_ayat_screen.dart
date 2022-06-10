@@ -186,7 +186,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               ],
             ),
             const SizedBox(
-              height: 50,
+              height: 100,
             ),
           ],
         ),
