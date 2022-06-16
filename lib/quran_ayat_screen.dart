@@ -37,107 +37,117 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
+    return Semantics(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        bottomSheet: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.black12,
-                            shadowColor: Colors.transparent,
-                            textStyle:
-                                const TextStyle(color: Colors.deepPurple) // This is what you need!
-                            ),
-                        onPressed: () {
-                          if (_selectedSurah != null) {
-                            int prevAyat = _selectedAyat - 1;
-                            if (prevAyat > 0) {
-                              setState(() {
-                                _selectedAyat = prevAyat;
-                              });
+      enabled: true,
+      container: true,
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          bottomSheet: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.black12,
+                              shadowColor: Colors.transparent,
+                              textStyle: const TextStyle(
+                                  color: Colors.deepPurple) // This is what you need!
+                              ),
+                          onPressed: () {
+                            if (_selectedSurah != null) {
+                              int prevAyat = _selectedAyat - 1;
+                              if (prevAyat > 0) {
+                                setState(() {
+                                  _selectedAyat = prevAyat;
+                                });
+                              }
                             }
-                          }
-                        },
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.deepPurple,
-                        )),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.black12,
-                            shadowColor: Colors.transparent // This is what you need!
-                            ),
-                        onPressed: () {
-                          if (_selectedSurah != null) {
-                            int nextAyat = _selectedAyat + 1;
-                            if (nextAyat <= _selectedSurah!.totalVerses) {
-                              setState(() {
-                                _selectedAyat = nextAyat;
-                              });
+                          },
+                          child: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.deepPurple,
+                          )),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.black12,
+                              shadowColor: Colors.transparent // This is what you need!
+                              ),
+                          onPressed: () {
+                            if (_selectedSurah != null) {
+                              int nextAyat = _selectedAyat + 1;
+                              if (nextAyat <= _selectedSurah!.totalVerses) {
+                                setState(() {
+                                  _selectedAyat = nextAyat;
+                                });
+                              }
                             }
-                          }
-                        },
-                        child: const Icon(Icons.arrow_forward, color: Colors.deepPurple)),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: Text(appVersion, style: TextStyle(fontSize: 10),),
-                  ),
-                ],
-              )
+                          },
+                          child: const Icon(Icons.arrow_forward, color: Colors.deepPurple)),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Text(
+                        "$appVersion uxQuran",
+                        style: TextStyle(fontSize: 10),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          appBar: AppBar(
+            title: const Text("Quran Ayat"),
+            actions: [
+              IconButton(
+                  tooltip: "go to search screen",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const QuranSearchScreen()),
+                    );
+                  },
+                  icon: const Icon(Icons.search)),
+              IconButton(
+                  tooltip: "display bookmark options",
+                  onPressed: () {
+                    _showBookmarkAlertDialog();
+                  },
+                  icon: _isThisBookmarkedAya()
+                      ? const Icon(Icons.bookmark)
+                      : const Icon(Icons.bookmark_border_outlined)),
             ],
           ),
-        ),
-        appBar: AppBar(
-          title: const Text("Quran Ayat"),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const QuranSearchScreen()),
-                  );
-                },
-                icon: const Icon(Icons.search)),
-            IconButton(
-                onPressed: () {
-                  _showBookmarkAlertDialog();
-                },
-                icon: _isThisBookmarkedAya()
-                    ? const Icon(Icons.bookmark)
-                    : const Icon(Icons.bookmark_border_outlined)),
-          ],
-        ),
-        body: FutureBuilder<List<NQSurahTitle>>(
-          future: NobleQuran.getSurahList(), // async work
-          builder: (BuildContext context, AsyncSnapshot<List<NQSurahTitle>> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return const Padding(padding: EdgeInsets.all(8.0), child: Text('Loading....'));
-              default:
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else {
-                  _surahTitles = snapshot.data as List<NQSurahTitle>;
-                  return _body(_surahTitles);
-                }
-            }
-          },
+          body: FutureBuilder<List<NQSurahTitle>>(
+            future: NobleQuran.getSurahList(), // async work
+            builder: (BuildContext context, AsyncSnapshot<List<NQSurahTitle>> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return const Padding(padding: EdgeInsets.all(8.0), child: Text('Loading....'));
+                default:
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    _surahTitles = snapshot.data as List<NQSurahTitle>;
+                    return _body(_surahTitles);
+                  }
+              }
+            },
+          ),
         ),
       ),
     );
@@ -200,54 +210,64 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       children: [
         Expanded(
           flex: 2,
-          child: SizedBox(
-            height: 80,
-            child: DropdownSearch<NQSurahTitle>(
-              items: surahTitles,
-              popupProps: const PopupPropsMultiSelection.menu(),
-              itemAsString: (surah) => "${surah.number}) ${surah.transliterationEn}",
-              dropdownSearchDecoration:
-                  const InputDecoration(labelText: "Surah", hintText: "select surah"),
-              onChanged: (value) {
-                setState(() {
-                  if (value != null) {
-                    _selectedSurah = value;
-                    _selectedAyat = 1;
-                  }
-                });
-              },
-              selectedItem: _selectedSurah,
+          child: Semantics(
+            enabled: true,
+            excludeSemantics: true,
+            label: 'dropdown to select surah',
+            child: SizedBox(
+              height: 80,
+              child: DropdownSearch<NQSurahTitle>(
+                items: surahTitles,
+                popupProps: const PopupPropsMultiSelection.menu(),
+                itemAsString: (surah) => "${surah.number}) ${surah.transliterationEn}",
+                dropdownSearchDecoration:
+                    const InputDecoration(labelText: "Surah", hintText: "select surah"),
+                onChanged: (value) {
+                  setState(() {
+                    if (value != null) {
+                      _selectedSurah = value;
+                      _selectedAyat = 1;
+                    }
+                  });
+                },
+                selectedItem: _selectedSurah,
+              ),
             ),
           ),
         ),
         const SizedBox(width: 10),
         _selectedSurah != null
             ? Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                  child: SizedBox(
-                    width: 100,
-                    height: 80,
-                    child: DropdownSearch<int>(
-                      popupProps: const PopupPropsMultiSelection.menu(showSearchBox: true),
-                      filterFn: (item, filter) {
-                        if (filter.isEmpty) {
-                          return true;
-                        }
-                        if ("$item" == QuranUtils.replaceFarsiNumber(filter)) {
-                          return true;
-                        }
-                        return false;
-                      },
-                      dropdownSearchDecoration:
-                          const InputDecoration(labelText: "Ayat", hintText: "ayat index"),
-                      items: List<int>.generate(_selectedSurah?.totalVerses ?? 0, (i) => i + 1),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedAyat = value ?? 1;
-                        });
-                      },
-                      selectedItem: _selectedAyat,
+                child: Semantics(
+                  enabled: true,
+                  excludeSemantics: true,
+                  label: 'dropdown to select ayat number',
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                    child: SizedBox(
+                      width: 100,
+                      height: 80,
+                      child: DropdownSearch<int>(
+                        popupProps: const PopupPropsMultiSelection.menu(showSearchBox: true),
+                        filterFn: (item, filter) {
+                          if (filter.isEmpty) {
+                            return true;
+                          }
+                          if ("$item" == QuranUtils.replaceFarsiNumber(filter)) {
+                            return true;
+                          }
+                          return false;
+                        },
+                        dropdownSearchDecoration:
+                            const InputDecoration(labelText: "Ayat", hintText: "ayat index"),
+                        items: List<int>.generate(_selectedSurah?.totalVerses ?? 0, (i) => i + 1),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedAyat = value ?? 1;
+                          });
+                        },
+                        selectedItem: _selectedAyat,
+                      ),
                     ),
                   ),
                 ),
@@ -258,24 +278,29 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   Widget _ayaWidget(List<NQWord> words) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Wrap(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.start,
-                runAlignment: WrapAlignment.end,
-                runSpacing: 10,
-                spacing: 5,
-                children: _wordsWidgetList(words),
+    return Semantics(
+      enabled: true,
+      excludeSemantics: false,
+      label: "quran ayat display with meaning",
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  alignment: WrapAlignment.start,
+                  runAlignment: WrapAlignment.end,
+                  runSpacing: 10,
+                  spacing: 5,
+                  children: _wordsWidgetList(words),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -283,48 +308,56 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   List<Widget> _wordsWidgetList(List<NQWord> words) {
     return words
-        .map((e) => InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => QuranSearchScreen(
-                            searchString: e.ar,
+        .map((e) => Semantics(
+              enabled: true,
+              excludeSemantics: true,
+              container: true,
+              child: Tooltip(
+                message: '${e.ar} ${e.tr}',
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => QuranSearchScreen(
+                                searchString: e.ar,
+                              )),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 120,
+                          child: Center(
+                              child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  e.ar,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 40, fontFamily: "Alvi"),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
                           )),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 120,
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              e.ar,
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 40, fontFamily: "Alvi"),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      )),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          e.tr,
+                          style: const TextStyle(color: Colors.black54, fontSize: 20),
+                          textDirection: TextDirection.ltr,
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      e.tr,
-                      style: const TextStyle(color: Colors.black54, fontSize: 20),
-                      textDirection: TextDirection.ltr,
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ))

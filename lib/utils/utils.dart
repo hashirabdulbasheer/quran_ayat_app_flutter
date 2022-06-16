@@ -1,8 +1,12 @@
-import 'package:noble_quran/models/bookmark.dart';
-
 import '../models/qr_word_model.dart';
 
 class QuranUtils {
+
+  static bool isArabic(String s) {
+    RegExp regex = RegExp(
+        "[\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufc3f]|[\ufe70-\ufefc]");
+    return regex.hasMatch(s);
+  }
 
 
   static String replaceFarsiNumber(String input) {

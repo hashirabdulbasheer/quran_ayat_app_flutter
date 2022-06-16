@@ -5,26 +5,27 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:quran_ayat/main.dart';
+import 'package:quran_ayat/utils/utils.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('is_arabic_test', (WidgetTester tester) async {
+    String input = "الحمد لله";
+    bool isArabic = QuranUtils.isArabic(input);
+    expect(isArabic, true);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    input = "Alhamdulillah";
+    isArabic = QuranUtils.isArabic(input);
+    expect(isArabic, false);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    input = "Alhamdulillah الحمدلله";
+    isArabic = QuranUtils.isArabic(input);
+    expect(isArabic, true);
+
+    input = "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ";
+    isArabic = QuranUtils.isArabic(input);
+    expect(isArabic, true);
+
   });
 }

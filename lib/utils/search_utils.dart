@@ -29,10 +29,16 @@ class QuranSearch {
   static List<QuranWord> searchStep2(String enteredText, {List<NQWord>? allWords}) {
     List<NQWord> quranWords = allWords ?? QuranSearch.globalQRWords;
     List<QuranWord> results = [];
+    bool isArabic = QuranUtils.isArabic(enteredText);
     for (NQWord word in quranWords) {
-      String normalizedWord = QuranUtils.normalise(word.ar);
-      String normalizedEntered = QuranUtils.normalise(enteredText);
-      double score = normalizedWord.similarityTo(normalizedEntered);
+      double score = 0.0;
+      if(isArabic) {
+        String normalizedWord = QuranUtils.normalise(word.ar);
+        String normalizedEntered = QuranUtils.normalise(enteredText);
+        score = normalizedWord.similarityTo(normalizedEntered);
+      } else {
+        score = word.tr.similarityTo(enteredText);
+      }
       if (score > 0.5) {
         results.add(QuranWord(word: word, similarityScore: score));
       }
