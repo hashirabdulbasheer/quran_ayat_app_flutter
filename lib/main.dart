@@ -1,15 +1,19 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 // TODO: Update before release
-const String appVersion = "v1.1";
+const String appVersion = "v1.1.2";
 
 void main() {
   runApp(const MyApp());
+  if (kIsWeb) {
+    setUrlStrategy(PathUrlStrategy());
+  }
   _loadQuranWords();
 }
 

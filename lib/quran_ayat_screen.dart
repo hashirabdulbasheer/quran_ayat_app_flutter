@@ -1,4 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
@@ -24,15 +25,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   List<NQSurahTitle> _surahTitles = [];
   NQSurahTitle? _selectedSurah;
   int _selectedAyat = 1;
+  int _selectedSurahIndex = 1;
   NQBookmark? _currentBookmark;
 
   @override
   void initState() {
     super.initState();
     _selectedAyat = widget.ayaIndex ?? 1;
+    _selectedSurahIndex = widget.surahIndex != null ? widget.surahIndex! - 1 : 0;
     QuranPreferences.getBookmark().then((bookmark) {
       _currentBookmark = bookmark;
     });
+    _handleUrlPathsForWeb();
   }
 
   @override
@@ -154,8 +158,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   Widget _body(List<NQSurahTitle> surahTitles) {
-    int actualSurahIndex = widget.surahIndex != null ? widget.surahIndex! - 1 : 0;
-    _selectedSurah ??= surahTitles[actualSurahIndex];
+    _selectedSurah ??= surahTitles[_selectedSurahIndex];
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -362,6 +365,29 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               ),
             ))
         .toList();
+  }
+
+  void _handleUrlPathsForWeb() {
+    if(kIsWeb) {
+      List<String> segs = Uri.base.pathSegments;
+      if(segs.length > 1) {
+        // have more than one
+        // the last two paths should be surah/ayat format
+        try {
+          _selectedAyat = int.parse(segs[segs.length - 1]);
+          _selectedSurahIndex = int.parse(segs[segs.length - 2]);
+          _selectedSurahIndex = _selectedSurahIndex - 1;
+        } catch(_) {}
+      } else if(segs.isNotEmpty) {
+        // has only one
+        // the last path will be surah index
+        try {
+          _selectedAyat = 1;
+          _selectedSurahIndex = int.parse(segs[segs.length - 1]);
+          _selectedSurahIndex = _selectedSurahIndex - 1;
+        } catch(_) {}
+      }
+    }
   }
 
   ///
