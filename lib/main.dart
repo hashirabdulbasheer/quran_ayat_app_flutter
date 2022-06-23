@@ -7,7 +7,7 @@ import 'utils/search_utils.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 // TODO: Update before release
-const String appVersion = "v1.1.2";
+const String appVersion = "v1.1.3";
 
 void main() {
   runApp(const MyApp());

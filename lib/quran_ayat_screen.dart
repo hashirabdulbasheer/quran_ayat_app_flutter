@@ -15,7 +15,8 @@ class QuranAyatScreen extends StatefulWidget {
   final int? surahIndex;
   final int? ayaIndex;
 
-  const QuranAyatScreen({Key? key, this.surahIndex, this.ayaIndex}) : super(key: key);
+  const QuranAyatScreen({Key? key, this.surahIndex, this.ayaIndex})
+      : super(key: key);
 
   @override
   QuranAyatScreenState createState() => QuranAyatScreenState();
@@ -32,7 +33,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   void initState() {
     super.initState();
     _selectedAyat = widget.ayaIndex ?? 1;
-    _selectedSurahIndex = widget.surahIndex != null ? widget.surahIndex! - 1 : 0;
+    _selectedSurahIndex =
+        widget.surahIndex != null ? widget.surahIndex! - 1 : 0;
     QuranPreferences.getBookmark().then((bookmark) {
       _currentBookmark = bookmark;
     });
@@ -61,7 +63,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               primary: Colors.black12,
                               shadowColor: Colors.transparent,
                               textStyle: const TextStyle(
-                                  color: Colors.deepPurple) // This is what you need!
+                                  color: Colors
+                                      .deepPurple) // This is what you need!
                               ),
                           onPressed: () {
                             if (_selectedSurah != null) {
@@ -83,7 +86,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: Colors.black12,
-                              shadowColor: Colors.transparent // This is what you need!
+                              shadowColor:
+                                  Colors.transparent // This is what you need!
                               ),
                           onPressed: () {
                             if (_selectedSurah != null) {
@@ -95,7 +99,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               }
                             }
                           },
-                          child: const Icon(Icons.arrow_forward, color: Colors.deepPurple)),
+                          child: const Icon(Icons.arrow_forward,
+                              color: Colors.deepPurple)),
                     ),
                   ],
                 ),
@@ -122,7 +127,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const QuranSearchScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => const QuranSearchScreen()),
                     );
                   },
                   icon: const Icon(Icons.search)),
@@ -138,10 +144,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           ),
           body: FutureBuilder<List<NQSurahTitle>>(
             future: NobleQuran.getSurahList(), // async work
-            builder: (BuildContext context, AsyncSnapshot<List<NQSurahTitle>> snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<List<NQSurahTitle>> snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
-                  return const Padding(padding: EdgeInsets.all(8.0), child: Text('Loading....'));
+                  return const Padding(
+                      padding: EdgeInsets.all(8.0), child: Text('Loading....'));
                 default:
                   if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
@@ -176,18 +184,23 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 Card(
                   elevation: 5,
                   child: FutureBuilder<List<List<NQWord>>>(
-                    future: NobleQuran.getSurahWordByWord((_selectedSurah?.number ?? 1) - 1),
+                    future: NobleQuran.getSurahWordByWord(
+                        (_selectedSurah?.number ?? 1) - 1),
                     // async work
-                    builder: (BuildContext context, AsyncSnapshot<List<List<NQWord>>> snapshot) {
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<List<NQWord>>> snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
                           return const Padding(
-                              padding: EdgeInsets.all(8.0), child: Text('Loading....'));
+                              padding: EdgeInsets.all(8.0),
+                              child: Text('Loading....'));
                         default:
                           if (snapshot.hasError) {
-                            return Center(child: Text('Error: ${snapshot.error}'));
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
                           } else {
-                            List<List<NQWord>> surahWords = snapshot.data as List<List<NQWord>>;
+                            List<List<NQWord>> surahWords =
+                                snapshot.data as List<List<NQWord>>;
                             return _ayaWidget(surahWords[_selectedAyat - 1]);
                           }
                       }
@@ -222,9 +235,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               child: DropdownSearch<NQSurahTitle>(
                 items: surahTitles,
                 popupProps: const PopupPropsMultiSelection.menu(),
-                itemAsString: (surah) => "${surah.number}) ${surah.transliterationEn}",
-                dropdownSearchDecoration:
-                    const InputDecoration(labelText: "Surah", hintText: "select surah"),
+                itemAsString: (surah) =>
+                    "${surah.number}) ${surah.transliterationEn}",
+                dropdownSearchDecoration: const InputDecoration(
+                    labelText: "Surah", hintText: "select surah"),
                 onChanged: (value) {
                   setState(() {
                     if (value != null) {
@@ -251,19 +265,22 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       width: 100,
                       height: 80,
                       child: DropdownSearch<int>(
-                        popupProps: const PopupPropsMultiSelection.menu(showSearchBox: true),
+                        popupProps: const PopupPropsMultiSelection.menu(
+                            showSearchBox: true),
                         filterFn: (item, filter) {
                           if (filter.isEmpty) {
                             return true;
                           }
-                          if ("$item" == QuranUtils.replaceFarsiNumber(filter)) {
+                          if ("$item" ==
+                              QuranUtils.replaceFarsiNumber(filter)) {
                             return true;
                           }
                           return false;
                         },
-                        dropdownSearchDecoration:
-                            const InputDecoration(labelText: "Ayat", hintText: "ayat index"),
-                        items: List<int>.generate(_selectedSurah?.totalVerses ?? 0, (i) => i + 1),
+                        dropdownSearchDecoration: const InputDecoration(
+                            labelText: "Ayat", hintText: "ayat index"),
+                        items: List<int>.generate(
+                            _selectedSurah?.totalVerses ?? 0, (i) => i + 1),
                         onChanged: (value) {
                           setState(() {
                             _selectedAyat = value ?? 1;
@@ -343,7 +360,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                 child: Text(
                                   e.ar,
                                   style: const TextStyle(
-                                      color: Colors.black, fontSize: 40, fontFamily: "Alvi"),
+                                      color: Colors.black,
+                                      fontSize: 40,
+                                      fontFamily: "Alvi"),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -355,7 +374,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         ),
                         Text(
                           e.tr,
-                          style: const TextStyle(color: Colors.black54, fontSize: 20),
+                          style: const TextStyle(
+                              color: Colors.black54, fontSize: 20),
                           textDirection: TextDirection.ltr,
                         ),
                       ],
@@ -368,24 +388,40 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   void _handleUrlPathsForWeb() {
-    if(kIsWeb) {
-      List<String> segs = Uri.base.pathSegments;
-      if(segs.length > 1) {
-        // have more than one
-        // the last two paths should be surah/ayat format
-        try {
-          _selectedAyat = int.parse(segs[segs.length - 1]);
-          _selectedSurahIndex = int.parse(segs[segs.length - 2]);
-          _selectedSurahIndex = _selectedSurahIndex - 1;
-        } catch(_) {}
-      } else if(segs.isNotEmpty) {
-        // has only one
-        // the last path will be surah index
-        try {
-          _selectedAyat = 1;
-          _selectedSurahIndex = int.parse(segs[segs.length - 1]);
-          _selectedSurahIndex = _selectedSurahIndex - 1;
-        } catch(_) {}
+    if (kIsWeb) {
+      String? searchString = Uri.base.queryParameters["search"];
+      if (searchString != null && searchString.isNotEmpty) {
+        // we have a search url
+        // navigate to search screen
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    QuranSearchScreen(searchString: searchString)),
+          );
+        });
+      } else {
+        // not a search url
+        // check for surah/ayat format
+        List<String> segs = Uri.base.pathSegments;
+        if (segs.length > 1) {
+          // have more than one
+          // the last two paths should be surah/ayat format
+          try {
+            _selectedAyat = int.parse(segs[segs.length - 1]);
+            _selectedSurahIndex = int.parse(segs[segs.length - 2]);
+            _selectedSurahIndex = _selectedSurahIndex - 1;
+          } catch (_) {}
+        } else if (segs.isNotEmpty) {
+          // has only one
+          // the last path will be surah index
+          try {
+            _selectedAyat = 1;
+            _selectedSurahIndex = int.parse(segs[segs.length - 1]);
+            _selectedSurahIndex = _selectedSurahIndex - 1;
+          } catch (_) {}
+        }
       }
     }
   }
@@ -401,8 +437,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       child: const Text("Save"),
       onPressed: () {
         if (_selectedSurah != null) {
-          QuranPreferences.saveBookmark(_selectedSurah!.number - 1, _selectedAyat);
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("👍 Saved ")));
+          QuranPreferences.saveBookmark(
+              _selectedSurah!.number - 1, _selectedAyat);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
           Navigator.of(context).pop();
         }
       },
@@ -435,29 +473,35 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   void _showMultipleOptionTimeBookmarkAlertDialog(NQBookmark bookmark) {
     AlertDialog alert;
     Widget saveButton = TextButton(
-      child: const Text("Save bookmark", style: TextStyle(fontWeight: FontWeight.bold)),
+      child: const Text("Save bookmark",
+          style: TextStyle(fontWeight: FontWeight.bold)),
       onPressed: () {
         if (_selectedSurah != null) {
-          QuranPreferences.saveBookmark(_selectedSurah!.number - 1, _selectedAyat);
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("👍 Saved ")));
+          QuranPreferences.saveBookmark(
+              _selectedSurah!.number - 1, _selectedAyat);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
           Navigator.of(context).pop();
         }
       },
     );
 
     Widget clearButton = TextButton(
-      child: const Text("Clear bookmark", style: TextStyle(fontWeight: FontWeight.bold)),
+      child: const Text("Clear bookmark",
+          style: TextStyle(fontWeight: FontWeight.bold)),
       onPressed: () {
         if (_selectedSurah != null) {
           QuranPreferences.saveBookmark(0, 0);
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("👍 Cleared ")));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(const SnackBar(content: Text("👍 Cleared ")));
         }
         Navigator.of(context).pop();
       },
     );
 
     Widget displayButton = TextButton(
-      child: const Text("Go to bookmark", style: TextStyle(fontWeight: FontWeight.bold)),
+      child: const Text("Go to bookmark",
+          style: TextStyle(fontWeight: FontWeight.bold)),
       onPressed: () {
         if (_selectedSurah != null && bookmark.ayat > 0) {
           setState(() {
