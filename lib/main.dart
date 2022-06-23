@@ -4,16 +4,14 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'misc/url/url_strategy.dart';
 
 // TODO: Update before release
 const String appVersion = "v1.1.3";
 
 void main() {
+  usePathUrlStrategy();
   runApp(const MyApp());
-  if (kIsWeb) {
-    setUrlStrategy(PathUrlStrategy());
-  }
   _loadQuranWords();
 }
 

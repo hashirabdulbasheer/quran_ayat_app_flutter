@@ -404,21 +404,25 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       } else {
         // not a search url
         // check for surah/ayat format
-        List<String> segs = Uri.base.pathSegments;
-        if (segs.length > 1) {
+        String? suraIndex = Uri.base.queryParameters["sura"];
+        String? ayaIndex = Uri.base.queryParameters["aya"];
+        if (suraIndex != null &&
+            ayaIndex != null &&
+            suraIndex.isNotEmpty &&
+            ayaIndex.isNotEmpty) {
           // have more than one
           // the last two paths should be surah/ayat format
           try {
-            _selectedAyat = int.parse(segs[segs.length - 1]);
-            _selectedSurahIndex = int.parse(segs[segs.length - 2]);
+            _selectedAyat = int.parse(ayaIndex);
+            _selectedSurahIndex = int.parse(suraIndex);
             _selectedSurahIndex = _selectedSurahIndex - 1;
           } catch (_) {}
-        } else if (segs.isNotEmpty) {
+        } else if (suraIndex != null && suraIndex.isNotEmpty) {
           // has only one
           // the last path will be surah index
           try {
             _selectedAyat = 1;
-            _selectedSurahIndex = int.parse(segs[segs.length - 1]);
+            _selectedSurahIndex = int.parse(suraIndex);
             _selectedSurahIndex = _selectedSurahIndex - 1;
           } catch (_) {}
         }
