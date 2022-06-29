@@ -43,7 +43,13 @@ class QuranSearch {
         results.add(QuranWord(word: word, similarityScore: score));
       }
     }
-    results = QuranUtils.removeDuplicates(results);
+
+    /// NOT REMOVING DUPLICATES. THE SAME WORD MIGHT BE USED IN TWO DIFF PLACES
+    /// IN DIFF CONTEXT. SO ITS SAFER TO NOT REMOVE DUPLICATES.
+    /// COMMENTING FOR NOW.
+
+    // results = QuranUtils.removeDuplicates(results);
+
     results.sort((QuranWord a, QuranWord b) => b.similarityScore.compareTo(a.similarityScore));
     return results;
   }
