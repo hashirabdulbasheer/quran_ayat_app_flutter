@@ -9,6 +9,7 @@ import 'package:quran_ayat/utils/prefs_utils.dart';
 import 'package:quran_ayat/utils/utils.dart';
 
 import 'main.dart';
+import 'quran_login_screen.dart';
 import 'quran_search_screen.dart';
 
 class QuranAyatScreen extends StatefulWidget {
@@ -140,6 +141,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   icon: _isThisBookmarkedAya()
                       ? const Icon(Icons.bookmark)
                       : const Icon(Icons.bookmark_border_outlined)),
+              IconButton(
+                  tooltip: "go to search screen",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const QuranLoginScreen()),
+                    );
+                  },
+                  icon: const Icon(Icons.account_circle_sharp)),
             ],
           ),
           body: FutureBuilder<List<NQSurahTitle>>(
