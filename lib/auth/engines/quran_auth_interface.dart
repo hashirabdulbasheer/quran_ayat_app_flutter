@@ -6,5 +6,6 @@ abstract class QuranAuthInterface {
   Future<QuranResponse> signup(String name, String username, String password);
   Future<QuranResponse> update(String name);
   Future<QuranResponse> logout();
+  Future<QuranResponse> forgotPassword(String email);
   Future<QuranUser?> getUser();
 }

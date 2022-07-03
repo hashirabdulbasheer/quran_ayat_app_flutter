@@ -9,7 +9,7 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     try {
       final _ = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: username, password: password);
-      return QuranResponse(isSuccessful: true, message: "Sucesss Logged In");
+      return QuranResponse(isSuccessful: true, message: "Logged In 👍");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -36,7 +36,7 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
       );
       await credential.user?.updateDisplayName(name);
       return QuranResponse(
-          isSuccessful: true, message: "Successfully created user");
+          isSuccessful: true, message: "Successfully created user 👍");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -74,13 +74,23 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
   Future<QuranResponse> logout() async {
     await FirebaseAuth.instance.signOut();
     return QuranResponse(
-        isSuccessful: true, message: "Successfully signed out");
+        isSuccessful: true, message: "Successfully signed out 👍");
   }
 
   @override
   Future<QuranResponse> update(String name) async {
     await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
     return QuranResponse(
-        isSuccessful: true, message: "Successfully updated user");
+        isSuccessful: true, message: "Successfully updated user 👍");
+  }
+
+  @override
+  Future<QuranResponse> forgotPassword(String email) async {
+    return await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: email)
+        .then((value) => QuranResponse(
+            isSuccessful: true, message: "Done 👍, please check your email."))
+        .catchError((e) => QuranResponse(
+            isSuccessful: false, message: "Sorry 😔, ${e.toString()}."));
   }
 }

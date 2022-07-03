@@ -93,6 +93,18 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                   ],
                 ),
                 const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          _forgotPasswordButtonPressed();
+                        },
+                        child: const Text("Forgot Password")),
+                  ],
+                ),
+                const SizedBox(
                   height: 50,
                 ),
                 TextButton(
@@ -103,7 +115,10 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                             builder: (context) => const QuranSignUpScreen()),
                       );
                     },
-                    child: const Text("Sign Up"))
+                    child: const Text(
+                      "Create a new account",
+                      style: TextStyle(fontSize: 18),
+                    )),
               ],
             ),
           ),
@@ -136,6 +151,20 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
       });
     } else {
       _showMessage("Sorry 😔, Please enter a valid email and password");
+    }
+  }
+
+  _forgotPasswordButtonPressed() async {
+    String email = _emailController.text;
+    if (email.isNotEmpty && QuranUtils.isEmail(email)) {
+      _showLoadingProgress(true);
+      QuranAuthFactory.authEngine.forgotPassword(email).then((response) {
+        _showLoadingProgress(false);
+        _showMessage(response.message);
+      });
+    } else {
+      _showMessage(
+          "Sorry 😔, Please enter a valid email and click forgot password.");
     }
   }
 
