@@ -5,12 +5,13 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/utils/prefs_utils.dart';
-import 'package:quran_ayat/utils/utils.dart';
-
+import 'auth/auth_factory.dart';
 import 'main.dart';
-import 'quran_login_screen.dart';
 import 'quran_search_screen.dart';
+import 'screens/auth/quran_login_screen.dart';
+import 'screens/auth/quran_profile_screen.dart';
+import 'utils/prefs_utils.dart';
+import 'utils/utils.dart';
 
 class QuranAyatScreen extends StatefulWidget {
   final int? surahIndex;
@@ -142,13 +143,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       ? const Icon(Icons.bookmark)
                       : const Icon(Icons.bookmark_border_outlined)),
               IconButton(
-                  tooltip: "go to search screen",
+                  tooltip: "user account",
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const QuranLoginScreen()),
-                    );
+                    _accountButtonTapped();
                   },
                   icon: const Icon(Icons.account_circle_sharp)),
             ],
@@ -573,5 +570,27 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       }
     }
     return false;
+  }
+
+  ///
+  /// Actions
+  ///
+  void _accountButtonTapped() async {
+    QuranAuthFactory.authEngine.getUser().then((user) {
+      if (user == null) {
+        // not previously logged in, go to login
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
+        );
+      } else {
+        // already logged in
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => QuranProfileScreen(user: user)),
+        );
+      }
+    });
   }
 }

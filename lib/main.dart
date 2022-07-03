@@ -1,16 +1,21 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/auth/auth_factory.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 // TODO: Update before release
 const String appVersion = "v1.1.3";
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await QuranAuthFactory.authEngine.getUser();
   runApp(const MyApp());
   _loadQuranWords();
 }

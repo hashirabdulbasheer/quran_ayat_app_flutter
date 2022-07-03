@@ -2,12 +2,18 @@ import '../models/qr_word_model.dart';
 
 class QuranUtils {
 
+  static bool isEmail(String e) {
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(e);
+    return emailValid;
+  }
+
   static bool isArabic(String s) {
     RegExp regex = RegExp(
         "[\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufc3f]|[\ufe70-\ufefc]");
     return regex.hasMatch(s);
   }
-
 
   static String replaceFarsiNumber(String input) {
     var sb = StringBuffer();
@@ -87,8 +93,8 @@ class QuranUtils {
   /// removes duplicates
   static List<QuranWord> removeDuplicates(List<QuranWord> words) {
     List<QuranWord> result = [];
-    result.addAll(
-        words.where((a) => result.every((b) => normalise(a.word.ar) != normalise(b.word.ar))));
+    result.addAll(words.where((a) =>
+        result.every((b) => normalise(a.word.ar) != normalise(b.word.ar))));
     return result;
   }
 
@@ -102,13 +108,16 @@ class QuranUtils {
 
       //Remove koranic anotation
       .replaceAll('\u0615', '') //ARABIC SMALL HIGH TAH
-      .replaceAll('\u0616', '') //ARABIC SMALL HIGH LIGATURE ALEF WITH LAM WITH YEH
+      .replaceAll(
+          '\u0616', '') //ARABIC SMALL HIGH LIGATURE ALEF WITH LAM WITH YEH
       .replaceAll('\u0617', '') //ARABIC SMALL HIGH ZAIN
       .replaceAll('\u0618', '') //ARABIC SMALL FATHA
       .replaceAll('\u0619', '') //ARABIC SMALL DAMMA
       .replaceAll('\u061A', '') //ARABIC SMALL KASRA
-      .replaceAll('\u06D6', '') //ARABIC SMALL HIGH LIGATURE SAD WITH LAM WITH ALEF MAKSURA
-      .replaceAll('\u06D7', '') //ARABIC SMALL HIGH LIGATURE QAF WITH LAM WITH ALEF MAKSURA
+      .replaceAll('\u06D6',
+          '') //ARABIC SMALL HIGH LIGATURE SAD WITH LAM WITH ALEF MAKSURA
+      .replaceAll('\u06D7',
+          '') //ARABIC SMALL HIGH LIGATURE QAF WITH LAM WITH ALEF MAKSURA
       .replaceAll('\u06D8', '') //ARABIC SMALL HIGH MEEM INITIAL FORM
       .replaceAll('\u06D9', '') //ARABIC SMALL HIGH LAM ALEF
       .replaceAll('\u06DA', '') //ARABIC SMALL HIGH JEEM
