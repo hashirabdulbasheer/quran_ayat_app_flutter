@@ -533,14 +533,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                             )),
                                       );
                                     })
-                                : ElevatedButton(
+                                : TextButton(
                                     onPressed: () {
                                       _goToCreateNoteScreen();
                                     },
                                     child: const SizedBox(
-                                        height: 200,
+                                        height: 100,
                                         child: Center(
-                                            child: Text("Create New Note")))),
+                                            child: Text("Add Note")))),
                           ],
                         );
                       }
