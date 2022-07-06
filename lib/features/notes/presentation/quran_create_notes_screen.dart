@@ -58,16 +58,68 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    children: _controlButtons(context),
-                  ),
-                )
+                widget.note == null
+                    ? _createControlButton(context)
+                    : _updateControlButton(context)
               ],
             ),
           ),
         ));
+  }
+
+  Widget _createControlButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Row(
+        children: [
+          Expanded(
+              child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+                onPressed: () {
+                  _createButtonPressed(() {
+                    Navigator.of(context).pop();
+                  });
+                },
+                child: const Text("Save")),
+          ))
+        ],
+      ),
+    );
+  }
+
+  Widget _updateControlButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Row(
+        children: [
+          Expanded(
+              child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+                onPressed: () {
+                  _updateButtonPressed();
+                },
+                child: const Text("Update")),
+          )),
+          const SizedBox(
+            width: 20,
+          ),
+          Expanded(
+              child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(primary: Colors.red),
+                onPressed: () async {
+                  _deleteButtonPressed(() {
+                    Navigator.of(context).pop();
+                  });
+                },
+                child: const Text("Delete")),
+          ))
+        ],
+      ),
+    );
   }
 
   List<Widget> _controlButtons(BuildContext context) {
