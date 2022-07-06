@@ -113,7 +113,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                         MaterialPageRoute(
                             builder: (context) => const QuranSignUpScreen()),
                       ).then((value) {
-                        if (value) {
+                        if (value != null && value == true) {
                           Navigator.of(context).pop();
                         }
                       });

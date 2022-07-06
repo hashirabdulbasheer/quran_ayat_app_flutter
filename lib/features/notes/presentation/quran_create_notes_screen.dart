@@ -74,32 +74,41 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
     List<Widget> children = [];
     if (widget.note == null) {
       children.add(Expanded(
-          child: ElevatedButton(
-              onPressed: () {
-                _createButtonPressed(() {
-                  Navigator.of(context).pop();
-                });
-              },
-              child: const Text("Save"))));
+          child: SizedBox(
+        height: 50,
+        child: ElevatedButton(
+            onPressed: () {
+              _createButtonPressed(() {
+                Navigator.of(context).pop();
+              });
+            },
+            child: const Text("Save")),
+      )));
     } else {
       children.add(Expanded(
-          child: ElevatedButton(
-              onPressed: () {
-                _updateButtonPressed();
-              },
-              child: const Text("Update"))));
+          child: SizedBox(
+        height: 50,
+        child: ElevatedButton(
+            onPressed: () {
+              _updateButtonPressed();
+            },
+            child: const Text("Update")),
+      )));
       children.add(const SizedBox(
         width: 20,
       ));
       children.add(Expanded(
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(primary: Colors.red),
-              onPressed: () async {
-                _deleteButtonPressed(() {
-                  Navigator.of(context).pop();
-                });
-              },
-              child: const Text("Delete"))));
+          child: SizedBox(
+        height: 50,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: Colors.red),
+            onPressed: () async {
+              _deleteButtonPressed(() {
+                Navigator.of(context).pop();
+              });
+            },
+            child: const Text("Delete")),
+      )));
     }
     return children;
   }

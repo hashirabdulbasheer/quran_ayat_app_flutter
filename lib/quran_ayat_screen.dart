@@ -418,11 +418,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               if (user == null) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 30),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        _goToLoginScreen();
-                      },
-                      child: const Text("Login to add notes")),
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _goToLoginScreen();
+                        },
+                        child: const Text("Login to add notes")),
+                  ),
                 );
               }
               // logged in
@@ -455,6 +458,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               height: 20,
                             ),
                             Container(
+                              height: 50,
                               decoration: BoxDecoration(
                                   border: Border.all(color: Colors.black12),
                                   color: Colors.black12,
@@ -529,7 +533,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                             )),
                                       );
                                     })
-                                : TextButton(
+                                : ElevatedButton(
                                     onPressed: () {
                                       _goToCreateNoteScreen();
                                     },
