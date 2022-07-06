@@ -15,6 +15,11 @@ class QuranUtils {
     return regex.hasMatch(s);
   }
 
+  static bool isEnglish(String s) {
+    RegExp regex = RegExp("[a-zA-Z0-9]+");
+    return regex.hasMatch(s);
+  }
+
   static String replaceFarsiNumber(String input) {
     var sb = StringBuffer();
     for (int i = 0; i < input.length; i++) {

@@ -501,10 +501,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Directionality(
-                                        textDirection: QuranUtils.isArabic(
+                                        textDirection: QuranUtils.isEnglish(
                                                 notes[index].note)
-                                            ? TextDirection.rtl
-                                            : TextDirection.ltr,
+                                            ? TextDirection.ltr
+                                            : TextDirection.rtl,
                                         child: ListTile(
                                             onTap: () {
                                               _goToCreateNoteScreen(
