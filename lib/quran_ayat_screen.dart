@@ -33,15 +33,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   List<NQSurahTitle> _surahTitles = [];
   NQSurahTitle? _selectedSurah;
   int _selectedAyat = 1;
-  int _selectedSurahIndex = 1;
+
+  // int _selectedSurahIndex = 1;
   NQBookmark? _currentBookmark;
 
   @override
   void initState() {
     super.initState();
     _selectedAyat = widget.ayaIndex ?? 1;
-    _selectedSurahIndex =
-        widget.surahIndex != null ? widget.surahIndex! - 1 : 0;
     QuranPreferences.getBookmark().then((bookmark) {
       _currentBookmark = bookmark;
     });
@@ -177,7 +176,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   Widget _body(List<NQSurahTitle> surahTitles) {
-    _selectedSurah ??= surahTitles[_selectedSurahIndex];
+    _selectedSurah ??= surahTitles[widget.surahIndex ?? 0];
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -614,16 +613,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           // the last two paths should be surah/ayat format
           try {
             _selectedAyat = int.parse(ayaIndex);
-            _selectedSurahIndex = int.parse(suraIndex);
-            _selectedSurahIndex = _selectedSurahIndex - 1;
+            var selectedSurahIndex = int.parse(suraIndex) - 1;
+            _selectedSurah = _surahTitles[selectedSurahIndex];
           } catch (_) {}
         } else if (suraIndex != null && suraIndex.isNotEmpty) {
           // has only one
           // the last path will be surah index
           try {
             _selectedAyat = 1;
-            _selectedSurahIndex = int.parse(suraIndex);
-            _selectedSurahIndex = _selectedSurahIndex - 1;
+            var selectedSurahIndex = int.parse(suraIndex) - 1;
+            _selectedSurah = _surahTitles[selectedSurahIndex];
           } catch (_) {}
         }
       }
@@ -789,17 +788,19 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   _goToCreateNoteScreen({QuranNote? note}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => QuranCreateNotesScreen(
-                note: note,
-                suraIndex: _selectedSurahIndex + 1,
-                ayaIndex: _selectedAyat,
-              )),
-    ).then((value) {
-      setState(() {});
-    });
+    if (_selectedSurah != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => QuranCreateNotesScreen(
+                  note: note,
+                  suraIndex: _selectedSurah!.number,
+                  ayaIndex: _selectedAyat,
+                )),
+      ).then((value) {
+        setState(() {});
+      });
+    }
   }
 
   _goToProfileScreen(QuranUser user) {
