@@ -9,7 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 // TODO: Update before release
-const String appVersion = "v1.1.3";
+const String appVersion = "v2.0.0";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

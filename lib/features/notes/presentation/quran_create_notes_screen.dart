@@ -108,15 +108,19 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   ///  BUTTON ACTIONS
   ///
   _createButtonPressed(Function onComplete) async {
-    QuranUser? user = await QuranAuthFactory.authEngine.getUser();
-    if (user != null) {
-      QuranNote note = QuranNote(
-          suraIndex: widget.suraIndex,
-          ayaIndex: widget.ayaIndex,
-          note: _notesController.text,
-          createdOn: DateTime.now().millisecondsSinceEpoch);
-      QuranNotesFactory.engine.create(user.uid, note);
-      onComplete();
+    if (_notesController.text.isNotEmpty) {
+      QuranUser? user = await QuranAuthFactory.authEngine.getUser();
+      if (user != null) {
+        QuranNote note = QuranNote(
+            suraIndex: widget.suraIndex,
+            ayaIndex: widget.ayaIndex,
+            note: _notesController.text,
+            createdOn: DateTime.now().millisecondsSinceEpoch);
+        QuranNotesFactory.engine.create(user.uid, note);
+        onComplete();
+      }
+    } else {
+      _showMessage("Sorry 😔, please enter a note");
     }
   }
 
@@ -159,14 +163,18 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   }
 
   _updateButtonPressed() async {
-    QuranUser? user = await QuranAuthFactory.authEngine.getUser();
-    if (user != null) {
-      QuranNote note = widget.note!.copyWith(
-          createdOn: DateTime.now().millisecondsSinceEpoch,
-          note: _notesController.text);
+    if (_notesController.text.isNotEmpty) {
+      QuranUser? user = await QuranAuthFactory.authEngine.getUser();
+      if (user != null) {
+        QuranNote note = widget.note!.copyWith(
+            createdOn: DateTime.now().millisecondsSinceEpoch,
+            note: _notesController.text);
 
-      QuranNotesFactory.engine.update(user.uid, note);
-      _showMessage("Updated 👍");
+        QuranNotesFactory.engine.update(user.uid, note);
+        _showMessage("Updated 👍");
+      }
+    } else {
+      _showMessage("Sorry 😔, please enter a note");
     }
   }
 
