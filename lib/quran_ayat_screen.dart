@@ -127,20 +127,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
           ),
           appBar: AppBar(
-            title: Row(
-              children: [
-                IconButton(
-                    tooltip: "user account",
-                    onPressed: () {
-                      _accountButtonTapped();
-                    },
-                    icon: const Icon(
-                      Icons.account_circle_outlined,
-                      size: 30,
-                    )),
-                const Text("Quran Ayat")
-              ],
-            ),
+            centerTitle: true,
+            leading: Padding(
+                padding: const EdgeInsets.all(5),
+                child: _profileIconBasedOnLoggedInStatus()),
+            title: const Text("Quran Ayat"),
             actions: [
               IconButton(
                   tooltip: "go to search screen",
@@ -556,6 +547,37 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         }
       },
     );
+  }
+
+  Widget _profileIconBasedOnLoggedInStatus() {
+    return FutureBuilder<QuranUser?>(
+      future: _fetchUserAfterDelay(), // async work
+      builder: (BuildContext context, AsyncSnapshot<QuranUser?> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(color: Colors.white),
+            );
+          default:
+            if (!snapshot.hasError) {
+              if (snapshot.data != null) {
+                return _profileIcon(icon: Icons.account_circle);
+              }
+            }
+            return _profileIcon(icon: Icons.account_circle_outlined);
+        }
+      },
+    );
+  }
+
+  _profileIcon({required IconData icon}) {
+    return IconButton(
+        tooltip: "user account",
+        onPressed: () {
+          _accountButtonTapped();
+        },
+        icon: Icon(icon, size: 30));
   }
 
   void _handleUrlPathsForWeb() {
