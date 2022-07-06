@@ -429,9 +429,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 );
               }
               // logged in
+              if (_selectedSurah == null) {
+                return Container();
+              }
               return FutureBuilder<List<QuranNote>>(
                 future: QuranNotesFactory.engine
-                    .fetch(user.uid, _selectedSurahIndex + 1, _selectedAyat),
+                    .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
                 // async work
                 builder: (BuildContext context,
                     AsyncSnapshot<List<QuranNote>> snapshot) {
@@ -539,8 +542,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                     },
                                     child: const SizedBox(
                                         height: 100,
-                                        child: Center(
-                                            child: Text("Add Note")))),
+                                        child:
+                                            Center(child: Text("Add Note")))),
                           ],
                         );
                       }
