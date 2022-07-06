@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../auth/auth_factory.dart';
-import '../../utils/utils.dart';
-import 'quran_profile_screen.dart';
+import '../domain/auth_factory.dart';
+import '../../../utils/utils.dart';
 import 'quran_signup_screen.dart';
 
 class QuranLoginScreen extends StatefulWidget {
@@ -57,7 +56,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                         color: Theme.of(context).primaryColorDark,
                       ),
                       onPressed: () {
-                        // Update the state i.e. toogle the state of passwordVisible variable
+                        // Update the state i.e. toggle the state of passwordVisible variable
                         setState(() {
                           _passwordVisible = !_passwordVisible;
                         });
@@ -109,11 +108,15 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                 ),
                 TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const QuranSignUpScreen()),
-                      );
+                      ).then((value) {
+                        if (value) {
+                          Navigator.of(context).pop();
+                        }
+                      });
                     },
                     child: const Text(
                       "Create a new account",
@@ -137,11 +140,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
         if (response.isSuccessful) {
           QuranAuthFactory.authEngine.getUser().then((user) {
             if (user != null) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => QuranProfileScreen(user: user)),
-              );
+              Navigator.of(context).pop();
               _showMessage("Logged in 👍");
             }
           });

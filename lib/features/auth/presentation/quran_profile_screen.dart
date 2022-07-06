@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/auth/auth_factory.dart';
-import 'package:quran_ayat/models/qr_response_model.dart';
-import '../../models/qr_user_model.dart';
+
+import '../domain/auth_factory.dart';
+import '../../../models/qr_response_model.dart';
+import '../../../models/qr_user_model.dart';
 
 class QuranProfileScreen extends StatefulWidget {
   final QuranUser user;
@@ -50,6 +51,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                 TextField(
                   controller: _emailController,
                   enabled: false,
+                  style: const TextStyle(color: Colors.black54),
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:quran_ayat/models/qr_user_model.dart';
-import '../../models/qr_response_model.dart';
-import 'quran_auth_interface.dart';
+import '../../../models/qr_response_model.dart';
+import '../../../models/qr_user_model.dart';
+import '../domain/interfaces/quran_auth_interface.dart';
 
 class QuranFirebaseAuthEngine implements QuranAuthInterface {
   @override

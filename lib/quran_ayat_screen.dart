@@ -5,13 +5,18 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'auth/auth_factory.dart';
+import 'features/auth/domain/auth_factory.dart';
+import 'features/auth/presentation/quran_login_screen.dart';
+import 'features/auth/presentation/quran_profile_screen.dart';
+import 'features/notes/domain/entities/quran_note.dart';
+import 'features/notes/domain/notes_factory.dart';
+import 'features/notes/presentation/quran_create_notes_screen.dart';
 import 'main.dart';
+import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
-import 'screens/auth/quran_login_screen.dart';
-import 'screens/auth/quran_profile_screen.dart';
 import 'utils/prefs_utils.dart';
 import 'utils/utils.dart';
+import 'package:intl/intl.dart' as intl;
 
 class QuranAyatScreen extends StatefulWidget {
   final int? surahIndex;
@@ -122,7 +127,20 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
           ),
           appBar: AppBar(
-            title: const Text("Quran Ayat"),
+            title: Row(
+              children: [
+                IconButton(
+                    tooltip: "user account",
+                    onPressed: () {
+                      _accountButtonTapped();
+                    },
+                    icon: const Icon(
+                      Icons.account_circle_outlined,
+                      size: 30,
+                    )),
+                const Text("Quran Ayat")
+              ],
+            ),
             actions: [
               IconButton(
                   tooltip: "go to search screen",
@@ -142,12 +160,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   icon: _isThisBookmarkedAya()
                       ? const Icon(Icons.bookmark)
                       : const Icon(Icons.bookmark_border_outlined)),
-              IconButton(
-                  tooltip: "user account",
-                  onPressed: () {
-                    _accountButtonTapped();
-                  },
-                  icon: const Icon(Icons.account_circle_sharp)),
             ],
           ),
           body: FutureBuilder<List<NQSurahTitle>>(
@@ -215,6 +227,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     },
                   ),
                 ),
+
+                /// Notes
+                _notesWidget(),
 
                 const SizedBox(height: 30),
               ],
@@ -393,6 +408,154 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               ),
             ))
         .toList();
+  }
+
+  Widget _notesWidget() {
+    return FutureBuilder<QuranUser?>(
+      future: _fetchUserAfterDelay(),
+      // async work
+      builder: (BuildContext context, AsyncSnapshot<QuranUser?> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Padding(
+                padding: EdgeInsets.all(8.0), child: Text('Loading....'));
+          default:
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else {
+              QuranUser? user = snapshot.data;
+              if (user == null) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        _goToLoginScreen();
+                      },
+                      child: const Text("Login to add notes")),
+                );
+              }
+              // logged in
+              return FutureBuilder<List<QuranNote>>(
+                future: QuranNotesFactory.engine
+                    .fetch(user.uid, _selectedSurahIndex + 1, _selectedAyat),
+                // async work
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<QuranNote>> snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: SizedBox(
+                              height: 100,
+                              child: Center(child: Text('Loading notes....'))));
+                    default:
+                      if (snapshot.hasError) {
+                        return SizedBox(
+                            height: 100,
+                            child: Center(
+                                child: Text('Error: ${snapshot.error}')));
+                      } else {
+                        List<QuranNote> notes =
+                            snapshot.data as List<QuranNote>;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
+                                  color: Colors.black12,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5))),
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text("Notes"),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        _goToCreateNoteScreen();
+                                      },
+                                      child: const Text("Add"))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            notes.isNotEmpty
+                                ? ListView.separated(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: notes.length,
+                                    shrinkWrap: true,
+                                    separatorBuilder:
+                                        (BuildContext context, int index) {
+                                      return const Divider(
+                                        thickness: 1,
+                                      );
+                                    },
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Directionality(
+                                        textDirection: QuranUtils.isArabic(
+                                                notes[index].note)
+                                            ? TextDirection.rtl
+                                            : TextDirection.ltr,
+                                        child: ListTile(
+                                            onTap: () {
+                                              _goToCreateNoteScreen(
+                                                  note: notes[index]);
+                                            },
+                                            title: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(notes[index].note,
+                                                      style: const TextStyle(
+                                                          fontSize: 20,
+                                                          color:
+                                                              Colors.black87)),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Text(
+                                                      "${_formattedDate(notes[index].createdOn)}",
+                                                      style: const TextStyle(
+                                                          fontSize: 15,
+                                                          color:
+                                                              Colors.black54)),
+                                                ],
+                                              ),
+                                            )),
+                                      );
+                                    })
+                                : TextButton(
+                                    onPressed: () {
+                                      _goToCreateNoteScreen();
+                                    },
+                                    child: const SizedBox(
+                                        height: 200,
+                                        child: Center(
+                                            child: Text("Create New Note")))),
+                          ],
+                        );
+                      }
+                  }
+                },
+              );
+            }
+        }
+      },
+    );
   }
 
   void _handleUrlPathsForWeb() {
@@ -579,18 +742,78 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     QuranAuthFactory.authEngine.getUser().then((user) {
       if (user == null) {
         // not previously logged in, go to login
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
-        );
+        _goToLoginScreen();
       } else {
         // already logged in
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => QuranProfileScreen(user: user)),
-        );
+        _goToProfileScreen(user);
       }
     });
+  }
+
+  _goToLoginScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
+    ).then((value) {
+      setState(() {});
+    });
+  }
+
+  _goToCreateNoteScreen({QuranNote? note}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => QuranCreateNotesScreen(
+                note: note,
+                suraIndex: _selectedSurahIndex + 1,
+                ayaIndex: _selectedAyat,
+              )),
+    ).then((value) {
+      setState(() {});
+    });
+  }
+
+  _goToProfileScreen(QuranUser user) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => QuranProfileScreen(user: user)),
+    ).then((value) {
+      setState(() {});
+    });
+  }
+
+  ///
+  /// Utils
+  ///
+
+  Future<QuranUser?> _fetchUserAfterDelay() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return QuranAuthFactory.authEngine.getUser();
+  }
+
+  _formattedDate(int timeMs) {
+    DateTime now = DateTime.now();
+    DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
+    var millis = DateTime.fromMillisecondsSinceEpoch(timeMs);
+    if (!millis.difference(justNow).isNegative) {
+      return 'Just now';
+    }
+    if (millis.day == now.day &&
+        millis.month == now.month &&
+        millis.year == now.year) {
+      return intl.DateFormat('jm').format(now);
+    }
+    DateTime yesterday = now.subtract(const Duration(days: 1));
+    if (millis.day == yesterday.day &&
+        millis.month == yesterday.month &&
+        millis.year == yesterday.year) {
+      return 'Yesterday, ${intl.DateFormat('jm').format(now)}';
+    }
+    if (now.difference(millis).inDays < 4) {
+      String weekday = intl.DateFormat('EEEE').format(millis);
+      return '$weekday, ${intl.DateFormat('jm').format(now)}';
+    }
+    var d24 = intl.DateFormat('dd/MM/yyyy HH:mm').format(millis);
+    return d24;
   }
 }

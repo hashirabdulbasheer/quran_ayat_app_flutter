@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../auth/auth_factory.dart';
-import '../../utils/utils.dart';
-import 'quran_profile_screen.dart';
+import '../domain/auth_factory.dart';
+import '../../../utils/utils.dart';
 
 class QuranSignUpScreen extends StatefulWidget {
   const QuranSignUpScreen({Key? key}) : super(key: key);
@@ -69,7 +68,7 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
                         color: Theme.of(context).primaryColorDark,
                       ),
                       onPressed: () {
-                        // Update the state i.e. toogle the state of passwordVisible variable
+                        // Update the state i.e. toggle the state of passwordVisible variable
                         setState(() {
                           _passwordVisible = !_passwordVisible;
                         });
@@ -131,11 +130,7 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
         if (response.isSuccessful) {
           QuranAuthFactory.authEngine.getUser().then((user) {
             if (user != null) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => QuranProfileScreen(user: user)),
-              );
+              Navigator.of(context).pop(true);
               _showMessage("Success 👍. Ahlan wa sahlan!");
             }
           });
