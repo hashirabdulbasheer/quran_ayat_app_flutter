@@ -327,8 +327,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   direction: Axis.horizontal,
                   alignment: WrapAlignment.start,
                   runAlignment: WrapAlignment.end,
-                  runSpacing: 10,
-                  spacing: 5,
                   children: _wordsWidgetList(words),
                 ),
               ),
@@ -358,7 +356,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(left: 8, right: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -383,7 +381,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           )),
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
                         Text(
                           e.tr,
