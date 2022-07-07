@@ -218,7 +218,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           } else {
                             List<List<NQWord>> surahWords =
                                 snapshot.data as List<List<NQWord>>;
-                            return _ayaWidget(surahWords[_selectedAyat - 1]);
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: _ayaWidget(surahWords[_selectedAyat - 1]),
+                            );
                           }
                       }
                     },
@@ -517,7 +520,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                         Text(
                                             "${_formattedDate(notes[index].createdOn)}",
                                             style: const TextStyle(
-                                                fontSize: 15,
+                                                fontSize: 12,
                                                 color: Colors.black54)),
                                       ],
                                     ),
