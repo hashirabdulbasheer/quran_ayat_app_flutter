@@ -4,6 +4,12 @@ import '../domain/entities/quran_note.dart';
 import '../domain/interfaces/quran_notes_interface.dart';
 
 class QuranFirebaseNotesEngine implements QuranNotesInterface {
+
+  @override
+  Future<void> initialize() async {
+    return;
+  }
+
   @override
   Future<QuranResponse> create(String userId, QuranNote note) async {
     DatabaseReference ref = FirebaseDatabase.instance

@@ -123,12 +123,12 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
         password.isNotEmpty &&
         QuranUtils.isEmail(email)) {
       _showLoadingProgress(true);
-      QuranAuthFactory.authEngine
+      QuranAuthFactory.engine
           .signup(name, email, password)
           .then((response) {
         _showLoadingProgress(false);
         if (response.isSuccessful) {
-          QuranAuthFactory.authEngine.getUser().then((user) {
+          QuranAuthFactory.engine.getUser().then((user) {
             if (user != null) {
               Navigator.of(context).pop(true);
               _showMessage("Success 👍. Ahlan wa sahlan!");

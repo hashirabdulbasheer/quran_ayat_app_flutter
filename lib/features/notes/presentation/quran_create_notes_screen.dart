@@ -170,7 +170,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   ///
   _createButtonPressed(Function onComplete) async {
     if (_notesController.text.isNotEmpty) {
-      QuranUser? user = await QuranAuthFactory.authEngine.getUser();
+      QuranUser? user = await QuranAuthFactory.engine.getUser();
       if (user != null) {
         QuranNote note = QuranNote(
             suraIndex: widget.suraIndex,
@@ -186,7 +186,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   }
 
   _deleteButtonPressed(Function onComplete) async {
-    QuranUser? user = await QuranAuthFactory.authEngine.getUser();
+    QuranUser? user = await QuranAuthFactory.engine.getUser();
     if (user != null) {
       Widget okButton = TextButton(
         style: TextButton.styleFrom(primary: Colors.red),
@@ -225,7 +225,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
 
   _updateButtonPressed() async {
     if (_notesController.text.isNotEmpty) {
-      QuranUser? user = await QuranAuthFactory.authEngine.getUser();
+      QuranUser? user = await QuranAuthFactory.engine.getUser();
       if (user != null) {
         QuranNote note = widget.note!.copyWith(
             createdOn: DateTime.now().millisecondsSinceEpoch,

@@ -1,9 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import '../../../firebase_options.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../domain/interfaces/quran_auth_interface.dart';
 
 class QuranFirebaseAuthEngine implements QuranAuthInterface {
+
+  @override
+  Future<QuranUser?> initialize() async {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    return await getUser();
+  }
+
   @override
   Future<QuranResponse> login(String username, String password) async {
     try {

@@ -110,7 +110,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
     String newName = _nameController.text;
     if (newName.isNotEmpty) {
       QuranResponse response =
-          await QuranAuthFactory.authEngine.update(newName);
+          await QuranAuthFactory.engine.update(newName);
       _showLoadingProgress(false);
       if (response.isSuccessful) {
         _showMessage("Updated successfully 👍");
@@ -121,7 +121,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
   }
 
   _signOutButtonPressed() async {
-    QuranResponse _ = await QuranAuthFactory.authEngine.logout();
+    QuranResponse _ = await QuranAuthFactory.engine.logout();
     return true;
   }
 

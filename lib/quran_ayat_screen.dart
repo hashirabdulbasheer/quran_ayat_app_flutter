@@ -411,7 +411,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 padding: EdgeInsets.all(8.0), child: Text('Loading....'));
           default:
             if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              print("Error user: ${snapshot.error}");
+              return const Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: SizedBox(
+                    height: 50,
+                    child: Text(
+                      'Unable to load notes. Please check internet connectivity',
+                      style: TextStyle(color: Colors.black38),
+                    ),
+                  ));
             } else {
               QuranUser? user = snapshot.data;
               if (user == null) {
@@ -446,10 +455,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               child: Center(child: Text('Loading notes....'))));
                     default:
                       if (snapshot.hasError) {
-                        return SizedBox(
-                            height: 100,
-                            child: Center(
-                                child: Text('Error: ${snapshot.error}')));
+                        print("Error notes: ${snapshot.error}");
+                        return const Padding(
+                            padding: EdgeInsets.only(top: 30),
+                            child: SizedBox(
+                              height: 50,
+                              child: Text(
+                                'Unable to load notes. Please check internet connectivity',
+                                style: TextStyle(color: Colors.black38),
+                              ),
+                            ));
                       } else {
                         List<QuranNote> notes =
                             snapshot.data as List<QuranNote>;
@@ -767,7 +782,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   /// Actions
   ///
   void _accountButtonTapped() async {
-    QuranAuthFactory.authEngine.getUser().then((user) {
+    QuranAuthFactory.engine.getUser().then((user) {
       if (user == null) {
         // not previously logged in, go to login
         _goToLoginScreen();
@@ -818,7 +833,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   Future<QuranUser?> _fetchUserAfterDelay() async {
     await Future.delayed(const Duration(seconds: 1));
-    return QuranAuthFactory.authEngine.getUser();
+    return QuranAuthFactory.engine.getUser();
   }
 
   _formattedDate(int timeMs) {

@@ -135,10 +135,10 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
     String password = _passwordController.text;
     if (email.isNotEmpty && password.isNotEmpty && QuranUtils.isEmail(email)) {
       _showLoadingProgress(true);
-      QuranAuthFactory.authEngine.login(email, password).then((response) {
+      QuranAuthFactory.engine.login(email, password).then((response) {
         _showLoadingProgress(false);
         if (response.isSuccessful) {
-          QuranAuthFactory.authEngine.getUser().then((user) {
+          QuranAuthFactory.engine.getUser().then((user) {
             if (user != null) {
               Navigator.of(context).pop();
               _showMessage("Logged in 👍");
@@ -157,7 +157,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
     String email = _emailController.text;
     if (email.isNotEmpty && QuranUtils.isEmail(email)) {
       _showLoadingProgress(true);
-      QuranAuthFactory.authEngine.forgotPassword(email).then((response) {
+      QuranAuthFactory.engine.forgotPassword(email).then((response) {
         _showLoadingProgress(false);
         _showMessage(response.message);
       });
