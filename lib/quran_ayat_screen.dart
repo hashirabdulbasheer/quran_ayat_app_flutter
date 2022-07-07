@@ -44,7 +44,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     QuranPreferences.getBookmark().then((bookmark) {
       _currentBookmark = bookmark;
     });
+    QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
     _handleUrlPathsForWeb();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
   }
 
   @override
@@ -399,17 +406,39 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   Widget _notesWidget() {
-    return FutureBuilder<QuranUser?>(
-      future: _fetchUserAfterDelay(),
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user == null) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 30),
+        child: SizedBox(
+          height: 50,
+          child: ElevatedButton(
+              onPressed: () {
+                _goToLoginScreen();
+              },
+              child: const Text("Login to add notes")),
+        ),
+      );
+    }
+    // logged in
+    if (_selectedSurah == null) {
+      return Container();
+    }
+    return FutureBuilder<List<QuranNote>>(
+      future: QuranNotesFactory.engine
+          .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
       // async work
-      builder: (BuildContext context, AsyncSnapshot<QuranUser?> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return const Padding(
-                padding: EdgeInsets.all(8.0), child: Text('Loading....'));
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                    height: 100,
+                    child: Center(child: Text('Loading notes....'))));
           default:
             if (snapshot.hasError) {
-              print("Error user: ${snapshot.error}");
+              print("Error notes: ${snapshot.error}");
               return const Padding(
                   padding: EdgeInsets.only(top: 30),
                   child: SizedBox(
@@ -420,147 +449,89 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     ),
                   ));
             } else {
-              QuranUser? user = snapshot.data;
-              if (user == null) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 30),
-                  child: SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          _goToLoginScreen();
-                        },
-                        child: const Text("Login to add notes")),
+              List<QuranNote> notes = snapshot.data as List<QuranNote>;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                );
-              }
-              // logged in
-              if (_selectedSurah == null) {
-                return Container();
-              }
-              return FutureBuilder<List<QuranNote>>(
-                future: QuranNotesFactory.engine
-                    .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
-                // async work
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<QuranNote>> snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: SizedBox(
+                  Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black12),
+                        color: Colors.black12,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5))),
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("Notes"),
+                        ElevatedButton(
+                            onPressed: () {
+                              _goToCreateNoteScreen();
+                            },
+                            child: const Text("Add"))
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  notes.isNotEmpty
+                      ? ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: notes.length,
+                          shrinkWrap: true,
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const Divider(
+                              thickness: 1,
+                            );
+                          },
+                          itemBuilder: (BuildContext context, int index) {
+                            return Directionality(
+                              textDirection:
+                                  QuranUtils.isEnglish(notes[index].note)
+                                      ? TextDirection.ltr
+                                      : TextDirection.rtl,
+                              child: ListTile(
+                                  onTap: () {
+                                    _goToCreateNoteScreen(note: notes[index]);
+                                  },
+                                  title: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(notes[index].note,
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.black87)),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Text(
+                                            "${_formattedDate(notes[index].createdOn)}",
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.black54)),
+                                      ],
+                                    ),
+                                  )),
+                            );
+                          })
+                      : TextButton(
+                          onPressed: () {
+                            _goToCreateNoteScreen();
+                          },
+                          child: const SizedBox(
                               height: 100,
-                              child: Center(child: Text('Loading notes....'))));
-                    default:
-                      if (snapshot.hasError) {
-                        print("Error notes: ${snapshot.error}");
-                        return const Padding(
-                            padding: EdgeInsets.only(top: 30),
-                            child: SizedBox(
-                              height: 50,
-                              child: Text(
-                                'Unable to load notes. Please check internet connectivity',
-                                style: TextStyle(color: Colors.black38),
-                              ),
-                            ));
-                      } else {
-                        List<QuranNote> notes =
-                            snapshot.data as List<QuranNote>;
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black12),
-                                  color: Colors.black12,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(5))),
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text("Notes"),
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        _goToCreateNoteScreen();
-                                      },
-                                      child: const Text("Add"))
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            notes.isNotEmpty
-                                ? ListView.separated(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: notes.length,
-                                    shrinkWrap: true,
-                                    separatorBuilder:
-                                        (BuildContext context, int index) {
-                                      return const Divider(
-                                        thickness: 1,
-                                      );
-                                    },
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Directionality(
-                                        textDirection: QuranUtils.isEnglish(
-                                                notes[index].note)
-                                            ? TextDirection.ltr
-                                            : TextDirection.rtl,
-                                        child: ListTile(
-                                            onTap: () {
-                                              _goToCreateNoteScreen(
-                                                  note: notes[index]);
-                                            },
-                                            title: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(notes[index].note,
-                                                      style: const TextStyle(
-                                                          fontSize: 20,
-                                                          color:
-                                                              Colors.black87)),
-                                                  const SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Text(
-                                                      "${_formattedDate(notes[index].createdOn)}",
-                                                      style: const TextStyle(
-                                                          fontSize: 15,
-                                                          color:
-                                                              Colors.black54)),
-                                                ],
-                                              ),
-                                            )),
-                                      );
-                                    })
-                                : TextButton(
-                                    onPressed: () {
-                                      _goToCreateNoteScreen();
-                                    },
-                                    child: const SizedBox(
-                                        height: 100,
-                                        child:
-                                            Center(child: Text("Add Note")))),
-                          ],
-                        );
-                      }
-                  }
-                },
+                              child: Center(child: Text("Add Note")))),
+                ],
               );
             }
         }
@@ -569,25 +540,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   Widget _profileIconBasedOnLoggedInStatus() {
-    return FutureBuilder<QuranUser?>(
-      future: _fetchUserAfterDelay(), // async work
-      builder: (BuildContext context, AsyncSnapshot<QuranUser?> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(color: Colors.white),
-            );
-          default:
-            if (!snapshot.hasError) {
-              if (snapshot.data != null) {
-                return _profileIcon(icon: Icons.account_circle);
-              }
-            }
-            return _profileIcon(icon: Icons.account_circle_outlined);
-        }
-      },
-    );
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      return _profileIcon(icon: Icons.account_circle);
+    }
+    return _profileIcon(icon: Icons.account_circle_outlined);
   }
 
   _profileIcon({required IconData icon}) {
@@ -780,15 +737,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   /// Actions
   ///
   void _accountButtonTapped() async {
-    QuranAuthFactory.engine.getUser().then((user) {
-      if (user == null) {
-        // not previously logged in, go to login
-        _goToLoginScreen();
-      } else {
-        // already logged in
-        _goToProfileScreen(user);
-      }
-    });
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user == null) {
+      // not previously logged in, go to login
+      _goToLoginScreen();
+    } else {
+      // already logged in
+      _goToProfileScreen(user);
+    }
   }
 
   _goToLoginScreen() {
@@ -829,11 +785,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   /// Utils
   ///
 
-  Future<QuranUser?> _fetchUserAfterDelay() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return QuranAuthFactory.engine.getUser();
-  }
-
   _formattedDate(int timeMs) {
     DateTime now = DateTime.now();
     DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
@@ -858,5 +809,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     }
     var d24 = intl.DateFormat('dd/MM/yyyy HH:mm').format(millis);
     return d24;
+  }
+
+  _authChangeListener() {
+    setState(() {});
   }
 }

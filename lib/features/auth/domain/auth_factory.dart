@@ -3,6 +3,6 @@ import 'interfaces/quran_auth_interface.dart';
 
 class QuranAuthFactory {
   static QuranAuthInterface get engine {
-    return QuranFirebaseAuthEngine();
+    return QuranFirebaseAuthEngine.instance;
   }
 }

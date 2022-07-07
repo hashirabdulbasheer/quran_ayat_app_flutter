@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/auth/domain/auth_factory.dart';
-import 'package:quran_ayat/features/notes/domain/notes_factory.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 
 // TODO: Update before release
 const String appVersion = "v2.0.0";

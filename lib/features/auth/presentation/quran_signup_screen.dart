@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/models/qr_user_model.dart';
 import '../domain/auth_factory.dart';
 import '../../../utils/utils.dart';
 
@@ -128,12 +129,11 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
           .then((response) {
         _showLoadingProgress(false);
         if (response.isSuccessful) {
-          QuranAuthFactory.engine.getUser().then((user) {
-            if (user != null) {
-              Navigator.of(context).pop(true);
-              _showMessage("Success 👍. Ahlan wa sahlan!");
-            }
-          });
+          QuranUser? user = QuranAuthFactory.engine.getUser();
+          if (user != null) {
+            Navigator.of(context).pop(true);
+            _showMessage("Success 👍. Ahlan wa sahlan!");
+          }
         } else {
           _showMessage("Sorry 😔, ${response.message}");
         }

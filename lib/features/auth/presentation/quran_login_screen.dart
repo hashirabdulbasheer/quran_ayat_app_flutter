@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../models/qr_user_model.dart';
 import '../domain/auth_factory.dart';
 import '../../../utils/utils.dart';
 import 'quran_signup_screen.dart';
@@ -138,12 +139,11 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
       QuranAuthFactory.engine.login(email, password).then((response) {
         _showLoadingProgress(false);
         if (response.isSuccessful) {
-          QuranAuthFactory.engine.getUser().then((user) {
-            if (user != null) {
-              Navigator.of(context).pop();
-              _showMessage("Logged in 👍");
-            }
-          });
+          QuranUser? user = QuranAuthFactory.engine.getUser();
+          if (user != null) {
+            Navigator.of(context).pop();
+            _showMessage("Logged in 👍");
+          }
         } else {
           _showMessage("Sorry 😔, ${response.message}");
         }

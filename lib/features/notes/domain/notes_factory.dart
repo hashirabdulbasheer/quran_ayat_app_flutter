@@ -3,6 +3,6 @@ import 'interfaces/quran_notes_interface.dart';
 
 class QuranNotesFactory {
   static QuranNotesInterface get engine {
-    return QuranFirebaseNotesEngine();
+    return QuranFirebaseNotesEngine.instance;
   }
 }

@@ -1,17 +1,48 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import '../../../firebase_options.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../domain/interfaces/quran_auth_interface.dart';
 
+/// Singleton
 class QuranFirebaseAuthEngine implements QuranAuthInterface {
+  QuranFirebaseAuthEngine._privateConstructor();
+
+  static final QuranFirebaseAuthEngine instance =
+      QuranFirebaseAuthEngine._privateConstructor();
+
+  QuranUser? _user;
+
+  List<Function> authChangeListeners = [];
+
+  _authChangeListener(User? user) {
+    _user = _mapFirebaseUserToQuranUser(user);
+    // inform all of auth change
+    for (Function listener in authChangeListeners) {
+      listener();
+    }
+  }
+
+  /// User? -> QuranUser?
+  QuranUser? _mapFirebaseUserToQuranUser(User? user) {
+    if (user != null) {
+      String name = user.displayName ?? "";
+      String email = user.email ?? "";
+      String uid = user.uid;
+      if (name.isNotEmpty && email.isNotEmpty && uid.isNotEmpty) {
+        return QuranUser(name: name, email: email, uid: uid);
+      }
+    }
+    return null;
+  }
 
   @override
-  Future<QuranUser?> initialize() async {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-    return await getUser();
+  Future<bool> initialize() async {
+    await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform);
+    FirebaseAuth.instance.authStateChanges().listen(_authChangeListener);
+    return true;
   }
 
   @override
@@ -65,19 +96,14 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
   }
 
   @override
-  Future<QuranUser?> getUser() async {
-    await FirebaseAuth.instance.currentUser?.reload();
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String name = user.displayName ?? "";
-      String email = user.email ?? "";
-      String uid = user.uid;
-      if (name.isNotEmpty && email.isNotEmpty) {
-        QuranUser quranUser = QuranUser(name: name, email: email, uid: uid);
-        return quranUser;
-      }
+  QuranUser? getUser() {
+    if (_user != null) {
+      return _user;
     }
-    return null;
+    FirebaseAuth.instance.currentUser?.reload();
+    User? user = FirebaseAuth.instance.currentUser;
+    _user = _mapFirebaseUserToQuranUser(user);
+    return _user;
   }
 
   @override
@@ -102,5 +128,15 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
             isSuccessful: true, message: "Done 👍, please check your email."))
         .catchError((e) => QuranResponse(
             isSuccessful: false, message: "Sorry 😔, ${e.toString()}."));
+  }
+
+  @override
+  void registerAuthChangeListener(Function listener) {
+    authChangeListeners.add(listener);
+  }
+
+  @override
+  void unregisterAuthChangeListener(Function listener) {
+    authChangeListeners.remove(listener);
   }
 }
