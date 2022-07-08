@@ -84,7 +84,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => QuranAyatScreen(
-                                              surahIndex: words[index].word.sura,
+                                              surahIndex: words[index].word.sura-1,
                                               ayaIndex: words[index].word.aya)),
                                     );
                                   },
