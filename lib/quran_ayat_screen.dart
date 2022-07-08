@@ -134,9 +134,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           ),
           appBar: AppBar(
             centerTitle: true,
-            leading: Padding(
-                padding: const EdgeInsets.all(5),
-                child: _profileIconBasedOnLoggedInStatus()),
             title: const Text("Quran Ayat"),
             actions: [
               IconButton(
@@ -157,6 +154,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   icon: _isThisBookmarkedAya()
                       ? const Icon(Icons.bookmark)
                       : const Icon(Icons.bookmark_border_outlined)),
+              Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: _profileIconBasedOnLoggedInStatus())
             ],
           ),
           body: FutureBuilder<List<NQSurahTitle>>(
