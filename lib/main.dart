@@ -7,11 +7,11 @@ import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.0.0";
+const String appVersion = "v2.0.1";
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
+  WidgetsFlutterBinding.ensureInitialized();
   await QuranAuthFactory.engine.initialize();
   runApp(const MyApp());
   _loadQuranWords();

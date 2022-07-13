@@ -41,11 +41,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   void initState() {
     super.initState();
     _selectedAyat = widget.ayaIndex ?? 1;
+    _handleUrlPathsForWeb();
     QuranPreferences.getBookmark().then((bookmark) {
       _currentBookmark = bookmark;
     });
     QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
-    _handleUrlPathsForWeb();
   }
 
   @override
@@ -559,9 +559,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         icon: Icon(icon, size: 30));
   }
 
-  void _handleUrlPathsForWeb() {
+  void _handleUrlPathsForWeb() async {
     if (kIsWeb) {
       String? searchString = Uri.base.queryParameters["search"];
+      String? suraIndex = Uri.base.queryParameters["sura"];
+      String? ayaIndex = Uri.base.queryParameters["aya"];
       if (searchString != null && searchString.isNotEmpty) {
         // we have a search url
         // navigate to search screen
@@ -576,8 +578,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       } else {
         // not a search url
         // check for surah/ayat format
-        String? suraIndex = Uri.base.queryParameters["sura"];
-        String? ayaIndex = Uri.base.queryParameters["aya"];
+        _surahTitles =  await NobleQuran.getSurahList();
         if (suraIndex != null &&
             ayaIndex != null &&
             suraIndex.isNotEmpty &&
