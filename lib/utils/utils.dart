@@ -1,6 +1,24 @@
+import 'package:uuid/uuid.dart';
+
+import '../misc/enums/quran_status_enum.dart';
 import '../models/qr_word_model.dart';
 
 class QuranUtils {
+
+  static QuranStatusEnum statusFromString(String value) {
+    if (value.toLowerCase() == "created") {
+      return QuranStatusEnum.created;
+    } else if (value.toLowerCase() == "updated") {
+      return QuranStatusEnum.updated;
+    } else if (value.toLowerCase() == "deleted") {
+      return QuranStatusEnum.deleted;
+    }
+    return QuranStatusEnum.created;
+  }
+
+  static String uniqueId() {
+    return const Uuid().v1();
+  }
 
   static bool isEmail(String e) {
     bool emailValid = RegExp(

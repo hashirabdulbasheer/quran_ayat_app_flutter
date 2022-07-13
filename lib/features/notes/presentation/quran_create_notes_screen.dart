@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
+import 'package:quran_ayat/utils/utils.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../domain/entities/quran_note.dart';
@@ -170,13 +172,15 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   ///
   _createButtonPressed(Function onComplete) async {
     if (_notesController.text.isNotEmpty) {
-      QuranUser? user = await QuranAuthFactory.engine.getUser();
+      QuranUser? user = QuranAuthFactory.engine.getUser();
       if (user != null) {
         QuranNote note = QuranNote(
             suraIndex: widget.suraIndex,
             ayaIndex: widget.ayaIndex,
             note: _notesController.text,
-            createdOn: DateTime.now().millisecondsSinceEpoch);
+            createdOn: DateTime.now().millisecondsSinceEpoch,
+            localId: QuranUtils.uniqueId(),
+            status: QuranStatusEnum.created);
         QuranNotesFactory.engine.create(user.uid, note);
         onComplete();
       }

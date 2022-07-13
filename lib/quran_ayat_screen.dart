@@ -8,6 +8,7 @@ import 'package:noble_quran/noble_quran.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/auth/presentation/quran_profile_screen.dart';
+import 'features/notes/data/firebase_notes_impl.dart';
 import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_factory.dart';
 import 'features/notes/presentation/quran_create_notes_screen.dart';
@@ -133,7 +134,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
           ),
           appBar: AppBar(
-            centerTitle: true,
+            centerTitle: false,
             title: const Text("Quran Ayat"),
             actions: [
               IconButton(

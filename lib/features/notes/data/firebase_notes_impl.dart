@@ -38,7 +38,9 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
             ayaIndex: ayaIndex,
             note: resultList[k]["note"],
             createdOn: resultList[k]["createdOn"],
-            id: k);
+            id: k,
+            localId: resultList[k]["localId"],
+            status: resultList[k]["status"]);
         notes.add(note);
       }
       // sort
