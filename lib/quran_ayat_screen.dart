@@ -30,21 +30,44 @@ class QuranAyatScreen extends StatefulWidget {
 }
 
 class QuranAyatScreenState extends State<QuranAyatScreen> {
+  /// list of all surah titles
   List<NQSurahTitle> _surahTitles = [];
+
+  /// current selected surah
   NQSurahTitle? _selectedSurah;
+
+  /// current selected ayat
   int _selectedAyat = 1;
 
-  // int _selectedSurahIndex = 1;
+  /// bookmark
   NQBookmark? _currentBookmark;
+
+  /// url parameters
+  final String? _urlQuerySearchString = Uri.base.queryParameters["search"];
+  final String? _urlQuerySuraIndex = Uri.base.queryParameters["sura"];
+  final String? _urlQueryAyaIndex = Uri.base.queryParameters["aya"];
 
   @override
   void initState() {
     super.initState();
+
+    /// if an aya index is passed in then use that
     _selectedAyat = widget.ayaIndex ?? 1;
-    _handleUrlPathsForWeb();
+
+    /// load bookmark
     QuranPreferences.getBookmark().then((bookmark) {
       _currentBookmark = bookmark;
     });
+
+    /// load surah titles and handle web url params when ready
+    NobleQuran.getSurahList().then((surahList) {
+      setState(() {
+        _surahTitles = surahList;
+      });
+      _handleUrlPathsForWeb();
+    });
+
+    /// register for auth changes
     QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
   }
 
@@ -63,127 +86,111 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          bottomSheet: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.black12,
-                              shadowColor: Colors.transparent,
-                              textStyle: const TextStyle(
-                                  color: Colors
-                                      .deepPurple) // This is what you need!
-                              ),
-                          onPressed: () {
-                            if (_selectedSurah != null) {
-                              int prevAyat = _selectedAyat - 1;
-                              if (prevAyat > 0) {
-                                setState(() {
-                                  _selectedAyat = prevAyat;
-                                });
+            bottomSheet: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.black12,
+                                shadowColor: Colors.transparent,
+                                textStyle: const TextStyle(
+                                    color: Colors
+                                        .deepPurple) // This is what you need!
+                                ),
+                            onPressed: () {
+                              if (_selectedSurah != null) {
+                                int prevAyat = _selectedAyat - 1;
+                                if (prevAyat > 0) {
+                                  setState(() {
+                                    _selectedAyat = prevAyat;
+                                  });
+                                }
                               }
-                            }
-                          },
-                          child: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.deepPurple,
-                          )),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.black12,
-                              shadowColor:
-                                  Colors.transparent // This is what you need!
-                              ),
-                          onPressed: () {
-                            if (_selectedSurah != null) {
-                              int nextAyat = _selectedAyat + 1;
-                              if (nextAyat <= _selectedSurah!.totalVerses) {
-                                setState(() {
-                                  _selectedAyat = nextAyat;
-                                });
-                              }
-                            }
-                          },
-                          child: const Icon(Icons.arrow_forward,
-                              color: Colors.deepPurple)),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                      child: Text(
-                        "$appVersion uxQuran",
-                        style: TextStyle(fontSize: 10),
+                            },
+                            child: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.deepPurple,
+                            )),
                       ),
-                    ),
-                  ],
-                )
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.black12,
+                                shadowColor:
+                                    Colors.transparent // This is what you need!
+                                ),
+                            onPressed: () {
+                              if (_selectedSurah != null) {
+                                int nextAyat = _selectedAyat + 1;
+                                if (nextAyat <= _selectedSurah!.totalVerses) {
+                                  setState(() {
+                                    _selectedAyat = nextAyat;
+                                  });
+                                }
+                              }
+                            },
+                            child: const Icon(Icons.arrow_forward,
+                                color: Colors.deepPurple)),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: Text(
+                          "$appVersion uxQuran",
+                          style: TextStyle(fontSize: 10),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            appBar: AppBar(
+              centerTitle: true,
+              title: const Text("Quran Ayat"),
+              actions: [
+                IconButton(
+                    tooltip: "go to search screen",
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const QuranSearchScreen()),
+                      );
+                    },
+                    icon: const Icon(Icons.search)),
+                IconButton(
+                    tooltip: "display bookmark options",
+                    onPressed: () {
+                      _showBookmarkAlertDialog();
+                    },
+                    icon: _isThisBookmarkedAya()
+                        ? const Icon(Icons.bookmark)
+                        : const Icon(Icons.bookmark_border_outlined)),
+                Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: _profileIconBasedOnLoggedInStatus())
               ],
             ),
-          ),
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Quran Ayat"),
-            actions: [
-              IconButton(
-                  tooltip: "go to search screen",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const QuranSearchScreen()),
-                    );
-                  },
-                  icon: const Icon(Icons.search)),
-              IconButton(
-                  tooltip: "display bookmark options",
-                  onPressed: () {
-                    _showBookmarkAlertDialog();
-                  },
-                  icon: _isThisBookmarkedAya()
-                      ? const Icon(Icons.bookmark)
-                      : const Icon(Icons.bookmark_border_outlined)),
-              Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: _profileIconBasedOnLoggedInStatus())
-            ],
-          ),
-          body: FutureBuilder<List<NQSurahTitle>>(
-            future: NobleQuran.getSurahList(), // async work
-            builder: (BuildContext context,
-                AsyncSnapshot<List<NQSurahTitle>> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return const Padding(
-                      padding: EdgeInsets.all(8.0), child: Text('Loading....'));
-                default:
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else {
-                    _surahTitles = snapshot.data as List<NQSurahTitle>;
-                    return _body(_surahTitles);
-                  }
-              }
-            },
-          ),
-        ),
+            body: _surahTitles.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : _body()),
       ),
     );
   }
 
-  Widget _body(List<NQSurahTitle> surahTitles) {
-    _selectedSurah ??= surahTitles[widget.surahIndex ?? 0];
+  Widget _body() {
+    _selectedSurah ??= _surahTitles[widget.surahIndex ?? 0];
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -193,7 +200,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 /// header
-                _displayHeader(surahTitles),
+                _displayHeader(),
 
                 const SizedBox(height: 10),
 
@@ -243,7 +250,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     );
   }
 
-  Widget _displayHeader(List<NQSurahTitle> surahTitles) {
+  Widget _displayHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -256,7 +263,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             child: SizedBox(
               height: 80,
               child: DropdownSearch<NQSurahTitle>(
-                items: surahTitles,
+                items: _surahTitles,
                 popupProps: const PopupPropsMultiSelection.menu(),
                 itemAsString: (surah) =>
                     "${surah.number}) ${surah.transliterationEn}",
@@ -559,50 +566,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         icon: Icon(icon, size: 30));
   }
 
-  void _handleUrlPathsForWeb() async {
-    if (kIsWeb) {
-      String? searchString = Uri.base.queryParameters["search"];
-      String? suraIndex = Uri.base.queryParameters["sura"];
-      String? ayaIndex = Uri.base.queryParameters["aya"];
-      if (searchString != null && searchString.isNotEmpty) {
-        // we have a search url
-        // navigate to search screen
-        Future.delayed(const Duration(seconds: 1), () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    QuranSearchScreen(searchString: searchString)),
-          );
-        });
-      } else {
-        // not a search url
-        // check for surah/ayat format
-        _surahTitles =  await NobleQuran.getSurahList();
-        if (suraIndex != null &&
-            ayaIndex != null &&
-            suraIndex.isNotEmpty &&
-            ayaIndex.isNotEmpty) {
-          // have more than one
-          // the last two paths should be surah/ayat format
-          try {
-            _selectedAyat = int.parse(ayaIndex);
-            var selectedSurahIndex = int.parse(suraIndex) - 1;
-            _selectedSurah = _surahTitles[selectedSurahIndex];
-          } catch (_) {}
-        } else if (suraIndex != null && suraIndex.isNotEmpty) {
-          // has only one
-          // the last path will be surah index
-          try {
-            _selectedAyat = 1;
-            var selectedSurahIndex = int.parse(suraIndex) - 1;
-            _selectedSurah = _surahTitles[selectedSurahIndex];
-          } catch (_) {}
-        }
-      }
-    }
-  }
-
   ///
   /// Bookmark
   ///
@@ -817,5 +780,48 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   _authChangeListener() {
     setState(() {});
+  }
+
+  void _handleUrlPathsForWeb() {
+    if (kIsWeb) {
+      String? searchString = _urlQuerySearchString;
+      String? suraIndex = _urlQuerySuraIndex;
+      String? ayaIndex = _urlQueryAyaIndex;
+      if (searchString != null && searchString.isNotEmpty) {
+        // we have a search url
+        // navigate to search screen
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    QuranSearchScreen(searchString: searchString)),
+          );
+        });
+      } else {
+        // not a search url
+        // check for surah/ayat format
+        if (suraIndex != null &&
+            ayaIndex != null &&
+            suraIndex.isNotEmpty &&
+            ayaIndex.isNotEmpty) {
+          // have more than one
+          // the last two paths should be surah/ayat format
+          try {
+            _selectedAyat = int.parse(ayaIndex);
+            var selectedSurahIndex = int.parse(suraIndex) - 1;
+            _selectedSurah = _surahTitles[selectedSurahIndex];
+          } catch (_) {}
+        } else if (suraIndex != null && suraIndex.isNotEmpty) {
+          // has only one
+          // the last path will be surah index
+          try {
+            _selectedAyat = 1;
+            var selectedSurahIndex = int.parse(suraIndex) - 1;
+            _selectedSurah = _surahTitles[selectedSurahIndex];
+          } catch (_) {}
+        }
+      }
+    }
   }
 }

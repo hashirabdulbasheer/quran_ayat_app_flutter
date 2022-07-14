@@ -1,0 +1,12 @@
+1) Change surah should work
+2) Change Ayat should work
+3) Search for ayat in dropdown
+4) Url parameters
+	- http://localhost:57951/?sura=18&aya=11
+	- http://localhost:57951/?sura=18
+	- http://localhost:57951/?search=mercy
+5) bookmarking
+6) navigation - forward and back
+7) search
+8) click on a word and search
+9) notes feature
