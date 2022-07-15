@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/models/qr_user_model.dart';
+import '../../../models/qr_user_model.dart';
 import '../domain/auth_factory.dart';
 import '../../../utils/utils.dart';
 

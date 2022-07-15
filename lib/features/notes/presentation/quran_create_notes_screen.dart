@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
-import 'package:quran_ayat/utils/utils.dart';
+import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
+import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../domain/entities/quran_note.dart';
-import '../domain/notes_factory.dart';
+import '../domain/notes_manager.dart';
+import 'widgets/offline_header_widget.dart';
 
 class QuranCreateNotesScreen extends StatefulWidget {
   final int suraIndex;
@@ -34,6 +35,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const QuranOfflineHeaderWidget(),
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
@@ -181,7 +183,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
             createdOn: DateTime.now().millisecondsSinceEpoch,
             localId: QuranUtils.uniqueId(),
             status: QuranStatusEnum.created);
-        QuranNotesFactory.engine.create(user.uid, note);
+        await QuranNotesManager.instance.create(user.uid, note);
         onComplete();
       }
     } else {
@@ -190,14 +192,14 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   }
 
   _deleteButtonPressed(Function onComplete) async {
-    QuranUser? user = await QuranAuthFactory.engine.getUser();
+    QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       Widget okButton = TextButton(
         style: TextButton.styleFrom(primary: Colors.red),
         child: const Text("Delete"),
         onPressed: () {
           if (widget.note != null) {
-            QuranNotesFactory.engine.delete(user.uid, widget.note!);
+            QuranNotesManager.instance.delete(user.uid, widget.note!);
             _showMessage("Deleted 👍");
             Navigator.of(context).pop();
             onComplete();
@@ -229,13 +231,12 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
 
   _updateButtonPressed() async {
     if (_notesController.text.isNotEmpty) {
-      QuranUser? user = await QuranAuthFactory.engine.getUser();
+      QuranUser? user = QuranAuthFactory.engine.getUser();
       if (user != null) {
         QuranNote note = widget.note!.copyWith(
             createdOn: DateTime.now().millisecondsSinceEpoch,
             note: _notesController.text);
-
-        QuranNotesFactory.engine.update(user.uid, note);
+        QuranNotesManager.instance.update(user.uid, note);
         _showMessage("Updated 👍");
       }
     } else {

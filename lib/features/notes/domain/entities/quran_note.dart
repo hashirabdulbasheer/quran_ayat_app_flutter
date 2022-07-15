@@ -1,4 +1,4 @@
-import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
+import '../../../../misc/enums/quran_status_enum.dart';
 
 class QuranNote {
   final String? id;
@@ -34,5 +34,14 @@ class QuranNote {
         localId: localId ?? this.localId,
         status: status ?? this.status,
         createdOn: createdOn ?? this.createdOn);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "note": note,
+      "status": status.rawString(),
+      "localId": localId,
+      "createdOn": createdOn
+    };
   }
 }

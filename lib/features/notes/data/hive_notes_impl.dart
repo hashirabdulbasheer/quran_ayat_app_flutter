@@ -12,6 +12,15 @@ class QuranHiveNotesEngine implements QuranNotesInterface {
   static final QuranHiveNotesEngine instance =
       QuranHiveNotesEngine._privateConstructor();
 
+  late Box<List> _box;
+
+  @override
+  Future<void> initialize() async {
+    await Hive.initFlutter();
+    Hive.registerAdapter(QuranNoteDtoAdapter());
+    _box = await Hive.openBox<List>('notesBox');
+  }
+
   @override
   Future<QuranResponse> create(String userId, QuranNote note) async {
     QuranNoteDto noteDto = QuranNoteDto(
@@ -23,54 +32,49 @@ class QuranHiveNotesEngine implements QuranNotesInterface {
         status: QuranStatusEnum.created.rawString(),
         localId: QuranUtils.uniqueId());
     String key = "$userId/${note.suraIndex}/${note.ayaIndex}";
-    var box = await Hive.openBox<List<QuranNoteDto>>('notesBox');
-    List<QuranNoteDto> items = box.get(key) ?? [];
+    List<QuranNoteDto>? items = (_box.get(key) ?? []).cast<QuranNoteDto>();
     items.add(noteDto);
-    box.put(key, items);
+    await _box.put(key, items);
+    await _box.flush();
     return QuranResponse(isSuccessful: true, message: "success");
   }
 
   @override
   Future<bool> delete(String userId, QuranNote note) async {
     String key = "$userId/${note.suraIndex}/${note.ayaIndex}";
-    var box = await Hive.openBox<List<QuranNoteDto>>('notesBox');
-    List<QuranNoteDto> items = box.get(key) ?? [];
+    List<QuranNoteDto> items = (_box.get(key) ?? []).cast<QuranNoteDto>();
     items.removeWhere((element) =>
         (element.localId == note.localId) ||
         (element.id != null && element.id == note.id));
-    box.put(key, items);
+    _box.put(key, items);
     return true;
   }
 
   @override
   Future<List<QuranNote>> fetch(
       String userId, int suraIndex, int ayaIndex) async {
+    List<QuranNote> items = [];
     String key = "$userId/$suraIndex/$ayaIndex";
-    var box = await Hive.openBox<List<QuranNoteDto>>('notesBox');
-    List<QuranNoteDto> items = box.get(key) ?? [];
-    return items
-        .map((e) => QuranNote(
+    List<QuranNoteDto> dtoItems = (_box.get(key) ?? []).cast<QuranNoteDto>();
+    for (QuranNoteDto e in dtoItems) {
+      try {
+        items.add(QuranNote(
             suraIndex: e.suraIndex,
             ayaIndex: e.ayaIndex,
             id: e.id,
             createdOn: e.createdOn,
             note: e.note,
             status: QuranUtils.statusFromString(e.status),
-            localId: e.localId))
-        .toList();
-  }
-
-  @override
-  Future<void> initialize() async {
-    await Hive.initFlutter();
-    Hive.registerAdapter(QuranNoteDtoAdapter());
+            localId: e.localId));
+      } catch (_) {}
+    }
+    return items;
   }
 
   @override
   Future<bool> update(String userId, QuranNote note) async {
     String key = "$userId/${note.suraIndex}/${note.ayaIndex}";
-    var box = await Hive.openBox<List<QuranNoteDto>>('notesBox');
-    List<QuranNoteDto> items = box.get(key) ?? [];
+    List<QuranNoteDto> items = (_box.get(key) ?? []).cast<QuranNoteDto>();
     int itemIndex = items.indexWhere((element) =>
         (element.localId == note.localId) ||
         (element.id != null && element.id == note.id));
@@ -84,10 +88,31 @@ class QuranHiveNotesEngine implements QuranNotesInterface {
           status: QuranStatusEnum.updated.rawString(),
           localId: note.localId);
       items[itemIndex] = updatedDto;
-      box.put(key, items);
+      _box.put(key, items);
       return true;
     }
     return false;
   }
 
+  @override
+  Future<List<QuranNote>> fetchAll(String userId) async {
+    List<QuranNote> items = [];
+    final keys = _box.keys.toList();
+    for (var key in keys) {
+      try {
+        List<QuranNoteDto> dtoNotesList = (_box.get(key) ?? []).cast<QuranNoteDto>();
+        for (QuranNoteDto e in dtoNotesList) {
+          items.add(QuranNote(
+              suraIndex: e.suraIndex,
+              ayaIndex: e.ayaIndex,
+              id: e.id,
+              createdOn: e.createdOn,
+              note: e.note,
+              status: QuranUtils.statusFromString(e.status),
+              localId: e.localId));
+        }
+      } catch (_) { }
+    }
+    return items;
+  }
 }

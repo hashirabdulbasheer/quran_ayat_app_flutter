@@ -8,6 +8,8 @@ abstract class QuranNotesInterface {
 
   Future<List<QuranNote>> fetch(String userId, int suraIndex, int ayaIndex);
 
+  Future<List<QuranNote>> fetchAll(String userId);
+
   Future<bool> delete(String userId, QuranNote note);
 
   Future<bool> update(String userId, QuranNote note);

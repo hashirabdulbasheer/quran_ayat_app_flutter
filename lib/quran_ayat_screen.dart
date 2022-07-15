@@ -9,8 +9,9 @@ import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/auth/presentation/quran_profile_screen.dart';
 import 'features/notes/domain/entities/quran_note.dart';
-import 'features/notes/domain/notes_factory.dart';
+import 'features/notes/domain/notes_manager.dart';
 import 'features/notes/presentation/quran_create_notes_screen.dart';
+import 'features/notes/presentation/widgets/offline_header_widget.dart';
 import 'main.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
@@ -434,8 +435,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     if (_selectedSurah == null) {
       return Container();
     }
+
     return FutureBuilder<List<QuranNote>>(
-      future: QuranNotesFactory.engine
+      future: QuranNotesManager.instance
           .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
       // async work
       builder: (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot) {
@@ -465,6 +467,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 children: [
                   const SizedBox(
                     height: 20,
+                  ),
+                  const QuranOfflineHeaderWidget(),
+                  const SizedBox(
+                    height: 10,
                   ),
                   Container(
                     height: 50,
@@ -778,7 +784,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     return d24;
   }
 
-  _authChangeListener() {
+  _authChangeListener() async {
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      await QuranNotesManager.instance.uploadLocalNotesIfAny(user.uid);
+    }
     setState(() {});
   }
 

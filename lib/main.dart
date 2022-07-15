@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/auth/domain/auth_factory.dart';
+import 'features/auth/domain/auth_factory.dart';
+import 'features/notes/data/hive_notes_impl.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.0.2";
+const String appVersion = "v2.1.0";
 
 void main() async {
   usePathUrlStrategy();
