@@ -404,7 +404,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         Text(
                           e.tr,
                           style: const TextStyle(
-                              color: Colors.black54, fontSize: 20),
+                              color: Colors.black54,
+                              fontSize: 20,
+                              fontFamily: "default"),
                           textDirection: TextDirection.ltr,
                         ),
                       ],
@@ -483,12 +485,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("Notes"),
+                        const Text(
+                          "Notes",
+                          style: TextStyle(fontFamily: "default"),
+                        ),
                         ElevatedButton(
                             onPressed: () {
                               _goToCreateNoteScreen();
                             },
-                            child: const Text("Add"))
+                            child: const Text("Add",
+                                style: TextStyle(fontFamily: "default")))
                       ],
                     ),
                   ),
@@ -526,6 +532,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                         Text(notes[index].note,
                                             style: const TextStyle(
                                                 fontSize: 20,
+                                                fontFamily: "default",
                                                 color: Colors.black87)),
                                         const SizedBox(
                                           height: 8,
@@ -546,7 +553,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           },
                           child: const SizedBox(
                               height: 100,
-                              child: Center(child: Text("Add Note")))),
+                              child: Center(
+                                  child: Text(
+                                "Add Note",
+                                style: TextStyle(fontFamily: "default"),
+                              )))),
                 ],
               );
             }
