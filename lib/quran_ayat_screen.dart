@@ -1,7 +1,9 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/bookmark.dart';
+import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
@@ -236,6 +238,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   ),
                 ),
 
+                const SizedBox(height: 20),
+
+                _fullTranslationWidget(),
+
                 /// Notes
                 _notesWidget(),
 
@@ -416,6 +422,53 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               ),
             ))
         .toList();
+  }
+
+  Widget _fullTranslationWidget() {
+    return FutureBuilder<NQSurah>(
+      future: NobleQuran.getTranslationString(
+          _selectedSurah!.number - 1, NQTranslation.SAHIH),
+      builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                    height: 100,
+                    child: Center(child: Text('Loading translation....'))));
+          default:
+            if (snapshot.hasError) {
+              return Container();
+            } else {
+              NQSurah surah = snapshot.data as NQSurah;
+              List<NQAyat> ayats = surah.aya;
+              return Card(
+                elevation: 5,
+                child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text(
+                            ayats[_selectedAyat - 1].text,
+                            style: const TextStyle(
+                                fontFamily: "default",
+                                fontSize: 18,
+                                height: 1.5,
+                                color: Colors.black87),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        }
+      },
+    );
   }
 
   Widget _notesWidget() {
