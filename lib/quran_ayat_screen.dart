@@ -676,7 +676,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       builder: (BuildContext context) {
         return alert;
       },
-    );
+    ).then((_) {
+      /// load bookmark
+      QuranPreferences.getBookmark().then((bookmark) {
+        setState(() {
+          _currentBookmark = bookmark;
+        });
+      });
+    });
   }
 
   void _showMultipleOptionTimeBookmarkAlertDialog(NQBookmark bookmark) {
@@ -697,7 +704,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
     Widget clearButton = TextButton(
       child: const Text("Clear bookmark",
-          style: TextStyle(fontWeight: FontWeight.bold)),
+          style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "default")),
       onPressed: () {
         if (_selectedSurah != null) {
           QuranPreferences.saveBookmark(0, 0);
@@ -710,7 +717,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
     Widget displayButton = TextButton(
       child: const Text("Go to bookmark",
-          style: TextStyle(fontWeight: FontWeight.bold)),
+          style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "default")),
       onPressed: () {
         if (_selectedSurah != null && bookmark.ayat > 0) {
           setState(() {
@@ -725,7 +732,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     Widget cancelButton = TextButton(
       child: const Text(
         "Cancel",
-        style: TextStyle(color: Colors.black45),
+        style: TextStyle(color: Colors.black45, fontFamily: "default"),
       ),
       onPressed: () {
         Navigator.of(context).pop();
@@ -733,7 +740,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     );
 
     alert = AlertDialog(
-      content: const Text("What would you like to do?"),
+      content: const Text(
+        "What would you like to do?",
+        style: TextStyle(fontFamily: "default"),
+      ),
       actions: [saveButton, displayButton, clearButton, cancelButton],
     );
 
@@ -743,7 +753,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       builder: (BuildContext context) {
         return alert;
       },
-    );
+    ).then((_) {
+      /// load bookmark
+      QuranPreferences.getBookmark().then((bookmark) {
+        setState(() {
+          _currentBookmark = bookmark;
+        });
+      });
+    });
   }
 
   void _showBookmarkAlertDialog() async {
@@ -758,13 +775,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   bool _isThisBookmarkedAya() {
-    if (_selectedSurah != null && _currentBookmark != null) {
-      int currentSurahIndex = _selectedSurah!.number - 1;
-      int currentAyaIndex = _selectedAyat;
-      if (currentSurahIndex == _currentBookmark?.surah &&
-          currentAyaIndex == _currentBookmark?.ayat) {
-        return true;
-      }
+    if (_currentBookmark != null && _currentBookmark!.surah >= 0) {
+      return true;
     }
     return false;
   }
