@@ -409,7 +409,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             e.tr,
                             style: const TextStyle(
                                 color: Colors.black54,
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontFamily: "default"),
                             textDirection: TextDirection.ltr,
                           ),
@@ -454,7 +454,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             ayats[_selectedAyat - 1].text,
                             style: const TextStyle(
                                 fontFamily: "default",
-                                fontSize: 18,
+                                fontSize: 14,
                                 height: 1.5,
                                 color: Colors.black87),
                           ),
