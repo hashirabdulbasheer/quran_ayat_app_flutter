@@ -385,35 +385,34 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(
-                          width: 120,
-                          child: Center(
-                              child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  e.ar,
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 40,
-                                      fontFamily: "Alvi"),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ],
-                          )),
+                        FittedBox(
+                          fit: BoxFit.cover,
+                          child: Text(
+                            e.ar,
+                            softWrap: false,
+                            maxLines: 1,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 35,
+                                fontFamily: "Alvi"),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          e.tr,
-                          style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 20,
-                              fontFamily: "default"),
-                          textDirection: TextDirection.ltr,
+                        const SizedBox(height: 2),
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black26),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(1))),
+                          child: Text(
+                            e.tr,
+                            style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 16,
+                                fontFamily: "default"),
+                            textDirection: TextDirection.ltr,
+                          ),
                         ),
                       ],
                     ),

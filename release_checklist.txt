@@ -10,3 +10,4 @@
 7) search
 8) click on a word and search
 9) notes feature
+10) authentication - login and registration process
