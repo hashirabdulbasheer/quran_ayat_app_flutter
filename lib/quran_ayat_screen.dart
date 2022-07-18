@@ -1,4 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
@@ -704,22 +705,26 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   ///
   /// Bookmark
+  /// TODO: Move to different class for bookmark management
   ///
+  void _showBookmarkAlertDialog() async {
+    NQBookmark? currentBookmark = await QuranPreferences.getBookmark();
+    if (currentBookmark == null) {
+      // no bookmark saved
+      _showFirstTimeBookmarkAlertDialog();
+    } else {
+      // there is a previous bookmark
+      _showMultipleOptionTimeBookmarkAlertDialog(currentBookmark);
+    }
+  }
+
   void _showFirstTimeBookmarkAlertDialog() {
     AlertDialog alert;
 
     // no bookmark saved
     Widget okButton = TextButton(
       child: const Text("Save"),
-      onPressed: () {
-        if (_selectedSurah != null) {
-          QuranPreferences.saveBookmark(
-              _selectedSurah!.number - 1, _selectedAyat);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
-          Navigator.of(context).pop();
-        }
-      },
+      onPressed: () => _saveBookmarkDialogAction(),
     );
 
     Widget cancelButton = TextButton(
@@ -758,15 +763,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     Widget saveButton = TextButton(
       child: const Text("Save bookmark",
           style: TextStyle(fontWeight: FontWeight.bold)),
-      onPressed: () {
-        if (_selectedSurah != null) {
-          QuranPreferences.saveBookmark(
-              _selectedSurah!.number - 1, _selectedAyat);
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
-          Navigator.of(context).pop();
-        }
-      },
+      onPressed: () => _saveBookmarkDialogAction(),
     );
 
     Widget clearButton = TextButton(
@@ -830,17 +827,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     });
   }
 
-  void _showBookmarkAlertDialog() async {
-    NQBookmark? currentBookmark = await QuranPreferences.getBookmark();
-    if (currentBookmark == null) {
-      // no bookmark saved
-      _showFirstTimeBookmarkAlertDialog();
-    } else {
-      // there is a previous bookmark
-      _showMultipleOptionTimeBookmarkAlertDialog(currentBookmark);
-    }
-  }
-
   bool _isThisBookmarkedAya() {
     if (_selectedSurah != null && _currentBookmark != null) {
       int currentSurahIndex = _selectedSurah!.number - 1;
@@ -851,6 +837,52 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       }
     }
     return false;
+  }
+
+  void _saveBookmarkDialogAction() {
+    if (_selectedSurah != null) {
+      // save locally
+      QuranPreferences.saveBookmark(_selectedSurah!.number - 1, _selectedAyat);
+      // sync bookmark to cloud
+      _syncBookmarkToCloud(_selectedSurah!.number - 1, _selectedAyat);
+      // show success message
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
+      // dismiss alert dialog
+      Navigator.of(context).pop();
+    }
+  }
+
+  void _syncBookmarkToCloud(int sura, int aya) async {
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      DatabaseReference ref =
+          FirebaseDatabase.instance.ref("bookmarks/${user.uid}");
+      DatabaseReference newPostRef = ref.push();
+      await newPostRef.set({"sura": sura, "aya": aya});
+    }
+  }
+
+  Future<NQBookmark?> _getBookmarkFromCloud() async {
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      DatabaseReference ref =
+          FirebaseDatabase.instance.ref("bookmarks/${user.uid}");
+      final snapshot = await ref.get();
+      Map<String, dynamic>? resultList =
+          snapshot.value as Map<String, dynamic>?;
+      if (resultList != null) {
+        String key = resultList.keys.first;
+        int? sura = resultList[key]["sura"];
+        int? aya = resultList[key]["aya"];
+        if (sura != null && aya != null) {
+          NQBookmark bookmark = NQBookmark(
+              surah: sura, ayat: aya, word: 0, seconds: 0, pixels: 0);
+          return bookmark;
+        }
+      }
+    }
+    return null;
   }
 
   ///
@@ -934,7 +966,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   _authChangeListener() async {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
+      /// upload local notes
       await QuranNotesManager.instance.uploadLocalNotesIfAny(user.uid);
+
+      /// fetch bookmark
+      NQBookmark? bookmark = await _getBookmarkFromCloud();
+      if (bookmark != null) {
+        _currentBookmark = bookmark;
+      }
     }
     setState(() {});
   }
