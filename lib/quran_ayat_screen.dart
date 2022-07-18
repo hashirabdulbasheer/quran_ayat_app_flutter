@@ -240,6 +240,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
                 const SizedBox(height: 20),
 
+                _fullArabicWidget(),
+
+                const SizedBox(height: 20),
+
                 _fullTranslationWidget(),
 
                 /// Notes
@@ -455,6 +459,52 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             style: const TextStyle(
                                 fontFamily: "default",
                                 fontSize: 14,
+                                height: 1.5,
+                                color: Colors.black87),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+        }
+      },
+    );
+  }
+
+  Widget _fullArabicWidget() {
+    return FutureBuilder<NQSurah>(
+      future: NobleQuran.getSurahArabic(_selectedSurah!.number - 1),
+      builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: SizedBox(
+                    height: 100,
+                    child: Center(child: Text('Loading arabic verse....'))));
+          default:
+            if (snapshot.hasError) {
+              return Container();
+            } else {
+              NQSurah surah = snapshot.data as NQSurah;
+              List<NQAyat> ayats = surah.aya;
+              return Card(
+                elevation: 5,
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text(
+                            ayats[_selectedAyat - 1].text,
+                            style: const TextStyle(
+                                fontFamily: "Alvi",
+                                fontSize: 35,
                                 height: 1.5,
                                 color: Colors.black87),
                           ),
