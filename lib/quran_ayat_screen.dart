@@ -775,8 +775,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   bool _isThisBookmarkedAya() {
-    if (_currentBookmark != null && _currentBookmark!.surah >= 0) {
-      return true;
+    if (_selectedSurah != null && _currentBookmark != null) {
+      int currentSurahIndex = _selectedSurah!.number - 1;
+      int currentAyaIndex = _selectedAyat;
+      if (currentSurahIndex == _currentBookmark?.surah &&
+          currentAyaIndex == _currentBookmark?.ayat) {
+        return true;
+      }
     }
     return false;
   }
