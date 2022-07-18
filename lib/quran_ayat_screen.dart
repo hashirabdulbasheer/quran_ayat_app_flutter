@@ -205,7 +205,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 /// header
                 _displayHeader(),
 
-                const SizedBox(height: 10),
+                _progressInSurah(),
+
+                const SizedBox(height: 30),
 
                 /// body
                 Card(
@@ -683,6 +685,21 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           _accountButtonTapped();
         },
         icon: Icon(icon, size: 30));
+  }
+
+  Widget _progressInSurah() {
+    NQSurahTitle? surah = _selectedSurah;
+    if (surah != null) {
+      int totalAyas = surah.totalVerses;
+      int currentAya = _selectedAyat;
+      double progress = currentAya / totalAyas;
+      return Padding(
+        padding: const EdgeInsets.only(left: 5, right: 5),
+        child: LinearProgressIndicator(
+            backgroundColor: Colors.black12, value: progress),
+      );
+    }
+    return Container();
   }
 
   ///
