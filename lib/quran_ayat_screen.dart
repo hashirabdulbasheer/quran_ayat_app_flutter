@@ -633,7 +633,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                       children: [
                                         Text(notes[index].note,
                                             style: const TextStyle(
-                                                fontSize: 20,
+                                                fontSize: 14,
                                                 fontFamily: "default",
                                                 color: Colors.black87)),
                                         const SizedBox(
