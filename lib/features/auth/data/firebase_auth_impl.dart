@@ -63,7 +63,7 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
             message: 'Wrong password provided for that user.');
       }
     }
-    return QuranResponse(isSuccessful: false, message: "Error creating user");
+    return QuranResponse(isSuccessful: false, message: "Error logging in");
   }
 
   @override

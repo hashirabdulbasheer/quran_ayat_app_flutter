@@ -208,7 +208,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
                 _progressInSurah(),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 25),
 
                 /// body
                 Card(
@@ -748,14 +748,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       builder: (BuildContext context) {
         return alert;
       },
-    ).then((_) {
-      /// load bookmark
-      QuranPreferences.getBookmark().then((bookmark) {
-        setState(() {
-          _currentBookmark = bookmark;
-        });
-      });
-    });
+    );
   }
 
   void _showMultipleOptionTimeBookmarkAlertDialog(NQBookmark bookmark) {
@@ -817,14 +810,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       builder: (BuildContext context) {
         return alert;
       },
-    ).then((_) {
-      /// load bookmark
-      QuranPreferences.getBookmark().then((bookmark) {
-        setState(() {
-          _currentBookmark = bookmark;
-        });
-      });
-    });
+    );
   }
 
   bool _isThisBookmarkedAya() {
@@ -839,12 +825,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     return false;
   }
 
-  void _saveBookmarkDialogAction() {
+  void _saveBookmarkDialogAction() async {
     if (_selectedSurah != null) {
       // save locally
       QuranPreferences.saveBookmark(_selectedSurah!.number - 1, _selectedAyat);
       // sync bookmark to cloud
       _syncBookmarkToCloud(_selectedSurah!.number - 1, _selectedAyat);
+
+      /// load bookmark
+      _currentBookmark = await QuranPreferences.getBookmark();
+      setState(() {
+
+      });
       // show success message
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
@@ -858,8 +850,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     if (user != null) {
       DatabaseReference ref =
           FirebaseDatabase.instance.ref("bookmarks/${user.uid}");
-      DatabaseReference newPostRef = ref.push();
-      await newPostRef.set({"sura": sura, "aya": aya});
+      await ref.set({"sura": sura, "aya": aya});
     }
   }
 
@@ -872,9 +863,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       Map<String, dynamic>? resultList =
           snapshot.value as Map<String, dynamic>?;
       if (resultList != null) {
-        String key = resultList.keys.first;
-        int? sura = resultList[key]["sura"];
-        int? aya = resultList[key]["aya"];
+        int? sura = resultList["sura"];
+        int? aya = resultList["aya"];
         if (sura != null && aya != null) {
           NQBookmark bookmark = NQBookmark(
               surah: sura, ayat: aya, word: 0, seconds: 0, pixels: 0);
@@ -973,6 +963,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       NQBookmark? bookmark = await _getBookmarkFromCloud();
       if (bookmark != null) {
         _currentBookmark = bookmark;
+        QuranPreferences.saveBookmark(bookmark.surah, bookmark.ayat);
       }
     }
     setState(() {});
