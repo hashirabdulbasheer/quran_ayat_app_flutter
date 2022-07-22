@@ -40,8 +40,8 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
             note: resultList[k]["note"],
             createdOn: resultList[k]["createdOn"],
             id: k,
-            localId: resultList[k]["localId"],
-            status: QuranUtils.statusFromString(resultList[k]["status"]));
+            localId: "${resultList[k]["localId"]}",
+            status: QuranUtils.statusFromString("${resultList[k]["status"]}"));
         notes.add(note);
       }
       // sort
