@@ -280,7 +280,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 items: _surahTitles,
                 popupProps: const PopupPropsMultiSelection.menu(),
                 itemAsString: (surah) =>
-                    "${surah.number}) ${surah.transliterationEn}",
+                    "(${surah.number}) ${surah.transliterationEn}",
                 dropdownSearchDecoration: const InputDecoration(
                     labelText: "Surah", hintText: "select surah"),
                 onChanged: (value) {
@@ -834,9 +834,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
       /// load bookmark
       _currentBookmark = await QuranPreferences.getBookmark();
-      setState(() {
-
-      });
+      setState(() {});
       // show success message
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
