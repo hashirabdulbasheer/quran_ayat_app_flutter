@@ -175,7 +175,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
 
   bool _isThisBookmarkedAya(NQBookmark? currentBookmark) {
     if (currentBookmark != null) {
-      int currentSurahIndex = widget.currentSurahIndex - 1;
+      int currentSurahIndex = widget.currentSurahIndex;
       int currentAyaIndex = widget.currentAyaIndex;
       if (currentSurahIndex == currentBookmark.surah &&
           currentAyaIndex == currentBookmark.ayat) {
