@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'package:quran_ayat/utils/prefs_utils.dart';
 
 import '../domain/auth_factory.dart';
@@ -124,7 +125,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
   _signOutButtonPressed() async {
     QuranResponse _ = await QuranAuthFactory.engine.logout();
     // clear stored data
-    QuranPreferences.saveBookmark(0, 0);
+    QuranBookmarksManager.instance.clearLocal();
     return true;
   }
 
