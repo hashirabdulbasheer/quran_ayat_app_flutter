@@ -72,7 +72,10 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
 
     // no bookmark saved
     Widget okButton = TextButton(
-      child: const Text("Save"),
+      child: const Text(
+        "Save",
+        style: TextStyle(fontFamily: "default"),
+      ),
       onPressed: () {
         widget.onSaveButtonPressed();
         Navigator.of(context).pop();
@@ -83,7 +86,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
     Widget cancelButton = TextButton(
       child: const Text(
         "Cancel",
-        style: TextStyle(color: Colors.black45),
+        style: TextStyle(color: Colors.black45, fontFamily: "default"),
       ),
       onPressed: () {
         Navigator.of(context).pop();
@@ -91,7 +94,10 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
     );
 
     alert = AlertDialog(
-      content: const Text("Do you want to bookmark this aya?"),
+      content: const Text(
+        "Do you want to bookmark this aya?",
+        style: TextStyle(fontFamily: "default"),
+      ),
       actions: [cancelButton, okButton],
     );
 
@@ -108,7 +114,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
     AlertDialog alert;
     Widget saveButton = TextButton(
       child: const Text("Save bookmark",
-          style: TextStyle(fontWeight: FontWeight.bold)),
+          style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "default")),
       onPressed: () {
         widget.onSaveButtonPressed();
         Navigator.of(context).pop();
@@ -122,8 +128,11 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
       onPressed: () {
         QuranPreferences.clearBookmark();
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("👍 Cleared ")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+          "👍 Cleared ",
+          style: TextStyle(fontFamily: "default"),
+        )));
         setState(() {});
       },
     );

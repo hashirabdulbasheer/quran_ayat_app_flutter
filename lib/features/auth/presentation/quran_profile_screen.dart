@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
-import 'package:quran_ayat/utils/prefs_utils.dart';
-
+import '../../bookmark/domain/bookmarks_manager.dart';
 import '../domain/auth_factory.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
