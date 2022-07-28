@@ -842,17 +842,27 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           // have more than one
           // the last two paths should be surah/ayat format
           try {
-            _selectedAyat = int.parse(ayaIndex);
             var selectedSurahIndex = int.parse(suraIndex) - 1;
-            _selectedSurah = _surahTitles[selectedSurahIndex];
+            if (selectedSurahIndex >= 0 && selectedSurahIndex < 114) {
+              _selectedSurah = _surahTitles[selectedSurahIndex];
+              var ayaIndexInt = int.parse(ayaIndex);
+              if (_selectedSurah != null &&
+                  ayaIndexInt <= _selectedSurah!.totalVerses) {
+                _selectedAyat = ayaIndexInt;
+              } else {
+                _selectedAyat = 1;
+              }
+            }
           } catch (_) {}
         } else if (suraIndex != null && suraIndex.isNotEmpty) {
           // has only one
           // the last path will be surah index
           try {
-            _selectedAyat = 1;
             var selectedSurahIndex = int.parse(suraIndex) - 1;
-            _selectedSurah = _surahTitles[selectedSurahIndex];
+            if (selectedSurahIndex >= 0 && selectedSurahIndex < 114) {
+              _selectedAyat = 1;
+              _selectedSurah = _surahTitles[selectedSurahIndex];
+            }
           } catch (_) {}
         }
       }
