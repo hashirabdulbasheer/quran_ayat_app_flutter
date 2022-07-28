@@ -242,9 +242,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
-
-                _fullArabicWidget(),
+                // TODO: Hiding full arabic widget for now
+                // const SizedBox(height: 20),
+                // _fullArabicWidget(),
 
                 const SizedBox(height: 20),
 
@@ -434,7 +434,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   Widget _fullTranslationWidget() {
     return FutureBuilder<NQSurah>(
       future: NobleQuran.getTranslationString(
-          _selectedSurah!.number - 1, NQTranslation.SAHIH),
+          _selectedSurah!.number - 1, NQTranslation.CLEAR),
       builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
