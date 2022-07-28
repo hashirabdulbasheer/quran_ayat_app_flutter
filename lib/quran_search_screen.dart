@@ -26,7 +26,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
   final StreamController<List<QuranWord>> _resultsController =
       StreamController<List<QuranWord>>.broadcast();
 
-  final StreamController<String> _logController = StreamController<String>.broadcast();
+  final StreamController<String> _logController =
+      StreamController<String>.broadcast();
 
   @override
   void initState() {
@@ -62,9 +63,11 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
           children: [
             StreamBuilder<List<QuranWord>>(
                 stream: _resultsController.stream,
-                builder: (BuildContext context, AsyncSnapshot<List<QuranWord>> snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<QuranWord>> snapshot) {
                   if (snapshot.hasError) {
-                    return Expanded(child: Center(child: Text('Error: ${snapshot.error}')));
+                    return Expanded(
+                        child: Center(child: Text('Error: ${snapshot.error}')));
                   } else if (snapshot.hasData) {
                     List<QuranWord> words = snapshot.data as List<QuranWord>;
                     if (words.isNotEmpty) {
@@ -84,7 +87,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => QuranAyatScreen(
-                                              surahIndex: words[index].word.sura-1,
+                                              surahIndex:
+                                                  words[index].word.sura - 1,
                                               ayaIndex: words[index].word.aya)),
                                     );
                                   },
@@ -94,7 +98,10 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                         Expanded(
                                             child: Text(
                                           words[index].word.ar,
-                                          style: const TextStyle(fontSize: 30, fontFamily: "Alvi"),
+                                          style: const TextStyle(
+                                              fontSize: 30,
+                                              fontFamily:
+                                                  "KFGQPC Uthmanic Script HAFS Regular"),
                                         ))
                                       ],
                                     ),
@@ -104,10 +111,12 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                       children: [
                                         Expanded(
                                             child: Directionality(
-                                                textDirection: TextDirection.ltr,
+                                                textDirection:
+                                                    TextDirection.ltr,
                                                 child: Text(
                                                   words[index].word.tr,
-                                                  style: const TextStyle(fontSize: 25),
+                                                  style: const TextStyle(
+                                                      fontSize: 25),
                                                   textAlign: TextAlign.right,
                                                 )))
                                       ],
@@ -120,7 +129,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                             child: Text(
                                               "${words[index].word.sura}:${words[index].word.aya}",
                                               style: const TextStyle(
-                                                  fontSize: 15, color: Colors.black54),
+                                                  fontSize: 15,
+                                                  color: Colors.black54),
                                               textAlign: TextAlign.right,
                                             ))
                                       ],
@@ -146,7 +156,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                       children: [
                         StreamBuilder<String>(
                             stream: _logController.stream,
-                            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                            builder: (BuildContext context,
+                                AsyncSnapshot<String> snapshot) {
                               if (snapshot.hasData) {
                                 return Wrap(
                                   children: [
@@ -176,7 +187,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                 textDirection: TextDirection.rtl,
                                 onSubmitted: (value) {
                                   if (value.isNotEmpty) {
-                                    FocusManager.instance.primaryFocus?.unfocus();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
                                     _search(value);
                                   }
                                 },
@@ -192,8 +204,11 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                             icon: const Icon(Icons.clear)),
                                         IconButton(
                                             onPressed: () {
-                                              if (_searchController.text.isNotEmpty) {
-                                                FocusManager.instance.primaryFocus?.unfocus();
+                                              if (_searchController
+                                                  .text.isNotEmpty) {
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    ?.unfocus();
                                                 _search(_searchController.text);
                                               }
                                             },
@@ -202,15 +217,19 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                     ),
                                     hintText: "input a word",
                                     enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black12, width: 0.0),
+                                      borderSide: BorderSide(
+                                          color: Colors.black12, width: 0.0),
                                     ),
                                     focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black12, width: 0.0),
+                                      borderSide: BorderSide(
+                                          color: Colors.black12, width: 0.0),
                                     ),
                                     border: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.black12, width: 0.0),
+                                      borderSide: BorderSide(
+                                          color: Colors.black12, width: 0.0),
                                     )),
-                                controller: _searchController..text = _enteredText),
+                                controller: _searchController
+                                  ..text = _enteredText),
                           ),
                         ],
                       ),
@@ -301,7 +320,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
         localeId: "ar",
       );
       // some time later...
-      Future.delayed(const Duration(seconds: listeningTimeoutSecs)).then((value) {
+      Future.delayed(const Duration(seconds: listeningTimeoutSecs))
+          .then((value) {
         _log("Listening stopped");
         speech.stop();
       });

@@ -7,10 +7,10 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/auth/presentation/quran_profile_screen.dart';
+import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_manager.dart';
@@ -401,8 +401,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             maxLines: 1,
                             style: const TextStyle(
                                 color: Colors.black,
-                                fontSize: 35,
-                                fontFamily: "Alvi"),
+                                fontSize: 30,
+                                fontFamily:
+                                    "KFGQPC Uthmanic Script HAFS Regular"),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -507,7 +508,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           child: Text(
                             ayats[_selectedAyat - 1].text,
                             style: const TextStyle(
-                                fontFamily: "Alvi",
+                                fontFamily:
+                                    "KFGQPC Uthmanic Script HAFS Regular",
                                 fontSize: 35,
                                 height: 1.5,
                                 color: Colors.black87),

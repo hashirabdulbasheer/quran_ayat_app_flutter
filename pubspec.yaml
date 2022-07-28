@@ -86,6 +86,10 @@ flutter:
       fonts:
         - asset: assets/fonts/AlMushafQuran.ttf
 
+    - family: KFGQPC Uthmanic Script HAFS Regular
+      fonts:
+        - asset: assets/fonts/KFGQPC_Uthmanic_Script_HAFS_Regular.otf
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
