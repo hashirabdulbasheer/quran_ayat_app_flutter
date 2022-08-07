@@ -32,8 +32,10 @@ jobs:
         run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html
       - name: Deploy
         run: |
+          pwd
           mkdir public
           cd public
+          pwd
           git config --global user.email hashir.abdulbasheer@gmail.com
           git config --global user.name hashirabdulbasheer
           git clone https://${{secrets.commit_secret}}@github.com/hashirabdulbasheer/hashirabdulbasheer.github.io.git
