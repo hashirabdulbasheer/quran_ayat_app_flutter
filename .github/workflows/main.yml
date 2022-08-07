@@ -6,6 +6,9 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  
+env:
+  FIREBASE_OPTIONS: ${{secrets.FIREBASE_OPTIONS}}  
 
 jobs:
   build:
@@ -19,7 +22,7 @@ jobs:
           channel: 'master'
       - name: print secrets
         run: |
-          echo ${{ secrets.FIREBASE_OPTIONS }} > config.ini
+          echo "$FIREBASE_OPTIONS" > config.ini
           cat config.ini
       - name: Clean project
         run: flutter clean
@@ -28,7 +31,7 @@ jobs:
       - name: Run Build tools
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
       - name: Create Firebase options file
-        run: echo ${{ secrets.FIREBASE_OPTIONS }} > lib/firebase_options.dart
+        run: echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
       - name: Run Build Web
         run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html
       - name: Deploy
