@@ -72,10 +72,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
 
     // no bookmark saved
     Widget okButton = TextButton(
-      child: const Text(
-        "Save",
-        style: TextStyle(fontFamily: "default"),
-      ),
+      child: const Text("Save"),
       onPressed: () {
         widget.onSaveButtonPressed();
         Navigator.of(context).pop();
@@ -84,20 +81,14 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
     );
 
     Widget cancelButton = TextButton(
-      child: const Text(
-        "Cancel",
-        style: TextStyle(color: Colors.black45, fontFamily: "default"),
-      ),
+      child: const Text("Cancel", style: TextStyle(color: Colors.black45)),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
 
     alert = AlertDialog(
-      content: const Text(
-        "Do you want to bookmark this aya?",
-        style: TextStyle(fontFamily: "default"),
-      ),
+      content: const Text("Do you want to bookmark this aya?"),
       actions: [cancelButton, okButton],
     );
 
@@ -114,7 +105,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
     AlertDialog alert;
     Widget saveButton = TextButton(
       child: const Text("Save bookmark",
-          style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "default")),
+          style: TextStyle(fontWeight: FontWeight.bold)),
       onPressed: () {
         widget.onSaveButtonPressed();
         Navigator.of(context).pop();
@@ -124,22 +115,19 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
 
     Widget clearButton = TextButton(
       child: const Text("Clear bookmark",
-          style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "default")),
+          style: TextStyle(fontWeight: FontWeight.bold)),
       onPressed: () {
         QuranPreferences.clearBookmark();
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-          "👍 Cleared ",
-          style: TextStyle(fontFamily: "default"),
-        )));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("👍 Cleared ")));
         setState(() {});
       },
     );
 
     Widget displayButton = TextButton(
       child: const Text("Go to bookmark",
-          style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "default")),
+          style: TextStyle(fontWeight: FontWeight.bold)),
       onPressed: () {
         widget.onGoToButtonPressed(_currentBookmark);
         Navigator.of(context).pop();
@@ -149,7 +137,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
     Widget cancelButton = TextButton(
       child: const Text(
         "Cancel",
-        style: TextStyle(color: Colors.black45, fontFamily: "default"),
+        style: TextStyle(color: Colors.black45),
       ),
       onPressed: () {
         Navigator.of(context).pop();
@@ -157,10 +145,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
     );
 
     alert = AlertDialog(
-      content: const Text(
-        "What would you like to do?",
-        style: TextStyle(fontFamily: "default"),
-      ),
+      content: const Text("What would you like to do?"),
       actions: [saveButton, displayButton, clearButton, cancelButton],
     );
 

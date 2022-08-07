@@ -30,11 +30,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-            title: const Text(
-          "Profile",
-          style: TextStyle(fontFamily: "default"),
-        )),
+        appBar: AppBar(title: const Text("Profile")),
         body: Directionality(
           textDirection: TextDirection.ltr,
           child: Padding(
@@ -49,7 +45,6 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                       controller: _nameController,
                       enabled: !_isLoading,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(fontFamily: "default"),
                       textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
                           hintText: 'Name', labelText: 'Name'),
@@ -60,8 +55,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                     TextField(
                       controller: _emailController,
                       enabled: false,
-                      style: const TextStyle(
-                          color: Colors.black54, fontFamily: "default"),
+                      style: const TextStyle(color: Colors.black54),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
@@ -92,10 +86,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                                           color: Colors.white,
                                         ),
                                       )
-                                    : const Text(
-                                        "Update",
-                                        style: TextStyle(fontFamily: "default"),
-                                      )),
+                                    : const Text("Update")),
                           ),
                         ),
                       ],
@@ -109,10 +100,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                             Navigator.of(context).pop();
                           });
                         },
-                        child: const Text(
-                          "Sign Out",
-                          style: TextStyle(fontFamily: "default"),
-                        ))
+                        child: const Text("Sign Out"))
                   ],
                 ),
               ),

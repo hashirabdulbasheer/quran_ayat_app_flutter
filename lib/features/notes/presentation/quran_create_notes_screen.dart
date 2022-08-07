@@ -44,7 +44,6 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextField(
-                    style: const TextStyle(fontFamily: "default"),
                     controller: _notesController
                       ..text = widget.note?.note ?? "",
                     decoration: const InputDecoration(

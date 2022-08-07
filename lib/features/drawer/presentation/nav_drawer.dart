@@ -81,8 +81,7 @@ class QuranNavDrawer extends StatelessWidget {
     return ListTile(
       trailing: const Icon(Icons.arrow_forward_ios_rounded),
       leading: Icon(icon),
-      title: Text(title,
-          style: const TextStyle(fontFamily: "default", fontSize: 16)),
+      title: Text(title, style: const TextStyle(fontSize: 16)),
       onTap: () {
         Navigator.of(context).pop();
         Navigator.push(

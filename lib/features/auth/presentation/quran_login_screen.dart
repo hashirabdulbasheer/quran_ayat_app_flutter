@@ -24,7 +24,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
       child: Scaffold(
         appBar: AppBar(
             title:
-                const Text("Login", style: TextStyle(fontFamily: "default"))),
+                const Text("Login")),
         body: Directionality(
           textDirection: TextDirection.ltr,
           child: Padding(
@@ -40,7 +40,6 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                       enabled: !_isLoading,
                       controller: _emailController,
                       textInputAction: TextInputAction.next,
-                      style: const TextStyle(fontFamily: "default"),
                       decoration: const InputDecoration(
                           hintText: 'Email', labelText: 'Email'),
                     ),
@@ -52,7 +51,6 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                       controller: _passwordController,
                       obscureText: !_passwordVisible,
                       textInputAction: TextInputAction.done,
-                      style: const TextStyle(fontFamily: "default"),
                       decoration: InputDecoration(
                         hintText: 'Password',
                         labelText: 'Password',
@@ -95,9 +93,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                                           color: Colors.white,
                                         ),
                                       )
-                                    : const Text("Login",
-                                        style:
-                                            TextStyle(fontFamily: "default"))),
+                                    : const Text("Login")),
                           ),
                         ),
                       ],
@@ -111,8 +107,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                             onPressed: () {
                               _forgotPasswordButtonPressed();
                             },
-                            child: const Text("Forgot Password",
-                                style: TextStyle(fontFamily: "default"))),
+                            child: const Text("Forgot Password")),
                       ],
                     ),
                     const SizedBox(
@@ -133,7 +128,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                         },
                         child: const Text(
                           "Create a new account",
-                          style: TextStyle(fontSize: 18, fontFamily: "default"),
+                          style: TextStyle(fontSize: 18),
                         )),
                   ],
                 ),

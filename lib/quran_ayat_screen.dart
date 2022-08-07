@@ -17,7 +17,6 @@ import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/notes/presentation/quran_create_notes_screen.dart';
 import 'features/notes/presentation/widgets/offline_header_widget.dart';
-import 'main.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
 import 'utils/utils.dart';
@@ -396,9 +395,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           child: Text(
                             e.tr,
                             style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 14,
-                                fontFamily: "default"),
+                                color: Colors.black54, fontSize: 14),
                             textDirection: TextDirection.ltr,
                           ),
                         ),
@@ -441,7 +438,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           child: Text(
                             ayats[_selectedAyat - 1].text,
                             style: const TextStyle(
-                                fontFamily: "default",
                                 fontSize: 14,
                                 height: 1.5,
                                 color: Colors.black87),
@@ -572,16 +568,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          "Notes",
-                          style: TextStyle(fontFamily: "default"),
-                        ),
+                        const Text("Notes"),
                         ElevatedButton(
                             onPressed: () {
                               _goToCreateNoteScreen();
                             },
-                            child: const Text("Add",
-                                style: TextStyle(fontFamily: "default")))
+                            child: const Text("Add"))
                       ],
                     ),
                   ),
@@ -619,7 +611,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                         Text(notes[index].note,
                                             style: const TextStyle(
                                                 fontSize: 14,
-                                                fontFamily: "default",
                                                 color: Colors.black87)),
                                         const SizedBox(
                                           height: 8,
@@ -640,11 +631,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           },
                           child: const SizedBox(
                               height: 100,
-                              child: Center(
-                                  child: Text(
-                                "Add Note",
-                                style: TextStyle(fontFamily: "default"),
-                              )))),
+                              child: Center(child: Text("Add Note")))),
                 ],
               );
             }
