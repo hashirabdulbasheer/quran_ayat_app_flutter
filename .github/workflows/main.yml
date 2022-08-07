@@ -19,7 +19,7 @@ jobs:
           channel: 'master'
       - name: print secrets
         run: |
-          echo "${{ secrets.FIREBASE_OPTIONS }}" >> config.ini
+          echo ${{ secrets.FIREBASE_OPTIONS }} > config.ini
           cat config.ini
       - name: Clean project
         run: flutter clean
