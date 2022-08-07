@@ -1,0 +1,28 @@
+name: Build Flutter Web
+on:
+  push:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'dev'
+      - name: Get dependencies
+        run: flutter pub get
+      - name: Run Build tools
+        run: flutter packages pub run build_runner build
+      - name: Run Build Web
+        run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html
+      - name: Deploy
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
