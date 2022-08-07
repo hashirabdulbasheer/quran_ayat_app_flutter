@@ -9,7 +9,6 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
-import 'features/auth/presentation/quran_profile_screen.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
@@ -219,10 +218,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     },
                   ),
                 ),
-
-                // TODO: Hiding full arabic widget for now
-                // const SizedBox(height: 20),
-                // _fullArabicWidget(),
 
                 const SizedBox(height: 20),
 
@@ -454,53 +449,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     );
   }
 
-  Widget _fullArabicWidget() {
-    return FutureBuilder<NQSurah>(
-      future: NobleQuran.getSurahArabic(_selectedSurah!.number - 1),
-      builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
-                    height: 100,
-                    child: Center(child: Text('Loading arabic verse....'))));
-          default:
-            if (snapshot.hasError) {
-              return Container();
-            } else {
-              NQSurah surah = snapshot.data as NQSurah;
-              List<NQAyat> ayats = surah.aya;
-              return Card(
-                elevation: 5,
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            ayats[_selectedAyat - 1].text,
-                            style: const TextStyle(
-                                fontFamily:
-                                    "KFGQPC Uthmanic Script HAFS Regular",
-                                fontSize: 35,
-                                height: 1.5,
-                                color: Colors.black87),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-        }
-      },
-    );
-  }
-
   Widget _notesWidget() {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user == null) {
@@ -616,7 +564,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                           height: 8,
                                         ),
                                         Text(
-                                            "${_formattedDate(notes[index].createdOn)}",
+                                            _formattedDate(notes[index].createdOn),
                                             style: const TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.black54)),
@@ -638,23 +586,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         }
       },
     );
-  }
-
-  Widget _profileIconBasedOnLoggedInStatus() {
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
-      return _profileIcon(icon: Icons.account_circle);
-    }
-    return _profileIcon(icon: Icons.account_circle_outlined);
-  }
-
-  Widget _profileIcon({required IconData icon}) {
-    return IconButton(
-        tooltip: "user account",
-        onPressed: () {
-          _accountButtonTapped();
-        },
-        icon: Icon(icon, size: 30));
   }
 
   Widget _progressInSurah() {
@@ -692,18 +623,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   ///
   /// Actions
   ///
-  void _accountButtonTapped() async {
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user == null) {
-      // not previously logged in, go to login
-      _goToLoginScreen();
-    } else {
-      // already logged in
-      _goToProfileScreen(user);
-    }
-  }
 
-  _goToLoginScreen() {
+  void _goToLoginScreen() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
@@ -712,7 +633,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     });
   }
 
-  _goToCreateNoteScreen({QuranNote? note}) {
+  void _goToCreateNoteScreen({QuranNote? note}) {
     if (_selectedSurah != null) {
       Navigator.push(
         context,
@@ -728,20 +649,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     }
   }
 
-  _goToProfileScreen(QuranUser user) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => QuranProfileScreen(user: user)),
-    ).then((value) {
-      setState(() {});
-    });
-  }
-
   ///
   /// Utils
   ///
 
-  _formattedDate(int timeMs) {
+  String _formattedDate(int timeMs) {
     DateTime now = DateTime.now();
     DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
     var millis = DateTime.fromMillisecondsSinceEpoch(timeMs);
@@ -767,7 +679,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     return d24;
   }
 
-  _authChangeListener() async {
+  void _authChangeListener() async {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       /// upload local notes
