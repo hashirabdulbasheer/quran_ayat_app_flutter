@@ -22,7 +22,7 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
       - name: Run Build tools
-        run: flutter packages pub run build_runner build
+        run: flutter packages pub run build_runner build --delete-conflicting-outputs
       - name: Run Build Web
         run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html
       - name: Deploy
