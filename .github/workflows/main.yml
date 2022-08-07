@@ -39,6 +39,7 @@ jobs:
           git clone https://${{secrets.commit_secret}}@github.com/hashirabdulbasheer/hashirabdulbasheer.github.io.git
           cd hashirabdulbasheer.github.io/
           cp -R ../../build/web/* apps/quran-ayat/
+          date | cat > apps/quran-ayat/lastupdate.txt
           git add --all .
           git commit -am "update: Quran Ayat app"
           git push origin main
