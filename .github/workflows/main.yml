@@ -17,6 +17,8 @@ jobs:
         with:
           flutter-version: '3.1.0-0.0.pre.1253'
           channel: 'master'
+      - name: Checking var
+        run: cat ${{ secrets.FIREBASE_OPTIONS }}
       - name: Clean project
         run: flutter clean
       - name: Get dependencies
@@ -24,7 +26,7 @@ jobs:
       - name: Run Build tools
         run: flutter packages pub run build_runner build --delete-conflicting-outputs
       - name: Create Firebase options file
-        run: cat ${{ secrets.FIREBASE_OPTIONS }} >> lib/firebase_options.dart
+        run: cat ${{ secrets.FIREBASE_OPTIONS }} > lib/firebase_options.dart
       - name: Run Build Web
         run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html
       - name: Deploy
