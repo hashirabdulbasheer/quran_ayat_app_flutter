@@ -32,10 +32,8 @@ jobs:
         run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html
       - name: Deploy
         run: |
-          pwd
           mkdir public
           cd public
-          pwd
           git config --global user.email hashir.abdulbasheer@gmail.com
           git config --global user.name hashirabdulbasheer
           git clone https://${{secrets.commit_secret}}@github.com/hashirabdulbasheer/hashirabdulbasheer.github.io.git
@@ -46,3 +44,26 @@ jobs:
           git push origin main
           cd ../../
           rm -rf public
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # Required mail server address:
+          server_address: smtp.gmail.com
+          # Required mail server port:
+          server_port: 465
+          # Optional (recommended): mail server username:
+          username: ${{secrets.MAIL_USERNAME}}
+          # Optional (recommended) mail server password:
+          password: ${{secrets.MAIL_PASSWORD}}
+          # Required mail subject:
+          subject: Github Actions job result
+          # Required recipients' addresses:
+          to: hashir.abdulbasheer@gmail.com
+          # Required sender full name (address can be skipped):
+          from: Quran Ayat App # <user@example.com>
+          # Optional whether this connection use TLS (default is true if server_port is 465)
+          secure: true
+          # Optional plain body:
+          body: Build job of ${{github.repository}} completed successfully!
+          # Optional priority: 'high', 'normal' (default) or 'low'
+          priority: high     
