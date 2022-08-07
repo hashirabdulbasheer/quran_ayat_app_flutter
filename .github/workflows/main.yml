@@ -32,5 +32,15 @@ jobs:
         run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html
       - name: Deploy
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          mkdir public
+          cd public
+          git config --global user.email hashir.abdulbasheer@gmail.com
+          git config --global user.name hashirabdulbasheer
+          git clone https://${{secrets.commit_secret}}@github.com/hashirabdulbasheer/hashirabdulbasheer.github.io.git
+          cd hashirabdulbasheer.github.io/
+          cp -R ../../build/web/* apps/quran-ayat
+          git add —all .
+          git commit -am "update: Quran Ayat app"
+          git push origin main
+          cd ../../
+          rm -rf public
