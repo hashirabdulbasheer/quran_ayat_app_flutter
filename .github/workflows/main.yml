@@ -17,6 +17,10 @@ jobs:
         with:
           flutter-version: '3.1.0-0.0.pre.1253'
           channel: 'master'
+      - name: print secrets
+        run: |
+          echo "${{ secrets.FIREBASE_OPTIONS }}" >> config.ini
+          cat config.ini
       - name: Clean project
         run: flutter clean
       - name: Get dependencies
