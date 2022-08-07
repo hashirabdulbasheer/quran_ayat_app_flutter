@@ -38,7 +38,7 @@ jobs:
           git config --global user.name hashirabdulbasheer
           git clone https://${{secrets.commit_secret}}@github.com/hashirabdulbasheer/hashirabdulbasheer.github.io.git
           cd hashirabdulbasheer.github.io/
-          cp -R ../../build/web/* apps/quran-ayat
+          cp -R ../../build/web/* apps/quran-ayat/
           git add --all .
           git commit -am "update: Quran Ayat app"
           git push origin main
