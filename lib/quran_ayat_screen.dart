@@ -438,7 +438,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           child: Text(
                             ayats[_selectedAyat - 1].text,
                             style: const TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 height: 1.5,
                                 color: Colors.black87),
                           ),
