@@ -12,6 +12,7 @@ import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/auth/presentation/quran_profile_screen.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
+import 'features/drawer/presentation/nav_drawer.dart';
 import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/notes/presentation/quran_create_notes_screen.dart';
@@ -82,8 +83,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
+            drawer: QuranNavDrawer(
+              user: QuranAuthFactory.engine.getUser(),
+            ),
             bottomSheet: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -135,18 +139,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                 color: Colors.deepPurple)),
                       ),
                     ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                        child: Text(
-                          "$appVersion uxQuran",
-                          style: TextStyle(fontSize: 10),
-                        ),
-                      ),
-                    ],
                   )
                 ],
               ),
@@ -155,16 +147,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               centerTitle: true,
               title: const Text("Quran Ayat"),
               actions: [
-                IconButton(
-                    tooltip: "go to search screen",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const QuranSearchScreen()),
-                      );
-                    },
-                    icon: const Icon(Icons.search)),
                 QuranBookmarkIconWidget(
                     currentSurahIndex:
                         _selectedSurah != null ? _selectedSurah!.number - 1 : 0,
@@ -182,9 +164,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         });
                       }
                     }),
-                Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: _profileIconBasedOnLoggedInStatus())
               ],
             ),
             body: _surahTitles.isEmpty
@@ -682,7 +661,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     return _profileIcon(icon: Icons.account_circle_outlined);
   }
 
-  _profileIcon({required IconData icon}) {
+  Widget _profileIcon({required IconData icon}) {
     return IconButton(
         tooltip: "user account",
         onPressed: () {

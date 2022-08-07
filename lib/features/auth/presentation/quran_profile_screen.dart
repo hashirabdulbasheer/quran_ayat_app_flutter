@@ -27,77 +27,95 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Profile")),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
-        child: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextField(
-                  controller: _nameController,
-                  enabled: !_isLoading,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                      hintText: 'Name', labelText: 'Name'),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  controller: _emailController,
-                  enabled: false,
-                  style: const TextStyle(color: Colors.black54),
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                      hintText: 'Email', labelText: 'Email'),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+            title: const Text(
+          "Profile",
+          style: TextStyle(fontFamily: "default"),
+        )),
+        body: Directionality(
+          textDirection: TextDirection.ltr,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(30, 20, 30, 20),
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              if (!_isLoading) {
-                                _updateButtonPressed();
-                              }
-                            },
-                            child: _isLoading
-                                ? const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : const Text("Update")),
-                      ),
+                    TextField(
+                      controller: _nameController,
+                      enabled: !_isLoading,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(fontFamily: "default"),
+                      textInputAction: TextInputAction.next,
+                      decoration: const InputDecoration(
+                          hintText: 'Name', labelText: 'Name'),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: _emailController,
+                      enabled: false,
+                      style: const TextStyle(
+                          color: Colors.black54, fontFamily: "default"),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      decoration: const InputDecoration(
+                          hintText: 'Email', labelText: 'Email'),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 50,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  if (!_isLoading) {
+                                    _updateButtonPressed();
+                                  }
+                                },
+                                child: _isLoading
+                                    ? const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Text(
+                                        "Update",
+                                        style: TextStyle(fontFamily: "default"),
+                                      )),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 50,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          _signOutButtonPressed().then((value) {
+                            Navigator.of(context).pop();
+                          });
+                        },
+                        child: const Text(
+                          "Sign Out",
+                          style: TextStyle(fontFamily: "default"),
+                        ))
                   ],
                 ),
-                const SizedBox(
-                  height: 50,
-                ),
-                TextButton(
-                    onPressed: () {
-                      _signOutButtonPressed().then((value) {
-                        Navigator.of(context).pop();
-                      });
-                    },
-                    child: const Text("Sign Out"))
-              ],
+              ),
             ),
           ),
         ),
@@ -109,8 +127,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
     _showLoadingProgress(true);
     String newName = _nameController.text;
     if (newName.isNotEmpty) {
-      QuranResponse response =
-          await QuranAuthFactory.engine.update(newName);
+      QuranResponse response = await QuranAuthFactory.engine.update(newName);
       _showLoadingProgress(false);
       if (response.isSuccessful) {
         _showMessage("Updated successfully 👍");
