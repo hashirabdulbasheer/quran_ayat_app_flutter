@@ -4,6 +4,7 @@ import '../../../models/qr_user_model.dart';
 import '../../../quran_search_screen.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../auth/presentation/quran_profile_screen.dart';
+import '../../notes/presentation/quran_view_notes_screen.dart';
 
 class QuranNavDrawer extends StatelessWidget {
   final QuranUser? user;
@@ -37,10 +38,10 @@ class QuranNavDrawer extends StatelessWidget {
             title: 'Profile',
             destination: QuranProfileScreen(user: user),
             icon: Icons.account_circle),
-        // _row(context,
-        //     title: 'Notes',
-        //     destination: Container(),
-        //     icon: Icons.edit_note_sharp),
+        _row(context,
+            title: 'Notes',
+            destination: QuranViewNotesScreen(user: user),
+            icon: Icons.edit_note_sharp),
         _row(context,
             title: 'Search',
             destination: const QuranSearchScreen(),

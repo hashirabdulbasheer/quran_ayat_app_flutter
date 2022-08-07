@@ -19,7 +19,6 @@ import 'features/notes/presentation/widgets/offline_header_widget.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
 import 'utils/utils.dart';
-import 'package:intl/intl.dart' as intl;
 
 class QuranAyatScreen extends StatefulWidget {
   final int? surahIndex;
@@ -564,7 +563,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                           height: 8,
                                         ),
                                         Text(
-                                            _formattedDate(notes[index].createdOn),
+                                            QuranNotesManager.instance
+                                                .formattedDate(
+                                                    notes[index].createdOn),
                                             style: const TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.black54)),
@@ -652,32 +653,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   ///
   /// Utils
   ///
-
-  String _formattedDate(int timeMs) {
-    DateTime now = DateTime.now();
-    DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
-    var millis = DateTime.fromMillisecondsSinceEpoch(timeMs);
-    if (!millis.difference(justNow).isNegative) {
-      return 'Just now';
-    }
-    if (millis.day == now.day &&
-        millis.month == now.month &&
-        millis.year == now.year) {
-      return intl.DateFormat('jm').format(now);
-    }
-    DateTime yesterday = now.subtract(const Duration(days: 1));
-    if (millis.day == yesterday.day &&
-        millis.month == yesterday.month &&
-        millis.year == yesterday.year) {
-      return 'Yesterday, ${intl.DateFormat('jm').format(now)}';
-    }
-    if (now.difference(millis).inDays < 4) {
-      String weekday = intl.DateFormat('EEEE').format(millis);
-      return '$weekday, ${intl.DateFormat('jm').format(now)}';
-    }
-    var d24 = intl.DateFormat('dd/MM/yyyy HH:mm').format(millis);
-    return d24;
-  }
 
   void _authChangeListener() async {
     QuranUser? user = QuranAuthFactory.engine.getUser();

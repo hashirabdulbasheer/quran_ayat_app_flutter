@@ -4,6 +4,7 @@ import '../data/firebase_notes_impl.dart';
 import '../data/hive_notes_impl.dart';
 import 'entities/quran_note.dart';
 import 'interfaces/quran_notes_interface.dart';
+import 'package:intl/intl.dart' as intl;
 
 class QuranNotesManager implements QuranNotesInterface {
   QuranNotesManager._privateConstructor();
@@ -28,6 +29,7 @@ class QuranNotesManager implements QuranNotesInterface {
     if (!await isOffline()) {
       return QuranFirebaseNotesEngine.instance.delete(userId, note);
     }
+
     /// OFFLINE
     return QuranHiveNotesEngine.instance.delete(userId, note);
   }
@@ -82,7 +84,12 @@ class QuranNotesManager implements QuranNotesInterface {
   }
 
   @override
-  Future<List<QuranNote>> fetchAll(String userId) {
+  Future<List<QuranNote>> fetchAll(String userId) async {
+    if (await isOffline()) {
+      /// OFFLINE
+      return await QuranHiveNotesEngine.instance.fetchAll(userId);
+    }
+    /// ONLINE
     return QuranFirebaseNotesEngine.instance.fetchAll(userId);
   }
 
@@ -103,5 +110,31 @@ class QuranNotesManager implements QuranNotesInterface {
       return false;
     }
     return true;
+  }
+
+  String formattedDate(int timeMs) {
+    DateTime now = DateTime.now();
+    DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
+    var millis = DateTime.fromMillisecondsSinceEpoch(timeMs);
+    if (!millis.difference(justNow).isNegative) {
+      return 'Just now';
+    }
+    if (millis.day == now.day &&
+        millis.month == now.month &&
+        millis.year == now.year) {
+      return intl.DateFormat('jm').format(now);
+    }
+    DateTime yesterday = now.subtract(const Duration(days: 1));
+    if (millis.day == yesterday.day &&
+        millis.month == yesterday.month &&
+        millis.year == yesterday.year) {
+      return 'Yesterday, ${intl.DateFormat('jm').format(now)}';
+    }
+    if (now.difference(millis).inDays < 4) {
+      String weekday = intl.DateFormat('EEEE').format(millis);
+      return '$weekday, ${intl.DateFormat('jm').format(now)}';
+    }
+    var d24 = intl.DateFormat('dd/MM/yyyy HH:mm').format(millis);
+    return d24;
   }
 }
