@@ -1,4 +1,4 @@
-name: Build Flutter Web
+name: Build
 on:
   push:
     branches:
