@@ -80,9 +80,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-            drawer: QuranNavDrawer(
-              user: QuranAuthFactory.engine.getUser(),
-            ),
+            drawer: widget.surahIndex == null
+                ? QuranNavDrawer(
+                    user: QuranAuthFactory.engine.getUser(),
+                  )
+                : null,
             bottomSheet: Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
