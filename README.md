@@ -1,4 +1,7 @@
 # quran_ayat_app_flutter
+
+[![Build](https://github.com/hashirabdulbasheer/quran_ayat_app_flutter/actions/workflows/main.yml/badge.svg)](https://github.com/hashirabdulbasheer/quran_ayat_app_flutter/actions/workflows/main.yml)
+
 App to quickly view the word by word meaning of an ayat
 
 <img src="https://raw.githubusercontent.com/hashirabdulbasheer/my_assets/master/quran_ayat_screenshot.png" width="25%">
