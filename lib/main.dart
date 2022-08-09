@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/misc/enums/quran_theme_enum.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/notes/data/hive_notes_impl.dart';
 import 'quran_ayat_screen.dart';
@@ -32,7 +33,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quran Ayat',
       debugShowCheckedModeBanner: false,
-      theme: QuranThemeManager.lightTheme,
+      theme: appTheme == ThemeMode.light
+          ? QuranThemeManager.lightTheme
+          : QuranThemeManager.darkTheme,
       darkTheme: QuranThemeManager.darkTheme,
       themeMode: appTheme,
       home: const QuranAyatScreen(),

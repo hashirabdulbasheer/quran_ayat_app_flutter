@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../misc/enums/quran_theme_enum.dart';
 
 class QuranThemeManager {
-
   static ThemeData lightTheme = ThemeData(
       primarySwatch: Colors.deepPurple,
       dividerColor: Colors.black26,
@@ -22,8 +21,10 @@ class QuranThemeManager {
       primaryColor: Colors.black,
       brightness: Brightness.dark,
       dividerColor: Colors.white60,
-      appBarTheme:
-          const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.dark),
+      appBarTheme: const AppBarTheme(
+          color: Colors.black,
+          systemOverlayStyle:
+              SystemUiOverlayStyle(systemNavigationBarColor: Colors.black)),
       backgroundColor: const Color(0xFF212121),
       cardColor: Colors.black54,
       textTheme: const TextTheme(
