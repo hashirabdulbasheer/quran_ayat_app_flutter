@@ -10,7 +10,7 @@ import 'misc/url/url_strategy.dart';
 import 'utils/theme_utils.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.1.6";
+const String appVersion = "v2.1.8";
 
 ThemeMode appTheme = ThemeMode.light;
 
