@@ -6,15 +6,19 @@ import 'features/notes/data/hive_notes_impl.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
+import 'utils/theme_utils.dart';
 
 // TODO: Update before release
 const String appVersion = "v2.1.6";
+
+ThemeMode appTheme = ThemeMode.light;
 
 void main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await QuranHiveNotesEngine.instance.initialize();
   await QuranAuthFactory.engine.initialize();
+  appTheme = await QuranThemeManager.currentThemeMode();
   runApp(const MyApp());
   _loadQuranWords();
 }
@@ -28,7 +32,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Quran Ayat',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.deepPurple, fontFamily: "default"),
+      theme: QuranThemeManager.lightTheme,
+      darkTheme: QuranThemeManager.darkTheme,
+      themeMode: appTheme,
       home: const QuranAyatScreen(),
     );
   }

@@ -33,7 +33,7 @@ class QuranNavDrawer extends StatelessWidget {
   }
 
   List<Widget> _loggedInDrawerItems(BuildContext context, QuranUser user) => [
-        _header(),
+        _header(context),
         _row(context,
             title: 'Profile',
             destination: QuranProfileScreen(user: user),
@@ -49,7 +49,7 @@ class QuranNavDrawer extends StatelessWidget {
       ];
 
   List<Widget> _loggedOutDrawerItems(BuildContext context) => [
-        _header(),
+        _header(context),
         _row(context,
             title: 'Login',
             destination: const QuranLoginScreen(),
@@ -61,9 +61,9 @@ class QuranNavDrawer extends StatelessWidget {
       ];
 
   /// Header
-  _header() {
+  _header(BuildContext context) {
     return DrawerHeader(
-      decoration: const BoxDecoration(color: Colors.deepPurple),
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       child: Container(
         alignment: Alignment.bottomLeft,
         child: const Text(

@@ -7,6 +7,7 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/utils/theme_utils.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
@@ -94,13 +95,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.black12,
-                                shadowColor: Colors.transparent,
-                                textStyle: const TextStyle(
-                                    color: Colors
-                                        .deepPurple) // This is what you need!
-                                ),
+                            style: _elevatedButtonTheme,
                             onPressed: () {
                               if (_selectedSurah != null) {
                                 int prevAyat = _selectedAyat - 1;
@@ -111,19 +106,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                 }
                               }
                             },
-                            child: const Icon(
-                              Icons.arrow_back,
-                              color: Colors.deepPurple,
-                            )),
+                            child: Icon(Icons.arrow_back,
+                                color: _elevatedButtonIconColor)),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.black12,
-                                shadowColor:
-                                    Colors.transparent // This is what you need!
-                                ),
+                            style: _elevatedButtonTheme,
                             onPressed: () {
                               if (_selectedSurah != null) {
                                 int nextAyat = _selectedAyat + 1;
@@ -134,8 +123,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                 }
                               }
                             },
-                            child: const Icon(Icons.arrow_forward,
-                                color: Colors.deepPurple)),
+                            child: Icon(
+                              Icons.arrow_forward,
+                              color: _elevatedButtonIconColor,
+                            )),
                       ),
                     ],
                   )
@@ -650,6 +641,31 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         setState(() {});
       });
     }
+  }
+
+  ///
+  /// Theme
+  ///
+
+  ButtonStyle? get _elevatedButtonTheme {
+    // if system dark mode is set then use dark mode buttons
+    // else use gray button
+    if (QuranThemeManager.isSystemDarkMode()) {
+      return null;
+    }
+    return ElevatedButton.styleFrom(
+        primary: Colors.black12,
+        shadowColor: Colors.transparent,
+        textStyle: const TextStyle(color: Colors.deepPurple));
+  }
+
+  Color? get _elevatedButtonIconColor {
+    // if system dark mode is set then use dark mode buttons
+    // else use primate color
+    if (QuranThemeManager.isSystemDarkMode()) {
+      return null;
+    }
+    return Theme.of(context).primaryColor;
   }
 
   ///
