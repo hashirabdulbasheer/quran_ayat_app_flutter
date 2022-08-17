@@ -7,7 +7,6 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/settings/domain/theme_manager.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
@@ -17,6 +16,7 @@ import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/notes/presentation/quran_create_notes_screen.dart';
 import 'features/notes/presentation/widgets/offline_header_widget.dart';
+import 'features/settings/domain/theme_manager.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
 import 'utils/utils.dart';
@@ -135,7 +135,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
             appBar: AppBar(
               centerTitle: true,
-              title: const Text("Quran Ayat"),
+              title: const Text("Quran"),
               actions: [
                 QuranBookmarkIconWidget(
                     currentSurahIndex:
@@ -191,9 +191,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         AsyncSnapshot<List<List<NQWord>>> snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text('Loading....'));
+                          return SizedBox(
+                            height: 300,
+                            width: MediaQuery.of(context).size.width,
+                            child: const Center(child: Text('Loading....')),
+                          );
                         default:
                           if (snapshot.hasError) {
                             return Center(
@@ -461,66 +463,65 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       return Container();
     }
 
-    return FutureBuilder<List<QuranNote>>(
-      future: QuranNotesManager.instance
-          .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
-      // async work
-      builder: (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
-                    height: 100,
-                    child: Center(child: Text('Loading notes....'))));
-          default:
-            if (snapshot.hasError) {
-              print("Error notes: ${snapshot.error}");
-              return const Padding(
-                  padding: EdgeInsets.only(top: 30),
-                  child: SizedBox(
-                    height: 50,
-                    child: Text(
-                      'Unable to load notes. Please check internet connectivity',
-                      style: TextStyle(color: Colors.black38),
-                    ),
-                  ));
-            } else {
-              List<QuranNote> notes = snapshot.data as List<QuranNote>;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const QuranOfflineHeaderWidget(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black12),
-                        color: Colors.black12,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5))),
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Notes"),
-                        ElevatedButton(
-                            onPressed: () {
-                              _goToCreateNoteScreen();
-                            },
-                            child: const Text("Add"))
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  notes.isNotEmpty
+    return Column(
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        const QuranOfflineHeaderWidget(),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          height: 50,
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+              color: Colors.black12,
+              borderRadius: const BorderRadius.all(Radius.circular(5))),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Notes"),
+              ElevatedButton(
+                  onPressed: () {
+                    _goToCreateNoteScreen();
+                  },
+                  child: const Text("Add"))
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        FutureBuilder<List<QuranNote>>(
+          future: QuranNotesManager.instance
+              .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
+          // async work
+          builder:
+              (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: SizedBox(
+                        height: 100,
+                        child: Center(child: Text('Loading notes....'))));
+              default:
+                if (snapshot.hasError) {
+                  print("Error notes: ${snapshot.error}");
+                  return const Padding(
+                      padding: EdgeInsets.only(top: 30),
+                      child: SizedBox(
+                        height: 50,
+                        child: Text(
+                          'Unable to load notes. Please check internet connectivity',
+                          style: TextStyle(color: Colors.black38),
+                        ),
+                      ));
+                } else {
+                  List<QuranNote> notes = snapshot.data as List<QuranNote>;
+                  return notes.isNotEmpty
                       ? ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: notes.length,
@@ -573,12 +574,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           },
                           child: const SizedBox(
                               height: 100,
-                              child: Center(child: Text("Add Note")))),
-                ],
-              );
+                              child: Center(child: Text("Add Note"))));
+                }
             }
-        }
-      },
+          },
+        ),
+      ],
     );
   }
 
@@ -650,8 +651,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   ButtonStyle? get _elevatedButtonTheme {
     // if system dark mode is set then use dark mode buttons
     // else use gray button
-    if (QuranThemeManager.instance.isSystemDarkMode()) {
-      return null;
+    if (QuranThemeManager.instance.isDarkMode()) {
+      return ElevatedButton.styleFrom(
+          primary: Colors.white70,
+          shadowColor: Colors.transparent,
+          textStyle: const TextStyle(color: Colors.black));
     }
     return ElevatedButton.styleFrom(
         primary: Colors.black12,
@@ -662,7 +666,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   Color? get _elevatedButtonIconColor {
     // if system dark mode is set then use dark mode buttons
     // else use primate color
-    if (QuranThemeManager.instance.isSystemDarkMode()) {
+    if (QuranThemeManager.instance.isDarkMode()) {
       return null;
     }
     return Theme.of(context).primaryColor;
