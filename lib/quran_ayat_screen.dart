@@ -135,7 +135,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
             appBar: AppBar(
               centerTitle: true,
-              title: const Text("Quran Ayat"),
+              title: const Text("Quran"),
               actions: [
                 QuranBookmarkIconWidget(
                     currentSurahIndex:
