@@ -191,9 +191,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         AsyncSnapshot<List<List<NQWord>>> snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
-                          return const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text('Loading....'));
+                          return SizedBox(
+                            height: 300,
+                            width: MediaQuery.of(context).size.width,
+                            child: const Center(child: Text('Loading....')),
+                          );
                         default:
                           if (snapshot.hasError) {
                             return Center(
@@ -461,66 +463,65 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       return Container();
     }
 
-    return FutureBuilder<List<QuranNote>>(
-      future: QuranNotesManager.instance
-          .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
-      // async work
-      builder: (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
-                    height: 100,
-                    child: Center(child: Text('Loading notes....'))));
-          default:
-            if (snapshot.hasError) {
-              print("Error notes: ${snapshot.error}");
-              return const Padding(
-                  padding: EdgeInsets.only(top: 30),
-                  child: SizedBox(
-                    height: 50,
-                    child: Text(
-                      'Unable to load notes. Please check internet connectivity',
-                      style: TextStyle(color: Colors.black38),
-                    ),
-                  ));
-            } else {
-              List<QuranNote> notes = snapshot.data as List<QuranNote>;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const QuranOfflineHeaderWidget(),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black12),
-                        color: Colors.black12,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5))),
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Notes"),
-                        ElevatedButton(
-                            onPressed: () {
-                              _goToCreateNoteScreen();
-                            },
-                            child: const Text("Add"))
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  notes.isNotEmpty
+    return Column(
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        const QuranOfflineHeaderWidget(),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          height: 50,
+          decoration: BoxDecoration(
+              border: Border.all(color: Colors.black12),
+              color: Colors.black12,
+              borderRadius: const BorderRadius.all(Radius.circular(5))),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Notes"),
+              ElevatedButton(
+                  onPressed: () {
+                    _goToCreateNoteScreen();
+                  },
+                  child: const Text("Add"))
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        FutureBuilder<List<QuranNote>>(
+          future: QuranNotesManager.instance
+              .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
+          // async work
+          builder:
+              (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: SizedBox(
+                        height: 100,
+                        child: Center(child: Text('Loading notes....'))));
+              default:
+                if (snapshot.hasError) {
+                  print("Error notes: ${snapshot.error}");
+                  return const Padding(
+                      padding: EdgeInsets.only(top: 30),
+                      child: SizedBox(
+                        height: 50,
+                        child: Text(
+                          'Unable to load notes. Please check internet connectivity',
+                          style: TextStyle(color: Colors.black38),
+                        ),
+                      ));
+                } else {
+                  List<QuranNote> notes = snapshot.data as List<QuranNote>;
+                  return notes.isNotEmpty
                       ? ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: notes.length,
@@ -573,12 +574,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           },
                           child: const SizedBox(
                               height: 100,
-                              child: Center(child: Text("Add Note")))),
-                ],
-              );
+                              child: Center(child: Text("Add Note"))));
+                }
             }
-        }
-      },
+          },
+        ),
+      ],
     );
   }
 
