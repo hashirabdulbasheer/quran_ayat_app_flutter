@@ -6,9 +6,9 @@ extension QuranAppThemeToString on QuranAppTheme {
   String rawString() {
     switch (this) {
       case QuranAppTheme.light:
-        return "light_theme";
+        return "Light";
       case QuranAppTheme.dark:
-        return "dark_theme";
+        return "Dark";
     }
   }
 }

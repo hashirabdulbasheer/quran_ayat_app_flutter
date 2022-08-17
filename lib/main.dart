@@ -1,45 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/misc/enums/quran_theme_enum.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/notes/data/hive_notes_impl.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
-import 'utils/theme_utils.dart';
+import 'features/settings/domain/theme_manager.dart';
 
 // TODO: Update before release
 const String appVersion = "v2.1.8";
-
-ThemeMode appTheme = ThemeMode.light;
 
 void main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await QuranHiveNotesEngine.instance.initialize();
   await QuranAuthFactory.engine.initialize();
-  appTheme = await QuranThemeManager.currentThemeMode();
   runApp(const MyApp());
   _loadQuranWords();
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => MyAppState();
+}
+
+class MyAppState extends State<MyApp> {
+  ThemeMode _appTheme = ThemeMode.light;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadThemes();
+    QuranThemeManager.instance.registerListener(onThemeChangedEvent);
+  }
+
+  @override
+  void dispose() {
+    QuranThemeManager.instance.removeListeners();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quran Ayat',
+      title: 'Quran',
       debugShowCheckedModeBanner: false,
-      theme: appTheme == ThemeMode.light
-          ? QuranThemeManager.lightTheme
-          : QuranThemeManager.darkTheme,
-      darkTheme: QuranThemeManager.darkTheme,
-      themeMode: appTheme,
+      theme: _appTheme == ThemeMode.light
+          ? QuranThemeManager.instance.lightTheme
+          : QuranThemeManager.instance.darkTheme,
+      darkTheme: QuranThemeManager.instance.darkTheme,
+      themeMode: _appTheme,
       home: const QuranAyatScreen(),
     );
+  }
+
+  void _loadThemes() async {
+    _appTheme = await QuranThemeManager.instance.currentThemeMode();
+    setState(() {});
+  }
+
+  /// callback when theme changes
+  void onThemeChangedEvent(String? event) async {
+    _loadThemes();
   }
 }
 

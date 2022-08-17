@@ -1,10 +1,19 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../misc/enums/quran_theme_enum.dart';
+import '../../../misc/enums/quran_theme_enum.dart';
 
 class QuranThemeManager {
-  static ThemeData lightTheme = ThemeData(
+  QuranThemeManager._privateConstructor();
+
+  static final QuranThemeManager instance =
+      QuranThemeManager._privateConstructor();
+
+  final String themeId = "quran_app_theme";
+
+  ThemeData lightTheme = ThemeData(
       primarySwatch: Colors.deepPurple,
       dividerColor: Colors.black26,
       appBarTheme:
@@ -16,7 +25,7 @@ class QuranThemeManager {
       fontFamily: "default",
       brightness: Brightness.light);
 
-  static ThemeData darkTheme = ThemeData(
+  ThemeData darkTheme = ThemeData(
       primarySwatch: Colors.grey,
       primaryColor: Colors.black,
       brightness: Brightness.dark,
@@ -34,14 +43,16 @@ class QuranThemeManager {
       cardTheme: const CardTheme(color: Colors.grey),
       buttonTheme: const ButtonThemeData(buttonColor: Colors.black38));
 
+  final StreamController<String> _themeStream = StreamController.broadcast();
+
   /// get the current theme
-  static Future<ThemeMode> currentThemeMode() async {
-    if (QuranThemeManager.isSystemDarkMode()) {
+  Future<ThemeMode> currentThemeMode() async {
+    if (isSystemDarkMode()) {
       // respect system dark mode
       return ThemeMode.dark;
     }
     final prefs = await SharedPreferences.getInstance();
-    String? themeString = prefs.getString("app_theme");
+    String? themeString = prefs.getString(themeId);
     if (themeString != null) {
       if (themeString == QuranAppTheme.dark.rawString()) {
         return ThemeMode.dark;
@@ -50,13 +61,23 @@ class QuranThemeManager {
     return ThemeMode.light;
   }
 
-  /// save theme
-  static void saveTheme(QuranAppTheme theme) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("app_theme", theme.rawString());
+  /// register a listener to get theme update events
+  void registerListener(void Function(String?) listener) {
+    _themeStream.stream.listen(listener);
   }
 
-  static bool isSystemDarkMode() {
+  /// remove all theme update event listeners
+  void removeListeners() {
+    _themeStream.stream.listen(null);
+  }
+
+  /// called when theme changes
+  void themeChanged() {
+    _themeStream.add("quran_theme_changed_event");
+  }
+
+  /// is the current system in dark mode - respect that
+  bool isSystemDarkMode() {
     final darkMode = WidgetsBinding.instance.window.platformBrightness;
     if (darkMode == Brightness.dark) {
       return true;

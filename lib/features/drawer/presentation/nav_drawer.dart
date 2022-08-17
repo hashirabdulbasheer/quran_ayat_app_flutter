@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/settings/presentation/quran_settings_screen.dart';
 import '../../../main.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../quran_search_screen.dart';
@@ -46,6 +47,10 @@ class QuranNavDrawer extends StatelessWidget {
             title: 'Search',
             destination: const QuranSearchScreen(),
             icon: Icons.search_rounded),
+        _row(context,
+            title: 'Settings',
+            destination: const QuranSettingsScreen(),
+            icon: Icons.settings),
       ];
 
   List<Widget> _loggedOutDrawerItems(BuildContext context) => [
@@ -58,6 +63,10 @@ class QuranNavDrawer extends StatelessWidget {
             title: 'Search',
             destination: const QuranSearchScreen(),
             icon: Icons.search_rounded),
+        _row(context,
+            title: 'Settings',
+            destination: const QuranSettingsScreen(),
+            icon: Icons.settings),
       ];
 
   /// Header
