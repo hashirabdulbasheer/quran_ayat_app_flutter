@@ -13,6 +13,8 @@ class QuranThemeManager {
 
   final String themeId = "quran_app_theme";
 
+  ThemeMode _appTheme = ThemeMode.light;
+
   ThemeData lightTheme = ThemeData(
       primarySwatch: Colors.deepPurple,
       dividerColor: Colors.black26,
@@ -45,20 +47,30 @@ class QuranThemeManager {
 
   final StreamController<String> _themeStream = StreamController.broadcast();
 
-  /// get the current theme
-  Future<ThemeMode> currentThemeMode() async {
+  ThemeData? get theme => _appTheme == ThemeMode.light
+      ? QuranThemeManager.instance.lightTheme
+      : QuranThemeManager.instance.darkTheme;
+
+  ThemeMode get currentAppThemeMode => _appTheme;
+
+  /// loads the current theme and notify listeners about the theme change
+  void loadThemeAndNotifyListeners() async {
     if (isSystemDarkMode()) {
       // respect system dark mode
-      return ThemeMode.dark;
-    }
-    final prefs = await SharedPreferences.getInstance();
-    String? themeString = prefs.getString(themeId);
-    if (themeString != null) {
-      if (themeString == QuranAppTheme.dark.rawString()) {
-        return ThemeMode.dark;
+      _appTheme = ThemeMode.dark;
+    } else {
+      // load saved theme
+      final prefs = await SharedPreferences.getInstance();
+      String? themeString = prefs.getString(themeId);
+      if (themeString == null ||
+          themeString == QuranAppTheme.light.rawString()) {
+        _appTheme = ThemeMode.light;
+      } else {
+        _appTheme = ThemeMode.dark;
       }
     }
-    return ThemeMode.light;
+    // inform all listeners
+    _themeStream.add("quran_theme_changed_event");
   }
 
   /// register a listener to get theme update events
@@ -73,7 +85,7 @@ class QuranThemeManager {
 
   /// called when theme changes
   void themeChanged() {
-    _themeStream.add("quran_theme_changed_event");
+    loadThemeAndNotifyListeners();
   }
 
   /// is the current system in dark mode - respect that
@@ -84,5 +96,14 @@ class QuranThemeManager {
     } else {
       return false;
     }
+  }
+
+  /// is the current app theme in dark mode
+  /// if system is dark mode then app theme respects that and will be dark mode
+  bool isDarkMode() {
+    if (_appTheme == ThemeMode.dark) {
+      return true;
+    }
+    return false;
   }
 }

@@ -7,7 +7,6 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/settings/domain/theme_manager.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
@@ -17,6 +16,7 @@ import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/notes/presentation/quran_create_notes_screen.dart';
 import 'features/notes/presentation/widgets/offline_header_widget.dart';
+import 'features/settings/domain/theme_manager.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
 import 'utils/utils.dart';
@@ -651,8 +651,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   ButtonStyle? get _elevatedButtonTheme {
     // if system dark mode is set then use dark mode buttons
     // else use gray button
-    if (QuranThemeManager.instance.isSystemDarkMode()) {
-      return null;
+    if (QuranThemeManager.instance.isDarkMode()) {
+      return ElevatedButton.styleFrom(
+          primary: Colors.white70,
+          shadowColor: Colors.transparent,
+          textStyle: const TextStyle(color: Colors.black));
     }
     return ElevatedButton.styleFrom(
         primary: Colors.black12,
@@ -663,7 +666,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   Color? get _elevatedButtonIconColor {
     // if system dark mode is set then use dark mode buttons
     // else use primate color
-    if (QuranThemeManager.instance.isSystemDarkMode()) {
+    if (QuranThemeManager.instance.isDarkMode()) {
       return null;
     }
     return Theme.of(context).primaryColor;

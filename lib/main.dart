@@ -28,13 +28,11 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  ThemeMode _appTheme = ThemeMode.light;
-
   @override
   void initState() {
     super.initState();
-    _loadThemes();
     QuranThemeManager.instance.registerListener(onThemeChangedEvent);
+    QuranThemeManager.instance.loadThemeAndNotifyListeners();
   }
 
   @override
@@ -48,23 +46,17 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Quran',
       debugShowCheckedModeBanner: false,
-      theme: _appTheme == ThemeMode.light
-          ? QuranThemeManager.instance.lightTheme
-          : QuranThemeManager.instance.darkTheme,
+      theme: QuranThemeManager.instance.theme,
       darkTheme: QuranThemeManager.instance.darkTheme,
-      themeMode: _appTheme,
+      themeMode: QuranThemeManager.instance.currentAppThemeMode,
       home: const QuranAyatScreen(),
     );
   }
 
-  void _loadThemes() async {
-    _appTheme = await QuranThemeManager.instance.currentThemeMode();
-    setState(() {});
-  }
-
   /// callback when theme changes
   void onThemeChangedEvent(String? event) async {
-    _loadThemes();
+    // reload to apply the new theme
+    setState(() {});
   }
 }
 
