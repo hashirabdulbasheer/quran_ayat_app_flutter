@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah.dart';
@@ -137,6 +138,25 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               centerTitle: true,
               title: const Text("Quran"),
               actions: [
+                IconButton(
+                    tooltip: "Copy to clipboard",
+                    onPressed: () async {
+                      int? surahIndex = _selectedSurah?.number;
+                      if (surahIndex != null) {
+                        String surahName =
+                            _surahTitles[surahIndex].transliterationEn;
+                        int ayaIndex = _selectedAyat;
+                        String shareString = await QuranUtils.shareString(
+                            surahName, surahIndex, ayaIndex);
+                        Clipboard.setData(ClipboardData(text: shareString))
+                            .then((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Copied to clipboard 👍")));
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.copy)),
                 QuranBookmarkIconWidget(
                     currentSurahIndex:
                         _selectedSurah != null ? _selectedSurah!.number - 1 : 0,
@@ -153,7 +173,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           _selectedAyat = bookmark.ayat;
                         });
                       }
-                    }),
+                    })
               ],
             ),
             body: _surahTitles.isEmpty
