@@ -162,7 +162,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         });
                       }
                     },
-                    icon: const Icon(Icons.copy)),
+                    icon: const Icon(Icons.share)),
                 QuranBookmarkIconWidget(
                     currentSurahIndex:
                         _selectedSurah != null ? _selectedSurah!.number - 1 : 0,
