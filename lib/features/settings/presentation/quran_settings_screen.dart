@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/misc/enums/quran_theme_enum.dart';
 import '../domain/entities/quran_setting.dart';
+import '../domain/enum/settings_type_enum.dart';
 import '../domain/settings_manager.dart';
 
 class QuranSettingsScreen extends StatefulWidget {
@@ -59,21 +61,12 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
                     return ListTile(
-                        trailing: DropdownButton<String>(
-                            value: snapshot.data,
-                            items: setting.possibleValues
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                  value: value, child: Text(value));
-                            }).toList(),
-                            onChanged: (value) {
-                              if (value != null) {
-                                QuranSettingsManager.instance.save(setting, value);
-                                setState(() {});
-                              }
-                            }),
+                        trailing: _settingAction(setting, snapshot.data),
                         title: Text(setting.name,
-                            style: Theme.of(context).textTheme.titleLarge),
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .titleLarge),
                         subtitle: Text(setting.description));
                   }
               }
@@ -82,4 +75,35 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
     );
   }
 
+  Widget _settingAction(QuranSetting setting, String? currentValue) {
+    switch (setting.type) {
+      case QuranSettingType.dropdown:
+        return DropdownButton<String>(
+            value: currentValue ?? QuranAppTheme.light.rawString(),
+            items: setting.possibleValues
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                  value: value, child: Text(value));
+            }).toList(),
+            onChanged: (value) {
+              if (value != null) {
+                QuranSettingsManager.instance.save(setting, value);
+                setState(() {});
+              }
+            });
+
+      case QuranSettingType.onOff:
+        bool isSwitched = currentValue == "true" ? true : false;
+        return Switch(
+          value: isSwitched,
+          onChanged: (value) {
+            QuranSettingsManager.instance.save(setting, "$value");
+            setState(() {});
+          },
+        );
+
+      default:
+        return Container();
+    }
+  }
 }

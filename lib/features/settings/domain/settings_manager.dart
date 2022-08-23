@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import '../../../misc/enums/quran_theme_enum.dart';
+import 'enum/settings_event_enum.dart';
 import 'theme_manager.dart';
 import '../data/repository/settings_repository_impl.dart';
 import 'entities/quran_setting.dart';
@@ -11,19 +14,29 @@ class QuranSettingsManager {
   static final QuranSettingsManager instance =
       QuranSettingsManager._privateConstructor();
 
-  List<QuranSetting> generateSettings() {
-    QuranSetting themeSettings = QuranSetting(
-        name: "App Theme",
-        description: "select the app color theme",
-        id: QuranThemeManager.instance.themeId,
-        possibleValues: [
-          QuranAppTheme.light.rawString(),
-          QuranAppTheme.dark.rawString()
-        ],
-        defaultValue: QuranAppTheme.light.rawString(),
-        type: QuranSettingType.dropdown);
+  final StreamController<String> _settingsStream = StreamController.broadcast();
 
-    return [themeSettings];
+  final QuranSetting _themeSettings = QuranSetting(
+      name: "App Theme",
+      description: "select the app color theme",
+      id: QuranThemeManager.instance.themeId,
+      possibleValues: [
+        QuranAppTheme.light.rawString(),
+        QuranAppTheme.dark.rawString()
+      ],
+      defaultValue: QuranAppTheme.light.rawString(),
+      type: QuranSettingType.dropdown);
+
+  final QuranSetting _transliterationSettings = QuranSetting(
+      name: "Transliteration",
+      description: "on/off transliteration",
+      id: QuranThemeManager.instance.transliterationId,
+      possibleValues: [],
+      defaultValue: QuranSettingOnOff.off.rawString(),
+      type: QuranSettingType.onOff);
+
+  List<QuranSetting> generateSettings() {
+    return [_themeSettings, _transliterationSettings];
   }
 
   void save(QuranSetting setting, String newValue) async {
@@ -41,6 +54,33 @@ class QuranSettingsManager {
     if (setting.id == QuranThemeManager.instance.themeId) {
       /// Update theme
       QuranThemeManager.instance.themeChanged();
+    } else if (setting.id == QuranThemeManager.instance.transliterationId) {
+      /// Update transliteration
+      QuranSettingsManager.instance
+          .notifyListeners(QuranSettingsEvent.transliterationChanged);
     }
+  }
+
+  Future<bool> isTransliterationEnabled() async {
+    String isEnabledStr = await getValue(_transliterationSettings);
+    if (isEnabledStr == "true") {
+      return true;
+    }
+    return false;
+  }
+
+  /// register a listener to get theme update events
+  void registerListener(void Function(String) listener) {
+    _settingsStream.stream.listen(listener);
+  }
+
+  /// remove all theme update event listeners
+  void removeListeners() {
+    _settingsStream.stream.listen(null);
+  }
+
+  /// notify listeners of events
+  void notifyListeners(QuranSettingsEvent event) {
+    _settingsStream.add(event.rawString());
   }
 }

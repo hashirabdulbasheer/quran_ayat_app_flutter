@@ -8,8 +8,10 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
+import 'features/ayats/widgets/full_ayat_row_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
@@ -65,12 +67,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
     /// register for auth changes
     QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
+
+    // register for settings changes
+    QuranSettingsManager.instance.registerListener(_settingsChangedListener);
   }
 
   @override
   void dispose() {
     super.dispose();
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
+    QuranSettingsManager.instance.removeListeners();
   }
 
   @override
@@ -233,8 +239,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                // transliterationWidget if enabled
+                _fullTransliterationWidget(),
 
+                // translation widget
                 _fullTranslationWidget(),
 
                 /// Notes
@@ -417,6 +425,44 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         .toList();
   }
 
+  Widget _fullTransliterationWidget() {
+    return FutureBuilder<bool>(
+        future: QuranSettingsManager.instance.isTransliterationEnabled(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                      height: 80,
+                      child:
+                          Center(child: Text('Loading transliteration....'))));
+            default:
+              if (snapshot.hasError) {
+                return Container();
+              } else {
+                bool isEnabled = snapshot.data as bool;
+                if (isEnabled) {
+                  return Column(
+                    children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      QuranFullAyatRowWidget(
+                          futureMethodThatReturnsSelectedSurah:
+                              NobleQuran.getSurahTransliteration(
+                                  _selectedSurah!.number - 1),
+                          ayaIndex: _selectedAyat),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              }
+          }
+        });
+  }
+
   Widget _fullTranslationWidget() {
     return FutureBuilder<NQSurah>(
       future: NobleQuran.getTranslationString(
@@ -435,27 +481,32 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             } else {
               NQSurah surah = snapshot.data as NQSurah;
               List<NQAyat> ayats = surah.aya;
-              return Card(
-                elevation: 5,
-                child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            ayats[_selectedAyat - 1].text,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                height: 1.5,
-                                color: Colors.black87),
+              return Column(
+                children: [
+                  const SizedBox(height: 20),
+                  Card(
+                    elevation: 5,
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Text(
+                                ayats[_selectedAyat - 1].text,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    height: 1.5,
+                                    color: Colors.black87),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               );
             }
         }
@@ -762,5 +813,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         }
       }
     }
+  }
+
+  void _settingsChangedListener(String event) {
+    setState(() {});
   }
 }
