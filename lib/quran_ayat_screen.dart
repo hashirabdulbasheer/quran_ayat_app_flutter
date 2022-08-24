@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/bookmark.dart';
-import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/ayats/widgets/full_ayat_row_widget.dart';
@@ -19,6 +17,7 @@ import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/notes/presentation/quran_create_notes_screen.dart';
 import 'features/notes/presentation/widgets/offline_header_widget.dart';
+import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
@@ -464,55 +463,85 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   Widget _fullTranslationWidget() {
-    return FutureBuilder<NQSurah>(
-      future: NobleQuran.getTranslationString(
-          _selectedSurah!.number - 1, NQTranslation.CLEAR),
-      builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
-                    height: 100,
-                    child: Center(child: Text('Loading translation....'))));
-          default:
-            if (snapshot.hasError) {
-              return Container();
-            } else {
-              NQSurah surah = snapshot.data as NQSurah;
-              List<NQAyat> ayats = surah.aya;
-              return Column(
-                children: [
+    return FutureBuilder<NQTranslation>(
+        future: QuranSettingsManager.instance.getTranslation(),
+        builder: (BuildContext context, AsyncSnapshot<NQTranslation> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                      height: 80,
+                      child: Center(child: Text('Loading translation....'))));
+            default:
+              if (snapshot.hasError) {
+                return Container();
+              } else {
+                NQTranslation translation = snapshot.data as NQTranslation;
+                return Column(children: [
                   const SizedBox(height: 20),
-                  Card(
-                    elevation: 5,
-                    child: Directionality(
-                      textDirection: TextDirection.ltr,
-                      child: Row(
-                        children: [
-                          Flexible(
-                            child: Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: Text(
-                                ayats[_selectedAyat - 1].text,
-                                style: const TextStyle(
-                                    fontSize: 16,
-                                    height: 1.5,
-                                    color: Colors.black87),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            }
-        }
-      },
-    );
+                  QuranFullAyatRowWidget(
+                      futureMethodThatReturnsSelectedSurah:
+                          NobleQuran.getTranslationString(
+                              _selectedSurah!.number - 1, translation),
+                      ayaIndex: _selectedAyat),
+                ]);
+              }
+          }
+        });
   }
+
+  // Widget _fullTranslationWidget2() {
+  //   return FutureBuilder<NQSurah>(
+  //     future: NobleQuran.getTranslationString(
+  //         _selectedSurah!.number - 1, NQTranslation.MALAYALAM_MUNDAM),
+  //     builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
+  //       switch (snapshot.connectionState) {
+  //         case ConnectionState.waiting:
+  //           return const Padding(
+  //               padding: EdgeInsets.all(8.0),
+  //               child: SizedBox(
+  //                   height: 100,
+  //                   child: Center(child: Text('Loading translation....'))));
+  //         default:
+  //           if (snapshot.hasError) {
+  //             return Container();
+  //           } else {
+  //             NQSurah surah = snapshot.data as NQSurah;
+  //             List<NQAyat> ayats = surah.aya;
+  //             return Column(
+  //               children: [
+  //                 const SizedBox(height: 20),
+  //                 Card(
+  //                   elevation: 5,
+  //                   child: Directionality(
+  //                     textDirection: TextDirection.ltr,
+  //                     child: Row(
+  //                       children: [
+  //                         Flexible(
+  //                           child: Padding(
+  //                             padding: const EdgeInsets.all(15.0),
+  //                             child: Text(
+  //                               ayats[_selectedAyat - 1].text,
+  //                               style: TextStyle(
+  //                                   fontSize: 16,
+  //                                   height: 1.5,
+  //                                   fontFamily: fontFamily,
+  //                                   color: Colors.black87),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             );
+  //           }
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget _notesWidget() {
     QuranUser? user = QuranAuthFactory.engine.getUser();

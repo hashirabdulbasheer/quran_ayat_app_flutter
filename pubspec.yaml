@@ -82,9 +82,9 @@ flutter:
     - assets/sounds/speech_to_text_stop.m4r
 
   fonts:
-    - family: Alvi
+    - family: Manjari Regular
       fonts:
-        - asset: assets/fonts/AlMushafQuran.ttf
+        - asset: assets/fonts/Manjari-Regular.ttf
 
     - family: KFGQPC Uthmanic Script HAFS Regular
       fonts:

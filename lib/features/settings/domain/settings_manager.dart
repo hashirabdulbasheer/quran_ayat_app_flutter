@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:noble_quran/enums/translations.dart';
+import 'package:noble_quran/noble_quran.dart';
+
 import '../../../misc/enums/quran_theme_enum.dart';
 import 'enum/settings_event_enum.dart';
 import 'theme_manager.dart';
@@ -35,8 +38,17 @@ class QuranSettingsManager {
       defaultValue: QuranSettingOnOff.off.rawString(),
       type: QuranSettingType.onOff);
 
+  final QuranSetting _translationSettings = QuranSetting(
+      name: "Translation",
+      description: "select the translation",
+      id: QuranThemeManager.instance.translationId,
+      possibleValues:
+          NobleQuran.getAllTranslations().map((e) => e.title).toList(),
+      defaultValue: NQTranslation.clear.title,
+      type: QuranSettingType.dropdown);
+
   List<QuranSetting> generateSettings() {
-    return [_themeSettings, _transliterationSettings];
+    return [_themeSettings, _translationSettings, _transliterationSettings];
   }
 
   void save(QuranSetting setting, String newValue) async {
@@ -58,6 +70,10 @@ class QuranSettingsManager {
       /// Update transliteration
       QuranSettingsManager.instance
           .notifyListeners(QuranSettingsEvent.transliterationChanged);
+    } else if (setting.id == QuranThemeManager.instance.translationId) {
+      /// Update translation
+      QuranSettingsManager.instance
+          .notifyListeners(QuranSettingsEvent.translationChanged);
     }
   }
 
@@ -67,6 +83,11 @@ class QuranSettingsManager {
       return true;
     }
     return false;
+  }
+
+  Future<NQTranslation> getTranslation() async {
+    String translation = await getValue(_translationSettings);
+    return NobleQuran.getTranslationFromTitle(translation);
   }
 
   /// register a listener to get theme update events

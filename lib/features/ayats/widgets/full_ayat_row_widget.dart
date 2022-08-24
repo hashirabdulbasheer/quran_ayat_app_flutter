@@ -1,14 +1,17 @@
 import 'package:noble_quran/models/surah.dart';
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/utils/utils.dart';
 
 class QuranFullAyatRowWidget extends StatelessWidget {
   final Future<NQSurah>? futureMethodThatReturnsSelectedSurah;
   final int ayaIndex;
+  final String? fontFamily;
 
   const QuranFullAyatRowWidget(
       {Key? key,
       required this.futureMethodThatReturnsSelectedSurah,
-      required this.ayaIndex})
+      required this.ayaIndex,
+      this.fontFamily})
       : super(key: key);
 
   @override
@@ -21,8 +24,7 @@ class QuranFullAyatRowWidget extends StatelessWidget {
             return const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
-                    height: 100,
-                    child: Center(child: Text('Loading translation....'))));
+                    height: 100, child: Center(child: Text('Loading....'))));
           default:
             if (snapshot.hasError) {
               return Container();
@@ -32,7 +34,9 @@ class QuranFullAyatRowWidget extends StatelessWidget {
               return Card(
                 elevation: 5,
                 child: Directionality(
-                  textDirection: TextDirection.ltr,
+                  textDirection: QuranUtils.isArabic(ayats[ayaIndex - 1].text)
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
                   child: Row(
                     children: [
                       Flexible(
@@ -40,9 +44,14 @@ class QuranFullAyatRowWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
                             _stripHtmlIfNeeded(ayats[ayaIndex - 1].text),
-                            style: const TextStyle(
+                            textAlign:
+                                QuranUtils.isArabic(ayats[ayaIndex - 1].text)
+                                    ? TextAlign.end
+                                    : TextAlign.end,
+                            style: TextStyle(
                                 fontSize: 16,
                                 height: 1.5,
+                                fontFamily: fontFamily,
                                 color: Colors.black87),
                           ),
                         ),
@@ -60,5 +69,4 @@ class QuranFullAyatRowWidget extends StatelessWidget {
   static String _stripHtmlIfNeeded(String text) {
     return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '');
   }
-
 }
