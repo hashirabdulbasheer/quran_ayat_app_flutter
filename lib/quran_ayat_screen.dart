@@ -7,6 +7,7 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/misc/enums/quran_font_family_enum.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/ayats/widgets/full_ayat_row_widget.dart';
@@ -393,11 +394,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             e.ar,
                             softWrap: false,
                             maxLines: 1,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 30,
                                 fontFamily:
-                                    "KFGQPC Uthmanic Script HAFS Regular"),
+                                    QuranFontFamily.arabic.rawString),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -484,64 +485,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       futureMethodThatReturnsSelectedSurah:
                           NobleQuran.getTranslationString(
                               _selectedSurah!.number - 1, translation),
+                      fontFamily: translationFontFamily(translation),
                       ayaIndex: _selectedAyat),
                 ]);
               }
           }
         });
   }
-
-  // Widget _fullTranslationWidget2() {
-  //   return FutureBuilder<NQSurah>(
-  //     future: NobleQuran.getTranslationString(
-  //         _selectedSurah!.number - 1, NQTranslation.MALAYALAM_MUNDAM),
-  //     builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
-  //       switch (snapshot.connectionState) {
-  //         case ConnectionState.waiting:
-  //           return const Padding(
-  //               padding: EdgeInsets.all(8.0),
-  //               child: SizedBox(
-  //                   height: 100,
-  //                   child: Center(child: Text('Loading translation....'))));
-  //         default:
-  //           if (snapshot.hasError) {
-  //             return Container();
-  //           } else {
-  //             NQSurah surah = snapshot.data as NQSurah;
-  //             List<NQAyat> ayats = surah.aya;
-  //             return Column(
-  //               children: [
-  //                 const SizedBox(height: 20),
-  //                 Card(
-  //                   elevation: 5,
-  //                   child: Directionality(
-  //                     textDirection: TextDirection.ltr,
-  //                     child: Row(
-  //                       children: [
-  //                         Flexible(
-  //                           child: Padding(
-  //                             padding: const EdgeInsets.all(15.0),
-  //                             child: Text(
-  //                               ayats[_selectedAyat - 1].text,
-  //                               style: TextStyle(
-  //                                   fontSize: 16,
-  //                                   height: 1.5,
-  //                                   fontFamily: fontFamily,
-  //                                   color: Colors.black87),
-  //                             ),
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ],
-  //             );
-  //           }
-  //       }
-  //     },
-  //   );
-  // }
 
   Widget _notesWidget() {
     QuranUser? user = QuranAuthFactory.engine.getUser();
@@ -846,5 +796,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   void _settingsChangedListener(String event) {
     setState(() {});
+  }
+
+  /// special font handling for translations
+  String? translationFontFamily(NQTranslation translation) {
+    if (translation == NQTranslation.malayalam_karakunnu ||
+        translation == NQTranslation.malayalam_abdulhameed) {
+      return QuranFontFamily.malayalam.rawString;
+    }
+    return null;
   }
 }
