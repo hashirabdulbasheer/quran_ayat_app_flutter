@@ -1,14 +1,15 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/bookmark.dart';
-import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
+import 'features/ayats/widgets/full_ayat_row_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
@@ -16,6 +17,7 @@ import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/notes/presentation/quran_create_notes_screen.dart';
 import 'features/notes/presentation/widgets/offline_header_widget.dart';
+import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
@@ -64,12 +66,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
     /// register for auth changes
     QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
+
+    // register for settings changes
+    QuranSettingsManager.instance.registerListener(_settingsChangedListener);
   }
 
   @override
   void dispose() {
     super.dispose();
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
+    QuranSettingsManager.instance.removeListeners();
   }
 
   @override
@@ -137,6 +143,25 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               centerTitle: true,
               title: const Text("Quran"),
               actions: [
+                IconButton(
+                    tooltip: "Copy to clipboard",
+                    onPressed: () async {
+                      int? surahIndex = _selectedSurah?.number;
+                      if (surahIndex != null) {
+                        String surahName =
+                            _surahTitles[surahIndex].transliterationEn;
+                        int ayaIndex = _selectedAyat;
+                        String shareString = await QuranUtils.shareString(
+                            surahName, surahIndex, ayaIndex);
+                        Clipboard.setData(ClipboardData(text: shareString))
+                            .then((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Copied to clipboard 👍")));
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.share)),
                 QuranBookmarkIconWidget(
                     currentSurahIndex:
                         _selectedSurah != null ? _selectedSurah!.number - 1 : 0,
@@ -153,7 +178,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           _selectedAyat = bookmark.ayat;
                         });
                       }
-                    }),
+                    })
               ],
             ),
             body: _surahTitles.isEmpty
@@ -213,8 +238,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                // transliterationWidget if enabled
+                _fullTransliterationWidget(),
 
+                // translation widget
                 _fullTranslationWidget(),
 
                 /// Notes
@@ -397,51 +424,124 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         .toList();
   }
 
-  Widget _fullTranslationWidget() {
-    return FutureBuilder<NQSurah>(
-      future: NobleQuran.getTranslationString(
-          _selectedSurah!.number - 1, NQTranslation.CLEAR),
-      builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
-                    height: 100,
-                    child: Center(child: Text('Loading translation....'))));
-          default:
-            if (snapshot.hasError) {
-              return Container();
-            } else {
-              NQSurah surah = snapshot.data as NQSurah;
-              List<NQAyat> ayats = surah.aya;
-              return Card(
-                elevation: 5,
-                child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Row(
+  Widget _fullTransliterationWidget() {
+    return FutureBuilder<bool>(
+        future: QuranSettingsManager.instance.isTransliterationEnabled(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                      height: 80,
+                      child:
+                          Center(child: Text('Loading transliteration....'))));
+            default:
+              if (snapshot.hasError) {
+                return Container();
+              } else {
+                bool isEnabled = snapshot.data as bool;
+                if (isEnabled) {
+                  return Column(
                     children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            ayats[_selectedAyat - 1].text,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                height: 1.5,
-                                color: Colors.black87),
-                          ),
-                        ),
+                      const SizedBox(
+                        height: 20,
                       ),
+                      QuranFullAyatRowWidget(
+                          futureMethodThatReturnsSelectedSurah:
+                              NobleQuran.getSurahTransliteration(
+                                  _selectedSurah!.number - 1),
+                          ayaIndex: _selectedAyat),
                     ],
-                  ),
-                ),
-              );
-            }
-        }
-      },
-    );
+                  );
+                } else {
+                  return Container();
+                }
+              }
+          }
+        });
   }
+
+  Widget _fullTranslationWidget() {
+    return FutureBuilder<NQTranslation>(
+        future: QuranSettingsManager.instance.getTranslation(),
+        builder: (BuildContext context, AsyncSnapshot<NQTranslation> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                      height: 80,
+                      child: Center(child: Text('Loading translation....'))));
+            default:
+              if (snapshot.hasError) {
+                return Container();
+              } else {
+                NQTranslation translation = snapshot.data as NQTranslation;
+                return Column(children: [
+                  const SizedBox(height: 20),
+                  QuranFullAyatRowWidget(
+                      futureMethodThatReturnsSelectedSurah:
+                          NobleQuran.getTranslationString(
+                              _selectedSurah!.number - 1, translation),
+                      ayaIndex: _selectedAyat),
+                ]);
+              }
+          }
+        });
+  }
+
+  // Widget _fullTranslationWidget2() {
+  //   return FutureBuilder<NQSurah>(
+  //     future: NobleQuran.getTranslationString(
+  //         _selectedSurah!.number - 1, NQTranslation.MALAYALAM_MUNDAM),
+  //     builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
+  //       switch (snapshot.connectionState) {
+  //         case ConnectionState.waiting:
+  //           return const Padding(
+  //               padding: EdgeInsets.all(8.0),
+  //               child: SizedBox(
+  //                   height: 100,
+  //                   child: Center(child: Text('Loading translation....'))));
+  //         default:
+  //           if (snapshot.hasError) {
+  //             return Container();
+  //           } else {
+  //             NQSurah surah = snapshot.data as NQSurah;
+  //             List<NQAyat> ayats = surah.aya;
+  //             return Column(
+  //               children: [
+  //                 const SizedBox(height: 20),
+  //                 Card(
+  //                   elevation: 5,
+  //                   child: Directionality(
+  //                     textDirection: TextDirection.ltr,
+  //                     child: Row(
+  //                       children: [
+  //                         Flexible(
+  //                           child: Padding(
+  //                             padding: const EdgeInsets.all(15.0),
+  //                             child: Text(
+  //                               ayats[_selectedAyat - 1].text,
+  //                               style: TextStyle(
+  //                                   fontSize: 16,
+  //                                   height: 1.5,
+  //                                   fontFamily: fontFamily,
+  //                                   color: Colors.black87),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             );
+  //           }
+  //       }
+  //     },
+  //   );
+  // }
 
   Widget _notesWidget() {
     QuranUser? user = QuranAuthFactory.engine.getUser();
@@ -742,5 +842,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         }
       }
     }
+  }
+
+  void _settingsChangedListener(String event) {
+    setState(() {});
   }
 }

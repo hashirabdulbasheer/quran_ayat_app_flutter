@@ -12,6 +12,8 @@ class QuranThemeManager {
       QuranThemeManager._privateConstructor();
 
   final String themeId = "quran_app_theme";
+  final String transliterationId = "quran_app_transliteration";
+  final String translationId = "quran_app_translation";
 
   ThemeMode _appTheme = ThemeMode.light;
 
