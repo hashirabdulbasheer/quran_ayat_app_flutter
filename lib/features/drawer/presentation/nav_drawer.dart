@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/settings/presentation/quran_settings_screen.dart';
 import '../../../main.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../quran_search_screen.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../auth/presentation/quran_profile_screen.dart';
 import '../../notes/presentation/quran_view_notes_screen.dart';
+import '../../settings/presentation/quran_settings_screen.dart';
 
 class QuranNavDrawer extends StatelessWidget {
   final QuranUser? user;

@@ -1,25 +1,28 @@
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'package:uuid/uuid.dart';
 
+import '../features/settings/domain/settings_manager.dart';
 import '../misc/enums/quran_status_enum.dart';
 import '../models/qr_word_model.dart';
 
 class QuranUtils {
-
-  static Future<String> shareString(String surahName, int surah, int aya) async {
+  static Future<String> shareString(
+      String surahName, int surah, int aya) async {
     int actualSuraIndex = surah - 1;
     int actualAyaIndex = aya - 1;
     NQSurah arabicSurah = await NobleQuran.getSurahArabic(actualSuraIndex);
-    NQTranslation translation = await QuranSettingsManager.instance.getTranslation();
-    NQSurah translationSurah = await NobleQuran.getTranslationString(actualSuraIndex, translation);
+    NQTranslation translation =
+        await QuranSettingsManager.instance.getTranslation();
+    NQSurah translationSurah =
+        await NobleQuran.getTranslationString(actualSuraIndex, translation);
     StringBuffer response = StringBuffer();
     response.write("Sura $surahName - $surah:$aya\n\n");
     response.write("${arabicSurah.aya[actualAyaIndex].text}\n\n");
     response.write("${translationSurah.aya[actualAyaIndex].text}\n\n");
-    response.write("More details:\nhttp://uxquran.com/apps/quran-ayat/?sura=$surah&aya=$aya\n");
+    response.write(
+        "More details:\nhttp://uxquran.com/apps/quran-ayat/?sura=$surah&aya=$aya\n");
     return response.toString();
   }
 
@@ -48,6 +51,11 @@ class QuranUtils {
   static bool isArabic(String s) {
     RegExp regex = RegExp(
         "[\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufc3f]|[\ufe70-\ufefc]");
+    return regex.hasMatch(s);
+  }
+
+  static bool isMalayalam(String s) {
+    RegExp regex = RegExp("[\u0D15-\u0D39]|[\u0D02-\u0D57]|[\u0D66-\u0D6F]");
     return regex.hasMatch(s);
   }
 

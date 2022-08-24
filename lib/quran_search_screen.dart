@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'package:flutter/foundation.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/material.dart';
+import 'misc/enums/quran_font_family_enum.dart';
 import 'models/qr_word_model.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
@@ -98,10 +99,10 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                         Expanded(
                                             child: Text(
                                           words[index].word.ar,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontSize: 30,
-                                              fontFamily:
-                                                  "KFGQPC Uthmanic Script HAFS Regular"),
+                                              fontFamily: QuranFontFamily
+                                                  .arabic.rawString),
                                         ))
                                       ],
                                     ),
