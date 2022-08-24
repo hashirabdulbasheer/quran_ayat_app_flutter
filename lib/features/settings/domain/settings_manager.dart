@@ -47,8 +47,21 @@ class QuranSettingsManager {
       defaultValue: NQTranslation.clear.title,
       type: QuranSettingType.dropdown);
 
+  final QuranSetting _audioControlSettings = QuranSetting(
+      name: "Audio Controls",
+      description: "on/off audio controls",
+      id: QuranThemeManager.instance.audioControlsId,
+      possibleValues: [],
+      defaultValue: QuranSettingOnOff.off.rawString(),
+      type: QuranSettingType.onOff);
+
   List<QuranSetting> generateSettings() {
-    return [_themeSettings, _translationSettings, _transliterationSettings];
+    return [
+      _themeSettings,
+      _translationSettings,
+      _transliterationSettings,
+      _audioControlSettings
+    ];
   }
 
   void save(QuranSetting setting, String newValue) async {
@@ -74,11 +87,23 @@ class QuranSettingsManager {
       /// Update translation
       QuranSettingsManager.instance
           .notifyListeners(QuranSettingsEvent.translationChanged);
+    } else if (setting.id == QuranThemeManager.instance.audioControlsId) {
+      /// Update audio controls
+      QuranSettingsManager.instance
+          .notifyListeners(QuranSettingsEvent.audioControlStatusChanged);
     }
   }
 
   Future<bool> isTransliterationEnabled() async {
     String isEnabledStr = await getValue(_transliterationSettings);
+    if (isEnabledStr == "true") {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> isAudioControlsEnabled() async {
+    String isEnabledStr = await getValue(_audioControlSettings);
     if (isEnabledStr == "true") {
       return true;
     }

@@ -14,6 +14,7 @@ class QuranThemeManager {
   final String themeId = "quran_app_theme";
   final String transliterationId = "quran_app_transliteration";
   final String translationId = "quran_app_translation";
+  final String audioControlsId = "quran_app_audio_controls";
 
   ThemeMode _appTheme = ThemeMode.light;
 

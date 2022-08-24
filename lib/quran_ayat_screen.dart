@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
+import 'features/ayats/widgets/audio_row_widget.dart';
 import 'features/ayats/widgets/full_ayat_row_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
@@ -245,6 +247,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 // translation widget
                 _fullTranslationWidget(),
 
+                // audio controls
+                _audioControlsWidget(),
+
                 /// Notes
                 _notesWidget(),
 
@@ -397,8 +402,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 30,
-                                fontFamily:
-                                    QuranFontFamily.arabic.rawString),
+                                fontFamily: QuranFontFamily.arabic.rawString),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -646,6 +650,37 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       );
     }
     return Container();
+  }
+
+  Widget _audioControlsWidget() {
+    return FutureBuilder<bool>(
+        future: QuranSettingsManager.instance.isAudioControlsEnabled(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: SizedBox(
+                      height: 80,
+                      child: Center(child: Text('Loading audio ....'))));
+            default:
+              if (snapshot.hasError) {
+                return Container();
+              } else {
+                bool isEnabled = snapshot.data as bool;
+                if (isEnabled) {
+                  if (_selectedSurah == null) {
+                    return Container();
+                  }
+                  return QuranAudioRowWidget(
+                      surahIndex: _selectedSurah!.number,
+                      ayaIndex: _selectedAyat);
+                } else {
+                  return Container();
+                }
+              }
+          }
+        });
   }
 
   ///
