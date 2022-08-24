@@ -1,4 +1,8 @@
-enum QuranSettingsEvent { transliterationChanged, translationChanged }
+enum QuranSettingsEvent {
+  transliterationChanged,
+  translationChanged,
+  audioControlStatusChanged
+}
 
 extension QuranSettingsEventToString on QuranSettingsEvent {
   String rawString() {
@@ -7,6 +11,8 @@ extension QuranSettingsEventToString on QuranSettingsEvent {
         return "transliterationChanged";
       case QuranSettingsEvent.translationChanged:
         return "translationChanged";
+      case QuranSettingsEvent.audioControlStatusChanged:
+        return "audioControlStatusChanged";
     }
   }
 }
