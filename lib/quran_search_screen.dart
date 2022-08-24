@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:isolate';
 import 'package:flutter/foundation.dart';
-import 'package:quran_ayat/misc/enums/quran_font_family_enum.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/material.dart';
+import 'misc/enums/quran_font_family_enum.dart';
 import 'models/qr_word_model.dart';
 import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';

@@ -1,9 +1,9 @@
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'package:uuid/uuid.dart';
 
+import '../features/settings/domain/settings_manager.dart';
 import '../misc/enums/quran_status_enum.dart';
 import '../models/qr_word_model.dart';
 
