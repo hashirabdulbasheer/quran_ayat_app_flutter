@@ -19,8 +19,11 @@ class QuranAudioRowWidget extends StatefulWidget {
 class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
   final intl.NumberFormat formatter = intl.NumberFormat("000");
 
+  // final String _baseAudioUrl =
+  //     "http://www.everyayah.com/data/AbdulSamad_64kbps_QuranExplorer.Com";
+
   final String _baseAudioUrl =
-      "http://www.everyayah.com/data/AbdulSamad_64kbps_QuranExplorer.Com";
+      "http://www.everyayah.com/data/khalefa_al_tunaiji_64kbps";
 
   late AudioPlayer _player;
 
