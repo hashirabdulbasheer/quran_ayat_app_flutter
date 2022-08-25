@@ -1,10 +1,9 @@
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../misc/enums/quran_theme_enum.dart';
 import '../domain/entities/quran_setting.dart';
 import '../domain/enum/settings_type_enum.dart';
 import '../domain/settings_manager.dart';
+import 'widgets/dropdown_title_widget.dart';
+import 'widgets/on_off_tile_widget.dart';
 
 class QuranSettingsScreen extends StatefulWidget {
   const QuranSettingsScreen({Key? key}) : super(key: key);
@@ -48,92 +47,32 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
       padding: const EdgeInsets.all(10.0),
       child: IntrinsicHeight(
         child: Container(
-          decoration: const BoxDecoration(
-              color: Colors.black26,
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: FutureBuilder<String>(
-              future: QuranSettingsManager.instance.getValue(setting),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const Center(child: CircularProgressIndicator());
-                  default:
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    } else {
-                      return _settingRowContents(setting, snapshot.data);
-                    }
-                }
-              }),
-        ),
+            decoration: const BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: _settingRowContents(setting)),
       ),
     );
   }
 
-  Widget _settingRowContents(QuranSetting setting, String? currentValue) {
+  Widget _settingRowContents(QuranSetting setting) {
     switch (setting.type) {
       case QuranSettingType.dropdown:
-        return _dropdownTile(setting, currentValue);
+        return QuranDropdownSettingsTileWidget(
+            setting: setting,
+            onChanged: (value) {
+              QuranSettingsManager.instance.save(setting, value);
+            });
 
       case QuranSettingType.onOff:
-        return _onOffTile(setting, currentValue);
+        return QuranOnOffSettingsTileWidget(
+            setting: setting,
+            onChanged: (value) {
+              QuranSettingsManager.instance.save(setting, "$value");
+            });
 
       default:
         return Container();
     }
-  }
-
-  Widget _onOffTile(QuranSetting setting, String? currentValue) {
-    bool isSwitched = currentValue == "true" ? true : false;
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-          trailing: CupertinoSwitch(
-            activeColor: Theme.of(context).primaryColor,
-            value: isSwitched,
-            onChanged: (value) {
-              QuranSettingsManager.instance.save(setting, "$value");
-              setState(() {});
-            },
-          ),
-          title:
-              Text(setting.name, style: Theme.of(context).textTheme.titleLarge),
-          subtitle: Text(setting.description)),
-    );
-  }
-
-  Widget _dropdownTile(QuranSetting setting, String? currentValue) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-        isThreeLine: true,
-        title:
-            Text(setting.name, style: Theme.of(context).textTheme.titleLarge),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(setting.description, textAlign: TextAlign.end),
-            IntrinsicWidth(
-              child: DropdownSearch<String>(
-                items: setting.possibleValues,
-                dropdownSearchTextAlign: TextAlign.start,
-                popupProps:
-                    const PopupPropsMultiSelection.menu(fit: FlexFit.loose),
-                dropdownSearchDecoration:
-                    const InputDecoration(hintText: "select"),
-                onChanged: (value) {
-                  if (value != null) {
-                    QuranSettingsManager.instance.save(setting, value);
-                    setState(() {});
-                  }
-                },
-                selectedItem: currentValue ?? QuranAppTheme.light.rawString(),
-              ),
-            ),
-            const SizedBox(height: 10)
-          ],
-        ),
-      ),
-    );
   }
 }
