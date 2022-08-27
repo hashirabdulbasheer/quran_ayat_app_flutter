@@ -1,8 +1,7 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
-
+import 'package:just_audio/just_audio.dart';
 
 class QuranAudioRowWidget extends StatefulWidget {
   final int surahIndex;
@@ -22,8 +21,9 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
   // final String _baseAudioUrl =
   //     "http://www.everyayah.com/data/AbdulSamad_64kbps_QuranExplorer.Com";
 
-  final String _baseAudioUrl =
-      "http://www.everyayah.com/data/khalefa_al_tunaiji_64kbps";
+  final String _recitor = "khalefa_al_tunaiji_64kbps";
+
+  final String _baseAudioUrl = "http://www.everyayah.com/data";
 
   late AudioPlayer _player;
 
@@ -31,14 +31,12 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
   void initState() {
     super.initState();
     _player = AudioPlayer();
-    _player.onPlayerStateChanged.listen(_audioStateChanged);
-    _player.onPlayerComplete.listen(_audioPlayCompleted);
+    _player.playerStateStream.listen(_audioStateChanged);
   }
 
   @override
   void dispose() {
     _player.stop();
-    _player.release();
     super.dispose();
   }
 
@@ -56,16 +54,14 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                   onPressed: () async {
                     bool offline = await _isOffline();
                     if (!offline) {
-                      if (_player.state == PlayerState.playing) {
-                        _player.stop();
-                      }
-                      await _player.play(UrlSource(
-                          "$_baseAudioUrl/${formatter.format(widget.surahIndex)}${formatter.format(widget.ayaIndex)}.mp3"));
+                      await _player.setAudioSource(AudioSource.uri(Uri.parse(
+                          "$_baseAudioUrl/$_recitor/${formatter.format(widget.surahIndex)}${formatter.format(widget.ayaIndex)}.mp3")));
+                      await _player.play();
                     } else {
                       _showMessage("Unable to connect to the internet 😞");
                     }
                   },
-                  child: _player.state == PlayerState.playing
+                  child: _player.playing
                       ? const SizedBox(
                           width: 20,
                           height: 20,
@@ -78,7 +74,7 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
               width: 150,
               child: ElevatedButton(
                   onPressed: () {
-                    if (_player.state == PlayerState.playing) {
+                    if (_player.playing) {
                       _player.stop();
                     }
                   },
@@ -97,11 +93,10 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
   void _audioStateChanged(PlayerState state) {
     if (mounted) {
       setState(() {});
+      if (state.processingState == ProcessingState.completed) {
+        _player.stop();
+      }
     }
-  }
-
-  void _audioPlayCompleted(event) {
-    _player.stop();
   }
 
   ///
