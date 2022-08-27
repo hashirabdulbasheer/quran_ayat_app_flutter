@@ -1,7 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' as intl;
 import 'package:just_audio/just_audio.dart';
+
+import '../../domain/audio/audio_cache_manager.dart';
 
 class QuranAudioRowWidget extends StatefulWidget {
   final int surahIndex;
@@ -16,14 +17,7 @@ class QuranAudioRowWidget extends StatefulWidget {
 }
 
 class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
-  final intl.NumberFormat formatter = intl.NumberFormat("000");
 
-  // final String _baseAudioUrl =
-  //     "http://www.everyayah.com/data/AbdulSamad_64kbps_QuranExplorer.Com";
-
-  final String _recitor = "khalefa_al_tunaiji_64kbps";
-
-  final String _baseAudioUrl = "http://www.everyayah.com/data";
 
   late AudioPlayer _player;
 
@@ -52,14 +46,16 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
               width: 150,
               child: ElevatedButton(
                   onPressed: () async {
-                    bool offline = await _isOffline();
-                    if (!offline) {
-                      await _player.setAudioSource(AudioSource.uri(Uri.parse(
-                          "$_baseAudioUrl/$_recitor/${formatter.format(widget.surahIndex)}${formatter.format(widget.ayaIndex)}.mp3")));
-                      await _player.play();
-                    } else {
-                      _showMessage("Unable to connect to the internet 😞");
+                    AudioSource source = await QuranAudioCacheManager.instance.getSource(widget.surahIndex, widget.ayaIndex);
+                    if(source is UriAudioSource) {
+                      bool offline = await _isOffline();
+                      if (offline) {
+                        _showMessage("Unable to connect to the internet 😞");
+                        return;
+                      }
                     }
+                    await _player.setAudioSource(source);
+                    await _player.play();
                   },
                   child: _player.playing
                       ? const SizedBox(

@@ -52,6 +52,7 @@ dependencies:
   uuid: ^3.0.6
   connectivity_plus: ^2.3.5
   just_audio: ^0.9.28
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

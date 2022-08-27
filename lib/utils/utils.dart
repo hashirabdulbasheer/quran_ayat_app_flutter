@@ -7,7 +7,16 @@ import '../features/settings/domain/settings_manager.dart';
 import '../misc/enums/quran_status_enum.dart';
 import '../models/qr_word_model.dart';
 
+import 'package:intl/intl.dart' as intl;
+
+
 class QuranUtils {
+
+  static String getAudioUrl(String baseAudioUrl, String reciter, int surahIndex, int ayaIndex) {
+    final intl.NumberFormat formatter = intl.NumberFormat("000");
+    return "$baseAudioUrl/$reciter/${formatter.format(surahIndex)}${formatter.format(ayaIndex)}.mp3";
+  }
+
   static Future<String> shareString(
       String surahName, int surah, int aya) async {
     int actualSuraIndex = surah - 1;
