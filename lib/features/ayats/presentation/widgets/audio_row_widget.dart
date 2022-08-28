@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:quran_ayat/utils/utils.dart';
 
+import '../../../../utils/utils.dart';
 import '../../domain/audio/audio_cache_manager.dart';
 
 class QuranAudioRowWidget extends StatefulWidget {
   final int surahIndex;
   final int ayaIndex;
+  final bool? autoPlayEnabled;
+  final Function? onPlayCompleted;
+  final Function? onContinuousPlayButtonPressed;
+  final Function? onStopButtonPressed;
 
   const QuranAudioRowWidget(
-      {Key? key, required this.surahIndex, required this.ayaIndex})
+      {Key? key,
+      required this.surahIndex,
+      required this.ayaIndex,
+      this.autoPlayEnabled,
+      this.onContinuousPlayButtonPressed,
+      this.onStopButtonPressed,
+      this.onPlayCompleted})
       : super(key: key);
 
   @override
@@ -17,8 +27,6 @@ class QuranAudioRowWidget extends StatefulWidget {
 }
 
 class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
-
-
   late AudioPlayer _player;
 
   @override
@@ -26,6 +34,9 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
     super.initState();
     _player = AudioPlayer();
     _player.playerStateStream.listen(_audioStateChanged);
+    if (widget.autoPlayEnabled == true) {
+      _play();
+    }
   }
 
   @override
@@ -42,20 +53,11 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              width: 150,
+            const SizedBox(width: 5),
+            Expanded(
               child: ElevatedButton(
                   onPressed: () async {
-                    AudioSource source = await QuranAudioCacheManager.instance.getSource(widget.surahIndex, widget.ayaIndex);
-                    if(source is UriAudioSource) {
-                      bool offline = await QuranUtils.isOffline();
-                      if (offline) {
-                        _showMessage("Unable to connect to the internet 😞");
-                        return;
-                      }
-                    }
-                    await _player.setAudioSource(source);
-                    await _player.play();
+                    _play();
                   },
                   child: _player.playing
                       ? const SizedBox(
@@ -66,16 +68,31 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                       : const Text("Play")),
             ),
             const SizedBox(width: 20),
-            SizedBox(
-              width: 150,
+            Expanded(
               child: ElevatedButton(
                   onPressed: () {
                     if (_player.playing) {
                       _player.stop();
                     }
+                    if (widget.onStopButtonPressed != null) {
+                      widget.onStopButtonPressed!();
+                    }
                   },
                   child: const Text("Stop")),
             ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (widget.onContinuousPlayButtonPressed != null) {
+                      widget.onContinuousPlayButtonPressed!();
+                    }
+                  },
+                  child: widget.autoPlayEnabled == true
+                      ? const Text("Cont. STOP", textAlign: TextAlign.center)
+                      : const Text("Continuous")),
+            ),
+            const SizedBox(width: 5),
           ],
         ),
       ],
@@ -91,8 +108,27 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
       setState(() {});
       if (state.processingState == ProcessingState.completed) {
         _player.stop();
+        if (!state.playing) {
+          if (widget.onPlayCompleted != null) {
+            widget.onPlayCompleted!();
+          }
+        }
       }
     }
+  }
+
+  void _play() async {
+    AudioSource source = await QuranAudioCacheManager.instance
+        .getSource(widget.surahIndex, widget.ayaIndex);
+    if (source is UriAudioSource) {
+      bool offline = await QuranUtils.isOffline();
+      if (offline) {
+        _showMessage("Unable to connect to the internet 😞");
+        return;
+      }
+    }
+    await _player.setAudioSource(source);
+    await _player.play();
   }
 
   ///

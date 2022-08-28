@@ -1,6 +1,5 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:quran_ayat/utils/utils.dart';
 import '../../../models/qr_response_model.dart';
+import '../../../utils/utils.dart';
 import '../data/firebase_notes_impl.dart';
 import '../data/hive_notes_impl.dart';
 import 'entities/quran_note.dart';
