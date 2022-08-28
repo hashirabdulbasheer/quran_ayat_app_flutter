@@ -19,12 +19,13 @@ class QuranAudioCacheManager {
       QuranAudioCacheManager._privateConstructor();
 
   Future<AudioSource> getSource(int surahIndex, int ayaIndex) async {
-    Uint8List? savedAudio = await _audioRepository.getAudio(surahIndex, ayaIndex, _reciter);
-    if (savedAudio == null) {
-      // no saved audio
-      // play live
-      return AudioSource.uri(Uri.parse(QuranUtils.getAudioUrl(_baseAudioUrl, _reciter, surahIndex, ayaIndex)));
-    }
-    return QuranAudioCacheSource(savedAudio);
+    // Uint8List? savedAudio = await _audioRepository.getAudio(surahIndex, ayaIndex, _reciter);
+    // if (savedAudio == null) {
+    //   // no saved audio
+    //   // play live
+    //   return AudioSource.uri(Uri.parse(QuranUtils.getAudioUrl(_baseAudioUrl, _reciter, surahIndex, ayaIndex)));
+    // }
+    // return QuranAudioCacheSource(savedAudio);
+    return AudioSource.uri(Uri.parse(QuranUtils.getAudioUrl(_baseAudioUrl, _reciter, surahIndex, ayaIndex)));
   }
 }

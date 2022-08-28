@@ -80,18 +80,18 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                   },
                   child: const Text("Stop")),
             ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (widget.onContinuousPlayButtonPressed != null) {
-                      widget.onContinuousPlayButtonPressed!();
-                    }
-                  },
-                  child: widget.autoPlayEnabled == true
-                      ? const Text("Cont. STOP", textAlign: TextAlign.center)
-                      : const Text("Continuous")),
-            ),
+            // const SizedBox(width: 20),
+            // Expanded(
+            //   child: ElevatedButton(
+            //       onPressed: () {
+            //         if (widget.onContinuousPlayButtonPressed != null) {
+            //           widget.onContinuousPlayButtonPressed!();
+            //         }
+            //       },
+            //       child: widget.autoPlayEnabled == true
+            //           ? const Text("Cont. STOP", textAlign: TextAlign.center)
+            //           : const Text("Continuous")),
+            // ),
             const SizedBox(width: 5),
           ],
         ),
