@@ -51,7 +51,8 @@ dependencies:
   hive_flutter: ^1.1.0
   uuid: ^3.0.6
   connectivity_plus: ^2.3.5
-  audioplayers: ^1.0.1
+  just_audio: ^0.9.28
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

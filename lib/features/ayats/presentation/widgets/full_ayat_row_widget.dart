@@ -1,7 +1,7 @@
 import 'package:noble_quran/models/surah.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/utils.dart';
+import '../../../../utils/utils.dart';
 
 class QuranFullAyatRowWidget extends StatelessWidget {
   final Future<NQSurah>? futureMethodThatReturnsSelectedSurah;

@@ -1,5 +1,5 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import '../../../models/qr_response_model.dart';
+import '../../../utils/utils.dart';
 import '../data/firebase_notes_impl.dart';
 import '../data/hive_notes_impl.dart';
 import 'entities/quran_note.dart';
@@ -102,14 +102,7 @@ class QuranNotesManager implements QuranNotesInterface {
   }
 
   Future<bool> isOffline() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi ||
-        connectivityResult == ConnectivityResult.bluetooth ||
-        connectivityResult == ConnectivityResult.ethernet) {
-      return false;
-    }
-    return true;
+    return QuranUtils.isOffline();
   }
 
   String formattedDate(int timeMs) {

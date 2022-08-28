@@ -1,4 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +9,8 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
-import 'features/ayats/widgets/audio_row_widget.dart';
-import 'features/ayats/widgets/full_ayat_row_widget.dart';
+import 'features/ayats/presentation/widgets/audio_row_widget.dart';
+import 'features/ayats/presentation/widgets/full_ayat_row_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
@@ -51,6 +50,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   final String? _urlQuerySearchString = Uri.base.queryParameters["search"];
   final String? _urlQuerySuraIndex = Uri.base.queryParameters["sura"];
   final String? _urlQueryAyaIndex = Uri.base.queryParameters["aya"];
+
+  /// audio continuous playing mode
+  bool _isAudioRecitationContinuousPlayEnabled = false;
 
   @override
   void initState() {
@@ -106,14 +108,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         child: ElevatedButton(
                             style: _elevatedButtonTheme,
                             onPressed: () {
-                              if (_selectedSurah != null) {
-                                int prevAyat = _selectedAyat - 1;
-                                if (prevAyat > 0) {
-                                  setState(() {
-                                    _selectedAyat = prevAyat;
-                                  });
-                                }
-                              }
+                              _moveToPreviousAyat();
                             },
                             child: Icon(Icons.arrow_back,
                                 color: _elevatedButtonIconColor)),
@@ -123,14 +118,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         child: ElevatedButton(
                             style: _elevatedButtonTheme,
                             onPressed: () {
-                              if (_selectedSurah != null) {
-                                int nextAyat = _selectedAyat + 1;
-                                if (nextAyat <= _selectedSurah!.totalVerses) {
-                                  setState(() {
-                                    _selectedAyat = nextAyat;
-                                  });
-                                }
-                              }
+                              _moveToNextAyat();
                             },
                             child: Icon(
                               Icons.arrow_forward,
@@ -673,7 +661,32 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     return Container();
                   }
                   return QuranAudioRowWidget(
+                      autoPlayEnabled: _isAudioRecitationContinuousPlayEnabled,
                       surahIndex: _selectedSurah!.number,
+                      onContinuousPlayButtonPressed: () {
+                        setState(() {
+                          _isAudioRecitationContinuousPlayEnabled =
+                              !_isAudioRecitationContinuousPlayEnabled;
+                        });
+                      },
+                      onStopButtonPressed: () {
+                        setState(() {
+                          _isAudioRecitationContinuousPlayEnabled = false;
+                        });
+                      },
+                      onPlayCompleted: () {
+                        if (_isAudioRecitationContinuousPlayEnabled) {
+                          bool isNotEnded = _moveToNextAyat();
+                          if(!isNotEnded) {
+                            // sura completed - stop continuous play
+                            setState(() {
+                              _isAudioRecitationContinuousPlayEnabled = false;
+                            });
+                          }
+                        } else {
+                          setState(() {});
+                        }
+                      },
                       ayaIndex: _selectedAyat);
                 } else {
                   return Container();
@@ -840,5 +853,32 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       return QuranFontFamily.malayalam.rawString;
     }
     return null;
+  }
+
+  /// display next aya
+  bool _moveToNextAyat() {
+    if (_selectedSurah != null) {
+      int nextAyat = _selectedAyat + 1;
+      if (nextAyat <= _selectedSurah!.totalVerses) {
+        setState(() {
+          _selectedAyat = nextAyat;
+        });
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /// display previous aya
+  void _moveToPreviousAyat() {
+    if (_selectedSurah != null) {
+      int prevAyat = _selectedAyat - 1;
+      if (prevAyat > 0) {
+        setState(() {
+          _selectedAyat = prevAyat;
+        });
+      }
+    }
   }
 }
