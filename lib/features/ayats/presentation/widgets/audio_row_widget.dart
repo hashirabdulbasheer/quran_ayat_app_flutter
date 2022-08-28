@@ -1,6 +1,6 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:quran_ayat/utils/utils.dart';
 
 import '../../domain/audio/audio_cache_manager.dart';
 
@@ -48,7 +48,7 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                   onPressed: () async {
                     AudioSource source = await QuranAudioCacheManager.instance.getSource(widget.surahIndex, widget.ayaIndex);
                     if(source is UriAudioSource) {
-                      bool offline = await _isOffline();
+                      bool offline = await QuranUtils.isOffline();
                       if (offline) {
                         _showMessage("Unable to connect to the internet 😞");
                         return;
@@ -98,17 +98,6 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
   ///
   /// Utils
   ///
-
-  Future<bool> _isOffline() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi ||
-        connectivityResult == ConnectivityResult.bluetooth ||
-        connectivityResult == ConnectivityResult.ethernet) {
-      return false;
-    }
-    return true;
-  }
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context)

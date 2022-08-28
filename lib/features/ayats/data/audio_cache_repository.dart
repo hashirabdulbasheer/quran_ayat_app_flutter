@@ -1,6 +1,6 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../../utils/utils.dart';
 import 'audio_local_source.dart';
 import 'audio_network_source.dart';
 import 'interface/audio_data_source.dart';
@@ -21,7 +21,7 @@ class QuranAudioCacheRepositoryImpl implements QuranAudioCacheRepository {
       return audioBytes;
     }
     // not available in cache - fetch remotely
-    bool offline = await _isOffline();
+    bool offline = await QuranUtils.isOffline();
     if(!offline) {
       audioBytes = await _remoteSource.getAudio(surahIndex, ayaIndex, reciter);
       if (audioBytes != null) {
@@ -45,20 +45,4 @@ class QuranAudioCacheRepositoryImpl implements QuranAudioCacheRepository {
                       params["reciter"],
                       params["audioBytes"]);
   }
-
-  ///
-  /// Utils
-  ///
-
-  Future<bool> _isOffline() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi ||
-        connectivityResult == ConnectivityResult.bluetooth ||
-        connectivityResult == ConnectivityResult.ethernet) {
-      return false;
-    }
-    return true;
-  }
-
 }

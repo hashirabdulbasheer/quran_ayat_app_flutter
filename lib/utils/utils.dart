@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
@@ -11,6 +12,17 @@ import 'package:intl/intl.dart' as intl;
 
 
 class QuranUtils {
+
+  static Future<bool> isOffline() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi ||
+        connectivityResult == ConnectivityResult.bluetooth ||
+        connectivityResult == ConnectivityResult.ethernet) {
+      return false;
+    }
+    return true;
+  }
 
   static String getAudioUrl(String baseAudioUrl, String reciter, int surahIndex, int ayaIndex) {
     final intl.NumberFormat formatter = intl.NumberFormat("000");
