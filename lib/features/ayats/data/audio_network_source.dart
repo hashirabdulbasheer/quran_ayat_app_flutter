@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import '../../../utils/utils.dart';
 import 'interface/audio_data_source.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,8 +10,9 @@ class QuranAudioNetworkSource implements QuranAudioDataSource {
   @override
   Future<Uint8List> getAudio(
       int surahIndex, int ayaIndex, String reciter) async {
-    String url =
-        QuranUtils.getAudioUrl(_baseAudioUrl, reciter, surahIndex, ayaIndex);
+    // String url =
+    //     QuranUtils.getAudioUrl(_baseAudioUrl, reciter, surahIndex, ayaIndex);
+    String url = "https://github.com/hashirabdulbasheer/my_assets/blob/master/audio/001002.mp3?raw=true";
     final response = await http.get(Uri.parse(url));
     Uint8List bytes = response.bodyBytes;
     return bytes;
