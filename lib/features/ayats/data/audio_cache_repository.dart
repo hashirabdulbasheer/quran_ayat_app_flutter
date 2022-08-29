@@ -15,12 +15,13 @@ class QuranAudioCacheRepositoryImpl implements QuranAudioCacheRepository {
 
   @override
   Future<Uint8List?> getAudio(int surahIndex, int ayaIndex, String reciter) async {
-    Uint8List? audioBytes = await _localSource.getAudio(surahIndex, ayaIndex, reciter);
-    if (audioBytes != null) {
-      // from cache
-      return audioBytes;
-    }
+    // Uint8List? audioBytes = await _localSource.getAudio(surahIndex, ayaIndex, reciter);
+    // if (audioBytes != null) {
+    //   // from cache
+    //   return audioBytes;
+    // }
     // not available in cache - fetch remotely
+    Uint8List? audioBytes;
     bool offline = await QuranUtils.isOffline();
     if(!offline) {
       audioBytes = await _remoteSource.getAudio(surahIndex, ayaIndex, reciter);
