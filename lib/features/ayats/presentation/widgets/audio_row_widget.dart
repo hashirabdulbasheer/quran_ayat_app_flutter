@@ -33,6 +33,9 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
   void initState() {
     super.initState();
     _player = AudioPlayer();
+    _player.playingStream.listen((event) {
+
+    });
     _player.playerStateStream.listen(_audioStateChanged);
     if (widget.autoPlayEnabled == true) {
       _play();
@@ -67,7 +70,7 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                               CircularProgressIndicator(color: Colors.white70))
                       : const Text("Play")),
             ),
-            const SizedBox(width: 20),
+            const SizedBox(width: 10),
             Expanded(
               child: ElevatedButton(
                   onPressed: () {
@@ -80,18 +83,18 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                   },
                   child: const Text("Stop")),
             ),
-            // const SizedBox(width: 20),
-            // Expanded(
-            //   child: ElevatedButton(
-            //       onPressed: () {
-            //         if (widget.onContinuousPlayButtonPressed != null) {
-            //           widget.onContinuousPlayButtonPressed!();
-            //         }
-            //       },
-            //       child: widget.autoPlayEnabled == true
-            //           ? const Text("Cont. STOP", textAlign: TextAlign.center)
-            //           : const Text("Continuous")),
-            // ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (widget.onContinuousPlayButtonPressed != null) {
+                      widget.onContinuousPlayButtonPressed!();
+                    }
+                  },
+                  child: widget.autoPlayEnabled == true
+                      ? const Text("Cont. STOP", textAlign: TextAlign.center)
+                      : const Text("Continuous")),
+            ),
             const SizedBox(width: 5),
           ],
         ),
