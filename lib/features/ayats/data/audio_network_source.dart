@@ -12,7 +12,7 @@ class QuranAudioNetworkSource implements QuranAudioDataSource {
       int surahIndex, int ayaIndex, String reciter) async {
     // String url =
     //     QuranUtils.getAudioUrl(_baseAudioUrl, reciter, surahIndex, ayaIndex);
-    String url = "https://github.com/hashirabdulbasheer/my_assets/blob/master/audio/001002.mp3?raw=true";
+    String url = "https://uxquran.com/audio/001002.mp3";
     final response = await http.get(Uri.parse(url));
     Uint8List bytes = response.bodyBytes;
     return bytes;

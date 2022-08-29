@@ -25,7 +25,7 @@ class QuranAudioCacheManager {
     //   return AudioSource.uri(Uri.parse(QuranUtils.getAudioUrl(_baseAudioUrl, _reciter, surahIndex, ayaIndex)));
     // }
     // return QuranAudioCacheSource(savedAudio);
-    if(surahIndex == 5 && ayaIndex == 5) {
+    if(surahIndex == 6 && ayaIndex == 6) {
       // TODO: for testing - remove
       //https://github.com/hashirabdulbasheer/my_assets/blob/master/audio/001002.mp3?raw=true
       Uint8List? savedAudio = await _audioRepository.getAudio(surahIndex, ayaIndex, _reciter);
