@@ -33,9 +33,7 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
   void initState() {
     super.initState();
     _player = AudioPlayer();
-    _player.playingStream.listen((event) {
-
-    });
+    _player.playingStream.listen((event) {});
     _player.playerStateStream.listen(_audioStateChanged);
     if (widget.autoPlayEnabled == true) {
       _play();
@@ -58,42 +56,53 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
           children: [
             const SizedBox(width: 5),
             Expanded(
-              child: ElevatedButton(
-                  onPressed: () async {
-                    _play();
-                  },
-                  child: _player.playing
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child:
-                              CircularProgressIndicator(color: Colors.white70))
-                      : const Text("Play")),
+              child: Tooltip(
+                message: "Play",
+                child: ElevatedButton(
+                    onPressed: () async {
+                      _play();
+                    },
+                    child: _player.playing
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                color: Colors.white70))
+                        : const Icon(Icons.play_arrow_sharp)),
+              ),
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (_player.playing) {
-                      _player.stop();
-                    }
-                    if (widget.onStopButtonPressed != null) {
-                      widget.onStopButtonPressed!();
-                    }
-                  },
-                  child: const Text("Stop")),
+              child: Tooltip(
+                message: "Stop",
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (_player.playing) {
+                        _player.stop();
+                      }
+                      if (widget.onStopButtonPressed != null) {
+                        widget.onStopButtonPressed!();
+                      }
+                    },
+                    child: const Icon(Icons.stop_sharp)),
+              ),
             ),
             const SizedBox(width: 10),
             Expanded(
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (widget.onContinuousPlayButtonPressed != null) {
-                      widget.onContinuousPlayButtonPressed!();
-                    }
-                  },
-                  child: widget.autoPlayEnabled == true
-                      ? const Text("Cont. STOP", textAlign: TextAlign.center)
-                      : const Text("Continuous")),
+              child: Tooltip(
+                message: widget.autoPlayEnabled == false
+                    ? "Continuous play"
+                    : "Continuous STOP",
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (widget.onContinuousPlayButtonPressed != null) {
+                        widget.onContinuousPlayButtonPressed!();
+                      }
+                    },
+                    child: widget.autoPlayEnabled == true
+                        ? const Icon(Icons.playlist_remove_sharp)
+                        : const Icon(Icons.playlist_play_sharp)),
+              ),
             ),
             const SizedBox(width: 5),
           ],

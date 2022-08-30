@@ -117,10 +117,10 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
       child: const Text("Clear bookmark",
           style: TextStyle(fontWeight: FontWeight.bold)),
       onPressed: () {
-        QuranPreferences.clearBookmark();
+        if (widget.onClearButtonPressed != null) {
+          widget.onClearButtonPressed!();
+        }
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("👍 Cleared ")));
         setState(() {});
       },
     );

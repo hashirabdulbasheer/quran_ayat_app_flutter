@@ -23,6 +23,7 @@ import 'features/settings/domain/theme_manager.dart';
 import 'misc/enums/quran_font_family_enum.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
+import 'utils/prefs_utils.dart';
 import 'utils/utils.dart';
 
 class QuranAyatScreen extends StatefulWidget {
@@ -81,6 +82,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     super.dispose();
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.removeListeners();
+    _isAudioRecitationContinuousPlayEnabled = false;
   }
 
   @override
@@ -97,6 +99,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     user: QuranAuthFactory.engine.getUser(),
                   )
                 : null,
+            onDrawerChanged: (status) {
+              // drawer opened - stop continuous play
+              setState(() {
+                _isAudioRecitationContinuousPlayEnabled = false;
+              });
+            },
             bottomSheet: Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
@@ -108,7 +116,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         child: ElevatedButton(
                             style: _elevatedButtonTheme,
                             onPressed: () {
-                              _moveToPreviousAyat();
+                              if (_isInteractionAllowedOnScreen()) {
+                                _moveToPreviousAyat();
+                              } else {
+                                _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                              }
                             },
                             child: Icon(Icons.arrow_back,
                                 color: _elevatedButtonIconColor)),
@@ -118,7 +130,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         child: ElevatedButton(
                             style: _elevatedButtonTheme,
                             onPressed: () {
-                              _moveToNextAyat();
+                              if (_isInteractionAllowedOnScreen()) {
+                                _moveToNextAyat();
+                              } else {
+                                _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                              }
                             },
                             child: Icon(
                               Icons.arrow_forward,
@@ -158,16 +174,33 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         _selectedSurah != null ? _selectedSurah!.number - 1 : 0,
                     currentAyaIndex: _selectedAyat,
                     onSaveButtonPressed: () {
-                      _saveBookmarkDialogAction();
+                      if (_isInteractionAllowedOnScreen()) {
+                        _saveBookmarkDialogAction();
+                      } else {
+                        _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                      }
+                    },
+                    onClearButtonPressed: () {
+                      if (_isInteractionAllowedOnScreen()) {
+                        QuranPreferences.clearBookmark();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("👍 Cleared ")));
+                      } else {
+                        _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                      }
                     },
                     onGoToButtonPressed: (NQBookmark? bookmark) {
-                      if (_selectedSurah != null &&
-                          bookmark != null &&
-                          bookmark.ayat > 0) {
-                        setState(() {
-                          _selectedSurah = _surahTitles[bookmark.surah];
-                          _selectedAyat = bookmark.ayat;
-                        });
+                      if (_isInteractionAllowedOnScreen()) {
+                        if (_selectedSurah != null &&
+                            bookmark != null &&
+                            bookmark.ayat > 0) {
+                          setState(() {
+                            _selectedSurah = _surahTitles[bookmark.surah];
+                            _selectedAyat = bookmark.ayat;
+                          });
+                        }
+                      } else {
+                        _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
                       }
                     })
               ],
@@ -267,6 +300,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               height: 80,
               child: DropdownSearch<NQSurahTitle>(
                 items: _surahTitles,
+                enabled: _isInteractionAllowedOnScreen(),
                 popupProps: const PopupPropsMultiSelection.menu(),
                 itemAsString: (surah) =>
                     "(${surah.number}) ${surah.transliterationEn}",
@@ -310,6 +344,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           }
                           return false;
                         },
+                        enabled: _isInteractionAllowedOnScreen(),
                         dropdownSearchDecoration: const InputDecoration(
                             labelText: "Ayat", hintText: "ayat index"),
                         items: List<int>.generate(
@@ -367,13 +402,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 message: '${e.ar} ${e.tr}',
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => QuranSearchScreen(
-                                searchString: e.ar,
-                              )),
-                    );
+                    if (_isInteractionAllowedOnScreen()) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                QuranSearchScreen(searchString: e.ar)),
+                      );
+                    } else {
+                      _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                    }
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
@@ -494,7 +532,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           height: 50,
           child: ElevatedButton(
               onPressed: () {
-                _goToLoginScreen();
+                if (_isInteractionAllowedOnScreen()) {
+                  _goToLoginScreen();
+                } else {
+                  _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                }
               },
               child: const Text("Login to add notes")),
         ),
@@ -527,7 +569,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               const Text("Notes"),
               ElevatedButton(
                   onPressed: () {
-                    _goToCreateNoteScreen();
+                    if (_isInteractionAllowedOnScreen()) {
+                      _goToCreateNoteScreen();
+                    } else {
+                      _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                    }
                   },
                   child: const Text("Add"))
             ],
@@ -581,7 +627,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                       : TextDirection.rtl,
                               child: ListTile(
                                   onTap: () {
-                                    _goToCreateNoteScreen(note: notes[index]);
+                                    if (_isInteractionAllowedOnScreen()) {
+                                      _goToCreateNoteScreen(note: notes[index]);
+                                    } else {
+                                      _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                                    }
                                   },
                                   title: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -677,7 +727,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       onPlayCompleted: () {
                         if (_isAudioRecitationContinuousPlayEnabled) {
                           bool isNotEnded = _moveToNextAyat();
-                          if(!isNotEnded) {
+                          if (!isNotEnded) {
                             // sura completed - stop continuous play
                             setState(() {
                               _isAudioRecitationContinuousPlayEnabled = false;
@@ -864,6 +914,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           _selectedAyat = nextAyat;
         });
       } else {
+        // end reached
         return false;
       }
     }
@@ -880,5 +931,15 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         });
       }
     }
+  }
+
+  bool _isInteractionAllowedOnScreen() {
+    // disable all interactions if continuous play mode is on
+    return _isAudioRecitationContinuousPlayEnabled == false;
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }
