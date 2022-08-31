@@ -720,9 +720,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         });
                       },
                       onStopButtonPressed: () {
-                        setState(() {
-                          _isAudioRecitationContinuousPlayEnabled = false;
-                        });
+                        if(_isAudioRecitationContinuousPlayEnabled) {
+                          setState(() {
+                            _isAudioRecitationContinuousPlayEnabled = false;
+                          });
+                        }
                       },
                       onPlayCompleted: () {
                         if (_isAudioRecitationContinuousPlayEnabled) {
@@ -733,8 +735,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               _isAudioRecitationContinuousPlayEnabled = false;
                             });
                           }
-                        } else {
-                          setState(() {});
                         }
                       },
                       ayaIndex: _selectedAyat);
