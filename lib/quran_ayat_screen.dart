@@ -57,7 +57,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   final ValueNotifier<bool> _isAudioContinuousModeEnabled =
       ValueNotifier(false);
 
-  final String _contPlayMessage = "Continuous Play in progress. Please stop first.";
+  final String _contPlayMessage =
+      "Continuous Play in progress. Please stop first.";
 
   @override
   void initState() {
@@ -87,6 +88,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.removeListeners();
     _isAudioContinuousModeEnabled.value = false;
+    _isAudioContinuousModeEnabled.dispose();
   }
 
   @override
@@ -718,10 +720,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     return Container();
                   }
                   return ValueListenableBuilder<bool>(
-                      builder:
-                          (BuildContext context, bool isContinuousPlay, Widget? child) {
+                      builder: (BuildContext context, bool isContinuousPlay,
+                          Widget? child) {
                         return QuranAudioRowWidget(
-                            isAudioRecitationContinuousPlayEnabled: isContinuousPlay,
+                            isAudioRecitationContinuousPlayEnabled:
+                                isContinuousPlay,
                             surahIndex: _selectedSurah!.number,
                             onAudioEventsListener: _onAudioPlayStatusChanged,
                             ayaIndex: _selectedAyat);
@@ -958,5 +961,4 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         break;
     }
   }
-
 }

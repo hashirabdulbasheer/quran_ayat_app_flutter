@@ -94,14 +94,14 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                     : "Continuous STOP",
                 child: ElevatedButton(
                     onPressed: () {
+                      // cont play status changed event
+                      _audioEventsStream
+                          .add(QuranAudioEventsEnum.contPlayStatusChanged);
                       if (_player.playing) {
                         _stop();
                       } else {
                         _play();
                       }
-                      // cont play status changed event
-                      _audioEventsStream
-                          .add(QuranAudioEventsEnum.contPlayStatusChanged);
                     },
                     child: widget.isAudioRecitationContinuousPlayEnabled == true
                         ? const Icon(Icons.playlist_remove_sharp)
