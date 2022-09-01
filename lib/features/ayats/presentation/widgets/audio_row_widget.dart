@@ -1,25 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../../../utils/utils.dart';
 import '../../domain/audio/audio_cache_manager.dart';
+import '../../domain/enums/audio_events_enum.dart';
 
 class QuranAudioRowWidget extends StatefulWidget {
   final int surahIndex;
   final int ayaIndex;
-  final bool? autoPlayEnabled;
-  final Function? onPlayCompleted;
-  final Function? onContinuousPlayButtonPressed;
-  final Function? onStopButtonPressed;
+  final bool? isAudioRecitationContinuousPlayEnabled;
+  final void Function(QuranAudioEventsEnum)? onAudioEventsListener;
 
   const QuranAudioRowWidget(
       {Key? key,
       required this.surahIndex,
       required this.ayaIndex,
-      this.autoPlayEnabled,
-      this.onContinuousPlayButtonPressed,
-      this.onStopButtonPressed,
-      this.onPlayCompleted})
+      this.isAudioRecitationContinuousPlayEnabled,
+      this.onAudioEventsListener})
       : super(key: key);
 
   @override
@@ -27,7 +26,11 @@ class QuranAudioRowWidget extends StatefulWidget {
 }
 
 class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
+  /// the player
   late AudioPlayer _player;
+
+  final StreamController<QuranAudioEventsEnum> _audioEventsStream =
+      StreamController<QuranAudioEventsEnum>.broadcast();
 
   @override
   void initState() {
@@ -35,7 +38,8 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
     _player = AudioPlayer();
     _player.playingStream.listen((event) {});
     _player.playerStateStream.listen(_audioStateChanged);
-    if (widget.autoPlayEnabled == true) {
+    _audioEventsStream.stream.listen(widget.onAudioEventsListener);
+    if (widget.isAudioRecitationContinuousPlayEnabled == true) {
       _play();
     }
   }
@@ -77,12 +81,7 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                 message: "Stop",
                 child: ElevatedButton(
                     onPressed: () {
-                      if (_player.playing) {
-                        _player.stop();
-                      }
-                      if (widget.onStopButtonPressed != null) {
-                        widget.onStopButtonPressed!();
-                      }
+                      _stop();
                     },
                     child: const Icon(Icons.stop_sharp)),
               ),
@@ -90,16 +89,21 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
             const SizedBox(width: 10),
             Expanded(
               child: Tooltip(
-                message: widget.autoPlayEnabled == false
+                message: widget.isAudioRecitationContinuousPlayEnabled == false
                     ? "Continuous play"
                     : "Continuous STOP",
                 child: ElevatedButton(
                     onPressed: () {
-                      if (widget.onContinuousPlayButtonPressed != null) {
-                        widget.onContinuousPlayButtonPressed!();
+                      if (_player.playing) {
+                        _stop();
+                      } else {
+                        _play();
                       }
+                      // cont play status changed event
+                      _audioEventsStream
+                          .add(QuranAudioEventsEnum.contPlayStatusChanged);
                     },
-                    child: widget.autoPlayEnabled == true
+                    child: widget.isAudioRecitationContinuousPlayEnabled == true
                         ? const Icon(Icons.playlist_remove_sharp)
                         : const Icon(Icons.playlist_play_sharp)),
               ),
@@ -121,8 +125,9 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
       if (state.processingState == ProcessingState.completed) {
         _player.stop();
         if (!state.playing) {
-          if (widget.onPlayCompleted != null) {
-            widget.onPlayCompleted!();
+          /// if cont. mode is enabled then inform UI to load next
+          if (widget.isAudioRecitationContinuousPlayEnabled == true) {
+            _audioEventsStream.add(QuranAudioEventsEnum.loadNext);
           }
         }
       }
@@ -141,6 +146,15 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
     }
     await _player.setAudioSource(source);
     await _player.play();
+  }
+
+  void _stop() {
+    // stop the current player if playing
+    if (_player.playing) {
+      _player.stop();
+    }
+    // inform the main UI of the stopped event
+    _audioEventsStream.add(QuranAudioEventsEnum.stopped);
   }
 
   ///
