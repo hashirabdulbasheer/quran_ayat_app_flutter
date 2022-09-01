@@ -7,6 +7,7 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/ayats/presentation/widgets/audio_row_widget.dart';
@@ -52,8 +53,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   final String? _urlQuerySuraIndex = Uri.base.queryParameters["sura"];
   final String? _urlQueryAyaIndex = Uri.base.queryParameters["aya"];
 
-  /// audio continuous playing mode
-  bool _isAudioRecitationContinuousPlayEnabled = false;
+  /// audio recitation continuous play mode state
+  final ValueNotifier<bool> _isAudioContinuousModeEnabled =
+      ValueNotifier(false);
+
+  final String _contPlayMessage =
+      "Continuous Play in progress. Please stop first.";
 
   @override
   void initState() {
@@ -82,7 +87,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     super.dispose();
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.removeListeners();
-    _isAudioRecitationContinuousPlayEnabled = false;
+    _isAudioContinuousModeEnabled.value = false;
+    _isAudioContinuousModeEnabled.dispose();
   }
 
   @override
@@ -95,14 +101,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         textDirection: TextDirection.rtl,
         child: Scaffold(
             drawer: widget.surahIndex == null
-                ? QuranNavDrawer(
-                    user: QuranAuthFactory.engine.getUser(),
-                  )
+                ? QuranNavDrawer(user: QuranAuthFactory.engine.getUser())
                 : null,
-            onDrawerChanged: (status) {
+            onDrawerChanged: (isOpened) {
               // drawer opened - stop continuous play
               setState(() {
-                _isAudioRecitationContinuousPlayEnabled = false;
+                _isAudioContinuousModeEnabled.value = false;
               });
             },
             bottomSheet: Padding(
@@ -119,7 +123,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               if (_isInteractionAllowedOnScreen()) {
                                 _moveToPreviousAyat();
                               } else {
-                                _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                                _showMessage(_contPlayMessage);
                               }
                             },
                             child: Icon(Icons.arrow_back,
@@ -133,7 +137,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               if (_isInteractionAllowedOnScreen()) {
                                 _moveToNextAyat();
                               } else {
-                                _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                                _showMessage(_contPlayMessage);
                               }
                             },
                             child: Icon(
@@ -177,7 +181,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       if (_isInteractionAllowedOnScreen()) {
                         _saveBookmarkDialogAction();
                       } else {
-                        _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                        _showMessage(_contPlayMessage);
                       }
                     },
                     onClearButtonPressed: () {
@@ -186,7 +190,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("👍 Cleared ")));
                       } else {
-                        _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                        _showMessage(_contPlayMessage);
                       }
                     },
                     onGoToButtonPressed: (NQBookmark? bookmark) {
@@ -200,7 +204,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           });
                         }
                       } else {
-                        _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                        _showMessage(_contPlayMessage);
                       }
                     })
               ],
@@ -287,82 +291,87 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   Widget _displayHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(
-          flex: 2,
-          child: Semantics(
-            enabled: true,
-            excludeSemantics: true,
-            label: 'dropdown to select surah',
-            child: SizedBox(
-              height: 80,
-              child: DropdownSearch<NQSurahTitle>(
-                items: _surahTitles,
-                enabled: _isInteractionAllowedOnScreen(),
-                popupProps: const PopupPropsMultiSelection.menu(),
-                itemAsString: (surah) =>
-                    "(${surah.number}) ${surah.transliterationEn}",
-                dropdownSearchDecoration: const InputDecoration(
-                    labelText: "Surah", hintText: "select surah"),
-                onChanged: (value) {
-                  setState(() {
-                    if (value != null) {
-                      _selectedSurah = value;
-                      _selectedAyat = 1;
-                    }
-                  });
-                },
-                selectedItem: _selectedSurah,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        _selectedSurah != null
-            ? Expanded(
+    return ValueListenableBuilder<bool>(
+        builder: (BuildContext context, bool isContinuousPlay, Widget? child) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                flex: 2,
                 child: Semantics(
                   enabled: true,
                   excludeSemantics: true,
-                  label: 'dropdown to select ayat number',
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-                    child: SizedBox(
-                      width: 100,
-                      height: 80,
-                      child: DropdownSearch<int>(
-                        popupProps: const PopupPropsMultiSelection.menu(
-                            showSearchBox: true),
-                        filterFn: (item, filter) {
-                          if (filter.isEmpty) {
-                            return true;
+                  label: 'dropdown to select surah',
+                  child: SizedBox(
+                    height: 80,
+                    child: DropdownSearch<NQSurahTitle>(
+                      items: _surahTitles,
+                      enabled: !isContinuousPlay,
+                      popupProps: const PopupPropsMultiSelection.menu(),
+                      itemAsString: (surah) =>
+                          "(${surah.number}) ${surah.transliterationEn}",
+                      dropdownSearchDecoration: const InputDecoration(
+                          labelText: "Surah", hintText: "select surah"),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value != null) {
+                            _selectedSurah = value;
+                            _selectedAyat = 1;
                           }
-                          if ("$item" ==
-                              QuranUtils.replaceFarsiNumber(filter)) {
-                            return true;
-                          }
-                          return false;
-                        },
-                        enabled: _isInteractionAllowedOnScreen(),
-                        dropdownSearchDecoration: const InputDecoration(
-                            labelText: "Ayat", hintText: "ayat index"),
-                        items: List<int>.generate(
-                            _selectedSurah?.totalVerses ?? 0, (i) => i + 1),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedAyat = value ?? 1;
-                          });
-                        },
-                        selectedItem: _selectedAyat,
-                      ),
+                        });
+                      },
+                      selectedItem: _selectedSurah,
                     ),
                   ),
                 ),
-              )
-            : Container(),
-      ],
-    );
+              ),
+              const SizedBox(width: 10),
+              _selectedSurah != null
+                  ? Expanded(
+                      child: Semantics(
+                        enabled: true,
+                        excludeSemantics: true,
+                        label: 'dropdown to select ayat number',
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          child: SizedBox(
+                            width: 100,
+                            height: 80,
+                            child: DropdownSearch<int>(
+                              popupProps: const PopupPropsMultiSelection.menu(
+                                  showSearchBox: true),
+                              filterFn: (item, filter) {
+                                if (filter.isEmpty) {
+                                  return true;
+                                }
+                                if ("$item" ==
+                                    QuranUtils.replaceFarsiNumber(filter)) {
+                                  return true;
+                                }
+                                return false;
+                              },
+                              enabled: !isContinuousPlay,
+                              dropdownSearchDecoration: const InputDecoration(
+                                  labelText: "Ayat", hintText: "ayat index"),
+                              items: List<int>.generate(
+                                  _selectedSurah?.totalVerses ?? 0,
+                                  (i) => i + 1),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedAyat = value ?? 1;
+                                });
+                              },
+                              selectedItem: _selectedAyat,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          );
+        },
+        valueListenable: _isAudioContinuousModeEnabled);
   }
 
   Widget _ayaWidget(List<NQWord> words) {
@@ -410,7 +419,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                 QuranSearchScreen(searchString: e.ar)),
                       );
                     } else {
-                      _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                      _showMessage(_contPlayMessage);
                     }
                   },
                   child: Padding(
@@ -535,7 +544,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 if (_isInteractionAllowedOnScreen()) {
                   _goToLoginScreen();
                 } else {
-                  _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                  _showMessage(_contPlayMessage);
                 }
               },
               child: const Text("Login to add notes")),
@@ -572,7 +581,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                     if (_isInteractionAllowedOnScreen()) {
                       _goToCreateNoteScreen();
                     } else {
-                      _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                      _showMessage(_contPlayMessage);
                     }
                   },
                   child: const Text("Add"))
@@ -630,7 +639,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                     if (_isInteractionAllowedOnScreen()) {
                                       _goToCreateNoteScreen(note: notes[index]);
                                     } else {
-                                      _showMessage("Continuous Play in progress. Please tap stop to proceed with this action");
+                                      _showMessage(_contPlayMessage);
                                     }
                                   },
                                   title: Padding(
@@ -710,34 +719,17 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   if (_selectedSurah == null) {
                     return Container();
                   }
-                  return QuranAudioRowWidget(
-                      autoPlayEnabled: _isAudioRecitationContinuousPlayEnabled,
-                      surahIndex: _selectedSurah!.number,
-                      onContinuousPlayButtonPressed: () {
-                        setState(() {
-                          _isAudioRecitationContinuousPlayEnabled =
-                              !_isAudioRecitationContinuousPlayEnabled;
-                        });
+                  return ValueListenableBuilder<bool>(
+                      builder: (BuildContext context, bool isContinuousPlay,
+                          Widget? child) {
+                        return QuranAudioRowWidget(
+                            isAudioRecitationContinuousPlayEnabled:
+                                isContinuousPlay,
+                            surahIndex: _selectedSurah!.number,
+                            onAudioEventsListener: _onAudioPlayStatusChanged,
+                            ayaIndex: _selectedAyat);
                       },
-                      onStopButtonPressed: () {
-                        setState(() {
-                          _isAudioRecitationContinuousPlayEnabled = false;
-                        });
-                      },
-                      onPlayCompleted: () {
-                        if (_isAudioRecitationContinuousPlayEnabled) {
-                          bool isNotEnded = _moveToNextAyat();
-                          if (!isNotEnded) {
-                            // sura completed - stop continuous play
-                            setState(() {
-                              _isAudioRecitationContinuousPlayEnabled = false;
-                            });
-                          }
-                        } else {
-                          setState(() {});
-                        }
-                      },
-                      ayaIndex: _selectedAyat);
+                      valueListenable: _isAudioContinuousModeEnabled);
                 } else {
                   return Container();
                 }
@@ -935,11 +927,38 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   bool _isInteractionAllowedOnScreen() {
     // disable all interactions if continuous play mode is on
-    return _isAudioRecitationContinuousPlayEnabled == false;
+    return _isAudioContinuousModeEnabled.value == false;
   }
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  ///
+  /// Audio
+  ///
+  void _onAudioPlayStatusChanged(QuranAudioEventsEnum event) {
+    switch (event) {
+      case QuranAudioEventsEnum.stopped:
+        _isAudioContinuousModeEnabled.value = false;
+        break;
+
+      case QuranAudioEventsEnum.loadNext:
+        bool isNotEnded = _moveToNextAyat();
+        if (!isNotEnded) {
+          // sura completed - stop continuous play
+          _isAudioContinuousModeEnabled.value = false;
+        }
+        break;
+
+      case QuranAudioEventsEnum.contPlayStatusChanged:
+        _isAudioContinuousModeEnabled.value =
+            !_isAudioContinuousModeEnabled.value;
+        break;
+
+      default:
+        break;
+    }
   }
 }
