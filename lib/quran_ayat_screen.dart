@@ -160,7 +160,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       int? surahIndex = _selectedSurah?.number;
                       if (surahIndex != null) {
                         String surahName =
-                            _surahTitles[surahIndex].transliterationEn;
+                            _surahTitles[surahIndex - 1].transliterationEn;
                         int ayaIndex = _selectedAyat;
                         String shareString = await QuranUtils.shareString(
                             surahName, surahIndex, ayaIndex);
@@ -651,9 +651,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(notes[index].note,
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black87)),
+                                            style:
+                                                const TextStyle(fontSize: 14)),
                                         const SizedBox(
                                           height: 8,
                                         ),
@@ -661,9 +660,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                             QuranNotesManager.instance
                                                 .formattedDate(
                                                     notes[index].createdOn),
-                                            style: const TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.black54)),
+                                            style:
+                                                const TextStyle(fontSize: 12)),
                                       ],
                                     ),
                                   )),
