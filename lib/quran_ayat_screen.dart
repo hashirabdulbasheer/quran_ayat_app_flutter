@@ -160,7 +160,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       int? surahIndex = _selectedSurah?.number;
                       if (surahIndex != null) {
                         String surahName =
-                            _surahTitles[surahIndex].transliterationEn;
+                            _surahTitles[surahIndex-1].transliterationEn;
                         int ayaIndex = _selectedAyat;
                         String shareString = await QuranUtils.shareString(
                             surahName, surahIndex, ayaIndex);
