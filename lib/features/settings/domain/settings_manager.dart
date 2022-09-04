@@ -4,6 +4,7 @@ import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/noble_quran.dart';
 
 import '../../../misc/enums/quran_theme_enum.dart';
+import 'constants/setting_constants.dart';
 import 'enum/settings_event_enum.dart';
 import 'theme_manager.dart';
 import '../data/repository/settings_repository_impl.dart';
@@ -22,7 +23,7 @@ class QuranSettingsManager {
   final QuranSetting _themeSettings = QuranSetting(
       name: "App Theme",
       description: "select the app color theme",
-      id: QuranThemeManager.instance.themeId,
+      id: QuranSettingsConstants.themeId,
       possibleValues: [
         QuranAppTheme.light.rawString(),
         QuranAppTheme.dark.rawString()
@@ -33,7 +34,7 @@ class QuranSettingsManager {
   final QuranSetting _transliterationSettings = QuranSetting(
       name: "Transliteration",
       description: "on/off transliteration",
-      id: QuranThemeManager.instance.transliterationId,
+      id: QuranSettingsConstants.transliterationId,
       possibleValues: [],
       defaultValue: QuranSettingOnOff.off.rawString(),
       type: QuranSettingType.onOff);
@@ -41,7 +42,7 @@ class QuranSettingsManager {
   final QuranSetting _translationSettings = QuranSetting(
       name: "Translation",
       description: "select the translation",
-      id: QuranThemeManager.instance.translationId,
+      id: QuranSettingsConstants.translationId,
       possibleValues:
           NobleQuran.getAllTranslations().map((e) => e.title).toList(),
       defaultValue: NQTranslation.clear.title,
@@ -50,7 +51,7 @@ class QuranSettingsManager {
   final QuranSetting _audioControlSettings = QuranSetting(
       name: "Audio Controls",
       description: "on/off audio controls",
-      id: QuranThemeManager.instance.audioControlsId,
+      id: QuranSettingsConstants.audioControlsId,
       possibleValues: [],
       defaultValue: QuranSettingOnOff.off.rawString(),
       type: QuranSettingType.onOff);
@@ -76,18 +77,18 @@ class QuranSettingsManager {
   }
 
   void _performSettingSpecificActions(QuranSetting setting) {
-    if (setting.id == QuranThemeManager.instance.themeId) {
+    if (setting.id == QuranSettingsConstants.themeId) {
       /// Update theme
       QuranThemeManager.instance.themeChanged();
-    } else if (setting.id == QuranThemeManager.instance.transliterationId) {
+    } else if (setting.id == QuranSettingsConstants.transliterationId) {
       /// Update transliteration
       QuranSettingsManager.instance
           .notifyListeners(QuranSettingsEvent.transliterationChanged);
-    } else if (setting.id == QuranThemeManager.instance.translationId) {
+    } else if (setting.id == QuranSettingsConstants.translationId) {
       /// Update translation
       QuranSettingsManager.instance
           .notifyListeners(QuranSettingsEvent.translationChanged);
-    } else if (setting.id == QuranThemeManager.instance.audioControlsId) {
+    } else if (setting.id == QuranSettingsConstants.audioControlsId) {
       /// Update audio controls
       QuranSettingsManager.instance
           .notifyListeners(QuranSettingsEvent.audioControlStatusChanged);
