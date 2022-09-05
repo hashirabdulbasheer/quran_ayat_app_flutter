@@ -17,5 +17,5 @@ class QuranSetting {
       required this.possibleValues,
       this.showSearchBoxInDropdown,
       this.defaultValue,
-      required this.type});
+      required this.type,});
 }

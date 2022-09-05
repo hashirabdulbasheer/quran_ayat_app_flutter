@@ -9,7 +9,7 @@ import 'widgets/offline_header_widget.dart';
 class QuranViewNotesScreen extends StatefulWidget {
   final QuranUser user;
 
-  const QuranViewNotesScreen({Key? key, required this.user}) : super(key: key);
+  const QuranViewNotesScreen({Key? key, required this.user,}) : super(key: key);
 
   @override
   State<QuranViewNotesScreen> createState() => _QuranViewNotesScreenState();
@@ -21,11 +21,11 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          appBar: AppBar(title: const Text("Notes")), body: _body(context)),
+          appBar: AppBar(title: const Text("Notes")), body: _body(),),
     );
   }
 
-  Widget _body(BuildContext context) {
+  Widget _body() {
     return Column(
       children: [
         const QuranOfflineHeaderWidget(),
@@ -33,26 +33,28 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
           child: FutureBuilder<List<QuranNote>>(
             future: QuranNotesManager.instance.fetchAll(widget.user.uid),
             builder: (BuildContext context,
-                AsyncSnapshot<List<QuranNote>> snapshot) {
+                AsyncSnapshot<List<QuranNote>> snapshot,) {
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Center(child: CircularProgressIndicator()));
+                      child: Center(child: CircularProgressIndicator()),);
                 default:
                   if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
                     List<QuranNote> notes = snapshot.data as List<QuranNote>;
                     if (notes.isEmpty) {
+
                       return const Center(child: Text('No notes'));
                     }
+
                     return ListView.separated(
-                        itemBuilder: (context, index) {
+                        itemBuilder: (context, index,) {
                           return ListTile(
-                            title: _noteItem(context, notes[index]),
+                            title: _noteItem(context, notes[index],),
                             onTap: () {
-                              Navigator.push(
+                              Navigator.push<void>(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
@@ -60,17 +62,17 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
                                           note: notes[index],
                                           suraIndex: notes[index].suraIndex,
                                           ayaIndex: notes[index].ayaIndex,
-                                        )),
+                                        ),),
                               ).then((value) {
                                 setState(() {});
                               });
                             },
                           );
                         },
-                        separatorBuilder: (context, index) {
+                        separatorBuilder: (context, index,) {
                           return const Divider(thickness: 1);
                         },
-                        itemCount: notes.length);
+                        itemCount: notes.length,);
                   }
               }
             },
@@ -80,21 +82,21 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     );
   }
 
-  Widget _noteItem(BuildContext context, QuranNote note) {
+  Widget _noteItem(BuildContext context, QuranNote note,) {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
+        padding: const EdgeInsets.fromLTRB(10, 20, 10, 20,),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("${note.suraIndex}:${note.ayaIndex}",
-                style: Theme.of(context).textTheme.subtitle1),
+                style: Theme.of(context).textTheme.subtitle1,),
             const SizedBox(height: 5),
-            Text(note.note, style: Theme.of(context).textTheme.bodyText1),
+            Text(note.note, style: Theme.of(context).textTheme.bodyText1,),
             const SizedBox(height: 10),
             Text(QuranNotesManager.instance.formattedDate(note.createdOn),
-                style: Theme.of(context).textTheme.subtitle2),
+                style: Theme.of(context).textTheme.subtitle2,),
           ],
         ),
       ),

@@ -11,7 +11,7 @@ import 'utils/search_utils.dart';
 class QuranSearchScreen extends StatefulWidget {
   final String? searchString;
 
-  const QuranSearchScreen({Key? key, this.searchString}) : super(key: key);
+  const QuranSearchScreen({Key? key, this.searchString,}) : super(key: key);
 
   @override
   QuranSearchScreenState createState() => QuranSearchScreenState();
@@ -35,7 +35,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     super.initState();
     _initialize();
     if (widget.searchString != null && widget.searchString!.isNotEmpty) {
-      Future.delayed(const Duration(milliseconds: 500)).then((value) {
+      Future<void>.delayed(const Duration(milliseconds: 500)).then((value) {
         FocusManager.instance.primaryFocus?.unfocus();
         _enteredText = widget.searchString!;
         _searchController.text = _enteredText;
@@ -65,34 +65,25 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
             StreamBuilder<List<QuranWord>>(
                 stream: _resultsController.stream,
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<QuranWord>> snapshot) {
+                    AsyncSnapshot<List<QuranWord>> snapshot,) {
                   if (snapshot.hasError) {
                     return Expanded(
-                        child: Center(child: Text('Error: ${snapshot.error}')));
+                        child: Center(child: Text('Error: ${snapshot.error}')),);
                   } else if (snapshot.hasData) {
                     List<QuranWord> words = snapshot.data as List<QuranWord>;
                     if (words.isNotEmpty) {
                       return Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 10,),
                           child: ListView.separated(
                             reverse: true,
-                            separatorBuilder: (context, index) {
+                            separatorBuilder: (context, index,) {
                               return const Divider(thickness: 1);
                             },
                             itemCount: words.length,
-                            itemBuilder: (context, index) {
+                            itemBuilder: (context, index,) {
                               return ListTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => QuranAyatScreen(
-                                              surahIndex:
-                                                  words[index].word.sura - 1,
-                                              ayaIndex: words[index].word.aya)),
-                                    );
-                                  },
+                                  onTap: () => _onSearchResultTileTapped(context, words, index,),
                                   title: Column(children: [
                                     Row(
                                       children: [
@@ -102,8 +93,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                           style: TextStyle(
                                               fontSize: 30,
                                               fontFamily: QuranFontFamily
-                                                  .arabic.rawString),
-                                        ))
+                                                  .arabic.rawString,),
+                                        ),),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
@@ -117,9 +108,9 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                                 child: Text(
                                                   words[index].word.tr,
                                                   style: const TextStyle(
-                                                      fontSize: 25),
+                                                      fontSize: 25,),
                                                   textAlign: TextAlign.right,
-                                                )))
+                                                ),),),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
@@ -131,20 +122,21 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                               "${words[index].word.sura}:${words[index].word.aya}",
                                               style: const TextStyle(
                                                   fontSize: 15,
-                                                  color: Colors.black54),
+                                                  color: Colors.black54,),
                                               textAlign: TextAlign.right,
-                                            ))
+                                            ),),
                                       ],
-                                    )
-                                  ]));
+                                    ),
+                                  ]),);
                             },
                           ),
                         ),
                       );
                     }
                   }
+
                   return Container();
-                }),
+                },),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -152,13 +144,13 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                 children: [
                   // const Divider(thickness: 0.5),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
                     child: Row(
                       children: [
                         StreamBuilder<String>(
                             stream: _logController.stream,
                             builder: (BuildContext context,
-                                AsyncSnapshot<String> snapshot) {
+                                AsyncSnapshot<String> snapshot,) {
                               if (snapshot.hasData) {
                                 return Wrap(
                                   children: [
@@ -169,15 +161,16 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                   ],
                                 );
                               }
+
                               return Container();
-                            }),
+                            },),
                       ],
                     ),
                   ),
                   SizedBox(
                     height: 100,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0,),
                       child: Row(
                         children: [
                           Expanded(
@@ -186,57 +179,35 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                 autofocus: true,
                                 style: const TextStyle(fontSize: 25),
                                 textDirection: TextDirection.rtl,
-                                onSubmitted: (value) {
-                                  if (value.isNotEmpty) {
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                    _search(value);
-                                  }
-                                },
+                                onSubmitted: (value) => _onSearchTextFieldSubmitted(value),
                                 decoration: InputDecoration(
                                     suffixIcon: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         IconButton(
                                             onPressed: () => _startListening(),
-                                            icon: const Icon(Icons.mic)),
+                                            icon: const Icon(Icons.mic),),
                                         IconButton(
                                             onPressed: () => _clear(),
-                                            icon: const Icon(Icons.clear)),
+                                            icon: const Icon(Icons.clear),),
                                         IconButton(
-                                            onPressed: () {
-                                              if (_searchController
-                                                  .text.isNotEmpty) {
-                                                FocusManager
-                                                    .instance.primaryFocus
-                                                    ?.unfocus();
-                                                _search(_searchController.text);
-                                              }
-                                            },
-                                            icon: const Icon(Icons.send))
+                                            onPressed: () => _onSearchIconPressed(),
+                                            icon: const Icon(Icons.send),),
                                       ],
                                     ),
                                     hintText: "input a word",
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.black12, width: 0.0),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.black12, width: 0.0),
-                                    ),
                                     border: const OutlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.black12, width: 0.0),
-                                    )),
+                                          color: Colors.black12, width: 0.0,),
+                                    ),),
                                 controller: _searchController
-                                  ..text = _enteredText),
+                                  ..text = _enteredText,),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 5)
+                  const SizedBox(height: 5),
                 ],
               ),
             ),
@@ -246,8 +217,37 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     );
   }
 
+  void _onSearchResultTileTapped(BuildContext context, List<QuranWord> words, int index,) {
+     Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+          builder: (context) => QuranAyatScreen(
+              surahIndex:
+                  words[index].word.sura - 1,
+              ayaIndex: words[index].word.aya,),),
+    );
+  }
+
+  void _onSearchTextFieldSubmitted(String value) {
+     if (value.isNotEmpty) {
+      FocusManager.instance.primaryFocus
+          ?.unfocus();
+      _search(value);
+    }
+  }
+
+  void _onSearchIconPressed() {
+      if (_searchController
+        .text.isNotEmpty) {
+      FocusManager
+          .instance.primaryFocus
+          ?.unfocus();
+      _search(_searchController.text);
+    }
+  }
+
   /// Clear
-  _clear({bool clearLog = true}) {
+  void _clear({bool clearLog = true}) {
     setState(() {
       _enteredText = "";
       _searchController.clear();
@@ -259,24 +259,24 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
   }
 
   /// display log message
-  _log(String message) {
+  void _log(String message) {
     _logController.sink.add(message);
     _logController.done;
   }
 
   /// search part 1
-  _search(String enteredText) async {
+  void _search(String enteredText) async {
     _log("Searching  $enteredText  ");
     List<QuranWord> results = [];
     if (kIsWeb) {
       /// web
-      await Future.delayed(const Duration(seconds: 1));
-      results = await compute(QuranSearch.searchStep2, enteredText);
+      await Future<void>.delayed(const Duration(seconds: 1));
+      results = await compute(QuranSearch.searchStep2, enteredText,);
     } else {
       /// mobile devices - use isolate spawn
       final p = ReceivePort();
       await Isolate.spawn(QuranSearch.searchBackgroundForDevice,
-          [p.sendPort, enteredText, QuranSearch.globalQRWords]);
+          [p.sendPort, enteredText, QuranSearch.globalQRWords,],);
       results = await p.first as List<QuranWord>;
     }
     _resultsController.sink.add(results);
@@ -295,7 +295,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
       // print(status);
     }, onError: (error) {
       print(error);
-    });
+    },);
     _log("Search a word");
   }
 
@@ -321,7 +321,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
         localeId: "ar",
       );
       // some time later...
-      Future.delayed(const Duration(seconds: listeningTimeoutSecs))
+      Future<void>.delayed(const Duration(seconds: listeningTimeoutSecs))
           .then((value) {
         _log("Listening stopped");
         speech.stop();

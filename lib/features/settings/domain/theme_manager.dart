@@ -23,9 +23,9 @@ class QuranThemeManager {
       textTheme: const TextTheme(
           bodyText1: TextStyle(color: Colors.black),
           subtitle1: TextStyle(color: Colors.black87),
-          subtitle2: TextStyle(color: Colors.black54, fontSize: 12)),
+          subtitle2: TextStyle(color: Colors.black54, fontSize: 12,),),
       fontFamily: "default",
-      brightness: Brightness.light);
+      brightness: Brightness.light,);
 
   ThemeData darkTheme = ThemeData(
       primarySwatch: Colors.grey,
@@ -35,15 +35,15 @@ class QuranThemeManager {
       appBarTheme: const AppBarTheme(
           color: Colors.black,
           systemOverlayStyle:
-              SystemUiOverlayStyle(systemNavigationBarColor: Colors.black)),
+              SystemUiOverlayStyle(systemNavigationBarColor: Colors.black),),
       backgroundColor: const Color(0xFF212121),
       cardColor: Colors.black54,
       textTheme: const TextTheme(
           bodyText1: TextStyle(color: Colors.white),
           subtitle1: TextStyle(color: Colors.white60),
-          subtitle2: TextStyle(color: Colors.white60, fontSize: 12)),
+          subtitle2: TextStyle(color: Colors.white60, fontSize: 12,),),
       cardTheme: const CardTheme(color: Colors.grey),
-      buttonTheme: const ButtonThemeData(buttonColor: Colors.black38));
+      buttonTheme: const ButtonThemeData(buttonColor: Colors.black38),);
 
   final StreamController<String> _themeStream = StreamController.broadcast();
 
@@ -104,6 +104,7 @@ class QuranThemeManager {
     if (_appTheme == ThemeMode.dark) {
       return true;
     }
+
     return false;
   }
 }

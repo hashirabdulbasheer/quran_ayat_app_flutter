@@ -16,7 +16,7 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
 
   List<Function> authChangeListeners = [];
 
-  _authChangeListener(User? user) {
+  void _authChangeListener(User? user) {
     _user = _mapFirebaseUserToQuranUser(user);
     // inform all of auth change
     for (Function listener in authChangeListeners) {
@@ -31,44 +31,72 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
       String email = user.email ?? "";
       String uid = user.uid;
       if (name.isNotEmpty && email.isNotEmpty && uid.isNotEmpty) {
-        return QuranUser(name: name, email: email, uid: uid);
+        return QuranUser(
+          name: name,
+          email: email,
+          uid: uid,
+        );
       }
     }
+
     return null;
   }
 
   @override
   Future<bool> initialize() async {
     await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     FirebaseAuth.instance.authStateChanges().listen(_authChangeListener);
+
     return true;
   }
 
   @override
-  Future<QuranResponse> login(String username, String password) async {
+  Future<QuranResponse> login(
+    String username,
+    String password,
+  ) async {
     try {
-      final _ = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: username, password: password);
-      return QuranResponse(isSuccessful: true, message: "Logged In 👍");
+      final _ = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: username,
+        password: password,
+      );
+
+      return QuranResponse(
+        isSuccessful: true,
+        message: "Logged In 👍",
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
+
         return QuranResponse(
-            isSuccessful: false, message: 'No user found for that email.');
+          isSuccessful: false,
+          message: 'No user found for that email.',
+        );
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
+
         return QuranResponse(
-            isSuccessful: false,
-            message: 'Wrong password provided for that user.');
+          isSuccessful: false,
+          message: 'Wrong password provided for that user.',
+        );
       }
     }
-    return QuranResponse(isSuccessful: false, message: "Error logging in");
+
+    return QuranResponse(
+      isSuccessful: false,
+      message: "Error logging in",
+    );
   }
 
   @override
   Future<QuranResponse> signup(
-      String name, String username, String password) async {
+    String name,
+    String username,
+    String password,
+  ) async {
     try {
       var credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -76,23 +104,31 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
         password: password,
       );
       await credential.user?.updateDisplayName(name);
+
       return QuranResponse(
-          isSuccessful: true, message: "Successfully created user 👍");
+        isSuccessful: true,
+        message: "Successfully created user 👍",
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
+
         return QuranResponse(
-            isSuccessful: false, message: "The password provided is too weak.");
+          isSuccessful: false,
+          message: "The password provided is too weak.",
+        );
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
+
         return QuranResponse(
             isSuccessful: false,
-            message: "The account already exists for that email.");
+            message: "The account already exists for that email.",);
       }
     } catch (e) {
       print(e);
     }
-    return QuranResponse(isSuccessful: false, message: "Error creating user");
+
+    return QuranResponse(isSuccessful: false, message: "Error creating user",);
   }
 
   @override
@@ -103,31 +139,35 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     FirebaseAuth.instance.currentUser?.reload();
     User? user = FirebaseAuth.instance.currentUser;
     _user = _mapFirebaseUserToQuranUser(user);
+
     return _user;
   }
 
   @override
   Future<QuranResponse> logout() async {
     await FirebaseAuth.instance.signOut();
+
     return QuranResponse(
-        isSuccessful: true, message: "Successfully signed out 👍");
+        isSuccessful: true, message: "Successfully signed out 👍",);
   }
 
   @override
   Future<QuranResponse> update(String name) async {
     await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
+
     return QuranResponse(
-        isSuccessful: true, message: "Successfully updated user 👍");
+        isSuccessful: true, message: "Successfully updated user 👍",);
   }
 
   @override
   Future<QuranResponse> forgotPassword(String email) async {
+
     return await FirebaseAuth.instance
         .sendPasswordResetEmail(email: email)
         .then((value) => QuranResponse(
-            isSuccessful: true, message: "Done 👍, please check your email."))
-        .catchError((e) => QuranResponse(
-            isSuccessful: false, message: "Sorry 😔, ${e.toString()}."));
+            isSuccessful: true, message: "Done 👍, please check your email.",))
+        .catchError((Object e) => QuranResponse(
+            isSuccessful: false, message: "Sorry 😔, ${e.toString()}.",));
   }
 
   @override

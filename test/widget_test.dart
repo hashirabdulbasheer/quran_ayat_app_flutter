@@ -13,19 +13,19 @@ void main() {
   testWidgets('is_arabic_test', (WidgetTester tester) async {
     String input = "الحمد لله";
     bool isArabic = QuranUtils.isArabic(input);
-    expect(isArabic, true);
+    expect(isArabic, true,);
 
     input = "Alhamdulillah";
     isArabic = QuranUtils.isArabic(input);
-    expect(isArabic, false);
+    expect(isArabic, false,);
 
     input = "Alhamdulillah الحمدلله";
     isArabic = QuranUtils.isArabic(input);
-    expect(isArabic, true);
+    expect(isArabic, true,);
 
     input = "بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ";
     isArabic = QuranUtils.isArabic(input);
-    expect(isArabic, true);
+    expect(isArabic, true,);
 
-  });
+  },);
 }

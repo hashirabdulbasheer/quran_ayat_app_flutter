@@ -31,7 +31,7 @@ class QuranAyatScreen extends StatefulWidget {
   final int? surahIndex;
   final int? ayaIndex;
 
-  const QuranAyatScreen({Key? key, this.surahIndex, this.ayaIndex})
+  const QuranAyatScreen({Key? key, this.surahIndex, this.ayaIndex,})
       : super(key: key);
 
   @override
@@ -59,6 +59,36 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   final String _contPlayMessage =
       "Continuous Play in progress. Please stop first.";
+
+  ///
+  /// Theme
+  ///
+
+  ButtonStyle? get _elevatedButtonTheme {
+    // if system dark mode is set then use dark mode buttons
+    // else use gray button
+    if (QuranThemeManager.instance.isDarkMode()) {
+      return ElevatedButton.styleFrom(
+          primary: Colors.white70,
+          shadowColor: Colors.transparent,
+          textStyle: const TextStyle(color: Colors.black),);
+    }
+
+    return ElevatedButton.styleFrom(
+        primary: Colors.black12,
+        shadowColor: Colors.transparent,
+        textStyle: const TextStyle(color: Colors.deepPurple),);
+  }
+
+  Color? get _elevatedButtonIconColor {
+    // if system dark mode is set then use dark mode buttons
+    // else use primate color
+    if (QuranThemeManager.instance.isDarkMode()) {
+      return null;
+    }
+
+    return Theme.of(context).primaryColor;
+  }
 
   @override
   void initState() {
@@ -110,7 +140,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               });
             },
             bottomSheet: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10,),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -127,7 +157,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               }
                             },
                             child: Icon(Icons.arrow_back,
-                                color: _elevatedButtonIconColor)),
+                                color: _elevatedButtonIconColor,),),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -143,10 +173,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             child: Icon(
                               Icons.arrow_forward,
                               color: _elevatedButtonIconColor,
-                            )),
+                            ),),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -163,16 +193,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             _surahTitles[surahIndex - 1].transliterationEn;
                         int ayaIndex = _selectedAyat;
                         String shareString = await QuranUtils.shareString(
-                            surahName, surahIndex, ayaIndex);
+                            surahName, surahIndex, ayaIndex,);
                         Clipboard.setData(ClipboardData(text: shareString))
                             .then((_) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                  content: Text("Copied to clipboard 👍")));
+                                  content: Text("Copied to clipboard 👍"),),);
                         });
                       }
                     },
-                    icon: const Icon(Icons.share)),
+                    icon: const Icon(Icons.share),),
                 QuranBookmarkIconWidget(
                     currentSurahIndex:
                         _selectedSurah != null ? _selectedSurah!.number - 1 : 0,
@@ -188,7 +218,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       if (_isInteractionAllowedOnScreen()) {
                         QuranPreferences.clearBookmark();
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("👍 Cleared ")));
+                            const SnackBar(content: Text("👍 Cleared ")),);
                       } else {
                         _showMessage(_contPlayMessage);
                       }
@@ -206,21 +236,22 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       } else {
                         _showMessage(_contPlayMessage);
                       }
-                    })
+                    },),
               ],
             ),
             body: _surahTitles.isEmpty
                 ? const Center(child: CircularProgressIndicator())
-                : _body()),
+                : _body(),),
       ),
     );
   }
 
   Widget _body() {
     _selectedSurah ??= _surahTitles[widget.surahIndex ?? 0];
+
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10,),
         child: Column(
           children: [
             Column(
@@ -238,10 +269,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   elevation: 5,
                   child: FutureBuilder<List<List<NQWord>>>(
                     future: NobleQuran.getSurahWordByWord(
-                        (_selectedSurah?.number ?? 1) - 1),
+                        (_selectedSurah?.number ?? 1) - 1,),
                     // async work
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<List<NQWord>>> snapshot) {
+                        AsyncSnapshot<List<List<NQWord>>> snapshot,) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
                           return SizedBox(
@@ -252,10 +283,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         default:
                           if (snapshot.hasError) {
                             return Center(
-                                child: Text('Error: ${snapshot.error}'));
+                                child: Text('Error: ${snapshot.error}'),);
                           } else {
                             List<List<NQWord>> surahWords =
                                 snapshot.data as List<List<NQWord>>;
+
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 10),
                               child: _ayaWidget(surahWords[_selectedAyat - 1]),
@@ -292,7 +324,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   Widget _displayHeader() {
     return ValueListenableBuilder<bool>(
-        builder: (BuildContext context, bool isContinuousPlay, Widget? child) {
+        builder: (BuildContext context, bool isContinuousPlay, Widget? child,) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -311,7 +343,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       itemAsString: (surah) =>
                           "(${surah.number}) ${surah.transliterationEn}",
                       dropdownSearchDecoration: const InputDecoration(
-                          labelText: "Surah", hintText: "select surah"),
+                          labelText: "Surah", hintText: "select surah",),
                       onChanged: (value) {
                         setState(() {
                           if (value != null) {
@@ -333,29 +365,31 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         excludeSemantics: true,
                         label: 'dropdown to select ayat number',
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8,),
                           child: SizedBox(
                             width: 100,
                             height: 80,
                             child: DropdownSearch<int>(
                               popupProps: const PopupPropsMultiSelection.menu(
-                                  showSearchBox: true),
-                              filterFn: (item, filter) {
+                                  showSearchBox: true,),
+                              filterFn: (item, filter,) {
                                 if (filter.isEmpty) {
                                   return true;
                                 }
                                 if ("$item" ==
                                     QuranUtils.replaceFarsiNumber(filter)) {
+
                                   return true;
                                 }
+
                                 return false;
                               },
                               enabled: !isContinuousPlay,
                               dropdownSearchDecoration: const InputDecoration(
-                                  labelText: "Ayat", hintText: "ayat index"),
+                                  labelText: "Ayat", hintText: "ayat index",),
                               items: List<int>.generate(
                                   _selectedSurah?.totalVerses ?? 0,
-                                  (i) => i + 1),
+                                  (i) => i + 1,),
                               onChanged: (value) {
                                 setState(() {
                                   _selectedAyat = value ?? 1;
@@ -371,7 +405,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ],
           );
         },
-        valueListenable: _isAudioContinuousModeEnabled);
+        valueListenable: _isAudioContinuousModeEnabled,);
   }
 
   Widget _ayaWidget(List<NQWord> words) {
@@ -412,18 +446,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 child: InkWell(
                   onTap: () {
                     if (_isInteractionAllowedOnScreen()) {
-                      Navigator.push(
+                      Navigator.push<void>(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                QuranSearchScreen(searchString: e.ar)),
+                                QuranSearchScreen(searchString: e.ar),),
                       );
                     } else {
                       _showMessage(_contPlayMessage);
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    padding: const EdgeInsets.only(left: 8, right: 8,),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -437,7 +471,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 30,
-                                fontFamily: QuranFontFamily.arabic.rawString),
+                                fontFamily: QuranFontFamily.arabic.rawString,),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -447,11 +481,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black26),
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(1))),
+                                  const BorderRadius.all(Radius.circular(1)),),
                           child: Text(
                             e.tr,
                             style: const TextStyle(
-                                color: Colors.black54, fontSize: 14),
+                                color: Colors.black54, fontSize: 14,),
                             textDirection: TextDirection.ltr,
                           ),
                         ),
@@ -467,7 +501,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   Widget _fullTransliterationWidget() {
     return FutureBuilder<bool>(
         future: QuranSettingsManager.instance.isTransliterationEnabled(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot,) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return const Padding(
@@ -475,7 +509,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   child: SizedBox(
                       height: 80,
                       child:
-                          Center(child: Text('Loading transliteration....'))));
+                          Center(child: Text('Loading transliteration....')),),);
             default:
               if (snapshot.hasError) {
                 return Container();
@@ -490,8 +524,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       QuranFullAyatRowWidget(
                           futureMethodThatReturnsSelectedSurah:
                               NobleQuran.getSurahTransliteration(
-                                  _selectedSurah!.number - 1),
-                          ayaIndex: _selectedAyat),
+                                  _selectedSurah!.number - 1,),
+                          ayaIndex: _selectedAyat,),
                     ],
                   );
                 } else {
@@ -499,37 +533,38 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 }
               }
           }
-        });
+        },);
   }
 
   Widget _fullTranslationWidget() {
     return FutureBuilder<NQTranslation>(
         future: QuranSettingsManager.instance.getTranslation(),
-        builder: (BuildContext context, AsyncSnapshot<NQTranslation> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<NQTranslation> snapshot,) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: SizedBox(
                       height: 80,
-                      child: Center(child: Text('Loading translation....'))));
+                      child: Center(child: Text('Loading translation....')),),);
             default:
               if (snapshot.hasError) {
                 return Container();
               } else {
                 NQTranslation translation = snapshot.data as NQTranslation;
+
                 return Column(children: [
                   const SizedBox(height: 20),
                   QuranFullAyatRowWidget(
                       futureMethodThatReturnsSelectedSurah:
                           NobleQuran.getTranslationString(
-                              _selectedSurah!.number - 1, translation),
+                              _selectedSurah!.number - 1, translation,),
                       fontFamily: translationFontFamily(translation),
-                      ayaIndex: _selectedAyat),
+                      ayaIndex: _selectedAyat,),
                 ]);
               }
           }
-        });
+        },);
   }
 
   Widget _notesWidget() {
@@ -547,7 +582,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   _showMessage(_contPlayMessage);
                 }
               },
-              child: const Text("Login to add notes")),
+              child: const Text("Login to add notes"),),
         ),
       );
     }
@@ -570,8 +605,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           decoration: BoxDecoration(
               border: Border.all(color: Colors.black12),
               color: Colors.black12,
-              borderRadius: const BorderRadius.all(Radius.circular(5))),
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              borderRadius: const BorderRadius.all(Radius.circular(5)),),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0,),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -584,7 +619,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                       _showMessage(_contPlayMessage);
                     }
                   },
-                  child: const Text("Add"))
+                  child: const Text("Add"),),
             ],
           ),
         ),
@@ -593,20 +628,21 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         ),
         FutureBuilder<List<QuranNote>>(
           future: QuranNotesManager.instance
-              .fetch(user.uid, _selectedSurah!.number, _selectedAyat),
+              .fetch(user.uid, _selectedSurah!.number, _selectedAyat,),
           // async work
           builder:
-              (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot) {
+              (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot,) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
                 return const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: SizedBox(
                         height: 100,
-                        child: Center(child: Text('Loading notes....'))));
+                        child: Center(child: Text('Loading notes....')),),);
               default:
                 if (snapshot.hasError) {
                   print("Error notes: ${snapshot.error}");
+
                   return const Padding(
                       padding: EdgeInsets.only(top: 30),
                       child: SizedBox(
@@ -615,20 +651,21 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           'Unable to load notes. Please check internet connectivity',
                           style: TextStyle(color: Colors.black38),
                         ),
-                      ));
+                      ),);
                 } else {
                   List<QuranNote> notes = snapshot.data as List<QuranNote>;
+
                   return notes.isNotEmpty
                       ? ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: notes.length,
                           shrinkWrap: true,
-                          separatorBuilder: (BuildContext context, int index) {
+                          separatorBuilder: (BuildContext context, int index,) {
                             return const Divider(
                               thickness: 1,
                             );
                           },
-                          itemBuilder: (BuildContext context, int index) {
+                          itemBuilder: (BuildContext context, int index,) {
                             return Directionality(
                               textDirection:
                                   QuranUtils.isEnglish(notes[index].note)
@@ -652,28 +689,28 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                       children: [
                                         Text(notes[index].note,
                                             style:
-                                                const TextStyle(fontSize: 14)),
+                                                const TextStyle(fontSize: 14),),
                                         const SizedBox(
                                           height: 8,
                                         ),
                                         Text(
                                             QuranNotesManager.instance
                                                 .formattedDate(
-                                                    notes[index].createdOn),
+                                                    notes[index].createdOn,),
                                             style:
-                                                const TextStyle(fontSize: 12)),
+                                                const TextStyle(fontSize: 12),),
                                       ],
                                     ),
-                                  )),
+                                  ),),
                             );
-                          })
+                          },)
                       : TextButton(
                           onPressed: () {
                             _goToCreateNoteScreen();
                           },
                           child: const SizedBox(
                               height: 100,
-                              child: Center(child: Text("Add Note"))));
+                              child: Center(child: Text("Add Note")),),);
                 }
             }
           },
@@ -688,26 +725,28 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       int totalAyas = surah.totalVerses;
       int currentAya = _selectedAyat;
       double progress = currentAya / totalAyas;
+
       return Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5),
+        padding: const EdgeInsets.only(left: 5, right: 5,),
         child: LinearProgressIndicator(
-            backgroundColor: Colors.black12, value: progress),
+            backgroundColor: Colors.black12, value: progress,),
       );
     }
+
     return Container();
   }
 
   Widget _audioControlsWidget() {
     return FutureBuilder<bool>(
         future: QuranSettingsManager.instance.isAudioControlsEnabled(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot,) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: SizedBox(
                       height: 80,
-                      child: Center(child: Text('Loading audio ....'))));
+                      child: Center(child: Text('Loading audio ....')),),);
             default:
               if (snapshot.hasError) {
                 return Container();
@@ -717,23 +756,24 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   if (_selectedSurah == null) {
                     return Container();
                   }
+
                   return ValueListenableBuilder<bool>(
                       builder: (BuildContext context, bool isContinuousPlay,
-                          Widget? child) {
+                          Widget? child,) {
                         return QuranAudioRowWidget(
                             isAudioRecitationContinuousPlayEnabled:
                                 isContinuousPlay,
                             surahIndex: _selectedSurah!.number,
                             onAudioEventsListener: _onAudioPlayStatusChanged,
-                            ayaIndex: _selectedAyat);
+                            ayaIndex: _selectedAyat,);
                       },
-                      valueListenable: _isAudioContinuousModeEnabled);
+                      valueListenable: _isAudioContinuousModeEnabled,);
                 } else {
                   return Container();
                 }
               }
           }
-        });
+        },);
   }
 
   ///
@@ -743,10 +783,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     if (_selectedSurah != null) {
       // save locally
       QuranBookmarksManager.instance
-          .saveLocal(_selectedSurah!.number - 1, _selectedAyat);
+          .saveLocal(_selectedSurah!.number - 1, _selectedAyat,);
       // sync bookmark to cloud
       QuranBookmarksManager.instance
-          .saveRemote(_selectedSurah!.number - 1, _selectedAyat);
+          .saveRemote(_selectedSurah!.number - 1, _selectedAyat,);
       // show success message
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
@@ -758,7 +798,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   ///
 
   void _goToLoginScreen() {
-    Navigator.push(
+    Navigator.push<void>(
       context,
       MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
     ).then((value) {
@@ -768,14 +808,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   void _goToCreateNoteScreen({QuranNote? note}) {
     if (_selectedSurah != null) {
-      Navigator.push(
+      Navigator.push<void>(
         context,
         MaterialPageRoute(
             builder: (context) => QuranCreateNotesScreen(
                   note: note,
                   suraIndex: _selectedSurah!.number,
                   ayaIndex: _selectedAyat,
-                )),
+                ),),
       ).then((value) {
         setState(() {});
       });
@@ -783,36 +823,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   ///
-  /// Theme
-  ///
-
-  ButtonStyle? get _elevatedButtonTheme {
-    // if system dark mode is set then use dark mode buttons
-    // else use gray button
-    if (QuranThemeManager.instance.isDarkMode()) {
-      return ElevatedButton.styleFrom(
-          primary: Colors.white70,
-          shadowColor: Colors.transparent,
-          textStyle: const TextStyle(color: Colors.black));
-    }
-    return ElevatedButton.styleFrom(
-        primary: Colors.black12,
-        shadowColor: Colors.transparent,
-        textStyle: const TextStyle(color: Colors.deepPurple));
-  }
-
-  Color? get _elevatedButtonIconColor {
-    // if system dark mode is set then use dark mode buttons
-    // else use primate color
-    if (QuranThemeManager.instance.isDarkMode()) {
-      return null;
-    }
-    return Theme.of(context).primaryColor;
-  }
-
-  ///
   /// Utils
   ///
+
+  /// special font handling for translations
+  String? translationFontFamily(NQTranslation translation) {
+    if (translation == NQTranslation.malayalam_karakunnu ||
+        translation == NQTranslation.malayalam_abdulhameed) {
+      return QuranFontFamily.malayalam.rawString;
+    }
+
+    return null;
+  }
 
   void _authChangeListener() async {
     QuranUser? user = QuranAuthFactory.engine.getUser();
@@ -823,7 +845,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       /// fetch bookmark
       NQBookmark? bookmark = await QuranBookmarksManager.instance.fetchRemote();
       if (bookmark != null) {
-        QuranBookmarksManager.instance.saveLocal(bookmark.surah, bookmark.ayat);
+        QuranBookmarksManager.instance.saveLocal(bookmark.surah, bookmark.ayat,);
       }
     }
     setState(() {});
@@ -838,13 +860,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         // we have a search url
         // navigate to search screen
         Future.delayed(const Duration(seconds: 1), () {
-          Navigator.push(
+          Navigator.push<void>(
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    QuranSearchScreen(searchString: searchString)),
+                    QuranSearchScreen(searchString: searchString),),
           );
-        });
+        },);
       } else {
         // not a search url
         // check for surah/ayat format
@@ -882,17 +904,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     }
   }
 
-  void _settingsChangedListener(String event) {
+  void _settingsChangedListener(String _) {
     setState(() {});
-  }
-
-  /// special font handling for translations
-  String? translationFontFamily(NQTranslation translation) {
-    if (translation == NQTranslation.malayalam_karakunnu ||
-        translation == NQTranslation.malayalam_abdulhameed) {
-      return QuranFontFamily.malayalam.rawString;
-    }
-    return null;
   }
 
   /// display next aya
@@ -908,6 +921,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         return false;
       }
     }
+
     return true;
   }
 
@@ -925,7 +939,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   bool _isInteractionAllowedOnScreen() {
     // disable all interactions if continuous play mode is on
-    return _isAudioContinuousModeEnabled.value == false;
+    return !_isAudioContinuousModeEnabled.value;
   }
 
   void _showMessage(String message) {

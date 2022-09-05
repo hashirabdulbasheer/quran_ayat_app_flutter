@@ -16,7 +16,7 @@ class QuranNote {
       required this.localId,
       required this.createdOn,
       required this.status,
-      this.id});
+      this.id,});
 
   QuranNote copyWith(
       {String? id,
@@ -25,7 +25,7 @@ class QuranNote {
       String? note,
       QuranStatusEnum? status,
       String? localId,
-      int? createdOn}) {
+      int? createdOn,}) {
     return QuranNote(
         suraIndex: suraIndex ?? this.suraIndex,
         ayaIndex: ayaIndex ?? this.ayaIndex,
@@ -33,15 +33,15 @@ class QuranNote {
         id: id ?? this.id,
         localId: localId ?? this.localId,
         status: status ?? this.status,
-        createdOn: createdOn ?? this.createdOn);
+        createdOn: createdOn ?? this.createdOn,);
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       "note": note,
       "status": status.rawString(),
       "localId": localId,
-      "createdOn": createdOn
+      "createdOn": createdOn,
     };
   }
 }

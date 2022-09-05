@@ -13,7 +13,7 @@ class QuranDropdownValuesFactory {
       case QuranSettingsConstants.themeId:
         return [
           QuranDropdownValue.sameValues(QuranAppTheme.light.rawString()),
-          QuranDropdownValue.sameValues(QuranAppTheme.dark.rawString())
+          QuranDropdownValue.sameValues(QuranAppTheme.dark.rawString()),
         ];
 
       case QuranSettingsConstants.translationId:
@@ -26,9 +26,10 @@ class QuranDropdownValuesFactory {
             .map((e) => QuranDropdownValue(
                 title: "${e.name} (${e.bitrate})",
                 content: e,
-                key: e.subfolder))
+                key: e.subfolder,))
             .toList();
     }
+
     return [];
   }
 
@@ -51,12 +52,13 @@ class QuranDropdownValuesFactory {
         QuranReciter reciter = QuranReciter(
             subfolder: "khalefa_al_tunaiji_64kbps",
             name: "Khalefa Al-Tunaiji",
-            bitrate: "64kbps");
+            bitrate: "64kbps",);
         return QuranDropdownValue(
             title: "Khalefa Al-Tunaiji (64kbps)",
             key: "khalefa_al_tunaiji_64kbps",
-            content: reciter);
+            content: reciter,);
     }
+
     return null;
   }
 }

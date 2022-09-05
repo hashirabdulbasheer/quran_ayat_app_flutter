@@ -9,7 +9,7 @@ class QuranOnOffSettingsTileWidget extends StatefulWidget {
   final void Function(bool)? onChanged;
 
   const QuranOnOffSettingsTileWidget(
-      {Key? key, required this.setting, this.onChanged})
+      {Key? key, required this.setting, this.onChanged,})
       : super(key: key);
 
   @override
@@ -24,7 +24,7 @@ class _QuranOnOffSettingsTileWidgetState
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
         future: QuranSettingsManager.instance.getValue(widget.setting),
-        builder: (context, snapshot) {
+        builder: (context, snapshot,) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return _tile();
@@ -33,6 +33,7 @@ class _QuranOnOffSettingsTileWidgetState
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 bool isSwitched = snapshot.data == "true" ? true : false;
+
                 return _tile(
                     isSwitched: isSwitched,
                     trailing: CupertinoSwitch(
@@ -42,13 +43,13 @@ class _QuranOnOffSettingsTileWidgetState
                         setState(() {});
                         widget.onChanged ?? widget.onChanged!(value);
                       },
-                    ));
+                    ),);
               }
           }
-        });
+        },);
   }
 
-  Widget _tile({bool? isSwitched, Widget? trailing}) {
+  Widget _tile({bool? isSwitched, Widget? trailing,}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -63,8 +64,8 @@ class _QuranOnOffSettingsTileWidgetState
             },
           ),
           title: Text(widget.setting.name,
-              style: Theme.of(context).textTheme.titleLarge),
-          subtitle: Text(widget.setting.description)),
+              style: Theme.of(context).textTheme.titleLarge,),
+          subtitle: Text(widget.setting.description),),
     );
   }
 }

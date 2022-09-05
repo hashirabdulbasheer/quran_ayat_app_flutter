@@ -54,14 +54,14 @@ class MyAppState extends State<MyApp> {
   }
 
   /// callback when theme changes
-  void onThemeChangedEvent(String? event) async {
+  void onThemeChangedEvent(String? _) async {
     // reload to apply the new theme
     setState(() {});
   }
 }
 
 /// load and save the quran words in memory
-_loadQuranWords() async {
+void _loadQuranWords() async {
   QuranSearch.globalQRWords = [];
   for (var i = 0; i < 114; i++) {
     List<List<NQWord>> words = await NobleQuran.getSurahWordByWord(i);

@@ -32,7 +32,7 @@ class QuranNoteDto {
       required this.createdOn,
       required this.status,
       required this.localId,
-      this.id});
+      this.id,});
 
   QuranNoteDto copyWith(
       {String? id,
@@ -41,7 +41,7 @@ class QuranNoteDto {
       String? note,
       String? status,
       String? localId,
-      int? createdOn}) {
+      int? createdOn,}) {
     return QuranNoteDto(
         suraIndex: suraIndex ?? this.suraIndex,
         ayaIndex: ayaIndex ?? this.ayaIndex,
@@ -49,6 +49,6 @@ class QuranNoteDto {
         id: id ?? this.id,
         status: status ?? this.status,
         localId: localId ?? this.localId,
-        createdOn: createdOn ?? this.createdOn);
+        createdOn: createdOn ?? this.createdOn,);
   }
 }

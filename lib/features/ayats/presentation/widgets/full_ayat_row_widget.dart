@@ -12,26 +12,27 @@ class QuranFullAyatRowWidget extends StatelessWidget {
       {Key? key,
       required this.futureMethodThatReturnsSelectedSurah,
       required this.ayaIndex,
-      this.fontFamily})
+      this.fontFamily,})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<NQSurah>(
       future: futureMethodThatReturnsSelectedSurah,
-      builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot,) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: SizedBox(
-                    height: 100, child: Center(child: Text('Loading....'))));
+                    height: 100, child: Center(child: Text('Loading....')),),);
           default:
             if (snapshot.hasError) {
               return Container();
             } else {
               NQSurah surah = snapshot.data as NQSurah;
               List<NQAyat> ayats = surah.aya;
+
               return Card(
                 elevation: 5,
                 child: Directionality(
@@ -48,12 +49,12 @@ class QuranFullAyatRowWidget extends StatelessWidget {
                             textAlign:
                                 QuranUtils.isArabic(ayats[ayaIndex - 1].text)
                                     ? TextAlign.end
-                                    : TextAlign.end,
+                                    : TextAlign.start,
                             style: TextStyle(
                                 fontSize: 16,
                                 height: 1.5,
                                 fontFamily: fontFamily,
-                                color: Colors.black87),
+                                color: Colors.black87,),
                           ),
                         ),
                       ),
@@ -68,6 +69,6 @@ class QuranFullAyatRowWidget extends StatelessWidget {
   }
 
   static String _stripHtmlIfNeeded(String text) {
-    return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '');
+    return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '',);
   }
 }

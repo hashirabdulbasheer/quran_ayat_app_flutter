@@ -11,14 +11,16 @@ class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
       QuranFirebaseBookmarksEngine._privateConstructor();
 
   @override
-  Future<bool> save(int sura, int aya) async {
+  Future<bool> save(int sura, int aya,) async {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       DatabaseReference ref =
           FirebaseDatabase.instance.ref("bookmarks/${user.uid}");
-      await ref.set({"sura": sura, "aya": aya});
+      await ref.set({"sura": sura, "aya": aya,});
+
       return true;
     }
+
     return false;
   }
 
@@ -32,15 +34,17 @@ class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
       Map<String, dynamic>? resultList =
           snapshot.value as Map<String, dynamic>?;
       if (resultList != null) {
-        int? sura = resultList["sura"];
-        int? aya = resultList["aya"];
+        int? sura = resultList["sura"] as int?;
+        int? aya = resultList["aya"] as int?;
         if (sura != null && aya != null) {
           NQBookmark bookmark = NQBookmark(
-              surah: sura, ayat: aya, word: 0, seconds: 0, pixels: 0);
+              surah: sura, ayat: aya, word: 0, seconds: 0, pixels: 0,);
+
           return bookmark;
         }
       }
     }
+
     return null;
   }
 

@@ -26,7 +26,7 @@ class QuranSettingsManager {
       id: QuranSettingsConstants.themeId,
       possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.themeId),
       defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.themeId),
-      type: QuranSettingType.dropdown);
+      type: QuranSettingType.dropdown,);
 
   final QuranSetting _transliterationSettings = QuranSetting(
       name: "Transliteration",
@@ -34,7 +34,7 @@ class QuranSettingsManager {
       id: QuranSettingsConstants.transliterationId,
       possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.transliterationId),
       defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.transliterationId),
-      type: QuranSettingType.onOff);
+      type: QuranSettingType.onOff,);
 
   final QuranSetting _translationSettings = QuranSetting(
       name: "Translation",
@@ -42,7 +42,7 @@ class QuranSettingsManager {
       id: QuranSettingsConstants.translationId,
       possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.translationId),
       defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.translationId),
-      type: QuranSettingType.dropdown);
+      type: QuranSettingType.dropdown,);
 
   final QuranSetting _audioControlSettings = QuranSetting(
       name: "Audio Controls",
@@ -50,7 +50,7 @@ class QuranSettingsManager {
       id: QuranSettingsConstants.audioControlsId,
       possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.audioControlsId),
       defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.audioControlsId),
-      type: QuranSettingType.onOff);
+      type: QuranSettingType.onOff,);
 
   final QuranSetting _audioReciterSetting = QuranSetting(
       name: "Select reciter",
@@ -59,7 +59,7 @@ class QuranSettingsManager {
       showSearchBoxInDropdown: true,
       possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.audioReciterId),
       defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.audioReciterId),
-      type: QuranSettingType.dropdown);
+      type: QuranSettingType.dropdown,);
 
   List<QuranSetting> generateSettings() {
     return [
@@ -67,18 +67,19 @@ class QuranSettingsManager {
       _translationSettings,
       _transliterationSettings,
       _audioControlSettings,
-      _audioReciterSetting
+      _audioReciterSetting,
     ];
   }
 
-  void save(QuranSetting setting, String newValue) async {
+  void save(QuranSetting setting, String newValue,) async {
     QuranSettingsRepository repository = QuranSettingsRepositoryImpl();
-    await repository.saveSetting(setting, newValue);
+    await repository.saveSetting(setting, newValue,);
     _performSettingSpecificActions(setting);
   }
 
   Future<String> getValue(QuranSetting setting) {
     QuranSettingsRepository repository = QuranSettingsRepositoryImpl();
+
     return repository.getValue(setting);
   }
 
@@ -106,6 +107,7 @@ class QuranSettingsManager {
     if (isEnabledStr == "true") {
       return true;
     }
+
     return false;
   }
 
@@ -114,16 +116,19 @@ class QuranSettingsManager {
     if (isEnabledStr == "true") {
       return true;
     }
+
     return false;
   }
 
   Future<NQTranslation> getTranslation() async {
     String translation = await getValue(_translationSettings);
+
     return NobleQuran.getTranslationFromTitle(translation);
   }
 
   Future<String> getReciterKey() async {
     String reciter = await getValue(_audioReciterSetting);
+
     return reciter != "" ? reciter : QuranAppConfig.audioReciter;
   }
 

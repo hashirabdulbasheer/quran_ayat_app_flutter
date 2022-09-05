@@ -11,7 +11,7 @@ class QuranDropdownSettingsTileWidget extends StatefulWidget {
   final void Function(QuranDropdownValue)? onChanged;
 
   const QuranDropdownSettingsTileWidget(
-      {Key? key, required this.setting, this.showSearchBox, this.onChanged})
+      {Key? key, required this.setting, this.showSearchBox, this.onChanged,})
       : super(key: key);
 
   @override
@@ -25,7 +25,7 @@ class _QuranDropdownSettingsTileWidgetState
   Widget build(BuildContext context) {
     return FutureBuilder<String>(
         future: QuranSettingsManager.instance.getValue(widget.setting),
-        builder: (context, snapshot) {
+        builder: (context, snapshot,) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return _tile();
@@ -34,10 +34,10 @@ class _QuranDropdownSettingsTileWidgetState
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else {
                 return _tile(
-                    currentValue: _dropdownValueFromKey(snapshot.data));
+                    currentValue: _dropdownValueFromKey(snapshot.data),);
               }
           }
-        });
+        },);
   }
 
   Widget _tile({QuranDropdownValue? currentValue}) {
@@ -46,11 +46,11 @@ class _QuranDropdownSettingsTileWidgetState
       child: ListTile(
         isThreeLine: true,
         title: Text(widget.setting.name,
-            style: Theme.of(context).textTheme.titleLarge),
+            style: Theme.of(context).textTheme.titleLarge,),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.setting.description, textAlign: TextAlign.end),
+            Text(widget.setting.description, textAlign: TextAlign.end,),
             IntrinsicWidth(
               child: DropdownSearch<QuranDropdownValue>(
                 items: widget.setting.possibleValues,
@@ -58,7 +58,7 @@ class _QuranDropdownSettingsTileWidgetState
                 itemAsString: (item) => item.title,
                 popupProps: PopupPropsMultiSelection.menu(
                     fit: FlexFit.loose,
-                    showSearchBox: widget.showSearchBox ?? false),
+                    showSearchBox: widget.showSearchBox ?? false,),
                 dropdownSearchDecoration:
                     const InputDecoration(hintText: "select"),
                 onChanged: (value) {
@@ -72,7 +72,7 @@ class _QuranDropdownSettingsTileWidgetState
                 selectedItem: currentValue,
               ),
             ),
-            const SizedBox(height: 10)
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -88,6 +88,7 @@ class _QuranDropdownSettingsTileWidgetState
         return filtered.first;
       }
     }
+
     return null;
   }
 }

@@ -3,5 +3,5 @@ class QuranUser {
   String email;
   String uid;
 
-  QuranUser({required this.name, required this.email, required this.uid});
+  QuranUser({required this.name, required this.email, required this.uid,});
 }

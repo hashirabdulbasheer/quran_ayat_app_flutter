@@ -10,47 +10,50 @@ import '../../settings/presentation/quran_settings_screen.dart';
 class QuranNavDrawer extends StatelessWidget {
   final QuranUser? user;
 
-  const QuranNavDrawer({Key? key, required this.user}) : super(key: key);
+  const QuranNavDrawer({Key? key, required this.user,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> items = user != null
-        ? _loggedInDrawerItems(context, user!)
+        ? _loggedInDrawerItems(context, user!,)
         : _loggedOutDrawerItems(context);
+
     return Drawer(
         child: ListView.separated(
-      separatorBuilder: (context, index) {
+      separatorBuilder: (context, index,) {
         if (index > 0) {
+
           return const Divider(thickness: 1);
         }
+
         return const Divider();
       },
       padding: EdgeInsets.zero,
-      itemBuilder: (context, index) {
+      itemBuilder: (context, index,) {
         return items[index];
       },
       itemCount: items.length,
-    ));
+    ),);
   }
 
-  List<Widget> _loggedInDrawerItems(BuildContext context, QuranUser user) => [
+  List<Widget> _loggedInDrawerItems(BuildContext context, QuranUser user,) => [
         _header(context),
         _row(context,
             title: 'Profile',
             destination: QuranProfileScreen(user: user),
-            icon: Icons.account_circle),
+            icon: Icons.account_circle,),
         _row(context,
             title: 'Notes',
             destination: QuranViewNotesScreen(user: user),
-            icon: Icons.edit_note_sharp),
+            icon: Icons.edit_note_sharp,),
         _row(context,
             title: 'Search',
             destination: const QuranSearchScreen(),
-            icon: Icons.search_rounded),
+            icon: Icons.search_rounded,),
         _row(context,
             title: 'Settings',
             destination: const QuranSettingsScreen(),
-            icon: Icons.settings),
+            icon: Icons.settings,),
       ];
 
   List<Widget> _loggedOutDrawerItems(BuildContext context) => [
@@ -58,43 +61,43 @@ class QuranNavDrawer extends StatelessWidget {
         _row(context,
             title: 'Login',
             destination: const QuranLoginScreen(),
-            icon: Icons.account_circle_outlined),
+            icon: Icons.account_circle_outlined,),
         _row(context,
             title: 'Search',
             destination: const QuranSearchScreen(),
-            icon: Icons.search_rounded),
+            icon: Icons.search_rounded,),
         _row(context,
             title: 'Settings',
             destination: const QuranSettingsScreen(),
-            icon: Icons.settings),
+            icon: Icons.settings,),
       ];
 
   /// Header
-  _header(BuildContext context) {
+  Widget _header(BuildContext context) {
     return DrawerHeader(
       decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       child: Container(
         alignment: Alignment.bottomLeft,
         child: const Text(
           "$appVersion uxQuran",
-          style: TextStyle(fontSize: 10, color: Colors.white),
+          style: TextStyle(fontSize: 10, color: Colors.white,),
         ),
       ),
     );
   }
 
   /// Row
-  _row(BuildContext context,
+  Widget _row(BuildContext context,
       {required String title,
       required IconData icon,
-      required Widget destination}) {
+      required Widget destination,}) {
     return ListTile(
       trailing: const Icon(Icons.arrow_forward_ios_rounded),
       leading: Icon(icon),
-      title: Text(title, style: const TextStyle(fontSize: 16)),
+      title: Text(title, style: const TextStyle(fontSize: 16),),
       onTap: () {
         Navigator.of(context).pop();
-        Navigator.push(
+        Navigator.push<void>(
           context,
           MaterialPageRoute(builder: (context) => destination),
         );

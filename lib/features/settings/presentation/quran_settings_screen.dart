@@ -26,19 +26,19 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          appBar: AppBar(title: const Text("Settings")), body: _body(context)),
+          appBar: AppBar(title: const Text("Settings")), body: _body(),),
     );
   }
 
-  Widget _body(BuildContext context) {
+  Widget _body() {
     return Container(
         padding: const EdgeInsets.all(10),
         child: ListView.builder(
-          itemBuilder: (context, index) {
+          itemBuilder: (context, index,) {
             return _settingRow(_settings[index]);
           },
           itemCount: _settings.length,
-        ));
+        ),);
   }
 
   Widget _settingRow(QuranSetting setting) {
@@ -48,8 +48,8 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
         child: Container(
             decoration: const BoxDecoration(
                 color: Colors.black26,
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            child: _settingRowContents(setting)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),),
+            child: _settingRowContents(setting),),
       ),
     );
   }
@@ -61,15 +61,15 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
             setting: setting,
             showSearchBox: setting.showSearchBoxInDropdown,
             onChanged: (value) {
-              QuranSettingsManager.instance.save(setting, value.key);
-            });
+              QuranSettingsManager.instance.save(setting, value.key,);
+            },);
 
       case QuranSettingType.onOff:
         return QuranOnOffSettingsTileWidget(
             setting: setting,
             onChanged: (value) {
-              QuranSettingsManager.instance.save(setting, "$value");
-            });
+              QuranSettingsManager.instance.save(setting, "$value",);
+            },);
 
       default:
         return Container();

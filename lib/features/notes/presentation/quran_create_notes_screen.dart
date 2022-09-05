@@ -12,9 +12,12 @@ class QuranCreateNotesScreen extends StatefulWidget {
   final int ayaIndex;
   final QuranNote? note;
 
-  const QuranCreateNotesScreen(
-      {Key? key, required this.suraIndex, required this.ayaIndex, this.note})
-      : super(key: key);
+  const QuranCreateNotesScreen({
+    Key? key,
+    required this.suraIndex,
+    required this.ayaIndex,
+    this.note,
+  }) : super(key: key);
 
   @override
   State<QuranCreateNotesScreen> createState() => _QuranCreateNotesScreenState();
@@ -26,48 +29,46 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Notes"),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const QuranOfflineHeaderWidget(),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                      "Enter your notes for ${widget.suraIndex}:${widget.ayaIndex}"),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    controller: _notesController
-                      ..text = widget.note?.note ?? "",
-                    decoration: const InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 0.0),
-                        )),
-                    maxLines: 10,
+      appBar: AppBar(
+        title: const Text("Notes"),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const QuranOfflineHeaderWidget(),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                "Enter your notes for ${widget.suraIndex}:${widget.ayaIndex}",
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                controller: _notesController..text = widget.note?.note ?? "",
+                maxLines: 10,
+                decoration: const InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                      width: 0.0,
+                    ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                widget.note == null
-                    ? _createControlButton(context)
-                    : _updateControlButton(context)
-              ],
+              ),
             ),
-          ),
-        ));
+            const SizedBox(
+              height: 20,
+            ),
+            widget.note == null
+                ? _createControlButton(context)
+                : _updateControlButton(context),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _createControlButton(BuildContext context) {
@@ -76,16 +77,18 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
       child: Row(
         children: [
           Expanded(
-              child: SizedBox(
-            height: 50,
-            child: ElevatedButton(
+            child: SizedBox(
+              height: 50,
+              child: ElevatedButton(
                 onPressed: () {
                   _createButtonPressed(() {
                     Navigator.of(context).pop();
                   });
                 },
-                child: const Text("Save")),
-          ))
+                child: const Text("Save"),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -97,29 +100,33 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
       child: Row(
         children: [
           Expanded(
-              child: SizedBox(
-            height: 50,
-            child: ElevatedButton(
+            child: SizedBox(
+              height: 50,
+              child: ElevatedButton(
                 onPressed: () {
                   _updateButtonPressed();
                 },
-                child: const Text("Update")),
-          )),
+                child: const Text("Update"),
+              ),
+            ),
+          ),
           const SizedBox(
             width: 20,
           ),
           Expanded(
-              child: SizedBox(
-            height: 50,
-            child: ElevatedButton(
+            child: SizedBox(
+              height: 50,
+              child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.red),
                 onPressed: () async {
                   _deleteButtonPressed(() {
                     Navigator.of(context).pop();
                   });
                 },
-                child: const Text("Delete")),
-          ))
+                child: const Text("Delete"),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -128,18 +135,22 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   ///
   ///  BUTTON ACTIONS
   ///
-  _createButtonPressed(Function onComplete) async {
+  void _createButtonPressed(Function onComplete) async {
     if (_notesController.text.isNotEmpty) {
       QuranUser? user = QuranAuthFactory.engine.getUser();
       if (user != null) {
         QuranNote note = QuranNote(
-            suraIndex: widget.suraIndex,
-            ayaIndex: widget.ayaIndex,
-            note: _notesController.text,
-            createdOn: DateTime.now().millisecondsSinceEpoch,
-            localId: QuranUtils.uniqueId(),
-            status: QuranStatusEnum.created);
-        await QuranNotesManager.instance.create(user.uid, note);
+          suraIndex: widget.suraIndex,
+          ayaIndex: widget.ayaIndex,
+          note: _notesController.text,
+          createdOn: DateTime.now().millisecondsSinceEpoch,
+          localId: QuranUtils.uniqueId(),
+          status: QuranStatusEnum.created,
+        );
+        await QuranNotesManager.instance.create(
+          user.uid,
+          note,
+        );
         onComplete();
       }
     } else {
@@ -147,7 +158,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
     }
   }
 
-  _deleteButtonPressed(Function onComplete) async {
+  void _deleteButtonPressed(Function onComplete) async {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       Widget okButton = TextButton(
@@ -155,7 +166,10 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
         child: const Text("Delete"),
         onPressed: () {
           if (widget.note != null) {
-            QuranNotesManager.instance.delete(user.uid, widget.note!);
+            QuranNotesManager.instance.delete(
+              user.uid,
+              widget.note!,
+            );
             _showMessage("Deleted 👍");
             Navigator.of(context).pop();
             onComplete();
@@ -173,10 +187,13 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
       AlertDialog alert = AlertDialog(
         title: const Text("Delete"),
         content: const Text("Are you sure?"),
-        actions: [okButton, cancelButton],
+        actions: [
+          okButton,
+          cancelButton,
+        ],
       );
 
-      showDialog(
+      showDialog<void>(
         context: context,
         builder: (BuildContext context) {
           return alert;
@@ -185,14 +202,18 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
     }
   }
 
-  _updateButtonPressed() async {
+  void _updateButtonPressed() async {
     if (_notesController.text.isNotEmpty) {
       QuranUser? user = QuranAuthFactory.engine.getUser();
       if (user != null) {
         QuranNote note = widget.note!.copyWith(
-            createdOn: DateTime.now().millisecondsSinceEpoch,
-            note: _notesController.text);
-        QuranNotesManager.instance.update(user.uid, note);
+          createdOn: DateTime.now().millisecondsSinceEpoch,
+          note: _notesController.text,
+        );
+        QuranNotesManager.instance.update(
+          user.uid,
+          note,
+        );
         _showMessage("Updated 👍");
       }
     } else {
@@ -200,7 +221,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
     }
   }
 
-  _showMessage(String message) {
+  void _showMessage(String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
   }
