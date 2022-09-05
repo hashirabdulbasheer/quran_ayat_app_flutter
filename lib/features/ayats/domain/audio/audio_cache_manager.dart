@@ -1,4 +1,5 @@
 import 'package:just_audio/just_audio.dart';
+import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import '../../../../misc/configs/app_config.dart';
 import '../../../../utils/utils.dart';
 
@@ -20,10 +21,8 @@ class QuranAudioCacheManager {
     //   return AudioSource.uri(Uri.parse(QuranUtils.getAudioUrl(_baseAudioUrl, _reciter, surahIndex, ayaIndex)));
     // }
     // return QuranAudioCacheSource(savedAudio);
+    String reciter = await QuranSettingsManager.instance.getReciterKey();
     return AudioSource.uri(Uri.parse(QuranUtils.getAudioUrl(
-        QuranAppConfig.audioRecitationBaseUrl,
-        QuranAppConfig.audioReciter,
-        surahIndex,
-        ayaIndex)));
+        QuranAppConfig.audioRecitationBaseUrl, reciter, surahIndex, ayaIndex)));
   }
 }

@@ -13,7 +13,6 @@ class QuranSettingsScreen extends StatefulWidget {
 }
 
 class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
-  /// generate settings
   late List<QuranSetting> _settings;
 
   @override
@@ -60,8 +59,9 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
       case QuranSettingType.dropdown:
         return QuranDropdownSettingsTileWidget(
             setting: setting,
+            showSearchBox: setting.showSearchBoxInDropdown,
             onChanged: (value) {
-              QuranSettingsManager.instance.save(setting, value);
+              QuranSettingsManager.instance.save(setting, value.key);
             });
 
       case QuranSettingType.onOff:

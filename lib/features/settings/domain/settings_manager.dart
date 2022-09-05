@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/noble_quran.dart';
-
-import '../../../misc/enums/quran_theme_enum.dart';
+import '../../../misc/configs/app_config.dart';
 import 'constants/setting_constants.dart';
+import 'entities/quran_dropdown_values_factory.dart';
 import 'enum/settings_event_enum.dart';
 import 'theme_manager.dart';
 import '../data/repository/settings_repository_impl.dart';
@@ -24,44 +24,50 @@ class QuranSettingsManager {
       name: "App Theme",
       description: "select the app color theme",
       id: QuranSettingsConstants.themeId,
-      possibleValues: [
-        QuranAppTheme.light.rawString(),
-        QuranAppTheme.dark.rawString()
-      ],
-      defaultValue: QuranAppTheme.light.rawString(),
+      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.themeId),
+      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.themeId),
       type: QuranSettingType.dropdown);
 
   final QuranSetting _transliterationSettings = QuranSetting(
       name: "Transliteration",
       description: "on/off transliteration",
       id: QuranSettingsConstants.transliterationId,
-      possibleValues: [],
-      defaultValue: QuranSettingOnOff.off.rawString(),
+      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.transliterationId),
+      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.transliterationId),
       type: QuranSettingType.onOff);
 
   final QuranSetting _translationSettings = QuranSetting(
       name: "Translation",
       description: "select the translation",
       id: QuranSettingsConstants.translationId,
-      possibleValues:
-          NobleQuran.getAllTranslations().map((e) => e.title).toList(),
-      defaultValue: NQTranslation.clear.title,
+      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.translationId),
+      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.translationId),
       type: QuranSettingType.dropdown);
 
   final QuranSetting _audioControlSettings = QuranSetting(
       name: "Audio Controls",
       description: "on/off audio controls",
       id: QuranSettingsConstants.audioControlsId,
-      possibleValues: [],
-      defaultValue: QuranSettingOnOff.off.rawString(),
+      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.audioControlsId),
+      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.audioControlsId),
       type: QuranSettingType.onOff);
+
+  final QuranSetting _audioReciterSetting = QuranSetting(
+      name: "Select reciter",
+      description: "select your favorite reciter",
+      id: QuranSettingsConstants.audioReciterId,
+      showSearchBoxInDropdown: true,
+      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.audioReciterId),
+      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.audioReciterId),
+      type: QuranSettingType.dropdown);
 
   List<QuranSetting> generateSettings() {
     return [
       _themeSettings,
       _translationSettings,
       _transliterationSettings,
-      _audioControlSettings
+      _audioControlSettings,
+      _audioReciterSetting
     ];
   }
 
@@ -114,6 +120,11 @@ class QuranSettingsManager {
   Future<NQTranslation> getTranslation() async {
     String translation = await getValue(_translationSettings);
     return NobleQuran.getTranslationFromTitle(translation);
+  }
+
+  Future<String> getReciterKey() async {
+    String reciter = await getValue(_audioReciterSetting);
+    return reciter != "" ? reciter : QuranAppConfig.audioReciter;
   }
 
   /// register a listener to get theme update events

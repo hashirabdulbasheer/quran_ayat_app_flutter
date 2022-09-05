@@ -19,6 +19,7 @@ class QuranOnOffSettingsTileWidget extends StatefulWidget {
 
 class _QuranOnOffSettingsTileWidgetState
     extends State<QuranOnOffSettingsTileWidget> {
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String>(

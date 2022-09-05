@@ -7,7 +7,7 @@ class QuranSettingsRepositoryImpl implements QuranSettingsRepository {
   @override
   Future<String> getValue(QuranSetting setting)  async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(setting.id) ?? setting.defaultValue;
+    return prefs.getString(setting.id) ?? setting.defaultValue?.key ?? "";
   }
 
   @override
