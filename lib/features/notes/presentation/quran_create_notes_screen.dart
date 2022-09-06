@@ -5,6 +5,8 @@ import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../domain/entities/quran_note.dart';
 import '../domain/notes_manager.dart';
+import 'widgets/notes_create_controls_widget.dart';
+import 'widgets/notes_update_controls_widget.dart';
 import 'widgets/offline_header_widget.dart';
 
 class QuranCreateNotesScreen extends StatefulWidget {
@@ -63,69 +65,23 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
               height: 20,
             ),
             widget.note == null
-                ? _createControlButton(context)
-                : _updateControlButton(context),
+                ? QuranNotesCreateControlsWidget(
+                    onConfirmation: () => {
+                      _createButtonPressed(() => {
+                            Navigator.of(context).pop(),
+                          }),
+                    },
+                  )
+                : QuranUpdateControlsWidget(
+                    onDelete: () => {
+                      _deleteButtonPressed(() {
+                        Navigator.of(context).pop();
+                      }),
+                    },
+                    onUpdate: () => _updateButtonPressed(),
+                  ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _createControlButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => {
-                  _createButtonPressed(() {
-                    Navigator.of(context).pop();
-                  }),
-                },
-                child: const Text("Save"),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _updateControlButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => _updateButtonPressed(),
-                child: const Text("Update"),
-              ),
-            ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Colors.red),
-                onPressed: () => {
-                  _deleteButtonPressed(() {
-                    Navigator.of(context).pop();
-                  }),
-                },
-                child: const Text("Delete"),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
