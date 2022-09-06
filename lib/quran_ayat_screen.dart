@@ -549,10 +549,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         const SizedBox(height: 2),
                         Container(
                           padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black26),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(1)),
+                          decoration: const BoxDecoration(
+                            border: Border.fromBorderSide(
+                              BorderSide(color: Colors.black26),
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(1)),
                           ),
                           child: Text(
                             e.tr,
@@ -707,10 +708,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         ),
         Container(
           height: 50,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black12),
+          decoration: const BoxDecoration(
+            border: Border.fromBorderSide(
+              BorderSide(color: Colors.black12),
+            ),
             color: Colors.black12,
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
+            borderRadius: BorderRadius.all(Radius.circular(5)),
           ),
           padding: const EdgeInsets.fromLTRB(
             10,

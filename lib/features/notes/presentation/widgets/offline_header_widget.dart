@@ -28,11 +28,12 @@ class QuranOfflineHeaderWidget extends StatelessWidget {
                     Expanded(
                       child: Container(
                         padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black12),
+                        decoration: const BoxDecoration(
+                          border: Border.fromBorderSide(
+                            BorderSide(color: Colors.black12),
+                          ),
                           color: Colors.black12,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
                         child: const Text(
                           "OFFLINE",
