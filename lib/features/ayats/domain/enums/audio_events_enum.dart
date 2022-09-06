@@ -1,5 +1,1 @@
-
-
-enum QuranAudioEventsEnum {
-   contPlayStatusChanged, stopped, loadNext
-}
+enum QuranAudioEventsEnum { contPlayStatusChanged, stopped, loadNext }

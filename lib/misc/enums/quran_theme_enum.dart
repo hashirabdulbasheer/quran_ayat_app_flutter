@@ -1,4 +1,3 @@
-
 /// Quran App Themes
 enum QuranAppTheme { light, dark }
 

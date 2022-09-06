@@ -13,38 +13,65 @@ class QuranNotesManager implements QuranNotesInterface {
       QuranNotesManager._privateConstructor();
 
   @override
-  Future<QuranResponse> create(String userId, QuranNote note,) async {
+  Future<QuranResponse> create(
+    String userId,
+    QuranNote note,
+  ) async {
     if (await isOffline()) {
       /// OFFLINE
-      return await QuranHiveNotesEngine.instance.create(userId, note,);
+      return await QuranHiveNotesEngine.instance.create(
+        userId,
+        note,
+      );
     } else {
       /// ONLINE
-      return await QuranFirebaseNotesEngine.instance.create(userId, note,);
+      return await QuranFirebaseNotesEngine.instance.create(
+        userId,
+        note,
+      );
     }
   }
 
   @override
-  Future<bool> delete(String userId, QuranNote note,) async {
+  Future<bool> delete(
+    String userId,
+    QuranNote note,
+  ) async {
     /// Supporting delete for online only
     if (!await isOffline()) {
-      return QuranFirebaseNotesEngine.instance.delete(userId, note,);
+      return QuranFirebaseNotesEngine.instance.delete(
+        userId,
+        note,
+      );
     }
 
     /// OFFLINE
-    return QuranHiveNotesEngine.instance.delete(userId, note,);
+    return QuranHiveNotesEngine.instance.delete(
+      userId,
+      note,
+    );
   }
 
   @override
   Future<List<QuranNote>> fetch(
-      String userId, int suraIndex, int ayaIndex,) async {
+    String userId,
+    int suraIndex,
+    int ayaIndex,
+  ) async {
     if (await isOffline()) {
       /// OFFLINE
-      return await QuranHiveNotesEngine.instance
-          .fetch(userId, suraIndex, ayaIndex,);
+      return await QuranHiveNotesEngine.instance.fetch(
+        userId,
+        suraIndex,
+        ayaIndex,
+      );
     } else {
       /// ONLINE
-      return await QuranFirebaseNotesEngine.instance
-          .fetch(userId, suraIndex, ayaIndex,);
+      return await QuranFirebaseNotesEngine.instance.fetch(
+        userId,
+        suraIndex,
+        ayaIndex,
+      );
     }
   }
 
@@ -60,14 +87,23 @@ class QuranNotesManager implements QuranNotesInterface {
   }
 
   @override
-  Future<bool> update(String userId, QuranNote note,) async {
+  Future<bool> update(
+    String userId,
+    QuranNote note,
+  ) async {
     if (!await isOffline()) {
       /// ONLINE
-      return QuranFirebaseNotesEngine.instance.update(userId, note,);
+      return QuranFirebaseNotesEngine.instance.update(
+        userId,
+        note,
+      );
     }
 
     /// OFFLINE
-    return QuranHiveNotesEngine.instance.update(userId, note,);
+    return QuranHiveNotesEngine.instance.update(
+      userId,
+      note,
+    );
   }
 
   Future<void> uploadLocalNotesIfAny(String userId) async {
@@ -76,9 +112,15 @@ class QuranNotesManager implements QuranNotesInterface {
       List<QuranNote> localNotes = await fetchAllLocal(userId);
       for (QuranNote note in localNotes) {
         // create online copy
-        create(userId, note,);
+        create(
+          userId,
+          note,
+        );
         // delete local copy
-        deleteLocal(userId, note,);
+        deleteLocal(
+          userId,
+          note,
+        );
       }
     }
   }
@@ -95,17 +137,20 @@ class QuranNotesManager implements QuranNotesInterface {
   }
 
   Future<List<QuranNote>> fetchAllLocal(String userId) {
-
     return QuranHiveNotesEngine.instance.fetchAll(userId);
   }
 
-  Future<bool> deleteLocal(String userId, QuranNote note,) {
-
-    return QuranHiveNotesEngine.instance.delete(userId, note,);
+  Future<bool> deleteLocal(
+    String userId,
+    QuranNote note,
+  ) {
+    return QuranHiveNotesEngine.instance.delete(
+      userId,
+      note,
+    );
   }
 
   Future<bool> isOffline() async {
-
     return QuranUtils.isOffline();
   }
 
@@ -114,20 +159,17 @@ class QuranNotesManager implements QuranNotesInterface {
     DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
     var millis = DateTime.fromMillisecondsSinceEpoch(timeMs);
     if (!millis.difference(justNow).isNegative) {
-
       return 'Just now';
     }
     if (millis.day == now.day &&
         millis.month == now.month &&
         millis.year == now.year) {
-
       return intl.DateFormat('jm').format(now);
     }
     DateTime yesterday = now.subtract(const Duration(days: 1));
     if (millis.day == yesterday.day &&
         millis.month == yesterday.month &&
         millis.year == yesterday.year) {
-
       return 'Yesterday, ${intl.DateFormat('jm').format(now)}';
     }
     if (now.difference(millis).inDays < 4) {

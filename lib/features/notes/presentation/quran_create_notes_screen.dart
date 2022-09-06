@@ -80,10 +80,10 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
             child: SizedBox(
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () => {
                   _createButtonPressed(() {
                     Navigator.of(context).pop();
-                  });
+                  }),
                 },
                 child: const Text("Save"),
               ),
@@ -103,9 +103,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
             child: SizedBox(
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  _updateButtonPressed();
-                },
+                onPressed: () => _updateButtonPressed(),
                 child: const Text("Update"),
               ),
             ),
@@ -118,10 +116,10 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.red),
-                onPressed: () async {
+                onPressed: () => {
                   _deleteButtonPressed(() {
                     Navigator.of(context).pop();
-                  });
+                  }),
                 },
                 child: const Text("Delete"),
               ),
@@ -164,24 +162,19 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
       Widget okButton = TextButton(
         style: TextButton.styleFrom(primary: Colors.red),
         child: const Text("Delete"),
-        onPressed: () {
-          if (widget.note != null) {
-            QuranNotesManager.instance.delete(
-              user.uid,
-              widget.note!,
-            );
-            _showMessage("Deleted 👍");
-            Navigator.of(context).pop();
-            onComplete();
-          }
+        onPressed: () => {
+          if (_deleteNote(user))
+            {
+              _showMessage("Deleted 👍"),
+              Navigator.of(context).pop(),
+              onComplete(),
+            },
         },
       );
 
       Widget cancelButton = TextButton(
         child: const Text("Cancel"),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+        onPressed: () => {Navigator.of(context).pop()},
       );
 
       AlertDialog alert = AlertDialog(
@@ -202,19 +195,38 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
     }
   }
 
+  bool _deleteNote(QuranUser user) {
+    QuranNote? noteParam = widget.note;
+    if (noteParam != null) {
+      QuranNotesManager.instance.delete(
+        user.uid,
+        noteParam,
+      );
+
+      return true;
+    }
+
+    return false;
+  }
+
   void _updateButtonPressed() async {
     if (_notesController.text.isNotEmpty) {
       QuranUser? user = QuranAuthFactory.engine.getUser();
       if (user != null) {
-        QuranNote note = widget.note!.copyWith(
-          createdOn: DateTime.now().millisecondsSinceEpoch,
-          note: _notesController.text,
-        );
-        QuranNotesManager.instance.update(
-          user.uid,
-          note,
-        );
-        _showMessage("Updated 👍");
+        QuranNote? noteParam = widget.note;
+        if (noteParam != null) {
+          QuranNote note = noteParam.copyWith(
+            createdOn: DateTime.now().millisecondsSinceEpoch,
+            note: _notesController.text,
+          );
+          QuranNotesManager.instance.update(
+            user.uid,
+            note,
+          );
+          _showMessage("Updated 👍");
+        } else {
+          _showMessage("Sorry 😔, unable to update the note at the moment.");
+        }
       }
     } else {
       _showMessage("Sorry 😔, please enter a note");

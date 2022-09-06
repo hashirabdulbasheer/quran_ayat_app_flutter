@@ -11,12 +11,18 @@ class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
       QuranFirebaseBookmarksEngine._privateConstructor();
 
   @override
-  Future<bool> save(int sura, int aya,) async {
+  Future<bool> save(
+    int sura,
+    int aya,
+  ) async {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       DatabaseReference ref =
           FirebaseDatabase.instance.ref("bookmarks/${user.uid}");
-      await ref.set({"sura": sura, "aya": aya,});
+      await ref.set({
+        "sura": sura,
+        "aya": aya,
+      });
 
       return true;
     }
@@ -38,7 +44,12 @@ class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
         int? aya = resultList["aya"] as int?;
         if (sura != null && aya != null) {
           NQBookmark bookmark = NQBookmark(
-              surah: sura, ayat: aya, word: 0, seconds: 0, pixels: 0,);
+            surah: sura,
+            ayat: aya,
+            word: 0,
+            seconds: 0,
+            pixels: 0,
+          );
 
           return bookmark;
         }
@@ -50,6 +61,7 @@ class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
 
   @override
   Future<bool> clear() {
+    /// TODO: Implement clearing remote bookmark
     return Future.value(true);
   }
 }

@@ -12,38 +12,49 @@ class QuranThemeManager {
   static final QuranThemeManager instance =
       QuranThemeManager._privateConstructor();
 
-
   ThemeMode _appTheme = ThemeMode.light;
 
   ThemeData lightTheme = ThemeData(
-      primarySwatch: Colors.deepPurple,
-      dividerColor: Colors.black26,
-      appBarTheme:
-          const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
-      textTheme: const TextTheme(
-          bodyText1: TextStyle(color: Colors.black),
-          subtitle1: TextStyle(color: Colors.black87),
-          subtitle2: TextStyle(color: Colors.black54, fontSize: 12,),),
-      fontFamily: "default",
-      brightness: Brightness.light,);
+    primarySwatch: Colors.deepPurple,
+    dividerColor: Colors.black26,
+    appBarTheme:
+        const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+    textTheme: const TextTheme(
+      bodyText1: TextStyle(color: Colors.black),
+      subtitle1: TextStyle(color: Colors.black87),
+      subtitle2: TextStyle(
+        color: Colors.black54,
+        fontSize: 12,
+      ),
+    ),
+    fontFamily: "default",
+    brightness: Brightness.light,
+  );
 
   ThemeData darkTheme = ThemeData(
-      primarySwatch: Colors.grey,
-      primaryColor: Colors.black,
-      brightness: Brightness.dark,
-      dividerColor: Colors.white60,
-      appBarTheme: const AppBarTheme(
-          color: Colors.black,
-          systemOverlayStyle:
-              SystemUiOverlayStyle(systemNavigationBarColor: Colors.black),),
-      backgroundColor: const Color(0xFF212121),
-      cardColor: Colors.black54,
-      textTheme: const TextTheme(
-          bodyText1: TextStyle(color: Colors.white),
-          subtitle1: TextStyle(color: Colors.white60),
-          subtitle2: TextStyle(color: Colors.white60, fontSize: 12,),),
-      cardTheme: const CardTheme(color: Colors.grey),
-      buttonTheme: const ButtonThemeData(buttonColor: Colors.black38),);
+    primarySwatch: Colors.grey,
+    primaryColor: Colors.black,
+    brightness: Brightness.dark,
+    fontFamily: "default",
+    dividerColor: Colors.white60,
+    appBarTheme: const AppBarTheme(
+      color: Colors.black,
+      systemOverlayStyle:
+          SystemUiOverlayStyle(systemNavigationBarColor: Colors.black),
+    ),
+    backgroundColor: const Color(0xFF212121),
+    cardColor: Colors.black54,
+    textTheme: const TextTheme(
+      bodyText1: TextStyle(color: Colors.white),
+      subtitle1: TextStyle(color: Colors.white60),
+      subtitle2: TextStyle(
+        color: Colors.white60,
+        fontSize: 12,
+      ),
+    ),
+    cardTheme: const CardTheme(color: Colors.grey),
+    buttonTheme: const ButtonThemeData(buttonColor: Colors.black38),
+  );
 
   final StreamController<String> _themeStream = StreamController.broadcast();
 

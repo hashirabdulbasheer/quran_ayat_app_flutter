@@ -8,24 +8,30 @@ class QuranFullAyatRowWidget extends StatelessWidget {
   final int ayaIndex;
   final String? fontFamily;
 
-  const QuranFullAyatRowWidget(
-      {Key? key,
-      required this.futureMethodThatReturnsSelectedSurah,
-      required this.ayaIndex,
-      this.fontFamily,})
-      : super(key: key);
+  const QuranFullAyatRowWidget({
+    Key? key,
+    required this.futureMethodThatReturnsSelectedSurah,
+    required this.ayaIndex,
+    this.fontFamily,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<NQSurah>(
       future: futureMethodThatReturnsSelectedSurah,
-      builder: (BuildContext context, AsyncSnapshot<NQSurah> snapshot,) {
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<NQSurah> snapshot,
+      ) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: SizedBox(
-                    height: 100, child: Center(child: Text('Loading....')),),);
+              padding: EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 100,
+                child: Center(child: Text('Loading....')),
+              ),
+            );
           default:
             if (snapshot.hasError) {
               return Container();
@@ -51,10 +57,11 @@ class QuranFullAyatRowWidget extends StatelessWidget {
                                     ? TextAlign.end
                                     : TextAlign.start,
                             style: TextStyle(
-                                fontSize: 16,
-                                height: 1.5,
-                                fontFamily: fontFamily,
-                                color: Colors.black87,),
+                              fontSize: 16,
+                              height: 1.5,
+                              fontFamily: fontFamily,
+                              color: Colors.black87,
+                            ),
                           ),
                         ),
                       ),
@@ -69,6 +76,9 @@ class QuranFullAyatRowWidget extends StatelessWidget {
   }
 
   static String _stripHtmlIfNeeded(String text) {
-    return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), '',);
+    return text.replaceAll(
+      RegExp(r'<[^>]*>|&[^;]+;'),
+      '',
+    );
   }
 }

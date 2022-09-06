@@ -12,7 +12,10 @@ class QuranAudioCacheManager {
   static final QuranAudioCacheManager instance =
       QuranAudioCacheManager._privateConstructor();
 
-  Future<AudioSource> getSource(int surahIndex, int ayaIndex,) async {
+  Future<AudioSource> getSource(
+    int surahIndex,
+    int ayaIndex,
+  ) async {
     // TODO: Find a way to use cache audio later
     // Uint8List? savedAudio = await _audioRepository.getAudio(surahIndex, ayaIndex, _reciter);
     // if (savedAudio == null) {
@@ -24,6 +27,10 @@ class QuranAudioCacheManager {
     String reciter = await QuranSettingsManager.instance.getReciterKey();
 
     return AudioSource.uri(Uri.parse(QuranUtils.getAudioUrl(
-        QuranAppConfig.audioRecitationBaseUrl, reciter, surahIndex, ayaIndex,)));
+      QuranAppConfig.audioRecitationBaseUrl,
+      reciter,
+      surahIndex,
+      ayaIndex,
+    )));
   }
 }

@@ -9,8 +9,14 @@ class QuranLocalBookmarksEngine implements QuranBookmarksInterface {
       QuranLocalBookmarksEngine._privateConstructor();
 
   @override
-  Future<bool> save(int sura, int aya,) async {
-    QuranPreferences.saveBookmark(sura, aya,);
+  Future<bool> save(
+    int sura,
+    int aya,
+  ) async {
+    QuranPreferences.saveBookmark(
+      sura,
+      aya,
+    );
 
     return true;
   }

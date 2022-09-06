@@ -24,11 +24,23 @@ class QuranBookmarksManager {
     return await QuranFirebaseBookmarksEngine.instance.fetch();
   }
 
-  Future<bool> saveLocal(int sura, int aya,) async {
-    return await QuranLocalBookmarksEngine.instance.save(sura, aya,);
+  Future<bool> saveLocal(
+    int sura,
+    int aya,
+  ) async {
+    return await QuranLocalBookmarksEngine.instance.save(
+      sura,
+      aya,
+    );
   }
 
-  Future<bool> saveRemote(int sura, int aya,) async {
-    return await QuranFirebaseBookmarksEngine.instance.save(sura, aya,);
+  Future<bool> saveRemote(
+    int sura,
+    int aya,
+  ) async {
+    return await QuranFirebaseBookmarksEngine.instance.save(
+      sura,
+      aya,
+    );
   }
 }

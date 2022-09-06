@@ -21,45 +21,60 @@ class QuranSettingsManager {
   final StreamController<String> _settingsStream = StreamController.broadcast();
 
   final QuranSetting _themeSettings = QuranSetting(
-      name: "App Theme",
-      description: "select the app color theme",
-      id: QuranSettingsConstants.themeId,
-      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.themeId),
-      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.themeId),
-      type: QuranSettingType.dropdown,);
+    name: "App Theme",
+    description: "select the app color theme",
+    id: QuranSettingsConstants.themeId,
+    possibleValues:
+        QuranDropdownValuesFactory.createValues(QuranSettingsConstants.themeId),
+    defaultValue:
+        QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.themeId),
+    type: QuranSettingType.dropdown,
+  );
 
   final QuranSetting _transliterationSettings = QuranSetting(
-      name: "Transliteration",
-      description: "on/off transliteration",
-      id: QuranSettingsConstants.transliterationId,
-      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.transliterationId),
-      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.transliterationId),
-      type: QuranSettingType.onOff,);
+    name: "Transliteration",
+    description: "on/off transliteration",
+    id: QuranSettingsConstants.transliterationId,
+    possibleValues: QuranDropdownValuesFactory.createValues(
+        QuranSettingsConstants.transliterationId,),
+    defaultValue: QuranDropdownValuesFactory.defaultValue(
+        QuranSettingsConstants.transliterationId,),
+    type: QuranSettingType.onOff,
+  );
 
   final QuranSetting _translationSettings = QuranSetting(
-      name: "Translation",
-      description: "select the translation",
-      id: QuranSettingsConstants.translationId,
-      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.translationId),
-      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.translationId),
-      type: QuranSettingType.dropdown,);
+    name: "Translation",
+    description: "select the translation",
+    id: QuranSettingsConstants.translationId,
+    possibleValues: QuranDropdownValuesFactory.createValues(
+        QuranSettingsConstants.translationId,),
+    defaultValue: QuranDropdownValuesFactory.defaultValue(
+        QuranSettingsConstants.translationId,),
+    type: QuranSettingType.dropdown,
+  );
 
   final QuranSetting _audioControlSettings = QuranSetting(
-      name: "Audio Controls",
-      description: "on/off audio controls",
-      id: QuranSettingsConstants.audioControlsId,
-      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.audioControlsId),
-      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.audioControlsId),
-      type: QuranSettingType.onOff,);
+    name: "Audio Controls",
+    description: "on/off audio controls",
+    id: QuranSettingsConstants.audioControlsId,
+    possibleValues: QuranDropdownValuesFactory.createValues(
+        QuranSettingsConstants.audioControlsId,),
+    defaultValue: QuranDropdownValuesFactory.defaultValue(
+        QuranSettingsConstants.audioControlsId,),
+    type: QuranSettingType.onOff,
+  );
 
   final QuranSetting _audioReciterSetting = QuranSetting(
-      name: "Select reciter",
-      description: "select your favorite reciter",
-      id: QuranSettingsConstants.audioReciterId,
-      showSearchBoxInDropdown: true,
-      possibleValues: QuranDropdownValuesFactory.createValues(QuranSettingsConstants.audioReciterId),
-      defaultValue: QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.audioReciterId),
-      type: QuranSettingType.dropdown,);
+    name: "Select reciter",
+    description: "select your favorite reciter",
+    id: QuranSettingsConstants.audioReciterId,
+    showSearchBoxInDropdown: true,
+    possibleValues: QuranDropdownValuesFactory.createValues(
+        QuranSettingsConstants.audioReciterId,),
+    defaultValue: QuranDropdownValuesFactory.defaultValue(
+        QuranSettingsConstants.audioReciterId,),
+    type: QuranSettingType.dropdown,
+  );
 
   List<QuranSetting> generateSettings() {
     return [
@@ -71,9 +86,15 @@ class QuranSettingsManager {
     ];
   }
 
-  void save(QuranSetting setting, String newValue,) async {
+  void save(
+    QuranSetting setting,
+    String newValue,
+  ) async {
     QuranSettingsRepository repository = QuranSettingsRepositoryImpl();
-    await repository.saveSetting(setting, newValue,);
+    await repository.saveSetting(
+      setting,
+      newValue,
+    );
     _performSettingSpecificActions(setting);
   }
 

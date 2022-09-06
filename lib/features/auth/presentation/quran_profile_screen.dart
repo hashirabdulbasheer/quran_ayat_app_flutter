@@ -85,10 +85,8 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                         child: SizedBox(
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {
-                              if (!_isLoading) {
-                                _updateButtonPressed();
-                              }
+                            onPressed: () => {
+                              if (!_isLoading) {_updateButtonPressed()},
                             },
                             child: _isLoading
                                 ? const Padding(
@@ -107,10 +105,10 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                     height: 50,
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () => {
                       _signOutButtonPressed().then((bool value) {
                         Navigator.of(context).pop();
-                      });
+                      }),
                     },
                     child: const Text("Sign Out"),
                   ),

@@ -41,8 +41,10 @@ dart_code_metrics:
     cyclomatic-complexity: 20
     maximum-nesting-level: 5
     number-of-parameters: 4
+    source-lines-of-code: 200
   metrics-exclude:
     - test/**
+    - lib/utils/utils.dart
   # per https://dartcodemetrics.dev/docs/getting-started/configuration#configuring-a-rules-entry
   # and https://dartcodemetrics.dev/docs/rules/overview
   rules:

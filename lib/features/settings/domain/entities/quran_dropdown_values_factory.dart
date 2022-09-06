@@ -24,9 +24,10 @@ class QuranDropdownValuesFactory {
       case QuranSettingsConstants.audioReciterId:
         return NobleQuran.getAllReciters()
             .map((e) => QuranDropdownValue(
-                title: "${e.name} (${e.bitrate})",
-                content: e,
-                key: e.subfolder,))
+                  title: "${e.name} (${e.bitrate})",
+                  content: e,
+                  key: e.subfolder,
+                ))
             .toList();
     }
 
@@ -48,15 +49,18 @@ class QuranDropdownValuesFactory {
         return QuranDropdownValue.sameValues(QuranSettingOnOff.off.rawString());
 
       case QuranSettingsConstants.audioReciterId:
+
         /// default reciter
         QuranReciter reciter = QuranReciter(
-            subfolder: "khalefa_al_tunaiji_64kbps",
-            name: "Khalefa Al-Tunaiji",
-            bitrate: "64kbps",);
+          subfolder: "khalefa_al_tunaiji_64kbps",
+          name: "Khalefa Al-Tunaiji",
+          bitrate: "64kbps",
+        );
         return QuranDropdownValue(
-            title: "Khalefa Al-Tunaiji (64kbps)",
-            key: "khalefa_al_tunaiji_64kbps",
-            content: reciter,);
+          title: "Khalefa Al-Tunaiji (64kbps)",
+          key: "khalefa_al_tunaiji_64kbps",
+          content: reciter,
+        );
     }
 
     return null;

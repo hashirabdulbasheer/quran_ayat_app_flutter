@@ -1,4 +1,3 @@
-
 void usePathUrlStrategy() {
   // noop
 }

@@ -24,15 +24,18 @@ import 'features/settings/domain/theme_manager.dart';
 import 'misc/enums/quran_font_family_enum.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
-import 'utils/prefs_utils.dart';
+import 'utils/logger_utils.dart';
 import 'utils/utils.dart';
 
 class QuranAyatScreen extends StatefulWidget {
   final int? surahIndex;
   final int? ayaIndex;
 
-  const QuranAyatScreen({Key? key, this.surahIndex, this.ayaIndex,})
-      : super(key: key);
+  const QuranAyatScreen({
+    Key? key,
+    this.surahIndex,
+    this.ayaIndex,
+  }) : super(key: key);
 
   @override
   QuranAyatScreenState createState() => QuranAyatScreenState();
@@ -69,15 +72,17 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     // else use gray button
     if (QuranThemeManager.instance.isDarkMode()) {
       return ElevatedButton.styleFrom(
-          primary: Colors.white70,
-          shadowColor: Colors.transparent,
-          textStyle: const TextStyle(color: Colors.black),);
+        primary: Colors.white70,
+        shadowColor: Colors.transparent,
+        textStyle: const TextStyle(color: Colors.black),
+      );
     }
 
     return ElevatedButton.styleFrom(
-        primary: Colors.black12,
-        shadowColor: Colors.transparent,
-        textStyle: const TextStyle(color: Colors.deepPurple),);
+      primary: Colors.black12,
+      shadowColor: Colors.transparent,
+      textStyle: const TextStyle(color: Colors.deepPurple),
+    );
   }
 
   Color? get _elevatedButtonIconColor {
@@ -123,6 +128,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int? surahIndex = _selectedSurah?.number;
+    if (surahIndex != null) {
+      surahIndex = surahIndex - 1;
+    } else {
+      surahIndex = 0;
+    }
+
     return Semantics(
       textDirection: TextDirection.rtl,
       enabled: true,
@@ -130,120 +142,138 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-            drawer: widget.surahIndex == null
-                ? QuranNavDrawer(user: QuranAuthFactory.engine.getUser())
-                : null,
-            onDrawerChanged: (isOpened) {
-              // drawer opened - stop continuous play
-              setState(() {
-                _isAudioContinuousModeEnabled.value = false;
-              });
-            },
-            bottomSheet: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10,),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                            style: _elevatedButtonTheme,
-                            onPressed: () {
-                              if (_isInteractionAllowedOnScreen()) {
-                                _moveToPreviousAyat();
-                              } else {
-                                _showMessage(_contPlayMessage);
-                              }
-                            },
-                            child: Icon(Icons.arrow_back,
-                                color: _elevatedButtonIconColor,),),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: ElevatedButton(
-                            style: _elevatedButtonTheme,
-                            onPressed: () {
-                              if (_isInteractionAllowedOnScreen()) {
-                                _moveToNextAyat();
-                              } else {
-                                _showMessage(_contPlayMessage);
-                              }
-                            },
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: _elevatedButtonIconColor,
-                            ),),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+          drawer: widget.surahIndex == null
+              ? QuranNavDrawer(user: QuranAuthFactory.engine.getUser())
+              : null,
+          onDrawerChanged: (isOpened) => {
+            // drawer opened - stop continuous play
+            setState(() {
+              _isAudioContinuousModeEnabled.value = false;
+            }),
+          },
+          bottomSheet: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              10,
+              10,
+              10,
+              10,
             ),
-            appBar: AppBar(
-              centerTitle: true,
-              title: const Text("Quran"),
-              actions: [
-                IconButton(
-                    tooltip: "Copy to clipboard",
-                    onPressed: () async {
-                      int? surahIndex = _selectedSurah?.number;
-                      if (surahIndex != null) {
-                        String surahName =
-                            _surahTitles[surahIndex - 1].transliterationEn;
-                        int ayaIndex = _selectedAyat;
-                        String shareString = await QuranUtils.shareString(
-                            surahName, surahIndex, ayaIndex,);
-                        Clipboard.setData(ClipboardData(text: shareString))
-                            .then((_) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Copied to clipboard 👍"),),);
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.share),),
-                QuranBookmarkIconWidget(
-                    currentSurahIndex:
-                        _selectedSurah != null ? _selectedSurah!.number - 1 : 0,
-                    currentAyaIndex: _selectedAyat,
-                    onSaveButtonPressed: () {
-                      if (_isInteractionAllowedOnScreen()) {
-                        _saveBookmarkDialogAction();
-                      } else {
-                        _showMessage(_contPlayMessage);
-                      }
-                    },
-                    onClearButtonPressed: () {
-                      if (_isInteractionAllowedOnScreen()) {
-                        QuranPreferences.clearBookmark();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("👍 Cleared ")),);
-                      } else {
-                        _showMessage(_contPlayMessage);
-                      }
-                    },
-                    onGoToButtonPressed: (NQBookmark? bookmark) {
-                      if (_isInteractionAllowedOnScreen()) {
-                        if (_selectedSurah != null &&
-                            bookmark != null &&
-                            bookmark.ayat > 0) {
-                          setState(() {
-                            _selectedSurah = _surahTitles[bookmark.surah];
-                            _selectedAyat = bookmark.ayat;
-                          });
-                        }
-                      } else {
-                        _showMessage(_contPlayMessage);
-                      }
-                    },),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        style: _elevatedButtonTheme,
+                        onPressed: () => {
+                          if (_isInteractionAllowedOnScreen())
+                            {_moveToPreviousAyat()}
+                          else
+                            {_showMessage(_contPlayMessage)},
+                        },
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: _elevatedButtonIconColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: _elevatedButtonTheme,
+                        onPressed: () => {
+                          if (_isInteractionAllowedOnScreen())
+                            {_moveToNextAyat()}
+                          else
+                            {_showMessage(_contPlayMessage)},
+                        },
+                        child: Icon(
+                          Icons.arrow_forward,
+                          color: _elevatedButtonIconColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-            body: _surahTitles.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : _body(),),
+          ),
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text("Quran"),
+            actions: [
+              IconButton(
+                tooltip: "Copy to clipboard",
+                onPressed: () => _onCopyToClipboardIconPressed(context),
+                icon: const Icon(Icons.share),
+              ),
+              QuranBookmarkIconWidget(
+                currentSurahIndex: surahIndex,
+                currentAyaIndex: _selectedAyat,
+                onSaveButtonPressed: () => {
+                  if (_isInteractionAllowedOnScreen())
+                    {_saveBookmarkDialogAction()}
+                  else
+                    {_showMessage(_contPlayMessage)},
+                },
+                onClearButtonPressed: () => _onBookmarkCleared(context),
+                onGoToButtonPressed: (NQBookmark? bookmark) =>
+                    _navigateToBookmark(bookmark),
+              ),
+            ],
+          ),
+          body: _surahTitles.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : _body(),
+        ),
       ),
     );
+  }
+
+  void _navigateToBookmark(NQBookmark? bookmark) {
+    if (_isInteractionAllowedOnScreen()) {
+      if (_selectedSurah != null && bookmark != null && bookmark.ayat > 0) {
+        setState(() {
+          _selectedSurah = _surahTitles[bookmark.surah];
+          _selectedAyat = bookmark.ayat;
+        });
+      }
+    } else {
+      _showMessage(_contPlayMessage);
+    }
+  }
+
+  void _onBookmarkCleared(BuildContext context) {
+    if (_isInteractionAllowedOnScreen()) {
+      QuranBookmarksManager.instance.clearLocal();
+      QuranBookmarksManager.instance.clearRemote();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("👍 Cleared ")),
+      );
+    } else {
+      _showMessage(_contPlayMessage);
+    }
+  }
+
+  Future<void> _onCopyToClipboardIconPressed(BuildContext context) async {
+    int? surahIndex = _selectedSurah?.number;
+    if (surahIndex != null) {
+      String surahName = _surahTitles[surahIndex - 1].transliterationEn;
+      int ayaIndex = _selectedAyat;
+      String shareString = await QuranUtils.shareString(
+        surahName,
+        surahIndex,
+        ayaIndex,
+      );
+      Clipboard.setData(ClipboardData(text: shareString)).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Copied to clipboard 👍"),
+          ),
+        );
+      });
+    }
   }
 
   Widget _body() {
@@ -251,7 +281,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10,),
+        padding: const EdgeInsets.fromLTRB(
+          20,
+          10,
+          20,
+          10,
+        ),
         child: Column(
           children: [
             Column(
@@ -269,10 +304,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   elevation: 5,
                   child: FutureBuilder<List<List<NQWord>>>(
                     future: NobleQuran.getSurahWordByWord(
-                        (_selectedSurah?.number ?? 1) - 1,),
+                      (_selectedSurah?.number ?? 1) - 1,
+                    ),
                     // async work
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<List<NQWord>>> snapshot,) {
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<List<List<NQWord>>> snapshot,
+                    ) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.waiting:
                           return SizedBox(
@@ -283,7 +321,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         default:
                           if (snapshot.hasError) {
                             return Center(
-                                child: Text('Error: ${snapshot.error}'),);
+                              child: Text('Error: ${snapshot.error}'),
+                            );
                           } else {
                             List<List<NQWord>> surahWords =
                                 snapshot.data as List<List<NQWord>>;
@@ -324,88 +363,114 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   Widget _displayHeader() {
     return ValueListenableBuilder<bool>(
-        builder: (BuildContext context, bool isContinuousPlay, Widget? child,) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Semantics(
-                  enabled: true,
-                  excludeSemantics: true,
-                  label: 'dropdown to select surah',
-                  child: SizedBox(
-                    height: 80,
-                    child: DropdownSearch<NQSurahTitle>(
-                      items: _surahTitles,
-                      enabled: !isContinuousPlay,
-                      popupProps: const PopupPropsMultiSelection.menu(),
-                      itemAsString: (surah) =>
-                          "(${surah.number}) ${surah.transliterationEn}",
-                      dropdownSearchDecoration: const InputDecoration(
-                          labelText: "Surah", hintText: "select surah",),
-                      onChanged: (value) {
-                        setState(() {
-                          if (value != null) {
-                            _selectedSurah = value;
-                            _selectedAyat = 1;
-                          }
-                        });
-                      },
-                      selectedItem: _selectedSurah,
+      builder: (
+        BuildContext context,
+        bool isContinuousPlay,
+        Widget? child,
+      ) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Semantics(
+                enabled: true,
+                excludeSemantics: true,
+                label: 'dropdown to select surah',
+                child: SizedBox(
+                  height: 80,
+                  child: DropdownSearch<NQSurahTitle>(
+                    items: _surahTitles,
+                    enabled: !isContinuousPlay,
+                    popupProps: const PopupPropsMultiSelection.menu(),
+                    itemAsString: (surah) =>
+                        "(${surah.number}) ${surah.transliterationEn}",
+                    dropdownSearchDecoration: const InputDecoration(
+                      labelText: "Surah",
+                      hintText: "select surah",
                     ),
+                    onChanged: (value) => {
+                      setState(() {
+                        if (value != null) {
+                          _selectedSurah = value;
+                          _selectedAyat = 1;
+                        }
+                      }),
+                    },
+                    selectedItem: _selectedSurah,
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
-              _selectedSurah != null
-                  ? Expanded(
-                      child: Semantics(
-                        enabled: true,
-                        excludeSemantics: true,
-                        label: 'dropdown to select ayat number',
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8,),
-                          child: SizedBox(
-                            width: 100,
-                            height: 80,
-                            child: DropdownSearch<int>(
-                              popupProps: const PopupPropsMultiSelection.menu(
-                                  showSearchBox: true,),
-                              filterFn: (item, filter,) {
-                                if (filter.isEmpty) {
-                                  return true;
-                                }
-                                if ("$item" ==
-                                    QuranUtils.replaceFarsiNumber(filter)) {
-
-                                  return true;
-                                }
-
-                                return false;
-                              },
-                              enabled: !isContinuousPlay,
-                              dropdownSearchDecoration: const InputDecoration(
-                                  labelText: "Ayat", hintText: "ayat index",),
-                              items: List<int>.generate(
-                                  _selectedSurah?.totalVerses ?? 0,
-                                  (i) => i + 1,),
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedAyat = value ?? 1;
-                                });
-                              },
-                              selectedItem: _selectedAyat,
+            ),
+            const SizedBox(width: 10),
+            _selectedSurah != null
+                ? Expanded(
+                    child: Semantics(
+                      enabled: true,
+                      excludeSemantics: true,
+                      label: 'dropdown to select ayat number',
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          8,
+                          8,
+                          8,
+                          8,
+                        ),
+                        child: SizedBox(
+                          width: 100,
+                          height: 80,
+                          child: DropdownSearch<int>(
+                            popupProps: const PopupPropsMultiSelection.menu(
+                              showSearchBox: true,
                             ),
+                            filterFn: (
+                              item,
+                              filter,
+                            ) =>
+                                _ayatNumberDropdownSearchFilterFn(
+                              filter,
+                              item,
+                            ),
+                            enabled: !isContinuousPlay,
+                            dropdownSearchDecoration: const InputDecoration(
+                              labelText: "Ayat",
+                              hintText: "ayat index",
+                            ),
+                            items: List<int>.generate(
+                              _selectedSurah?.totalVerses ?? 0,
+                              (i) => i + 1,
+                            ),
+                            onChanged: (value) => {
+                              setState(() {
+                                _selectedAyat = value ?? 1;
+                              }),
+                            },
+                            selectedItem: _selectedAyat,
                           ),
                         ),
                       ),
-                    )
-                  : Container(),
-            ],
-          );
-        },
-        valueListenable: _isAudioContinuousModeEnabled,);
+                    ),
+                  )
+                : Container(),
+          ],
+        );
+      },
+      valueListenable: _isAudioContinuousModeEnabled,
+    );
+  }
+
+  bool _ayatNumberDropdownSearchFilterFn(
+    String filter,
+    int item,
+  ) {
+    if (filter.isEmpty) {
+      return true;
+    }
+    if ("$item" == QuranUtils.replaceFarsiNumber(filter)) {
+      return true;
+    }
+
+    return false;
   }
 
   Widget _ayaWidget(List<NQWord> words) {
@@ -444,20 +509,25 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               child: Tooltip(
                 message: '${e.ar} ${e.tr}',
                 child: InkWell(
-                  onTap: () {
-                    if (_isInteractionAllowedOnScreen()) {
-                      Navigator.push<void>(
-                        context,
-                        MaterialPageRoute(
+                  onTap: () => {
+                    if (_isInteractionAllowedOnScreen())
+                      {
+                        Navigator.push<void>(
+                          context,
+                          MaterialPageRoute(
                             builder: (context) =>
-                                QuranSearchScreen(searchString: e.ar),),
-                      );
-                    } else {
-                      _showMessage(_contPlayMessage);
-                    }
+                                QuranSearchScreen(searchString: e.ar),
+                          ),
+                        ),
+                      }
+                    else
+                      {_showMessage(_contPlayMessage)},
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8,),
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      right: 8,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -469,9 +539,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             softWrap: false,
                             maxLines: 1,
                             style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 30,
-                                fontFamily: QuranFontFamily.arabic.rawString,),
+                              color: Colors.black,
+                              fontSize: 30,
+                              fontFamily: QuranFontFamily.arabic.rawString,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -479,13 +550,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                         Container(
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black26),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(1)),),
+                            border: Border.all(color: Colors.black26),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(1)),
+                          ),
                           child: Text(
                             e.tr,
                             style: const TextStyle(
-                                color: Colors.black54, fontSize: 14,),
+                              color: Colors.black54,
+                              fontSize: 14,
+                            ),
                             textDirection: TextDirection.ltr,
                           ),
                         ),
@@ -500,71 +574,100 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   Widget _fullTransliterationWidget() {
     return FutureBuilder<bool>(
-        future: QuranSettingsManager.instance.isTransliterationEnabled(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot,) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: SizedBox(
-                      height: 80,
-                      child:
-                          Center(child: Text('Loading transliteration....')),),);
-            default:
-              if (snapshot.hasError) {
-                return Container();
-              } else {
-                bool isEnabled = snapshot.data as bool;
-                if (isEnabled) {
+      future: QuranSettingsManager.instance.isTransliterationEnabled(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<bool> snapshot,
+      ) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 80,
+                child: Center(child: Text('Loading transliteration....')),
+              ),
+            );
+          default:
+            if (snapshot.hasError) {
+              return Container();
+            } else {
+              bool isEnabled = snapshot.data as bool;
+              if (isEnabled) {
+                int? surahIndex = _selectedSurah?.number;
+                if (surahIndex != null) {
+                  // actual index
+                  surahIndex = surahIndex - 1;
+
                   return Column(
                     children: [
                       const SizedBox(
                         height: 20,
                       ),
                       QuranFullAyatRowWidget(
-                          futureMethodThatReturnsSelectedSurah:
-                              NobleQuran.getSurahTransliteration(
-                                  _selectedSurah!.number - 1,),
-                          ayaIndex: _selectedAyat,),
+                        futureMethodThatReturnsSelectedSurah:
+                            NobleQuran.getSurahTransliteration(
+                          surahIndex,
+                        ),
+                        ayaIndex: _selectedAyat,
+                      ),
                     ],
                   );
-                } else {
-                  return Container();
                 }
               }
-          }
-        },);
+
+              return Container();
+            }
+        }
+      },
+    );
   }
 
   Widget _fullTranslationWidget() {
     return FutureBuilder<NQTranslation>(
-        future: QuranSettingsManager.instance.getTranslation(),
-        builder: (BuildContext context, AsyncSnapshot<NQTranslation> snapshot,) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: SizedBox(
-                      height: 80,
-                      child: Center(child: Text('Loading translation....')),),);
-            default:
-              if (snapshot.hasError) {
-                return Container();
-              } else {
-                NQTranslation translation = snapshot.data as NQTranslation;
+      future: QuranSettingsManager.instance.getTranslation(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<NQTranslation> snapshot,
+      ) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 80,
+                child: Center(child: Text('Loading translation....')),
+              ),
+            );
+          default:
+            if (snapshot.hasError) {
+              return Container();
+            } else {
+              NQTranslation translation = snapshot.data as NQTranslation;
+              int? surahIndex = _selectedSurah?.number;
+              if (surahIndex != null) {
+                // actual index
+                surahIndex = surahIndex - 1;
 
                 return Column(children: [
                   const SizedBox(height: 20),
                   QuranFullAyatRowWidget(
-                      futureMethodThatReturnsSelectedSurah:
-                          NobleQuran.getTranslationString(
-                              _selectedSurah!.number - 1, translation,),
-                      fontFamily: translationFontFamily(translation),
-                      ayaIndex: _selectedAyat,),
+                    futureMethodThatReturnsSelectedSurah:
+                        NobleQuran.getTranslationString(
+                      surahIndex,
+                      translation,
+                    ),
+                    fontFamily: translationFontFamily(translation),
+                    ayaIndex: _selectedAyat,
+                  ),
                 ]);
               }
-          }
-        },);
+
+              return Container();
+            }
+        }
+      },
+    );
   }
 
   Widget _notesWidget() {
@@ -575,14 +678,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         child: SizedBox(
           height: 50,
           child: ElevatedButton(
-              onPressed: () {
-                if (_isInteractionAllowedOnScreen()) {
-                  _goToLoginScreen();
-                } else {
-                  _showMessage(_contPlayMessage);
-                }
-              },
-              child: const Text("Login to add notes"),),
+            onPressed: () => {
+              if (_isInteractionAllowedOnScreen())
+                {_goToLoginScreen()}
+              else
+                {_showMessage(_contPlayMessage)},
+            },
+            child: const Text("Login to add notes"),
+          ),
         ),
       );
     }
@@ -590,6 +693,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     if (_selectedSurah == null) {
       return Container();
     }
+
+    int? surahIndex = _selectedSurah?.number;
 
     return Column(
       children: [
@@ -603,81 +708,107 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         Container(
           height: 50,
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.black12),
-              color: Colors.black12,
-              borderRadius: const BorderRadius.all(Radius.circular(5)),),
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0,),
+            border: Border.all(color: Colors.black12),
+            color: Colors.black12,
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+          ),
+          padding: const EdgeInsets.fromLTRB(
+            10,
+            0,
+            10,
+            0,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text("Notes"),
               ElevatedButton(
-                  onPressed: () {
-                    if (_isInteractionAllowedOnScreen()) {
-                      _goToCreateNoteScreen();
-                    } else {
-                      _showMessage(_contPlayMessage);
-                    }
-                  },
-                  child: const Text("Add"),),
+                onPressed: () => {
+                  if (_isInteractionAllowedOnScreen())
+                    {_goToCreateNoteScreen()}
+                  else
+                    {_showMessage(_contPlayMessage)},
+                },
+                child: const Text("Add"),
+              ),
             ],
           ),
         ),
         const SizedBox(
           height: 10,
         ),
-        FutureBuilder<List<QuranNote>>(
-          future: QuranNotesManager.instance
-              .fetch(user.uid, _selectedSurah!.number, _selectedAyat,),
-          // async work
-          builder:
-              (BuildContext context, AsyncSnapshot<List<QuranNote>> snapshot,) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: SizedBox(
-                        height: 100,
-                        child: Center(child: Text('Loading notes....')),),);
-              default:
-                if (snapshot.hasError) {
-                  print("Error notes: ${snapshot.error}");
-
-                  return const Padding(
-                      padding: EdgeInsets.only(top: 30),
-                      child: SizedBox(
-                        height: 50,
-                        child: Text(
-                          'Unable to load notes. Please check internet connectivity',
-                          style: TextStyle(color: Colors.black38),
+        surahIndex != null
+            ? FutureBuilder<List<QuranNote>>(
+                future: QuranNotesManager.instance.fetch(
+                  user.uid,
+                  surahIndex,
+                  _selectedAyat,
+                ),
+                // async work
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<List<QuranNote>> snapshot,
+                ) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 100,
+                          child: Center(child: Text('Loading notes....')),
                         ),
-                      ),);
-                } else {
-                  List<QuranNote> notes = snapshot.data as List<QuranNote>;
+                      );
+                    default:
+                      if (snapshot.hasError) {
+                        QuranLogger.log("Error notes: ${snapshot.error}");
 
-                  return notes.isNotEmpty
-                      ? ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: notes.length,
-                          shrinkWrap: true,
-                          separatorBuilder: (BuildContext context, int index,) {
-                            return const Divider(
-                              thickness: 1,
-                            );
-                          },
-                          itemBuilder: (BuildContext context, int index,) {
-                            return Directionality(
-                              textDirection:
-                                  QuranUtils.isEnglish(notes[index].note)
-                                      ? TextDirection.ltr
-                                      : TextDirection.rtl,
-                              child: ListTile(
-                                  onTap: () {
-                                    if (_isInteractionAllowedOnScreen()) {
-                                      _goToCreateNoteScreen(note: notes[index]);
-                                    } else {
-                                      _showMessage(_contPlayMessage);
-                                    }
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: SizedBox(
+                            height: 50,
+                            child: Text(
+                              'Unable to load notes. Please check internet connectivity',
+                              style: TextStyle(color: Colors.black38),
+                            ),
+                          ),
+                        );
+                      } else {
+                        List<QuranNote> notes =
+                            snapshot.data as List<QuranNote>;
+                        if (notes.isNotEmpty) {
+                          return ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: notes.length,
+                            shrinkWrap: true,
+                            separatorBuilder: (
+                              BuildContext context,
+                              int index,
+                            ) {
+                              return const Divider(
+                                thickness: 1,
+                              );
+                            },
+                            itemBuilder: (
+                              BuildContext context,
+                              int index,
+                            ) {
+                              TextDirection textDirection = TextDirection.ltr;
+                              if (!QuranUtils.isEnglish(notes[index].note)) {
+                                textDirection = TextDirection.rtl;
+                              }
+
+                              return Directionality(
+                                textDirection: textDirection,
+                                child: ListTile(
+                                  onTap: () => {
+                                    if (_isInteractionAllowedOnScreen())
+                                      {
+                                        _goToCreateNoteScreen(
+                                          note: notes[index],
+                                        ),
+                                      }
+                                    else
+                                      {_showMessage(_contPlayMessage)},
                                   },
                                   title: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -687,34 +818,41 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(notes[index].note,
-                                            style:
-                                                const TextStyle(fontSize: 14),),
+                                        Text(
+                                          notes[index].note,
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
                                         const SizedBox(
                                           height: 8,
                                         ),
                                         Text(
-                                            QuranNotesManager.instance
-                                                .formattedDate(
-                                                    notes[index].createdOn,),
-                                            style:
-                                                const TextStyle(fontSize: 12),),
+                                          QuranNotesManager.instance
+                                              .formattedDate(
+                                            notes[index].createdOn,
+                                          ),
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
                                       ],
                                     ),
-                                  ),),
-                            );
-                          },)
-                      : TextButton(
-                          onPressed: () {
-                            _goToCreateNoteScreen();
-                          },
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        }
+
+                        return TextButton(
+                          onPressed: () => _goToCreateNoteScreen(),
                           child: const SizedBox(
-                              height: 100,
-                              child: Center(child: Text("Add Note")),),);
-                }
-            }
-          },
-        ),
+                            height: 100,
+                            child: Center(child: Text("Add Note")),
+                          ),
+                        );
+                      }
+                  }
+                },
+              )
+            : Container(),
       ],
     );
   }
@@ -727,9 +865,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       double progress = currentAya / totalAyas;
 
       return Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5,),
+        padding: const EdgeInsets.only(
+          left: 5,
+          right: 5,
+        ),
         child: LinearProgressIndicator(
-            backgroundColor: Colors.black12, value: progress,),
+          backgroundColor: Colors.black12,
+          value: progress,
+        ),
       );
     }
 
@@ -738,42 +881,58 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   Widget _audioControlsWidget() {
     return FutureBuilder<bool>(
-        future: QuranSettingsManager.instance.isAudioControlsEnabled(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot,) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: SizedBox(
-                      height: 80,
-                      child: Center(child: Text('Loading audio ....')),),);
-            default:
-              if (snapshot.hasError) {
-                return Container();
-              } else {
-                bool isEnabled = snapshot.data as bool;
-                if (isEnabled) {
-                  if (_selectedSurah == null) {
-                    return Container();
-                  }
-
-                  return ValueListenableBuilder<bool>(
-                      builder: (BuildContext context, bool isContinuousPlay,
-                          Widget? child,) {
-                        return QuranAudioRowWidget(
-                            isAudioRecitationContinuousPlayEnabled:
-                                isContinuousPlay,
-                            surahIndex: _selectedSurah!.number,
-                            onAudioEventsListener: _onAudioPlayStatusChanged,
-                            ayaIndex: _selectedAyat,);
-                      },
-                      valueListenable: _isAudioContinuousModeEnabled,);
-                } else {
+      future: QuranSettingsManager.instance.isAudioControlsEnabled(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<bool> snapshot,
+      ) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 80,
+                child: Center(child: Text('Loading audio ....')),
+              ),
+            );
+          default:
+            if (snapshot.hasError) {
+              return Container();
+            } else {
+              bool isEnabled = snapshot.data as bool;
+              if (isEnabled) {
+                if (_selectedSurah == null) {
                   return Container();
                 }
+
+                return ValueListenableBuilder<bool>(
+                  builder: (
+                    BuildContext context,
+                    bool isContinuousPlay,
+                    Widget? child,
+                  ) {
+                    int? surahIndex = _selectedSurah?.number;
+                    if (surahIndex != null) {
+                      return QuranAudioRowWidget(
+                        isAudioRecitationContinuousPlayEnabled:
+                            isContinuousPlay,
+                        surahIndex: surahIndex,
+                        onAudioEventsListener: _onAudioPlayStatusChanged,
+                        ayaIndex: _selectedAyat,
+                      );
+                    }
+
+                    return Container();
+                  },
+                  valueListenable: _isAudioContinuousModeEnabled,
+                );
+              } else {
+                return Container();
               }
-          }
-        },);
+            }
+        }
+      },
+    );
   }
 
   ///
@@ -782,14 +941,24 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   void _saveBookmarkDialogAction() async {
     if (_selectedSurah != null) {
       // save locally
-      QuranBookmarksManager.instance
-          .saveLocal(_selectedSurah!.number - 1, _selectedAyat,);
-      // sync bookmark to cloud
-      QuranBookmarksManager.instance
-          .saveRemote(_selectedSurah!.number - 1, _selectedAyat,);
-      // show success message
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
+      int? surahIndex = _selectedSurah?.number;
+      if (surahIndex != null) {
+        // actual index starts from 0
+        surahIndex = surahIndex - 1;
+        // proceed with saving
+        QuranBookmarksManager.instance.saveLocal(
+          surahIndex,
+          _selectedAyat,
+        );
+        // sync bookmark to cloud
+        QuranBookmarksManager.instance.saveRemote(
+          surahIndex,
+          _selectedAyat,
+        );
+        // show success message
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
+      }
     }
   }
 
@@ -808,17 +977,21 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   void _goToCreateNoteScreen({QuranNote? note}) {
     if (_selectedSurah != null) {
-      Navigator.push<void>(
-        context,
-        MaterialPageRoute(
+      int? surahIndex = _selectedSurah?.number;
+      if (surahIndex != null) {
+        Navigator.push<void>(
+          context,
+          MaterialPageRoute(
             builder: (context) => QuranCreateNotesScreen(
-                  note: note,
-                  suraIndex: _selectedSurah!.number,
-                  ayaIndex: _selectedAyat,
-                ),),
-      ).then((value) {
-        setState(() {});
-      });
+              note: note,
+              suraIndex: surahIndex,
+              ayaIndex: _selectedAyat,
+            ),
+          ),
+        ).then((value) {
+          setState(() {});
+        });
+      }
     }
   }
 
@@ -845,7 +1018,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       /// fetch bookmark
       NQBookmark? bookmark = await QuranBookmarksManager.instance.fetchRemote();
       if (bookmark != null) {
-        QuranBookmarksManager.instance.saveLocal(bookmark.surah, bookmark.ayat,);
+        QuranBookmarksManager.instance.saveLocal(
+          bookmark.surah,
+          bookmark.ayat,
+        );
       }
     }
     setState(() {});
@@ -859,14 +1035,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       if (searchString != null && searchString.isNotEmpty) {
         // we have a search url
         // navigate to search screen
-        Future.delayed(const Duration(seconds: 1), () {
-          Navigator.push<void>(
-            context,
-            MaterialPageRoute(
+        Future.delayed(
+          const Duration(seconds: 1),
+          () => {
+            Navigator.push<void>(
+              context,
+              MaterialPageRoute(
                 builder: (context) =>
-                    QuranSearchScreen(searchString: searchString),),
-          );
-        },);
+                    QuranSearchScreen(searchString: searchString),
+              ),
+            ),
+          },
+        );
       } else {
         // not a search url
         // check for surah/ayat format
@@ -878,11 +1058,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           // the last two paths should be surah/ayat format
           try {
             var selectedSurahIndex = int.parse(suraIndex) - 1;
+            int totalVerses = _selectedSurah?.totalVerses ?? 0;
             if (selectedSurahIndex >= 0 && selectedSurahIndex < 114) {
               _selectedSurah = _surahTitles[selectedSurahIndex];
               var ayaIndexInt = int.parse(ayaIndex);
-              if (_selectedSurah != null &&
-                  ayaIndexInt <= _selectedSurah!.totalVerses) {
+              if (_selectedSurah != null && ayaIndexInt <= totalVerses) {
                 _selectedAyat = ayaIndexInt;
               } else {
                 _selectedAyat = 1;
@@ -910,9 +1090,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   /// display next aya
   bool _moveToNextAyat() {
+    int totalVerses = _selectedSurah?.totalVerses ?? 0;
     if (_selectedSurah != null) {
       int nextAyat = _selectedAyat + 1;
-      if (nextAyat <= _selectedSurah!.totalVerses) {
+      if (nextAyat <= totalVerses) {
         setState(() {
           _selectedAyat = nextAyat;
         });

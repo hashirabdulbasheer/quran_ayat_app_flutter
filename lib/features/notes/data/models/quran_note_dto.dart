@@ -25,30 +25,33 @@ class QuranNoteDto {
   @HiveField(6)
   final String localId;
 
-  QuranNoteDto(
-      {required this.suraIndex,
-      required this.ayaIndex,
-      required this.note,
-      required this.createdOn,
-      required this.status,
-      required this.localId,
-      this.id,});
+  QuranNoteDto({
+    required this.suraIndex,
+    required this.ayaIndex,
+    required this.note,
+    required this.createdOn,
+    required this.status,
+    required this.localId,
+    this.id,
+  });
 
-  QuranNoteDto copyWith(
-      {String? id,
-      int? suraIndex,
-      int? ayaIndex,
-      String? note,
-      String? status,
-      String? localId,
-      int? createdOn,}) {
+  QuranNoteDto copyWith({
+    String? id,
+    int? suraIndex,
+    int? ayaIndex,
+    String? note,
+    String? status,
+    String? localId,
+    int? createdOn,
+  }) {
     return QuranNoteDto(
-        suraIndex: suraIndex ?? this.suraIndex,
-        ayaIndex: ayaIndex ?? this.ayaIndex,
-        note: note ?? this.note,
-        id: id ?? this.id,
-        status: status ?? this.status,
-        localId: localId ?? this.localId,
-        createdOn: createdOn ?? this.createdOn,);
+      suraIndex: suraIndex ?? this.suraIndex,
+      ayaIndex: ayaIndex ?? this.ayaIndex,
+      note: note ?? this.note,
+      id: id ?? this.id,
+      status: status ?? this.status,
+      localId: localId ?? this.localId,
+      createdOn: createdOn ?? this.createdOn,
+    );
   }
 }

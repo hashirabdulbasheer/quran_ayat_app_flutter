@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import '../../../firebase_options.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
+import '../../../utils/logger_utils.dart';
 import '../domain/interfaces/quran_auth_interface.dart';
 
 /// Singleton
@@ -69,14 +70,14 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        QuranLogger.log('No user found for that email.');
 
         return QuranResponse(
           isSuccessful: false,
           message: 'No user found for that email.',
         );
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        QuranLogger.log('Wrong password provided for that user.');
 
         return QuranResponse(
           isSuccessful: false,
@@ -111,24 +112,28 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        QuranLogger.log('The password provided is too weak.');
 
         return QuranResponse(
           isSuccessful: false,
           message: "The password provided is too weak.",
         );
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        QuranLogger.log('The account already exists for that email.');
 
         return QuranResponse(
-            isSuccessful: false,
-            message: "The account already exists for that email.",);
+          isSuccessful: false,
+          message: "The account already exists for that email.",
+        );
       }
     } catch (e) {
-      print(e);
+      QuranLogger.logE(e);
     }
 
-    return QuranResponse(isSuccessful: false, message: "Error creating user",);
+    return QuranResponse(
+      isSuccessful: false,
+      message: "Error creating user",
+    );
   }
 
   @override
@@ -148,7 +153,9 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     await FirebaseAuth.instance.signOut();
 
     return QuranResponse(
-        isSuccessful: true, message: "Successfully signed out 👍",);
+      isSuccessful: true,
+      message: "Successfully signed out 👍",
+    );
   }
 
   @override
@@ -156,18 +163,23 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
 
     return QuranResponse(
-        isSuccessful: true, message: "Successfully updated user 👍",);
+      isSuccessful: true,
+      message: "Successfully updated user 👍",
+    );
   }
 
   @override
   Future<QuranResponse> forgotPassword(String email) async {
-
     return await FirebaseAuth.instance
         .sendPasswordResetEmail(email: email)
         .then((value) => QuranResponse(
-            isSuccessful: true, message: "Done 👍, please check your email.",))
+              isSuccessful: true,
+              message: "Done 👍, please check your email.",
+            ))
         .catchError((Object e) => QuranResponse(
-            isSuccessful: false, message: "Sorry 😔, ${e.toString()}.",));
+              isSuccessful: false,
+              message: "Sorry 😔, ${e.toString()}.",
+            ));
   }
 
   @override

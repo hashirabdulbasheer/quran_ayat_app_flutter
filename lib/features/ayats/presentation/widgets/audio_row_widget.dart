@@ -13,13 +13,13 @@ class QuranAudioRowWidget extends StatefulWidget {
   final bool? isAudioRecitationContinuousPlayEnabled;
   final void Function(QuranAudioEventsEnum)? onAudioEventsListener;
 
-  const QuranAudioRowWidget(
-      {Key? key,
-      required this.surahIndex,
-      required this.ayaIndex,
-      this.isAudioRecitationContinuousPlayEnabled,
-      this.onAudioEventsListener,})
-      : super(key: key);
+  const QuranAudioRowWidget({
+    Key? key,
+    required this.surahIndex,
+    required this.ayaIndex,
+    this.isAudioRecitationContinuousPlayEnabled,
+    this.onAudioEventsListener,
+  }) : super(key: key);
 
   @override
   State<QuranAudioRowWidget> createState() => _QuranAudioRowWidgetState();
@@ -62,16 +62,17 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
               child: Tooltip(
                 message: "Play",
                 child: ElevatedButton(
-                    onPressed: () async {
-                      _play();
-                    },
-                    child: _player.playing
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                                color: Colors.white70,),)
-                        : const Icon(Icons.play_arrow_sharp),),
+                  onPressed: () => _play(),
+                  child: _player.playing
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white70,
+                          ),
+                        )
+                      : const Icon(Icons.play_arrow_sharp),
+                ),
               ),
             ),
             const SizedBox(width: 10),
@@ -79,10 +80,9 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
               child: Tooltip(
                 message: "Stop",
                 child: ElevatedButton(
-                    onPressed: () {
-                      _stop();
-                    },
-                    child: const Icon(Icons.stop_sharp),),
+                  onPressed: () => _stop(),
+                  child: const Icon(Icons.stop_sharp),
+                ),
               ),
             ),
             const SizedBox(width: 10),
@@ -92,19 +92,11 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
                     ? "Continuous play"
                     : "Continuous STOP",
                 child: ElevatedButton(
-                    onPressed: () {
-                      // cont play status changed event
-                      _audioEventsStream
-                          .add(QuranAudioEventsEnum.contPlayStatusChanged);
-                      if (_player.playing) {
-                        _stop();
-                      } else {
-                        _play();
-                      }
-                    },
-                    child: widget.isAudioRecitationContinuousPlayEnabled == true
-                        ? const Icon(Icons.playlist_remove_sharp)
-                        : const Icon(Icons.playlist_play_sharp),),
+                  onPressed: () => _onContinuousPlayButtonPressed(),
+                  child: widget.isAudioRecitationContinuousPlayEnabled == true
+                      ? const Icon(Icons.playlist_remove_sharp)
+                      : const Icon(Icons.playlist_play_sharp),
+                ),
               ),
             ),
             const SizedBox(width: 5),
@@ -112,6 +104,16 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
         ),
       ],
     );
+  }
+
+  void _onContinuousPlayButtonPressed() {
+    // cont play status changed event
+    _audioEventsStream.add(QuranAudioEventsEnum.contPlayStatusChanged);
+    if (_player.playing) {
+      _stop();
+    } else {
+      _play();
+    }
   }
 
   ///
@@ -134,8 +136,10 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
   }
 
   void _play() async {
-    AudioSource source = await QuranAudioCacheManager.instance
-        .getSource(widget.surahIndex, widget.ayaIndex,);
+    AudioSource source = await QuranAudioCacheManager.instance.getSource(
+      widget.surahIndex,
+      widget.ayaIndex,
+    );
     if (source is UriAudioSource) {
       bool offline = await QuranUtils.isOffline();
       if (offline) {

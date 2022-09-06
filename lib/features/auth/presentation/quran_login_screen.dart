@@ -23,12 +23,17 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-            title:
-                const Text("Login"),),
+          title: const Text("Login"),
+        ),
         body: Directionality(
           textDirection: TextDirection.ltr,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(30, 20, 30, 20,),
+            padding: const EdgeInsets.fromLTRB(
+              30,
+              20,
+              30,
+              20,
+            ),
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Column(
@@ -40,7 +45,9 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                     controller: _emailController,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
-                        hintText: 'Email', labelText: 'Email',),
+                      hintText: 'Email',
+                      labelText: 'Email',
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
@@ -59,14 +66,8 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                           _passwordVisible
                               ? Icons.visibility
                               : Icons.visibility_off,
-                          color: Theme.of(context).primaryColorDark,
                         ),
-                        onPressed: () {
-                          // Update the state i.e. toggle the state of passwordVisible variable
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
-                        },
+                        onPressed: () => _passwordVisibilityTogglePressed(),
                       ),
                     ),
                   ),
@@ -80,19 +81,18 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                         child: SizedBox(
                           height: 50,
                           child: ElevatedButton(
-                              onPressed: () {
-                                if (!_isLoading) {
-                                  _loginButtonPressed();
-                                }
-                              },
-                              child: _isLoading
-                                  ? const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  : const Text("Login"),),
+                            onPressed: () => {
+                              if (!_isLoading) {_loginButtonPressed()},
+                            },
+                            child: _isLoading
+                                ? const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : const Text("Login"),
+                          ),
                         ),
                       ),
                     ],
@@ -103,32 +103,32 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                   Row(
                     children: [
                       TextButton(
-                          onPressed: () {
-                            _forgotPasswordButtonPressed();
-                          },
-                          child: const Text("Forgot Password"),),
+                        onPressed: () => _forgotPasswordButtonPressed(),
+                        child: const Text("Forgot Password"),
+                      ),
                     ],
                   ),
                   const SizedBox(
                     height: 30,
                   ),
                   TextButton(
-                      onPressed: () {
-                        Navigator.push<bool>(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const QuranSignUpScreen(),),
-                        ).then((value) {
-                          if (value != null && value) {
-                            Navigator.of(context).pop();
-                          }
-                        });
-                      },
-                      child: const Text(
-                        "Create a new account",
-                        style: TextStyle(fontSize: 18),
-                      ),),
+                    onPressed: () => {
+                      Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const QuranSignUpScreen(),
+                        ),
+                      ).then((value) {
+                        if (value != null && value) {
+                          Navigator.of(context).pop();
+                        }
+                      }),
+                    },
+                    child: const Text(
+                      "Create a new account",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -138,12 +138,24 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
     );
   }
 
+  void _passwordVisibilityTogglePressed() {
+    // Update the state i.e. toggle the state of passwordVisible variable
+    setState(() {
+      _passwordVisible = !_passwordVisible;
+    });
+  }
+
   void _loginButtonPressed() async {
     String email = _emailController.text;
     String password = _passwordController.text;
     if (email.isNotEmpty && password.isNotEmpty && QuranUtils.isEmail(email)) {
       _showLoadingProgress(true);
-      QuranAuthFactory.engine.login(email, password,).then((response) {
+      QuranAuthFactory.engine
+          .login(
+        email,
+        password,
+      )
+          .then((response) {
         _showLoadingProgress(false);
         if (response.isSuccessful) {
           QuranUser? user = QuranAuthFactory.engine.getUser();
@@ -170,7 +182,8 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
       });
     } else {
       _showMessage(
-          "Sorry 😔, Please enter a valid email and click forgot password.",);
+        "Sorry 😔, Please enter a valid email and click forgot password.",
+      );
     }
   }
 

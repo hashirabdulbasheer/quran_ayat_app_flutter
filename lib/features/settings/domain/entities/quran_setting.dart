@@ -10,12 +10,13 @@ class QuranSetting {
   final bool? showSearchBoxInDropdown;
   final QuranSettingType type;
 
-  const QuranSetting(
-      {required this.name,
-      required this.id,
-      required this.description,
-      required this.possibleValues,
-      this.showSearchBoxInDropdown,
-      this.defaultValue,
-      required this.type,});
+  const QuranSetting({
+    required this.name,
+    required this.id,
+    required this.description,
+    required this.possibleValues,
+    this.showSearchBoxInDropdown,
+    this.defaultValue,
+    required this.type,
+  });
 }
