@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import '../domain/entities/quran_setting.dart';
-import '../domain/enum/settings_type_enum.dart';
 import '../domain/settings_manager.dart';
-import 'widgets/dropdown_title_widget.dart';
-import 'widgets/on_off_tile_widget.dart';
+import 'widgets/settings_row_widget.dart';
 
 class QuranSettingsScreen extends StatefulWidget {
   const QuranSettingsScreen({Key? key}) : super(key: key);
@@ -27,68 +25,30 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(title: const Text("Settings")),
-        body: _body(),
-      ),
-    );
-  }
-
-  Widget _body() {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: ListView.builder(
-        itemBuilder: (
-          context,
-          index,
-        ) {
-          return _settingRow(_settings[index]);
-        },
-        itemCount: _settings.length,
-      ),
-    );
-  }
-
-  Widget _settingRow(QuranSetting setting) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: IntrinsicHeight(
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.black26,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+        body: Container(
+          padding: const EdgeInsets.all(10),
+          child: ListView.builder(
+            itemBuilder: (
+              context,
+              index,
+            ) {
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: IntrinsicHeight(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                    child: QuranSettingsRowWidget(setting: _settings[index]),
+                  ),
+                ),
+              );
+            },
+            itemCount: _settings.length,
           ),
-          child: _settingRowContents(setting),
         ),
       ),
     );
-  }
-
-  Widget _settingRowContents(QuranSetting setting) {
-    switch (setting.type) {
-      case QuranSettingType.dropdown:
-        return QuranDropdownSettingsTileWidget(
-          setting: setting,
-          showSearchBox: setting.showSearchBoxInDropdown,
-          onChanged: (value) => {
-            QuranSettingsManager.instance.save(
-              setting,
-              value.key,
-            ),
-          },
-        );
-
-      case QuranSettingType.onOff:
-        return QuranOnOffSettingsTileWidget(
-          setting: setting,
-          onChanged: (value) => {
-            QuranSettingsManager.instance.save(
-              setting,
-              "$value",
-            ),
-          },
-        );
-
-      default:
-        return Container();
-    }
   }
 }
