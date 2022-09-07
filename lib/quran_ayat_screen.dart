@@ -11,6 +11,7 @@ import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/ayats/presentation/widgets/audio_row_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_header_widget.dart';
+import 'features/ayats/presentation/widgets/ayat_display_surah_progress_widget.dart';
 import 'features/ayats/presentation/widgets/full_ayat_row_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
@@ -313,7 +314,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   currentlySelectedSurah: _selectedSurah,
                 ),
 
-                _progressInSurah(),
+                /// surah progress
+                QuranAyatDisplaySurahProgressWidget(
+                  currentlySelectedSurah: _selectedSurah,
+                  currentlySelectedAya: _selectedAyat,
+                ),
 
                 const SizedBox(height: 25),
 
@@ -764,28 +769,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             : Container(),
       ],
     );
-  }
-
-  Widget _progressInSurah() {
-    NQSurahTitle? surah = _selectedSurah;
-    if (surah != null) {
-      int totalAyas = surah.totalVerses;
-      int currentAya = _selectedAyat;
-      double progress = currentAya / totalAyas;
-
-      return Padding(
-        padding: const EdgeInsets.only(
-          left: 5,
-          right: 5,
-        ),
-        child: LinearProgressIndicator(
-          backgroundColor: Colors.black12,
-          value: progress,
-        ),
-      );
-    }
-
-    return Container();
   }
 
   Widget _audioControlsWidget() {

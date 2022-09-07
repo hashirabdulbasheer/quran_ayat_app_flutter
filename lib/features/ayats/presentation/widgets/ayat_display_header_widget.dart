@@ -7,7 +7,7 @@ import '../../../../utils/utils.dart';
 class QuranAyatHeaderWidget extends StatelessWidget {
   final List<NQSurahTitle> surahTitles;
   final NQSurahTitle? currentlySelectedSurah;
-  final int? currentlySelectedAya;
+  final int currentlySelectedAya;
   final ValueNotifier<bool> continuousMode;
 
   final Function(NQSurahTitle?) onSurahSelected;
