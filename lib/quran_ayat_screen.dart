@@ -1,4 +1,3 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +10,7 @@ import 'package:quran_ayat/features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/ayats/presentation/widgets/audio_row_widget.dart';
+import 'features/ayats/presentation/widgets/ayat_display_header_widget.dart';
 import 'features/ayats/presentation/widgets/full_ayat_row_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
@@ -293,7 +293,25 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 /// header
-                _displayHeader(),
+                QuranAyatHeaderWidget(
+                  surahTitles: _surahTitles,
+                  onSurahSelected: (surah) => {
+                    setState(() {
+                      if (surah != null) {
+                        _selectedSurah = surah;
+                        _selectedAyat = 1;
+                      }
+                    }),
+                  },
+                  onAyaNumberSelected: (aya) => {
+                    setState(() {
+                      _selectedAyat = aya ?? 1;
+                    }),
+                  },
+                  continuousMode: _isAudioContinuousModeEnabled,
+                  currentlySelectedAya: _selectedAyat,
+                  currentlySelectedSurah: _selectedSurah,
+                ),
 
                 _progressInSurah(),
 
@@ -359,118 +377,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         ),
       ),
     );
-  }
-
-  Widget _displayHeader() {
-    return ValueListenableBuilder<bool>(
-      builder: (
-        BuildContext context,
-        bool isContinuousPlay,
-        Widget? child,
-      ) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              flex: 2,
-              child: Semantics(
-                enabled: true,
-                excludeSemantics: true,
-                label: 'dropdown to select surah',
-                child: SizedBox(
-                  height: 80,
-                  child: DropdownSearch<NQSurahTitle>(
-                    items: _surahTitles,
-                    enabled: !isContinuousPlay,
-                    popupProps: const PopupPropsMultiSelection.menu(),
-                    itemAsString: (surah) =>
-                        "(${surah.number}) ${surah.transliterationEn}",
-                    dropdownSearchDecoration: const InputDecoration(
-                      labelText: "Surah",
-                      hintText: "select surah",
-                    ),
-                    onChanged: (value) => {
-                      setState(() {
-                        if (value != null) {
-                          _selectedSurah = value;
-                          _selectedAyat = 1;
-                        }
-                      }),
-                    },
-                    selectedItem: _selectedSurah,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            _selectedSurah != null
-                ? Expanded(
-                    child: Semantics(
-                      enabled: true,
-                      excludeSemantics: true,
-                      label: 'dropdown to select ayat number',
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          8,
-                          8,
-                          8,
-                          8,
-                        ),
-                        child: SizedBox(
-                          width: 100,
-                          height: 80,
-                          child: DropdownSearch<int>(
-                            popupProps: const PopupPropsMultiSelection.menu(
-                              showSearchBox: true,
-                            ),
-                            filterFn: (
-                              item,
-                              filter,
-                            ) =>
-                                _ayatNumberDropdownSearchFilterFn(
-                              filter,
-                              item,
-                            ),
-                            enabled: !isContinuousPlay,
-                            dropdownSearchDecoration: const InputDecoration(
-                              labelText: "Ayat",
-                              hintText: "ayat index",
-                            ),
-                            items: List<int>.generate(
-                              _selectedSurah?.totalVerses ?? 0,
-                              (i) => i + 1,
-                            ),
-                            onChanged: (value) => {
-                              setState(() {
-                                _selectedAyat = value ?? 1;
-                              }),
-                            },
-                            selectedItem: _selectedAyat,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                : Container(),
-          ],
-        );
-      },
-      valueListenable: _isAudioContinuousModeEnabled,
-    );
-  }
-
-  bool _ayatNumberDropdownSearchFilterFn(
-    String filter,
-    int item,
-  ) {
-    if (filter.isEmpty) {
-      return true;
-    }
-    if ("$item" == QuranUtils.replaceFarsiNumber(filter)) {
-      return true;
-    }
-
-    return false;
   }
 
   Widget _ayaWidget(List<NQWord> words) {
