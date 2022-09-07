@@ -12,7 +12,8 @@ import 'features/auth/presentation/quran_login_screen.dart';
 import 'features/ayats/presentation/widgets/audio_row_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_header_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_surah_progress_widget.dart';
-import 'features/ayats/presentation/widgets/full_ayat_row_widget.dart';
+import 'features/ayats/presentation/widgets/ayat_display_translation_widget.dart';
+import 'features/ayats/presentation/widgets/ayat_display_transliteration_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
@@ -361,10 +362,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 ),
 
                 // transliterationWidget if enabled
-                _fullTransliterationWidget(),
+                QuranAyatDisplayTransliterationWidget(
+                  currentlySelectedSurah: _selectedSurah,
+                  currentlySelectedAya: _selectedAyat,
+                ),
 
                 // translation widget
-                _fullTranslationWidget(),
+                QuranAyatDisplayTranslationWidget(
+                  currentlySelectedSurah: _selectedSurah,
+                  currentlySelectedAya: _selectedAyat,
+                ),
 
                 // audio controls
                 _audioControlsWidget(),
@@ -482,104 +489,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               ),
             ))
         .toList();
-  }
-
-  Widget _fullTransliterationWidget() {
-    return FutureBuilder<bool>(
-      future: QuranSettingsManager.instance.isTransliterationEnabled(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<bool> snapshot,
-      ) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 80,
-                child: Center(child: Text('Loading transliteration....')),
-              ),
-            );
-          default:
-            if (snapshot.hasError) {
-              return Container();
-            } else {
-              bool isEnabled = snapshot.data as bool;
-              if (isEnabled) {
-                int? surahIndex = _selectedSurah?.number;
-                if (surahIndex != null) {
-                  // actual index
-                  surahIndex = surahIndex - 1;
-
-                  return Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      QuranFullAyatRowWidget(
-                        futureMethodThatReturnsSelectedSurah:
-                            NobleQuran.getSurahTransliteration(
-                          surahIndex,
-                        ),
-                        ayaIndex: _selectedAyat,
-                      ),
-                    ],
-                  );
-                }
-              }
-
-              return Container();
-            }
-        }
-      },
-    );
-  }
-
-  Widget _fullTranslationWidget() {
-    return FutureBuilder<NQTranslation>(
-      future: QuranSettingsManager.instance.getTranslation(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<NQTranslation> snapshot,
-      ) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 80,
-                child: Center(child: Text('Loading translation....')),
-              ),
-            );
-          default:
-            if (snapshot.hasError) {
-              return Container();
-            } else {
-              NQTranslation translation = snapshot.data as NQTranslation;
-              int? surahIndex = _selectedSurah?.number;
-              if (surahIndex != null) {
-                // actual index
-                surahIndex = surahIndex - 1;
-
-                return Column(children: [
-                  const SizedBox(height: 20),
-                  QuranFullAyatRowWidget(
-                    futureMethodThatReturnsSelectedSurah:
-                        NobleQuran.getTranslationString(
-                      surahIndex,
-                      translation,
-                    ),
-                    fontFamily: translationFontFamily(translation),
-                    ayaIndex: _selectedAyat,
-                  ),
-                ]);
-              }
-
-              return Container();
-            }
-        }
-      },
-    );
   }
 
   Widget _notesWidget() {
