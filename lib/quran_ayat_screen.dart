@@ -14,6 +14,7 @@ import 'features/ayats/presentation/widgets/ayat_display_notes_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_surah_progress_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_transliteration_widget.dart';
+import 'features/ayats/presentation/widgets/ayat_display_word_by_word_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
@@ -133,6 +134,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       surahIndex = 0;
     }
 
+    if (_surahTitles.isNotEmpty) {
+      _selectedSurah ??= _surahTitles[widget.surahIndex ?? 0];
+    }
+
     return Semantics(
       textDirection: TextDirection.rtl,
       enabled: true,
@@ -223,7 +228,135 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           ),
           body: _surahTitles.isEmpty
               ? const Center(child: CircularProgressIndicator())
-              : _body(),
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      20,
+                      10,
+                      20,
+                      10,
+                    ),
+                    child: Column(
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            /// header
+                            QuranAyatHeaderWidget(
+                              surahTitles: _surahTitles,
+                              onSurahSelected: (surah) => {
+                                setState(() {
+                                  if (surah != null) {
+                                    _selectedSurah = surah;
+                                    _selectedAyat = 1;
+                                  }
+                                }),
+                              },
+                              onAyaNumberSelected: (aya) => {
+                                setState(() {
+                                  _selectedAyat = aya ?? 1;
+                                }),
+                              },
+                              continuousMode: _isAudioContinuousModeEnabled,
+                              currentlySelectedAya: _selectedAyat,
+                              currentlySelectedSurah: _selectedSurah,
+                            ),
+
+                            /// surah progress
+                            QuranAyatDisplaySurahProgressWidget(
+                              currentlySelectedSurah: _selectedSurah,
+                              currentlySelectedAya: _selectedAyat,
+                            ),
+
+                            const SizedBox(height: 25),
+
+                            /// body
+                            Card(
+                              elevation: 5,
+                              child: FutureBuilder<List<List<NQWord>>>(
+                                future: NobleQuran.getSurahWordByWord(
+                                  (_selectedSurah?.number ?? 1) - 1,
+                                ),
+                                // async work
+                                builder: (
+                                  BuildContext context,
+                                  AsyncSnapshot<List<List<NQWord>>> snapshot,
+                                ) {
+                                  switch (snapshot.connectionState) {
+                                    case ConnectionState.waiting:
+                                      return SizedBox(
+                                        height: 300,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: const Center(
+                                          child: Text('Loading....'),
+                                        ),
+                                      );
+                                    default:
+                                      if (snapshot.hasError) {
+                                        return Center(
+                                          child:
+                                              Text('Error: ${snapshot.error}'),
+                                        );
+                                      } else {
+                                        List<List<NQWord>> surahWords =
+                                            snapshot.data as List<List<NQWord>>;
+
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 10),
+                                          child:
+                                              QuranAyatDisplayWordByWordWidget(
+                                            words:
+                                                surahWords[_selectedAyat - 1],
+                                            continuousMode:
+                                                _isAudioContinuousModeEnabled,
+                                          ),
+                                        );
+                                      }
+                                  }
+                                },
+                              ),
+                            ),
+
+                            // transliterationWidget if enabled
+                            QuranAyatDisplayTransliterationWidget(
+                              currentlySelectedSurah: _selectedSurah,
+                              currentlySelectedAya: _selectedAyat,
+                            ),
+
+                            // translation widget
+                            QuranAyatDisplayTranslationWidget(
+                              currentlySelectedSurah: _selectedSurah,
+                              currentlySelectedAya: _selectedAyat,
+                            ),
+
+                            // audio controls
+                            QuranAyatDisplayAudioControlsWidget(
+                              currentlySelectedSurah: _selectedSurah,
+                              currentlySelectedAya: _selectedAyat,
+                              onAudioPlayStatusChanged:
+                                  _onAudioPlayStatusChanged,
+                              continuousMode: _isAudioContinuousModeEnabled,
+                            ),
+
+                            /// Notes
+                            QuranAyatDisplayNotesWidget(
+                              currentlySelectedSurah: _selectedSurah,
+                              currentlySelectedAya: _selectedAyat,
+                              continuousMode: _isAudioContinuousModeEnabled,
+                            ),
+
+                            const SizedBox(height: 30),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 100,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
         ),
       ),
     );
@@ -272,228 +405,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         );
       });
     }
-  }
-
-  Widget _body() {
-    _selectedSurah ??= _surahTitles[widget.surahIndex ?? 0];
-
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          20,
-          10,
-          20,
-          10,
-        ),
-        child: Column(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                /// header
-                QuranAyatHeaderWidget(
-                  surahTitles: _surahTitles,
-                  onSurahSelected: (surah) => {
-                    setState(() {
-                      if (surah != null) {
-                        _selectedSurah = surah;
-                        _selectedAyat = 1;
-                      }
-                    }),
-                  },
-                  onAyaNumberSelected: (aya) => {
-                    setState(() {
-                      _selectedAyat = aya ?? 1;
-                    }),
-                  },
-                  continuousMode: _isAudioContinuousModeEnabled,
-                  currentlySelectedAya: _selectedAyat,
-                  currentlySelectedSurah: _selectedSurah,
-                ),
-
-                /// surah progress
-                QuranAyatDisplaySurahProgressWidget(
-                  currentlySelectedSurah: _selectedSurah,
-                  currentlySelectedAya: _selectedAyat,
-                ),
-
-                const SizedBox(height: 25),
-
-                /// body
-                Card(
-                  elevation: 5,
-                  child: FutureBuilder<List<List<NQWord>>>(
-                    future: NobleQuran.getSurahWordByWord(
-                      (_selectedSurah?.number ?? 1) - 1,
-                    ),
-                    // async work
-                    builder: (
-                      BuildContext context,
-                      AsyncSnapshot<List<List<NQWord>>> snapshot,
-                    ) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return SizedBox(
-                            height: 300,
-                            width: MediaQuery.of(context).size.width,
-                            child: const Center(child: Text('Loading....')),
-                          );
-                        default:
-                          if (snapshot.hasError) {
-                            return Center(
-                              child: Text('Error: ${snapshot.error}'),
-                            );
-                          } else {
-                            List<List<NQWord>> surahWords =
-                                snapshot.data as List<List<NQWord>>;
-
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: _ayaWidget(surahWords[_selectedAyat - 1]),
-                            );
-                          }
-                      }
-                    },
-                  ),
-                ),
-
-                // transliterationWidget if enabled
-                QuranAyatDisplayTransliterationWidget(
-                  currentlySelectedSurah: _selectedSurah,
-                  currentlySelectedAya: _selectedAyat,
-                ),
-
-                // translation widget
-                QuranAyatDisplayTranslationWidget(
-                  currentlySelectedSurah: _selectedSurah,
-                  currentlySelectedAya: _selectedAyat,
-                ),
-
-                // audio controls
-                QuranAyatDisplayAudioControlsWidget(
-                  currentlySelectedSurah: _selectedSurah,
-                  currentlySelectedAya: _selectedAyat,
-                  onAudioPlayStatusChanged: _onAudioPlayStatusChanged,
-                  continuousMode: _isAudioContinuousModeEnabled,
-                ),
-
-                /// Notes
-                QuranAyatDisplayNotesWidget(
-                  currentlySelectedSurah: _selectedSurah,
-                  currentlySelectedAya: _selectedAyat,
-                  continuousMode: _isAudioContinuousModeEnabled,
-                ),
-
-                const SizedBox(height: 30),
-              ],
-            ),
-            const SizedBox(
-              height: 100,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _ayaWidget(List<NQWord> words) {
-    return Semantics(
-      enabled: true,
-      excludeSemantics: false,
-      label: "quran ayat display with meaning",
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Wrap(
-                  direction: Axis.horizontal,
-                  alignment: WrapAlignment.start,
-                  runAlignment: WrapAlignment.end,
-                  children: _wordsWidgetList(words),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  List<Widget> _wordsWidgetList(List<NQWord> words) {
-    return words
-        .map((e) => Semantics(
-              enabled: true,
-              excludeSemantics: true,
-              container: true,
-              child: Tooltip(
-                message: '${e.ar} ${e.tr}',
-                child: InkWell(
-                  onTap: () => {
-                    if (_isInteractionAllowedOnScreen())
-                      {
-                        Navigator.push<void>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                QuranSearchScreen(searchString: e.ar),
-                          ),
-                        ),
-                      }
-                    else
-                      {_showMessage(_contPlayMessage)},
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 8,
-                      right: 8,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        FittedBox(
-                          fit: BoxFit.cover,
-                          child: Text(
-                            e.ar,
-                            softWrap: false,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 30,
-                              fontFamily: QuranFontFamily.arabic.rawString,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: const BoxDecoration(
-                            border: Border.fromBorderSide(
-                              BorderSide(color: Colors.black26),
-                            ),
-                            borderRadius: BorderRadius.all(Radius.circular(1)),
-                          ),
-                          child: Text(
-                            e.tr,
-                            style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 14,
-                            ),
-                            textDirection: TextDirection.ltr,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ))
-        .toList();
   }
 
   ///
