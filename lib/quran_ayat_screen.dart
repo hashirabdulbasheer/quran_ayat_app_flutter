@@ -8,25 +8,21 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/auth/domain/auth_factory.dart';
-import 'features/auth/presentation/quran_login_screen.dart';
-import 'features/ayats/presentation/widgets/audio_row_widget.dart';
+import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_header_widget.dart';
+import 'features/ayats/presentation/widgets/ayat_display_notes_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_surah_progress_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_transliteration_widget.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
-import 'features/notes/domain/entities/quran_note.dart';
 import 'features/notes/domain/notes_manager.dart';
-import 'features/notes/presentation/quran_create_notes_screen.dart';
-import 'features/notes/presentation/widgets/offline_header_widget.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'misc/enums/quran_font_family_enum.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
-import 'utils/logger_utils.dart';
 import 'utils/utils.dart';
 
 class QuranAyatScreen extends StatefulWidget {
@@ -374,10 +370,19 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 ),
 
                 // audio controls
-                _audioControlsWidget(),
+                QuranAyatDisplayAudioControlsWidget(
+                  currentlySelectedSurah: _selectedSurah,
+                  currentlySelectedAya: _selectedAyat,
+                  onAudioPlayStatusChanged: _onAudioPlayStatusChanged,
+                  continuousMode: _isAudioContinuousModeEnabled,
+                ),
 
                 /// Notes
-                _notesWidget(),
+                QuranAyatDisplayNotesWidget(
+                  currentlySelectedSurah: _selectedSurah,
+                  currentlySelectedAya: _selectedAyat,
+                  continuousMode: _isAudioContinuousModeEnabled,
+                ),
 
                 const SizedBox(height: 30),
               ],
@@ -491,251 +496,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         .toList();
   }
 
-  Widget _notesWidget() {
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user == null) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: SizedBox(
-          height: 50,
-          child: ElevatedButton(
-            onPressed: () => {
-              if (_isInteractionAllowedOnScreen())
-                {_goToLoginScreen()}
-              else
-                {_showMessage(_contPlayMessage)},
-            },
-            child: const Text("Login to add notes"),
-          ),
-        ),
-      );
-    }
-    // logged in
-    if (_selectedSurah == null) {
-      return Container();
-    }
-
-    int? surahIndex = _selectedSurah?.number;
-
-    return Column(
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        const QuranOfflineHeaderWidget(),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          height: 50,
-          decoration: const BoxDecoration(
-            border: Border.fromBorderSide(
-              BorderSide(color: Colors.black12),
-            ),
-            color: Colors.black12,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          padding: const EdgeInsets.fromLTRB(
-            10,
-            0,
-            10,
-            0,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Notes"),
-              ElevatedButton(
-                onPressed: () => {
-                  if (_isInteractionAllowedOnScreen())
-                    {_goToCreateNoteScreen()}
-                  else
-                    {_showMessage(_contPlayMessage)},
-                },
-                child: const Text("Add"),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        surahIndex != null
-            ? FutureBuilder<List<QuranNote>>(
-                future: QuranNotesManager.instance.fetch(
-                  user.uid,
-                  surahIndex,
-                  _selectedAyat,
-                ),
-                // async work
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<QuranNote>> snapshot,
-                ) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          height: 100,
-                          child: Center(child: Text('Loading notes....')),
-                        ),
-                      );
-                    default:
-                      if (snapshot.hasError) {
-                        QuranLogger.log("Error notes: ${snapshot.error}");
-
-                        return const Padding(
-                          padding: EdgeInsets.only(top: 30),
-                          child: SizedBox(
-                            height: 50,
-                            child: Text(
-                              'Unable to load notes. Please check internet connectivity',
-                              style: TextStyle(color: Colors.black38),
-                            ),
-                          ),
-                        );
-                      } else {
-                        List<QuranNote> notes =
-                            snapshot.data as List<QuranNote>;
-                        if (notes.isNotEmpty) {
-                          return ListView.separated(
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: notes.length,
-                            shrinkWrap: true,
-                            separatorBuilder: (
-                              BuildContext context,
-                              int index,
-                            ) {
-                              return const Divider(
-                                thickness: 1,
-                              );
-                            },
-                            itemBuilder: (
-                              BuildContext context,
-                              int index,
-                            ) {
-                              TextDirection textDirection = TextDirection.ltr;
-                              if (!QuranUtils.isEnglish(notes[index].note)) {
-                                textDirection = TextDirection.rtl;
-                              }
-
-                              return Directionality(
-                                textDirection: textDirection,
-                                child: ListTile(
-                                  onTap: () => {
-                                    if (_isInteractionAllowedOnScreen())
-                                      {
-                                        _goToCreateNoteScreen(
-                                          note: notes[index],
-                                        ),
-                                      }
-                                    else
-                                      {_showMessage(_contPlayMessage)},
-                                  },
-                                  title: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          notes[index].note,
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        Text(
-                                          QuranNotesManager.instance
-                                              .formattedDate(
-                                            notes[index].createdOn,
-                                          ),
-                                          style: const TextStyle(fontSize: 12),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        }
-
-                        return TextButton(
-                          onPressed: () => _goToCreateNoteScreen(),
-                          child: const SizedBox(
-                            height: 100,
-                            child: Center(child: Text("Add Note")),
-                          ),
-                        );
-                      }
-                  }
-                },
-              )
-            : Container(),
-      ],
-    );
-  }
-
-  Widget _audioControlsWidget() {
-    return FutureBuilder<bool>(
-      future: QuranSettingsManager.instance.isAudioControlsEnabled(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<bool> snapshot,
-      ) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 80,
-                child: Center(child: Text('Loading audio ....')),
-              ),
-            );
-          default:
-            if (snapshot.hasError) {
-              return Container();
-            } else {
-              bool isEnabled = snapshot.data as bool;
-              if (isEnabled) {
-                if (_selectedSurah == null) {
-                  return Container();
-                }
-
-                return ValueListenableBuilder<bool>(
-                  builder: (
-                    BuildContext context,
-                    bool isContinuousPlay,
-                    Widget? child,
-                  ) {
-                    int? surahIndex = _selectedSurah?.number;
-                    if (surahIndex != null) {
-                      return QuranAudioRowWidget(
-                        isAudioRecitationContinuousPlayEnabled:
-                            isContinuousPlay,
-                        surahIndex: surahIndex,
-                        onAudioEventsListener: _onAudioPlayStatusChanged,
-                        ayaIndex: _selectedAyat,
-                      );
-                    }
-
-                    return Container();
-                  },
-                  valueListenable: _isAudioContinuousModeEnabled,
-                );
-              } else {
-                return Container();
-              }
-            }
-        }
-      },
-    );
-  }
-
   ///
   /// Bookmark
   ///
@@ -759,39 +519,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         // show success message
         ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
-      }
-    }
-  }
-
-  ///
-  /// Actions
-  ///
-
-  void _goToLoginScreen() {
-    Navigator.push<void>(
-      context,
-      MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
-    ).then((value) {
-      setState(() {});
-    });
-  }
-
-  void _goToCreateNoteScreen({QuranNote? note}) {
-    if (_selectedSurah != null) {
-      int? surahIndex = _selectedSurah?.number;
-      if (surahIndex != null) {
-        Navigator.push<void>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => QuranCreateNotesScreen(
-              note: note,
-              suraIndex: surahIndex,
-              ayaIndex: _selectedAyat,
-            ),
-          ),
-        ).then((value) {
-          setState(() {});
-        });
       }
     }
   }
