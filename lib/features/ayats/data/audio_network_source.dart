@@ -8,17 +8,29 @@ import 'package:http/http.dart' as http;
 class QuranAudioNetworkSource implements QuranAudioDataSource {
   @override
   Future<Uint8List> getAudio(
-      int surahIndex, int ayaIndex, String reciter) async {
+    int surahIndex,
+    int ayaIndex,
+    String reciter,
+  ) async {
     String url = QuranUtils.getAudioUrl(
-        QuranAppConfig.audioRecitationBaseUrl, reciter, surahIndex, ayaIndex);
+      QuranAppConfig.audioRecitationBaseUrl,
+      reciter,
+      surahIndex,
+      ayaIndex,
+    );
     final response = await http.get(Uri.parse(url));
     Uint8List bytes = response.bodyBytes;
+
     return bytes;
   }
 
   @override
   void saveAudio(
-      int surahIndex, int ayaIndex, String reciter, Uint8List audioBytes) {
+    int surahIndex,
+    int ayaIndex,
+    String reciter,
+    Uint8List audioBytes,
+  ) {
     throw UnimplementedError("Not Implemented");
   }
 }

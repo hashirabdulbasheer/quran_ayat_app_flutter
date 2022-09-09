@@ -2,51 +2,57 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quran_ayat/features/settings/domain/constants/setting_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../misc/enums/quran_theme_enum.dart';
 
 class QuranThemeManager {
-  QuranThemeManager._privateConstructor();
-
   static final QuranThemeManager instance =
       QuranThemeManager._privateConstructor();
 
-  final String themeId = "quran_app_theme";
-  final String transliterationId = "quran_app_transliteration";
-  final String translationId = "quran_app_translation";
-  final String audioControlsId = "quran_app_audio_controls";
-
-  ThemeMode _appTheme = ThemeMode.light;
-
   ThemeData lightTheme = ThemeData(
-      primarySwatch: Colors.deepPurple,
-      dividerColor: Colors.black26,
-      appBarTheme:
-          const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
-      textTheme: const TextTheme(
-          bodyText1: TextStyle(color: Colors.black),
-          subtitle1: TextStyle(color: Colors.black87),
-          subtitle2: TextStyle(color: Colors.black54, fontSize: 12)),
-      fontFamily: "default",
-      brightness: Brightness.light);
+    primarySwatch: Colors.deepPurple,
+    dividerColor: Colors.black26,
+    appBarTheme:
+        const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+    textTheme: const TextTheme(
+      bodyText1: TextStyle(color: Colors.black),
+      subtitle1: TextStyle(color: Colors.black87),
+      subtitle2: TextStyle(
+        color: Colors.black54,
+        fontSize: 12,
+      ),
+    ),
+    fontFamily: "default",
+    brightness: Brightness.light,
+  );
 
   ThemeData darkTheme = ThemeData(
-      primarySwatch: Colors.grey,
-      primaryColor: Colors.black,
-      brightness: Brightness.dark,
-      dividerColor: Colors.white60,
-      appBarTheme: const AppBarTheme(
-          color: Colors.black,
-          systemOverlayStyle:
-              SystemUiOverlayStyle(systemNavigationBarColor: Colors.black)),
-      backgroundColor: const Color(0xFF212121),
-      cardColor: Colors.black54,
-      textTheme: const TextTheme(
-          bodyText1: TextStyle(color: Colors.white),
-          subtitle1: TextStyle(color: Colors.white60),
-          subtitle2: TextStyle(color: Colors.white60, fontSize: 12)),
-      cardTheme: const CardTheme(color: Colors.grey),
-      buttonTheme: const ButtonThemeData(buttonColor: Colors.black38));
+    primarySwatch: Colors.grey,
+    primaryColor: Colors.black,
+    brightness: Brightness.dark,
+    fontFamily: "default",
+    dividerColor: Colors.white60,
+    appBarTheme: const AppBarTheme(
+      color: Colors.black,
+      systemOverlayStyle:
+          SystemUiOverlayStyle(systemNavigationBarColor: Colors.black),
+    ),
+    backgroundColor: const Color(0xFF212121),
+    cardColor: Colors.black54,
+    textTheme: const TextTheme(
+      bodyText1: TextStyle(color: Colors.white),
+      subtitle1: TextStyle(color: Colors.white60),
+      subtitle2: TextStyle(
+        color: Colors.white60,
+        fontSize: 12,
+      ),
+    ),
+    cardTheme: const CardTheme(color: Colors.grey),
+    buttonTheme: const ButtonThemeData(buttonColor: Colors.black38),
+  );
+
+  ThemeMode _appTheme = ThemeMode.light;
 
   final StreamController<String> _themeStream = StreamController.broadcast();
 
@@ -56,6 +62,8 @@ class QuranThemeManager {
 
   ThemeMode get currentAppThemeMode => _appTheme;
 
+  QuranThemeManager._privateConstructor();
+
   /// loads the current theme and notify listeners about the theme change
   void loadThemeAndNotifyListeners() async {
     if (isSystemDarkMode()) {
@@ -64,7 +72,7 @@ class QuranThemeManager {
     } else {
       // load saved theme
       final prefs = await SharedPreferences.getInstance();
-      String? themeString = prefs.getString(themeId);
+      String? themeString = prefs.getString(QuranSettingsConstants.themeId);
       if (themeString == null ||
           themeString == QuranAppTheme.light.rawString()) {
         _appTheme = ThemeMode.light;
@@ -107,6 +115,7 @@ class QuranThemeManager {
     if (_appTheme == ThemeMode.dark) {
       return true;
     }
+
     return false;
   }
 }

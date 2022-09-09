@@ -5,10 +5,10 @@ import '../domain/entities/quran_note.dart';
 import '../domain/interfaces/quran_notes_interface.dart';
 
 class QuranFirebaseNotesEngine implements QuranNotesInterface {
-  QuranFirebaseNotesEngine._privateConstructor();
-
   static final QuranFirebaseNotesEngine instance =
       QuranFirebaseNotesEngine._privateConstructor();
+
+  QuranFirebaseNotesEngine._privateConstructor();
 
   @override
   Future<void> initialize() async {
@@ -16,17 +16,27 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
   }
 
   @override
-  Future<QuranResponse> create(String userId, QuranNote note) async {
+  Future<QuranResponse> create(
+    String userId,
+    QuranNote note,
+  ) async {
     DatabaseReference ref = FirebaseDatabase.instance
         .ref("notes/$userId/${note.suraIndex}/${note.ayaIndex}");
     DatabaseReference newPostRef = ref.push();
     await newPostRef.set(note.toMap());
-    return QuranResponse(isSuccessful: true, message: "Success");
+
+    return QuranResponse(
+      isSuccessful: true,
+      message: "Success",
+    );
   }
 
   @override
   Future<List<QuranNote>> fetch(
-      String userId, int suraIndex, int ayaIndex) async {
+    String userId,
+    int suraIndex,
+    int ayaIndex,
+  ) async {
     List<QuranNote> notes = [];
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("notes/$userId/$suraIndex/$ayaIndex");
@@ -35,40 +45,56 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
     if (resultList != null) {
       for (String k in resultList.keys) {
         QuranNote note = QuranNote(
-            suraIndex: suraIndex,
-            ayaIndex: ayaIndex,
-            note: resultList[k]["note"],
-            createdOn: resultList[k]["createdOn"],
-            id: k,
-            localId: "${resultList[k]["localId"]}",
-            status: QuranUtils.statusFromString("${resultList[k]["status"]}"));
+          suraIndex: suraIndex,
+          ayaIndex: ayaIndex,
+          note: resultList[k]["note"] as String,
+          createdOn: resultList[k]["createdOn"] as int,
+          id: k,
+          localId: "${resultList[k]["localId"]}",
+          status: QuranUtils.statusFromString("${resultList[k]["status"]}"),
+        );
         notes.add(note);
       }
       // sort
-      notes.sort((a, b) => b.createdOn.compareTo(a.createdOn));
+      notes.sort((
+        a,
+        b,
+      ) =>
+          b.createdOn.compareTo(a.createdOn));
     }
+
     return notes;
   }
 
   @override
-  Future<bool> update(String userId, QuranNote note) async {
+  Future<bool> update(
+    String userId,
+    QuranNote note,
+  ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
       DatabaseReference ref = FirebaseDatabase.instance
           .ref("notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}");
       await ref.set(note.toMap());
+
       return true;
     }
+
     return false;
   }
 
   @override
-  Future<bool> delete(String userId, QuranNote note) async {
+  Future<bool> delete(
+    String userId,
+    QuranNote note,
+  ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
       DatabaseReference ref = FirebaseDatabase.instance
           .ref("notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}");
       await ref.remove();
+
       return true;
     }
+
     return false;
   }
 
@@ -90,14 +116,16 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
                 // print("******");
                 try {
                   QuranNote note = QuranNote(
-                      suraIndex: surahIndex,
-                      ayaIndex: ayaIndex,
-                      note: "${notesList[notesId]["note"]}",
-                      createdOn: notesList[notesId]["createdOn"],
-                      id: notesId,
-                      localId: "${notesList[notesId]["localId"] ?? ""}",
-                      status: QuranUtils.statusFromString(
-                          "${notesList[notesId]["status"] ?? ""}"));
+                    suraIndex: surahIndex,
+                    ayaIndex: ayaIndex,
+                    note: "${notesList[notesId]["note"]}",
+                    createdOn: notesList[notesId]["createdOn"] as int,
+                    id: notesId,
+                    localId: "${notesList[notesId]["localId"] ?? ""}",
+                    status: QuranUtils.statusFromString(
+                      "${notesList[notesId]["status"] ?? ""}",
+                    ),
+                  );
                   notes.add(note);
                 } catch (_) {}
               }
@@ -107,7 +135,12 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
       }
     }
     // sort
-    notes.sort((a, b) => b.createdOn.compareTo(a.createdOn));
+    notes.sort((
+      a,
+      b,
+    ) =>
+        b.createdOn.compareTo(a.createdOn));
+
     return notes;
   }
 
@@ -132,14 +165,16 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
                   // print("******");
                   try {
                     QuranNote note = QuranNote(
-                        suraIndex: int.parse(suraIndex),
-                        ayaIndex: int.parse(ayaIndex),
-                        note: "${notesList[notesId]["note"]}",
-                        createdOn: notesList[notesId]["createdOn"],
-                        id: notesId,
-                        localId: "${notesList[notesId]["localId"] ?? ""}",
-                        status: QuranUtils.statusFromString(
-                            "${notesList[notesId]["status"] ?? ""}"));
+                      suraIndex: int.parse(suraIndex),
+                      ayaIndex: int.parse(ayaIndex),
+                      note: "${notesList[notesId]["note"]}",
+                      createdOn: notesList[notesId]["createdOn"] as int,
+                      id: notesId,
+                      localId: "${notesList[notesId]["localId"] ?? ""}",
+                      status: QuranUtils.statusFromString(
+                        "${notesList[notesId]["status"] ?? ""}",
+                      ),
+                    );
                     notes.add(note);
                   } catch (_) {}
                 }
@@ -150,7 +185,12 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
       }
     }
     // sort
-    notes.sort((a, b) => b.createdOn.compareTo(a.createdOn));
+    notes.sort((
+      a,
+      b,
+    ) =>
+        b.createdOn.compareTo(a.createdOn));
+
     return notes;
   }
 }

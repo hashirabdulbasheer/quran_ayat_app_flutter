@@ -10,7 +10,10 @@ class QuranOfflineHeaderWidget extends StatelessWidget {
     return FutureBuilder<bool>(
       future: QuranNotesManager.instance.isOffline(),
       // async work
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<bool> snapshot,
+      ) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return Container();
@@ -23,22 +26,26 @@ class QuranOfflineHeaderWidget extends StatelessWidget {
                 return Row(
                   children: [
                     Expanded(
-                        child: Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black12),
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          border: Border.fromBorderSide(
+                            BorderSide(color: Colors.black12),
+                          ),
                           color: Colors.black12,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5))),
-                      child: const Text(
-                        "OFFLINE",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: const Text(
+                          "OFFLINE",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ))
+                    ),
                   ],
                 );
               }
+
               return Container();
             }
         }

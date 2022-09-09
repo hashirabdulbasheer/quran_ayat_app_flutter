@@ -4,5 +4,8 @@ class QuranWord {
   NQWord word;
   double similarityScore;
 
-  QuranWord({required this.word, required this.similarityScore});
+  QuranWord({
+    required this.word,
+    required this.similarityScore,
+  });
 }
