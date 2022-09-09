@@ -481,9 +481,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           // the last two paths should be surah/ayat format
           try {
             var selectedSurahIndex = int.parse(suraIndex) - 1;
-            int totalVerses = _selectedSurah?.totalVerses ?? 0;
             if (selectedSurahIndex >= 0 && selectedSurahIndex < 114) {
               _selectedSurah = _surahTitles[selectedSurahIndex];
+              int totalVerses = _selectedSurah?.totalVerses ?? 0;
               var ayaIndexInt = int.parse(ayaIndex);
               if (_selectedSurah != null && ayaIndexInt <= totalVerses) {
                 _selectedAyat = ayaIndexInt;
