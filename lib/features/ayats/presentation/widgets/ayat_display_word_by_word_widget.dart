@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 
+import '../../../../misc/constants/string_constants.dart';
 import '../../../../misc/enums/quran_font_family_enum.dart';
 import '../../../../quran_search_screen.dart';
 
 class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
   final List<NQWord> words;
   final ValueNotifier<bool> continuousMode;
-
-  final String _contPlayMessage =
-      "Continuous Play in progress. Please stop first.";
 
   const QuranAyatDisplayWordByWordWidget({
     Key? key,
@@ -60,7 +58,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                     {
                                       _showMessage(
                                         context,
-                                        _contPlayMessage,
+                                        QuranStrings.contPlayMessage,
                                       ),
                                     },
                                 },
