@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
 
+import '../../../../misc/constants/string_constants.dart';
 import '../../../../models/qr_user_model.dart';
 import '../../../../utils/logger_utils.dart';
 import '../../../../utils/utils.dart';
@@ -30,9 +31,6 @@ class QuranAyatDisplayNotesWidget extends StatefulWidget {
 
 class _QuranAyatDisplayNotesWidgetState
     extends State<QuranAyatDisplayNotesWidget> {
-  final String _contPlayMessage =
-      "Continuous Play in progress. Please stop first.";
-
   @override
   Widget build(BuildContext context) {
     QuranUser? user = QuranAuthFactory.engine.getUser();
@@ -46,7 +44,7 @@ class _QuranAyatDisplayNotesWidgetState
               if (_isInteractionAllowedOnScreen())
                 {_goToLoginScreen()}
               else
-                {_showMessage(_contPlayMessage)},
+                {_showMessage(QuranStrings.contPlayMessage)},
             },
             child: const Text("Login to add notes"),
           ),
@@ -93,7 +91,7 @@ class _QuranAyatDisplayNotesWidgetState
                   if (_isInteractionAllowedOnScreen())
                     {_goToCreateNoteScreen()}
                   else
-                    {_showMessage(_contPlayMessage)},
+                    {_showMessage(QuranStrings.contPlayMessage)},
                 },
                 child: const Text("Add"),
               ),
@@ -174,7 +172,11 @@ class _QuranAyatDisplayNotesWidgetState
                                         ),
                                       }
                                     else
-                                      {_showMessage(_contPlayMessage)},
+                                      {
+                                        _showMessage(
+                                          QuranStrings.contPlayMessage,
+                                        ),
+                                      },
                                   },
                                   title: Padding(
                                     padding: const EdgeInsets.all(8.0),

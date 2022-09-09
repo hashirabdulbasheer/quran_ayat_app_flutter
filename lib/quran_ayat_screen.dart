@@ -20,6 +20,7 @@ import 'features/drawer/presentation/nav_drawer.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
+import 'misc/constants/string_constants.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
 import 'utils/utils.dart';
@@ -57,8 +58,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   final ValueNotifier<bool> _isAudioContinuousModeEnabled =
       ValueNotifier(false);
 
-  final String _contPlayMessage =
-      "Continuous Play in progress. Please stop first.";
 
   ///
   /// Theme
@@ -171,7 +170,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           if (_isInteractionAllowedOnScreen())
                             {_moveToPreviousAyat()}
                           else
-                            {_showMessage(_contPlayMessage)},
+                            {_showMessage(QuranStrings.contPlayMessage)},
                         },
                         child: Icon(
                           Icons.arrow_back,
@@ -187,7 +186,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                           if (_isInteractionAllowedOnScreen())
                             {_moveToNextAyat()}
                           else
-                            {_showMessage(_contPlayMessage)},
+                            {_showMessage(QuranStrings.contPlayMessage)},
                         },
                         child: Icon(
                           Icons.arrow_forward,
@@ -216,7 +215,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                   if (_isInteractionAllowedOnScreen())
                     {_saveBookmarkDialogAction()}
                   else
-                    {_showMessage(_contPlayMessage)},
+                    {_showMessage(QuranStrings.contPlayMessage)},
                 },
                 onClearButtonPressed: () => _onBookmarkCleared(context),
                 onGoToButtonPressed: (NQBookmark? bookmark) =>
@@ -369,7 +368,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         });
       }
     } else {
-      _showMessage(_contPlayMessage);
+      _showMessage(QuranStrings.contPlayMessage);
     }
   }
 
@@ -381,7 +380,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         const SnackBar(content: Text("👍 Cleared ")),
       );
     } else {
-      _showMessage(_contPlayMessage);
+      _showMessage(QuranStrings.contPlayMessage);
     }
   }
 
