@@ -13,8 +13,6 @@ import 'enum/settings_type_enum.dart';
 import 'repository/settings_repository.dart';
 
 class QuranSettingsManager {
-  QuranSettingsManager._privateConstructor();
-
   static final QuranSettingsManager instance =
       QuranSettingsManager._privateConstructor();
 
@@ -36,9 +34,11 @@ class QuranSettingsManager {
     description: "on/off transliteration",
     id: QuranSettingsConstants.transliterationId,
     possibleValues: QuranDropdownValuesFactory.createValues(
-        QuranSettingsConstants.transliterationId,),
+      QuranSettingsConstants.transliterationId,
+    ),
     defaultValue: QuranDropdownValuesFactory.defaultValue(
-        QuranSettingsConstants.transliterationId,),
+      QuranSettingsConstants.transliterationId,
+    ),
     type: QuranSettingType.onOff,
   );
 
@@ -47,9 +47,11 @@ class QuranSettingsManager {
     description: "select the translation",
     id: QuranSettingsConstants.translationId,
     possibleValues: QuranDropdownValuesFactory.createValues(
-        QuranSettingsConstants.translationId,),
+      QuranSettingsConstants.translationId,
+    ),
     defaultValue: QuranDropdownValuesFactory.defaultValue(
-        QuranSettingsConstants.translationId,),
+      QuranSettingsConstants.translationId,
+    ),
     type: QuranSettingType.dropdown,
   );
 
@@ -58,9 +60,11 @@ class QuranSettingsManager {
     description: "on/off audio controls",
     id: QuranSettingsConstants.audioControlsId,
     possibleValues: QuranDropdownValuesFactory.createValues(
-        QuranSettingsConstants.audioControlsId,),
+      QuranSettingsConstants.audioControlsId,
+    ),
     defaultValue: QuranDropdownValuesFactory.defaultValue(
-        QuranSettingsConstants.audioControlsId,),
+      QuranSettingsConstants.audioControlsId,
+    ),
     type: QuranSettingType.onOff,
   );
 
@@ -70,11 +74,15 @@ class QuranSettingsManager {
     id: QuranSettingsConstants.audioReciterId,
     showSearchBoxInDropdown: true,
     possibleValues: QuranDropdownValuesFactory.createValues(
-        QuranSettingsConstants.audioReciterId,),
+      QuranSettingsConstants.audioReciterId,
+    ),
     defaultValue: QuranDropdownValuesFactory.defaultValue(
-        QuranSettingsConstants.audioReciterId,),
+      QuranSettingsConstants.audioReciterId,
+    ),
     type: QuranSettingType.dropdown,
   );
+
+  QuranSettingsManager._privateConstructor();
 
   List<QuranSetting> generateSettings() {
     return [
@@ -102,25 +110,6 @@ class QuranSettingsManager {
     QuranSettingsRepository repository = QuranSettingsRepositoryImpl();
 
     return repository.getValue(setting);
-  }
-
-  void _performSettingSpecificActions(QuranSetting setting) {
-    if (setting.id == QuranSettingsConstants.themeId) {
-      /// Update theme
-      QuranThemeManager.instance.themeChanged();
-    } else if (setting.id == QuranSettingsConstants.transliterationId) {
-      /// Update transliteration
-      QuranSettingsManager.instance
-          .notifyListeners(QuranSettingsEvent.transliterationChanged);
-    } else if (setting.id == QuranSettingsConstants.translationId) {
-      /// Update translation
-      QuranSettingsManager.instance
-          .notifyListeners(QuranSettingsEvent.translationChanged);
-    } else if (setting.id == QuranSettingsConstants.audioControlsId) {
-      /// Update audio controls
-      QuranSettingsManager.instance
-          .notifyListeners(QuranSettingsEvent.audioControlStatusChanged);
-    }
   }
 
   Future<bool> isTransliterationEnabled() async {
@@ -166,5 +155,24 @@ class QuranSettingsManager {
   /// notify listeners of events
   void notifyListeners(QuranSettingsEvent event) {
     _settingsStream.add(event.rawString());
+  }
+
+  void _performSettingSpecificActions(QuranSetting setting) {
+    if (setting.id == QuranSettingsConstants.themeId) {
+      /// Update theme
+      QuranThemeManager.instance.themeChanged();
+    } else if (setting.id == QuranSettingsConstants.transliterationId) {
+      /// Update transliteration
+      QuranSettingsManager.instance
+          .notifyListeners(QuranSettingsEvent.transliterationChanged);
+    } else if (setting.id == QuranSettingsConstants.translationId) {
+      /// Update translation
+      QuranSettingsManager.instance
+          .notifyListeners(QuranSettingsEvent.translationChanged);
+    } else if (setting.id == QuranSettingsConstants.audioControlsId) {
+      /// Update audio controls
+      QuranSettingsManager.instance
+          .notifyListeners(QuranSettingsEvent.audioControlStatusChanged);
+    }
   }
 }

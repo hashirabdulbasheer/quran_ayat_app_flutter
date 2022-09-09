@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
@@ -21,7 +20,6 @@ import 'features/drawer/presentation/nav_drawer.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
-import 'misc/enums/quran_font_family_enum.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
 import 'utils/utils.dart';
@@ -432,20 +430,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             .showSnackBar(const SnackBar(content: Text("👍 Saved ")));
       }
     }
-  }
-
-  ///
-  /// Utils
-  ///
-
-  /// special font handling for translations
-  String? translationFontFamily(NQTranslation translation) {
-    if (translation == NQTranslation.malayalam_karakunnu ||
-        translation == NQTranslation.malayalam_abdulhameed) {
-      return QuranFontFamily.malayalam.rawString;
-    }
-
-    return null;
   }
 
   void _authChangeListener() async {

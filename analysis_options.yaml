@@ -39,7 +39,7 @@ dart_code_metrics:
     - long-parameter-list
   metrics:
     cyclomatic-complexity: 20
-    maximum-nesting-level: 5
+    maximum-nesting-level: 10
     number-of-parameters: 4
     source-lines-of-code: 200
   metrics-exclude:
@@ -53,6 +53,10 @@ dart_code_metrics:
     - avoid-border-all:
         severity: warning
     - avoid-returning-widgets:
+        severity: warning
+    - avoid-unnecessary-setstate:
+        severity: warning
+    - member-ordering-extended:
         severity: warning
     - avoid-late-keyword:
         severity:  warning

@@ -4,14 +4,14 @@ import '../../domain/entities/quran_note.dart';
 import '../../domain/notes_manager.dart';
 
 class QuranViewNoteItemWidget extends StatelessWidget {
+  final BuildContext context;
+  final QuranNote note;
+
   const QuranViewNoteItemWidget({
     Key? key,
     required this.context,
     required this.note,
   }) : super(key: key);
-
-  final BuildContext context;
-  final QuranNote note;
 
   @override
   Widget build(BuildContext context) {

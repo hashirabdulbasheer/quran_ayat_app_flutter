@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class QuranNavDrawerItemsWidget extends StatelessWidget {
   final List<Widget> items;
 

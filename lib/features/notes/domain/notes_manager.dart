@@ -7,10 +7,10 @@ import 'interfaces/quran_notes_interface.dart';
 import 'package:intl/intl.dart' as intl;
 
 class QuranNotesManager implements QuranNotesInterface {
-  QuranNotesManager._privateConstructor();
-
   static final QuranNotesManager instance =
       QuranNotesManager._privateConstructor();
+
+  QuranNotesManager._privateConstructor();
 
   @override
   Future<QuranResponse> create(

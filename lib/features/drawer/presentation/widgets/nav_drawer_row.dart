@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class QuranNavDrawerRowWidget extends StatelessWidget {
+  final BuildContext context;
+  final String title;
+  final IconData icon;
+  final Widget destination;
+
   const QuranNavDrawerRowWidget({
     Key? key,
     required this.context,
@@ -8,11 +13,6 @@ class QuranNavDrawerRowWidget extends StatelessWidget {
     required this.icon,
     required this.destination,
   }) : super(key: key);
-
-  final BuildContext context;
-  final String title;
-  final IconData icon;
-  final Widget destination;
 
   @override
   Widget build(BuildContext context) {

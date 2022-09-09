@@ -8,14 +8,14 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
   final List<NQWord> words;
   final ValueNotifier<bool> continuousMode;
 
+  final String _contPlayMessage =
+      "Continuous Play in progress. Please stop first.";
+
   const QuranAyatDisplayWordByWordWidget({
     Key? key,
     required this.words,
     required this.continuousMode,
   }) : super(key: key);
-
-  final String _contPlayMessage =
-      "Continuous Play in progress. Please stop first.";
 
   @override
   Widget build(BuildContext context) {

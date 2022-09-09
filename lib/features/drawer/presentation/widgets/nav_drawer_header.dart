@@ -5,10 +5,7 @@ import '../../../../main.dart';
 class QuranNavDrawerHeaderWidget extends StatelessWidget {
   const QuranNavDrawerHeaderWidget({
     Key? key,
-    required this.context,
   }) : super(key: key);
-
-  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {

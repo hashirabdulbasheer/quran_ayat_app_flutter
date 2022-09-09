@@ -79,13 +79,13 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                         showSearchBox: true,
                       ),
                       filterFn: (
-                          item,
-                          filter,
-                          ) =>
+                        item,
+                        filter,
+                      ) =>
                           _ayatNumberDropdownSearchFilterFn(
-                            filter,
-                            item,
-                          ),
+                        filter,
+                        item,
+                      ),
                       enabled: !isContinuousPlay,
                       dropdownSearchDecoration: const InputDecoration(
                         labelText: "Ayat",
@@ -93,7 +93,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                       ),
                       items: List<int>.generate(
                         currentlySelectedSurah?.totalVerses ?? 0,
-                            (i) => i + 1,
+                        (i) => i + 1,
                       ),
                       onChanged: (value) => onAyaNumberSelected(value),
                       selectedItem: currentlySelectedAya,

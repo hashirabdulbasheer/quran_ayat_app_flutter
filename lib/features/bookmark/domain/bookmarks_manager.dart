@@ -3,10 +3,10 @@ import '../data/firebase_bookmarks_impl.dart';
 import '../data/bookmarks_local_impl.dart';
 
 class QuranBookmarksManager {
-  QuranBookmarksManager._privateConstructor();
-
   static final QuranBookmarksManager instance =
       QuranBookmarksManager._privateConstructor();
+
+  QuranBookmarksManager._privateConstructor();
 
   Future<bool> clearLocal() async {
     return await QuranLocalBookmarksEngine.instance.clear();

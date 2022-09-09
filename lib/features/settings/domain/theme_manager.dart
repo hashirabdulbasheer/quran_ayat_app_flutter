@@ -7,12 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../misc/enums/quran_theme_enum.dart';
 
 class QuranThemeManager {
-  QuranThemeManager._privateConstructor();
-
   static final QuranThemeManager instance =
       QuranThemeManager._privateConstructor();
-
-  ThemeMode _appTheme = ThemeMode.light;
 
   ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.deepPurple,
@@ -56,6 +52,8 @@ class QuranThemeManager {
     buttonTheme: const ButtonThemeData(buttonColor: Colors.black38),
   );
 
+  ThemeMode _appTheme = ThemeMode.light;
+
   final StreamController<String> _themeStream = StreamController.broadcast();
 
   ThemeData? get theme => _appTheme == ThemeMode.light
@@ -63,6 +61,8 @@ class QuranThemeManager {
       : QuranThemeManager.instance.darkTheme;
 
   ThemeMode get currentAppThemeMode => _appTheme;
+
+  QuranThemeManager._privateConstructor();
 
   /// loads the current theme and notify listeners about the theme change
   void loadThemeAndNotifyListeners() async {

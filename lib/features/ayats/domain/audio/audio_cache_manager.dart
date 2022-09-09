@@ -6,11 +6,10 @@ import '../../../../utils/utils.dart';
 class QuranAudioCacheManager {
   // final QuranAudioCacheRepository _audioRepository =
   //     QuranAudioCacheRepositoryImpl();
-
-  QuranAudioCacheManager._privateConstructor();
-
   static final QuranAudioCacheManager instance =
       QuranAudioCacheManager._privateConstructor();
+
+  QuranAudioCacheManager._privateConstructor();
 
   Future<AudioSource> getSource(
     int surahIndex,

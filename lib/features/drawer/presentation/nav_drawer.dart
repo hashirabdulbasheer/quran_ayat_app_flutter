@@ -25,7 +25,7 @@ class QuranNavDrawer extends StatelessWidget {
       return Drawer(
         child: QuranNavDrawerItemsWidget(
           items: [
-            QuranNavDrawerHeaderWidget(context: context),
+            const QuranNavDrawerHeaderWidget(),
             QuranNavDrawerRowWidget(
               context: context,
               title: 'Profile',
@@ -58,29 +58,28 @@ class QuranNavDrawer extends StatelessWidget {
     /// Logged out
     return Drawer(
       child: QuranNavDrawerItemsWidget(
-          items: [
-            QuranNavDrawerHeaderWidget(context: context),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Login',
-              icon: Icons.account_circle_outlined,
-              destination: const QuranLoginScreen(),
-            ),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Search',
-              icon: Icons.search_rounded,
-              destination: const QuranSearchScreen(),
-            ),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Settings',
-              icon: Icons.settings,
-              destination: const QuranSettingsScreen(),
-            ),
-          ],
+        items: [
+          const QuranNavDrawerHeaderWidget(),
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Login',
+            icon: Icons.account_circle_outlined,
+            destination: const QuranLoginScreen(),
+          ),
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Search',
+            icon: Icons.search_rounded,
+            destination: const QuranSearchScreen(),
+          ),
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Settings',
+            icon: Icons.settings,
+            destination: const QuranSettingsScreen(),
+          ),
+        ],
       ),
     );
   }
-
 }

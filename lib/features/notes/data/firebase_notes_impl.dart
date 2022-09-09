@@ -5,10 +5,10 @@ import '../domain/entities/quran_note.dart';
 import '../domain/interfaces/quran_notes_interface.dart';
 
 class QuranFirebaseNotesEngine implements QuranNotesInterface {
-  QuranFirebaseNotesEngine._privateConstructor();
-
   static final QuranFirebaseNotesEngine instance =
       QuranFirebaseNotesEngine._privateConstructor();
+
+  QuranFirebaseNotesEngine._privateConstructor();
 
   @override
   Future<void> initialize() async {

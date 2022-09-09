@@ -7,12 +7,12 @@ import 'dropdown_title_widget.dart';
 import 'on_off_tile_widget.dart';
 
 class QuranSettingsRowWidget extends StatelessWidget {
+  final QuranSetting setting;
+
   const QuranSettingsRowWidget({
     Key? key,
     required this.setting,
   }) : super(key: key);
-
-  final QuranSetting setting;
 
   @override
   Widget build(BuildContext context) {

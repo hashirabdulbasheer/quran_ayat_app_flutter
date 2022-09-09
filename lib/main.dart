@@ -52,7 +52,7 @@ class MyAppState extends State<MyApp> {
       home: const QuranAyatScreen(),
     );
   }
-  
+
   /// callback when theme changes
   void onThemeChangedEvent(String? _) async {
     // reload to apply the new theme

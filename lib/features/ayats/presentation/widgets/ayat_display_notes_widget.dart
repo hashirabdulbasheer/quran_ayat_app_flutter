@@ -16,19 +16,20 @@ class QuranAyatDisplayNotesWidget extends StatefulWidget {
   final int currentlySelectedAya;
   final ValueNotifier<bool> continuousMode;
 
-  const QuranAyatDisplayNotesWidget(
-      {Key? key,
-      required this.currentlySelectedSurah,
-      required this.currentlySelectedAya,
-      required this.continuousMode,})
-      : super(key: key);
+  const QuranAyatDisplayNotesWidget({
+    Key? key,
+    required this.currentlySelectedSurah,
+    required this.currentlySelectedAya,
+    required this.continuousMode,
+  }) : super(key: key);
 
   @override
-  State<QuranAyatDisplayNotesWidget> createState() => _QuranAyatDisplayNotesWidgetState();
+  State<QuranAyatDisplayNotesWidget> createState() =>
+      _QuranAyatDisplayNotesWidgetState();
 }
 
-class _QuranAyatDisplayNotesWidgetState extends State<QuranAyatDisplayNotesWidget> {
-
+class _QuranAyatDisplayNotesWidgetState
+    extends State<QuranAyatDisplayNotesWidget> {
   final String _contPlayMessage =
       "Continuous Play in progress. Please stop first.";
 
@@ -248,12 +249,11 @@ class _QuranAyatDisplayNotesWidgetState extends State<QuranAyatDisplayNotesWidge
         Navigator.push<void>(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                QuranCreateNotesScreen(
-                  note: note,
-                  suraIndex: surahIndex,
-                  ayaIndex: widget.currentlySelectedAya,
-                ),
+            builder: (context) => QuranCreateNotesScreen(
+              note: note,
+              suraIndex: surahIndex,
+              ayaIndex: widget.currentlySelectedAya,
+            ),
           ),
         ).then((value) {
           setState(() {});

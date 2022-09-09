@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
 
 class QuranAyatDisplaySurahProgressWidget extends StatelessWidget {
-
   final NQSurahTitle? currentlySelectedSurah;
   final int? currentlySelectedAya;
 
-  const QuranAyatDisplaySurahProgressWidget(
-      {Key? key, required this.currentlySelectedSurah, required this.currentlySelectedAya,})
-      : super(key: key);
+  const QuranAyatDisplaySurahProgressWidget({
+    Key? key,
+    required this.currentlySelectedSurah,
+    required this.currentlySelectedAya,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

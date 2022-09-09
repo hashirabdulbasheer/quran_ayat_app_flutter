@@ -8,40 +8,14 @@ import '../domain/interfaces/quran_auth_interface.dart';
 
 /// Singleton
 class QuranFirebaseAuthEngine implements QuranAuthInterface {
-  QuranFirebaseAuthEngine._privateConstructor();
-
   static final QuranFirebaseAuthEngine instance =
       QuranFirebaseAuthEngine._privateConstructor();
 
   QuranUser? _user;
 
-  List<Function> authChangeListeners = [];
+  final List<Function> _authChangeListeners = [];
 
-  void _authChangeListener(User? user) {
-    _user = _mapFirebaseUserToQuranUser(user);
-    // inform all of auth change
-    for (Function listener in authChangeListeners) {
-      listener();
-    }
-  }
-
-  /// User? -> QuranUser?
-  QuranUser? _mapFirebaseUserToQuranUser(User? user) {
-    if (user != null) {
-      String name = user.displayName ?? "";
-      String email = user.email ?? "";
-      String uid = user.uid;
-      if (name.isNotEmpty && email.isNotEmpty && uid.isNotEmpty) {
-        return QuranUser(
-          name: name,
-          email: email,
-          uid: uid,
-        );
-      }
-    }
-
-    return null;
-  }
+  QuranFirebaseAuthEngine._privateConstructor();
 
   @override
   Future<bool> initialize() async {
@@ -184,11 +158,37 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
 
   @override
   void registerAuthChangeListener(Function listener) {
-    authChangeListeners.add(listener);
+    _authChangeListeners.add(listener);
   }
 
   @override
   void unregisterAuthChangeListener(Function listener) {
-    authChangeListeners.remove(listener);
+    _authChangeListeners.remove(listener);
+  }
+
+  void _authChangeListener(User? user) {
+    _user = _mapFirebaseUserToQuranUser(user);
+    // inform all of auth change
+    for (Function listener in _authChangeListeners) {
+      listener();
+    }
+  }
+
+  /// User? -> QuranUser?
+  QuranUser? _mapFirebaseUserToQuranUser(User? user) {
+    if (user != null) {
+      String name = user.displayName ?? "";
+      String email = user.email ?? "";
+      String uid = user.uid;
+      if (name.isNotEmpty && email.isNotEmpty && uid.isNotEmpty) {
+        return QuranUser(
+          name: name,
+          email: email,
+          uid: uid,
+        );
+      }
+    }
+
+    return null;
   }
 }

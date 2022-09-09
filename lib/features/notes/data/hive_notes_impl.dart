@@ -7,12 +7,12 @@ import '../domain/interfaces/quran_notes_interface.dart';
 import 'models/quran_note_dto.dart';
 
 class QuranHiveNotesEngine implements QuranNotesInterface {
-  QuranHiveNotesEngine._privateConstructor();
-
   static final QuranHiveNotesEngine instance =
       QuranHiveNotesEngine._privateConstructor();
 
   Box<List<QuranNoteDto>>? _box;
+
+  QuranHiveNotesEngine._privateConstructor();
 
   @override
   Future<void> initialize() async {
