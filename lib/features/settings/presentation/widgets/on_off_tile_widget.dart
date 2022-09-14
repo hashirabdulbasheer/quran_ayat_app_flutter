@@ -40,11 +40,6 @@ class _QuranOnOffSettingsTileWidgetState
 
               return _tile(
                 isSwitched: isSwitched,
-                trailing: CupertinoSwitch(
-                  activeColor: Theme.of(context).primaryColor,
-                  value: isSwitched,
-                  onChanged: (value) => _onSwitchValueChanged(value),
-                ),
               );
             }
         }
@@ -62,7 +57,6 @@ class _QuranOnOffSettingsTileWidgetState
 
   Widget _tile({
     bool? isSwitched,
-    Widget? trailing,
   }) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
