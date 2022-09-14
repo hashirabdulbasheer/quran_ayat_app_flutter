@@ -52,7 +52,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                 controller: _notesController..text = widget.note?.note ?? "",
                 maxLines: 10,
                 decoration: const InputDecoration(
-                  enabledBorder: OutlineInputBorder(
+                  border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.grey,
                       width: 0.0,
