@@ -149,7 +149,6 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                         "${words[index].word.sura}:${words[index].word.aya}",
                                         style: const TextStyle(
                                           fontSize: 15,
-                                          color: Colors.black54,
                                         ),
                                         textAlign: TextAlign.right,
                                       ),
