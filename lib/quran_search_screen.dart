@@ -62,208 +62,210 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(title: const Text("Quran Search")),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            StreamBuilder<List<QuranWord>>(
-              stream: _resultsController.stream,
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<List<QuranWord>> snapshot,
-              ) {
-                if (snapshot.hasError) {
-                  return Expanded(
-                    child: Center(child: Text('Error: ${snapshot.error}')),
-                  );
-                } else if (snapshot.hasData) {
-                  List<QuranWord> words = snapshot.data as List<QuranWord>;
-                  if (words.isNotEmpty) {
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          appBar: AppBar(title: const Text("Quran Search")),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              StreamBuilder<List<QuranWord>>(
+                stream: _resultsController.stream,
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<List<QuranWord>> snapshot,
+                ) {
+                  if (snapshot.hasError) {
                     return Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(
-                          20,
-                          0,
-                          20,
-                          10,
-                        ),
-                        child: ListView.separated(
-                          reverse: true,
-                          separatorBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return const Divider(thickness: 1);
-                          },
-                          itemCount: words.length,
-                          itemBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return ListTile(
-                              onTap: () => _onSearchResultTileTapped(
-                                context,
-                                words,
-                                index,
-                              ),
-                              title: Column(children: [
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        words[index].word.ar,
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                          fontFamily:
-                                              QuranFontFamily.arabic.rawString,
+                      child: Center(child: Text('Error: ${snapshot.error}')),
+                    );
+                  } else if (snapshot.hasData) {
+                    List<QuranWord> words = snapshot.data as List<QuranWord>;
+                    if (words.isNotEmpty) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(
+                            20,
+                            0,
+                            20,
+                            10,
+                          ),
+                          child: ListView.separated(
+                            reverse: true,
+                            separatorBuilder: (
+                              context,
+                              index,
+                            ) {
+                              return const Divider(thickness: 1);
+                            },
+                            itemCount: words.length,
+                            itemBuilder: (
+                              context,
+                              index,
+                            ) {
+                              return ListTile(
+                                onTap: () => _onSearchResultTileTapped(
+                                  context,
+                                  words,
+                                  index,
+                                ),
+                                title: Column(children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          words[index].word.ar,
+                                          style: TextStyle(
+                                            fontSize: 30,
+                                            fontFamily:
+                                                QuranFontFamily.arabic.rawString,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Expanded(
-                                      child: Directionality(
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Expanded(
+                                        child: Directionality(
+                                          textDirection: TextDirection.ltr,
+                                          child: Text(
+                                            words[index].word.tr,
+                                            style: const TextStyle(
+                                              fontSize: 25,
+                                            ),
+                                            textAlign: TextAlign.right,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      Directionality(
                                         textDirection: TextDirection.ltr,
                                         child: Text(
-                                          words[index].word.tr,
+                                          "${words[index].word.sura}:${words[index].word.aya}",
                                           style: const TextStyle(
-                                            fontSize: 25,
+                                            fontSize: 15,
                                           ),
                                           textAlign: TextAlign.right,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10),
-                                Row(
-                                  children: [
-                                    Directionality(
-                                      textDirection: TextDirection.ltr,
-                                      child: Text(
-                                        "${words[index].word.sura}:${words[index].word.aya}",
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black54,
-                                        ),
-                                        textAlign: TextAlign.right,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ]),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  }
-                }
-
-                return Container();
-              },
-            ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // const Divider(thickness: 0.5),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      20,
-                      0,
-                      20,
-                      0,
-                    ),
-                    child: Row(
-                      children: [
-                        StreamBuilder<String>(
-                          stream: _logController.stream,
-                          builder: (
-                            BuildContext context,
-                            AsyncSnapshot<String> snapshot,
-                          ) {
-                            if (snapshot.hasData) {
-                              return Wrap(
-                                children: [
-                                  Directionality(
-                                    textDirection: TextDirection.ltr,
-                                    child: Text(snapshot.data ?? ""),
+                                    ],
                                   ),
-                                ],
+                                ]),
                               );
-                            }
-
-                            return Container();
-                          },
+                            },
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 100,
-                    child: Padding(
+                      );
+                    }
+                  }
+
+                  return Container();
+                },
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // const Divider(thickness: 0.5),
+                    Padding(
                       padding: const EdgeInsets.fromLTRB(
                         20,
-                        10,
+                        0,
                         20,
                         0,
                       ),
                       child: Row(
                         children: [
-                          Expanded(
-                            child: TextField(
-                              textAlign: TextAlign.right,
-                              autofocus: true,
-                              style: const TextStyle(fontSize: 25),
-                              textDirection: TextDirection.rtl,
-                              onSubmitted: (value) =>
-                                  _onSearchTextFieldSubmitted(value),
-                              decoration: InputDecoration(
-                                suffixIcon: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                          StreamBuilder<String>(
+                            stream: _logController.stream,
+                            builder: (
+                              BuildContext context,
+                              AsyncSnapshot<String> snapshot,
+                            ) {
+                              if (snapshot.hasData) {
+                                return Wrap(
                                   children: [
-                                    IconButton(
-                                      onPressed: () => _startListening(),
-                                      icon: const Icon(Icons.mic),
-                                    ),
-                                    IconButton(
-                                      onPressed: () => _clear(),
-                                      icon: const Icon(Icons.clear),
-                                    ),
-                                    IconButton(
-                                      onPressed: () => _onSearchIconPressed(),
-                                      icon: const Icon(Icons.send),
+                                    Directionality(
+                                      textDirection: TextDirection.ltr,
+                                      child: Text(snapshot.data ?? ""),
                                     ),
                                   ],
-                                ),
-                                hintText: "input a word",
-                                border: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.black12,
-                                    width: 0.0,
-                                  ),
-                                ),
-                              ),
-                              controller: _searchController
-                                ..text = _enteredText,
-                            ),
+                                );
+                              }
+
+                              return Container();
+                            },
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                ],
+                    SizedBox(
+                      height: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          20,
+                          10,
+                          20,
+                          0,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                textAlign: TextAlign.right,
+                                autofocus: true,
+                                style: const TextStyle(fontSize: 25),
+                                textDirection: TextDirection.rtl,
+                                onSubmitted: (value) =>
+                                    _onSearchTextFieldSubmitted(value),
+                                decoration: InputDecoration(
+                                  suffixIcon: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () => _startListening(),
+                                        icon: const Icon(Icons.mic),
+                                      ),
+                                      IconButton(
+                                        onPressed: () => _clear(),
+                                        icon: const Icon(Icons.clear),
+                                      ),
+                                      IconButton(
+                                        onPressed: () => _onSearchIconPressed(),
+                                        icon: const Icon(Icons.send),
+                                      ),
+                                    ],
+                                  ),
+                                  hintText: "input a word",
+                                  border: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black12,
+                                      width: 0.0,
+                                    ),
+                                  ),
+                                ),
+                                controller: _searchController
+                                  ..text = _enteredText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -344,6 +346,15 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     _resultsController.sink.add(results);
     _resultsController.done;
     _log("Searching  $enteredText ... Found ${results.length}");
+  }
+
+  Future<bool> _onWillPop() async {
+     if(_enteredText.isEmpty) {
+       return true;
+     }
+     _clear();
+
+     return false;
   }
 
   ///
