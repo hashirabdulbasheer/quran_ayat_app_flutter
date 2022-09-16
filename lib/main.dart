@@ -9,7 +9,7 @@ import 'misc/url/url_strategy.dart';
 import 'features/settings/domain/theme_manager.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.3.0";
+const String appVersion = "v2.3.1";
 
 void main() async {
   usePathUrlStrategy();
