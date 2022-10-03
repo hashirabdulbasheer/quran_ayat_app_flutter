@@ -3,11 +3,11 @@ import 'interfaces/bookmark_interface.dart';
 
 class QuranBookmarksManager {
   QuranBookmarksInterface localEngine;
-  QuranBookmarksInterface remoteEngine;
+  QuranBookmarksInterface? remoteEngine;
 
   QuranBookmarksManager({
     required this.localEngine,
-    required this.remoteEngine,
+    this.remoteEngine,
   });
 
   Future<bool> clearLocal() async {
@@ -15,7 +15,7 @@ class QuranBookmarksManager {
   }
 
   Future<bool> clearRemote() async {
-    return await remoteEngine.clear();
+    return await remoteEngine?.clear() ?? false;
   }
 
   Future<NQBookmark?> fetchLocal() async {
@@ -23,7 +23,7 @@ class QuranBookmarksManager {
   }
 
   Future<NQBookmark?> fetchRemote() async {
-    return await remoteEngine.fetch();
+    return await remoteEngine?.fetch();
   }
 
   Future<bool> saveLocal(
@@ -40,9 +40,10 @@ class QuranBookmarksManager {
     int sura,
     int aya,
   ) async {
-    return await remoteEngine.save(
-      sura,
-      aya,
-    );
+    return await remoteEngine?.save(
+          sura,
+          aya,
+        ) ??
+        false;
   }
 }
