@@ -5,8 +5,8 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/auth/domain/auth_factory.dart';
+import 'features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_header_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_notes_widget.dart';
@@ -29,10 +29,13 @@ class QuranAyatScreen extends StatefulWidget {
   final int? surahIndex;
   final int? ayaIndex;
 
+  final QuranBookmarksManager bookmarksManager;
+
   const QuranAyatScreen({
     Key? key,
     this.surahIndex,
     this.ayaIndex,
+    required this.bookmarksManager,
   }) : super(key: key);
 
   @override
@@ -57,7 +60,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   /// audio recitation continuous play mode state
   final ValueNotifier<bool> _isAudioContinuousModeEnabled =
       ValueNotifier(false);
-
 
   ///
   /// Theme
@@ -374,8 +376,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   void _onBookmarkCleared(BuildContext context) {
     if (_isInteractionAllowedOnScreen()) {
-      QuranBookmarksManager.instance.clearLocal();
-      QuranBookmarksManager.instance.clearRemote();
+      widget.bookmarksManager.clearLocal();
+      widget.bookmarksManager.clearRemote();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("👍 Cleared ")),
       );
@@ -415,12 +417,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         // actual index starts from 0
         surahIndex = surahIndex - 1;
         // proceed with saving
-        QuranBookmarksManager.instance.saveLocal(
+        widget.bookmarksManager.saveLocal(
           surahIndex,
           _selectedAyat,
         );
         // sync bookmark to cloud
-        QuranBookmarksManager.instance.saveRemote(
+        widget.bookmarksManager.saveRemote(
           surahIndex,
           _selectedAyat,
         );
@@ -438,9 +440,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       await QuranNotesManager.instance.uploadLocalNotesIfAny(user.uid);
 
       /// fetch bookmark
-      NQBookmark? bookmark = await QuranBookmarksManager.instance.fetchRemote();
+      NQBookmark? bookmark = await widget.bookmarksManager.fetchRemote();
       if (bookmark != null) {
-        QuranBookmarksManager.instance.saveLocal(
+        widget.bookmarksManager.saveLocal(
           bookmark.surah,
           bookmark.ayat,
         );

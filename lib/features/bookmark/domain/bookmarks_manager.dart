@@ -1,34 +1,36 @@
 import 'package:noble_quran/models/bookmark.dart';
-import '../data/firebase_bookmarks_impl.dart';
-import '../data/bookmarks_local_impl.dart';
+import 'interfaces/bookmark_interface.dart';
 
 class QuranBookmarksManager {
-  static final QuranBookmarksManager instance =
-      QuranBookmarksManager._privateConstructor();
+  QuranBookmarksInterface localEngine;
+  QuranBookmarksInterface remoteEngine;
 
-  QuranBookmarksManager._privateConstructor();
+  QuranBookmarksManager({
+    required this.localEngine,
+    required this.remoteEngine,
+  });
 
   Future<bool> clearLocal() async {
-    return await QuranLocalBookmarksEngine.instance.clear();
+    return await localEngine.clear();
   }
 
   Future<bool> clearRemote() async {
-    return await QuranFirebaseBookmarksEngine.instance.clear();
+    return await remoteEngine.clear();
   }
 
   Future<NQBookmark?> fetchLocal() async {
-    return await QuranLocalBookmarksEngine.instance.fetch();
+    return await localEngine.fetch();
   }
 
   Future<NQBookmark?> fetchRemote() async {
-    return await QuranFirebaseBookmarksEngine.instance.fetch();
+    return await remoteEngine.fetch();
   }
 
   Future<bool> saveLocal(
     int sura,
     int aya,
   ) async {
-    return await QuranLocalBookmarksEngine.instance.save(
+    return await localEngine.save(
       sura,
       aya,
     );
@@ -38,7 +40,7 @@ class QuranBookmarksManager {
     int sura,
     int aya,
   ) async {
-    return await QuranFirebaseBookmarksEngine.instance.save(
+    return await remoteEngine.save(
       sura,
       aya,
     );

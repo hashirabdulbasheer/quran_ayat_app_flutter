@@ -6,10 +6,12 @@ import '../../../models/qr_user_model.dart';
 
 class QuranProfileScreen extends StatefulWidget {
   final QuranUser user;
+  final QuranBookmarksManager bookmarksManager;
 
   const QuranProfileScreen({
     Key? key,
     required this.user,
+    required this.bookmarksManager,
   }) : super(key: key);
 
   @override
@@ -138,7 +140,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
   Future<bool> _signOutButtonPressed() async {
     QuranResponse _ = await QuranAuthFactory.engine.logout();
     // clear stored data
-    QuranBookmarksManager.instance.clearLocal();
+    widget.bookmarksManager.clearLocal();
 
     return true;
   }

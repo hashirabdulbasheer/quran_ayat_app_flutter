@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/bookmark/data/bookmarks_local_impl.dart';
+import 'package:quran_ayat/features/bookmark/data/firebase_bookmarks_impl.dart';
+import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../quran_search_screen.dart';
 import '../../auth/presentation/quran_login_screen.dart';
@@ -30,7 +33,13 @@ class QuranNavDrawer extends StatelessWidget {
               context: context,
               title: 'Profile',
               icon: Icons.account_circle,
-              destination: QuranProfileScreen(user: userParam),
+              destination: QuranProfileScreen(
+                user: userParam,
+                bookmarksManager: QuranBookmarksManager(
+                  localEngine: QuranLocalBookmarksEngine.instance,
+                  remoteEngine: QuranFirebaseBookmarksEngine.instance,
+                ),
+              ),
             ),
             QuranNavDrawerRowWidget(
               context: context,

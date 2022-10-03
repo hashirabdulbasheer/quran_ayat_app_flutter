@@ -5,8 +5,8 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/material.dart';
 import 'misc/enums/quran_font_family_enum.dart';
 import 'models/qr_word_model.dart';
-import 'quran_ayat_screen.dart';
 import 'utils/logger_utils.dart';
+import 'utils/nav_utils.dart';
 import 'utils/search_utils.dart';
 
 class QuranSearchScreen extends StatefulWidget {
@@ -117,8 +117,8 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                                           words[index].word.ar,
                                           style: TextStyle(
                                             fontSize: 30,
-                                            fontFamily:
-                                                QuranFontFamily.arabic.rawString,
+                                            fontFamily: QuranFontFamily
+                                                .arabic.rawString,
                                           ),
                                         ),
                                       ),
@@ -276,14 +276,10 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     List<QuranWord> words,
     int index,
   ) {
-    Navigator.push<void>(
+    QuranNavigator.navigateToAyatScreen(
       context,
-      MaterialPageRoute(
-        builder: (context) => QuranAyatScreen(
-          surahIndex: words[index].word.sura - 1,
-          ayaIndex: words[index].word.aya,
-        ),
-      ),
+      surahIndex: words[index].word.sura - 1,
+      ayaIndex: words[index].word.aya,
     );
   }
 
@@ -349,12 +345,12 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
   }
 
   Future<bool> _onWillPop() async {
-     if(_enteredText.isEmpty) {
-       return true;
-     }
-     _clear();
+    if (_enteredText.isEmpty) {
+      return true;
+    }
+    _clear();
 
-     return false;
+    return false;
   }
 
   ///
