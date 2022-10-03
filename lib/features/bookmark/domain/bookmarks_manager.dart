@@ -2,8 +2,8 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'interfaces/bookmark_interface.dart';
 
 class QuranBookmarksManager {
-  QuranBookmarksInterface localEngine;
-  QuranBookmarksInterface? remoteEngine;
+  final QuranBookmarksInterface localEngine;
+  final QuranBookmarksInterface? remoteEngine;
 
   QuranBookmarksManager({
     required this.localEngine,

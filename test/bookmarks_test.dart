@@ -4,24 +4,22 @@ import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'package:quran_ayat/features/bookmark/domain/interfaces/bookmark_interface.dart';
 
 class _BookmarksSpy extends QuranBookmarksInterface {
-  int _sura = -1;
-  int _aya = -1;
+  final List<NQBookmark> bookmarks = [];
 
   @override
   Future<bool> clear() {
-    _sura = -1;
-    _aya = -1;
+    bookmarks.clear();
 
     return Future.value(true);
   }
 
   @override
   Future<NQBookmark?> fetch() {
+    if (bookmarks.isNotEmpty) {
+      return Future.value(bookmarks.first);
+    }
 
-    return Future.value(NQBookmark(
-      surah: _sura,
-      ayat: _aya,
-    ));
+    return Future.value(null);
   }
 
   @override
@@ -29,8 +27,7 @@ class _BookmarksSpy extends QuranBookmarksInterface {
     int sura,
     int aya,
   ) {
-    _sura = sura;
-    _aya = aya;
+    bookmarks.add(NQBookmark(surah: sura, ayat: aya));
 
     return Future.value(true);
   }
@@ -55,12 +52,8 @@ void main() {
 
       // Assert
       expect(
-        bookmark?.surah,
-        -1,
-      );
-      expect(
-        bookmark?.ayat,
-        -1,
+        bookmark,
+        null,
       );
     },
   );
@@ -86,19 +79,15 @@ void main() {
 
       // Assert
       expect(
-        bookmark?.surah,
-        -1,
-      );
-      expect(
-        bookmark?.ayat,
-        -1,
+        bookmark,
+        null,
       );
     },
   );
 
   test(
     'Clear Remote With No Remote',
-        () async {
+    () async {
       // Arrange
       QuranBookmarksManager sut = QuranBookmarksManager(
         localEngine: _BookmarksSpy(),
@@ -114,11 +103,7 @@ void main() {
 
       // Assert
       expect(
-        bookmark?.surah,
-        null,
-      );
-      expect(
-        bookmark?.ayat,
+        bookmark,
         null,
       );
     },
@@ -153,6 +138,32 @@ void main() {
       expect(
         bookmark?.ayat,
         1,
+      );
+    },
+  );
+
+  test(
+    'Save Twice should save twice',
+    () async {
+      // Arrange
+      QuranBookmarksManager sut = QuranBookmarksManager(
+        localEngine: _BookmarksSpy(),
+      );
+
+      // Act
+      await sut.saveLocal(
+        5,
+        1,
+      );
+      await sut.saveLocal(
+        5,
+        1,
+      );
+
+      // Assert
+      expect(
+        (sut.localEngine as _BookmarksSpy).bookmarks.length == 2,
+        true,
       );
     },
   );
@@ -195,7 +206,7 @@ void main() {
 
   test(
     'Save and Fetch Remote With No Remote',
-        () async {
+    () async {
       // Arrange
       QuranBookmarksManager sut = QuranBookmarksManager(
         localEngine: _BookmarksSpy(),
@@ -225,5 +236,4 @@ void main() {
       );
     },
   );
-
 }
