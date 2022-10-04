@@ -21,7 +21,7 @@ class QuranNavigator {
           ayaIndex: ayaIndex,
           bookmarksManager: QuranBookmarksManager(
             localEngine: QuranLocalBookmarksEngine(),
-            remoteEngine: QuranFirebaseBookmarksEngine.instance,
+            remoteEngine: QuranFirebaseBookmarksEngine(),
           ),
         ),
       ),

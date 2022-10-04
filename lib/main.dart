@@ -55,7 +55,7 @@ class MyAppState extends State<MyApp> {
       home: QuranAyatScreen(
         bookmarksManager: QuranBookmarksManager(
           localEngine: QuranLocalBookmarksEngine(),
-          remoteEngine: QuranFirebaseBookmarksEngine.instance,
+          remoteEngine: QuranFirebaseBookmarksEngine(),
         ),
       ),
     );

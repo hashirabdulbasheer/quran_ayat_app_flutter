@@ -5,11 +5,6 @@ import '../../auth/domain/auth_factory.dart';
 import '../domain/interfaces/bookmark_interface.dart';
 
 class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
-  static final QuranFirebaseBookmarksEngine instance =
-      QuranFirebaseBookmarksEngine._privateConstructor();
-
-  QuranFirebaseBookmarksEngine._privateConstructor();
-
   @override
   Future<bool> save(
     int sura,
