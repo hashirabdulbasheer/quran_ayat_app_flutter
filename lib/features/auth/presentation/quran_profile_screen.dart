@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../bookmark/domain/bookmarks_manager.dart';
 import '../domain/auth_factory.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 
 class QuranProfileScreen extends StatefulWidget {
   final QuranUser user;
-  final QuranBookmarksManager bookmarksManager;
+  final Function onLogOutTapped;
 
   const QuranProfileScreen({
     Key? key,
     required this.user,
-    required this.bookmarksManager,
+    required this.onLogOutTapped,
   }) : super(key: key);
 
   @override
@@ -138,9 +137,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
   }
 
   Future<bool> _signOutButtonPressed() async {
-    QuranResponse _ = await QuranAuthFactory.engine.logout();
-    // clear stored data
-    widget.bookmarksManager.clearLocal();
+    widget.onLogOutTapped();
 
     return true;
   }

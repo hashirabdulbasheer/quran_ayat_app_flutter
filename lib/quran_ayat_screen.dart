@@ -145,7 +145,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           drawer: widget.surahIndex == null
-              ? QuranNavDrawer(user: QuranAuthFactory.engine.getUser())
+              ? QuranNavDrawer(
+                  user: QuranAuthFactory.engine.getUser(),
+                  bookmarksManager: widget.bookmarksManager,
+                )
               : null,
           onDrawerChanged: (isOpened) => {
             // drawer opened - stop continuous play

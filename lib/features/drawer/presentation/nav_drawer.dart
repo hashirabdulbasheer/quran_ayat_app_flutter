@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/bookmark/data/bookmarks_local_impl.dart';
-import 'package:quran_ayat/features/bookmark/data/firebase_bookmarks_impl.dart';
-import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
+import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../quran_search_screen.dart';
+import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../auth/presentation/quran_profile_screen.dart';
+import '../../bookmark/domain/bookmarks_manager.dart';
 import '../../notes/presentation/quran_view_notes_screen.dart';
 import '../../settings/presentation/quran_settings_screen.dart';
 import 'widgets/nav_drawer_header.dart';
@@ -14,10 +14,12 @@ import 'widgets/nav_drawer_row.dart';
 
 class QuranNavDrawer extends StatelessWidget {
   final QuranUser? user;
+  final QuranBookmarksManager bookmarksManager;
 
   const QuranNavDrawer({
     Key? key,
     required this.user,
+    required this.bookmarksManager,
   }) : super(key: key);
 
   @override
@@ -35,10 +37,7 @@ class QuranNavDrawer extends StatelessWidget {
               icon: Icons.account_circle,
               destination: QuranProfileScreen(
                 user: userParam,
-                bookmarksManager: QuranBookmarksManager(
-                  localEngine: QuranLocalBookmarksEngine(),
-                  remoteEngine: QuranFirebaseBookmarksEngine(),
-                ),
+                onLogOutTapped: () => {_onLogout()},
               ),
             ),
             QuranNavDrawerRowWidget(
@@ -90,5 +89,11 @@ class QuranNavDrawer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _onLogout() async {
+    QuranResponse _ = await QuranAuthFactory.engine.logout();
+    // clear stored data
+    bookmarksManager.clearLocal();
   }
 }
