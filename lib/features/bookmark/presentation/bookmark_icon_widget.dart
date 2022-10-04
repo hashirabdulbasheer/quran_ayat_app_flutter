@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/bookmark.dart';
-import '../../../utils/prefs_utils.dart';
+import '../domain/bookmarks_manager.dart';
 
 class QuranBookmarkIconWidget extends StatefulWidget {
   final int currentSurahIndex;
@@ -9,9 +9,11 @@ class QuranBookmarkIconWidget extends StatefulWidget {
   final Function onSaveButtonPressed;
   final Function? onCancelButtonPressed;
   final Function? onClearButtonPressed;
+  final QuranBookmarksManager bookmarksManager;
 
   const QuranBookmarkIconWidget({
     Key? key,
+    required this.bookmarksManager,
     required this.currentSurahIndex,
     required this.currentAyaIndex,
     required this.onGoToButtonPressed,
@@ -31,7 +33,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<NQBookmark?>(
-      future: QuranPreferences.getBookmark(),
+      future: widget.bookmarksManager.localEngine.fetch(),
       builder: (
         BuildContext context,
         AsyncSnapshot<NQBookmark?> snapshot,
@@ -187,4 +189,5 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
 
     return false;
   }
+
 }

@@ -1,16 +1,27 @@
+import 'dart:convert';
+
 import 'package:noble_quran/models/bookmark.dart';
-import '../../../utils/prefs_utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../domain/interfaces/bookmark_interface.dart';
 
 class QuranLocalBookmarksEngine implements QuranBookmarksInterface {
+
   @override
   Future<bool> save(
     int sura,
     int aya,
   ) async {
-    QuranPreferences.saveBookmark(
-      sura,
-      aya,
+    final prefs = await SharedPreferences.getInstance();
+    final bookmark = NQBookmark(
+      surah: sura,
+      ayat: aya,
+      word: 0,
+      seconds: 0,
+      pixels: 0,
+    );
+    await prefs.setString(
+      "bookmark",
+      json.encode(bookmark.toJson()),
     );
 
     return true;
@@ -18,12 +29,23 @@ class QuranLocalBookmarksEngine implements QuranBookmarksInterface {
 
   @override
   Future<NQBookmark?> fetch() async {
-    return QuranPreferences.getBookmark();
+    final prefs = await SharedPreferences.getInstance();
+    String? bookmarkString = prefs.getString("bookmark");
+    if (bookmarkString != null) {
+      final NQBookmark bookmark = NQBookmark.fromJson(
+        jsonDecode(bookmarkString) as Map<String, dynamic>,
+      );
+
+      return bookmark;
+    }
+
+    return null;
   }
 
   @override
   Future<bool> clear() async {
-    QuranPreferences.clearBookmark();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("bookmark");
 
     return Future.value(true);
   }

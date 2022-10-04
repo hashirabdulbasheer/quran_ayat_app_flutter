@@ -94,6 +94,6 @@ class QuranNavDrawer extends StatelessWidget {
   void _onLogout() async {
     QuranResponse _ = await QuranAuthFactory.engine.logout();
     // clear stored data
-    bookmarksManager.clearLocal();
+    bookmarksManager.localEngine.clear();
   }
 }

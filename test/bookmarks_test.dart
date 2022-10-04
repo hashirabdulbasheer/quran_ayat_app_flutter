@@ -27,7 +27,7 @@ class _BookmarksMock extends QuranBookmarksInterface {
     int sura,
     int aya,
   ) {
-    bookmarks.add(NQBookmark(surah: sura, ayat: aya));
+    bookmarks.add(NQBookmark(surah: sura, ayat: aya,));
 
     return Future.value(true);
   }
@@ -43,12 +43,12 @@ void main() {
       );
 
       // Act
-      await sut.saveLocal(
+      await sut.localEngine.save(
         5,
         1,
       );
-      await sut.clearLocal();
-      NQBookmark? bookmark = await sut.fetchLocal();
+      await sut.localEngine.clear();
+      NQBookmark? bookmark = await sut.localEngine.fetch();
 
       // Assert
       expect(
@@ -70,12 +70,12 @@ void main() {
       );
 
       // Act
-      await sut.saveRemote(
+      await sut.remoteEngine?.save(
         5,
         2,
       );
-      await sut.clearRemote();
-      NQBookmark? bookmark = await sut.fetchRemote();
+      await sut.remoteEngine?.clear();
+      NQBookmark? bookmark = await sut.remoteEngine?.fetch();
 
       // Assert
       expect(
@@ -94,12 +94,12 @@ void main() {
       );
 
       // Act
-      await sut.saveRemote(
+      await sut.remoteEngine?.save(
         5,
         2,
       );
-      await sut.clearRemote();
-      NQBookmark? bookmark = await sut.fetchRemote();
+      await sut.remoteEngine?.clear();
+      NQBookmark? bookmark = await sut.remoteEngine?.fetch();
 
       // Assert
       expect(
@@ -118,11 +118,11 @@ void main() {
       );
 
       // Act
-      await sut.saveLocal(
+      await sut.localEngine.save(
         5,
         1,
       );
-      NQBookmark? bookmark = await sut.fetchLocal();
+      NQBookmark? bookmark = await sut.localEngine.fetch();
 
       // Assert
       expect(
@@ -151,11 +151,11 @@ void main() {
       );
 
       // Act
-      await sut.saveLocal(
+      await sut.localEngine.save(
         5,
         1,
       );
-      await sut.saveLocal(
+      await sut.localEngine.save(
         5,
         1,
       );
@@ -180,11 +180,11 @@ void main() {
       );
 
       // Act
-      await sut.saveRemote(
+      await sut.remoteEngine?.save(
         5,
         2,
       );
-      NQBookmark? bookmark = await sut.fetchRemote();
+      NQBookmark? bookmark = await sut.remoteEngine?.fetch();
 
       // Assert
       expect(
@@ -213,11 +213,11 @@ void main() {
       );
 
       // Act
-      await sut.saveRemote(
+      await sut.remoteEngine?.save(
         5,
         2,
       );
-      NQBookmark? bookmark = await sut.fetchRemote();
+      NQBookmark? bookmark = await sut.remoteEngine?.fetch();
 
       // Assert
       expect(

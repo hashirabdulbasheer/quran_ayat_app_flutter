@@ -214,6 +214,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 icon: const Icon(Icons.share),
               ),
               QuranBookmarkIconWidget(
+                bookmarksManager: widget.bookmarksManager,
                 currentSurahIndex: surahIndex,
                 currentAyaIndex: _selectedAyat,
                 onSaveButtonPressed: () => {
@@ -379,8 +380,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   void _onBookmarkCleared(BuildContext context) {
     if (_isInteractionAllowedOnScreen()) {
-      widget.bookmarksManager.clearLocal();
-      widget.bookmarksManager.clearRemote();
+      widget.bookmarksManager.localEngine.clear();
+      widget.bookmarksManager.remoteEngine?.clear();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("👍 Cleared ")),
       );
@@ -420,12 +421,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         // actual index starts from 0
         surahIndex = surahIndex - 1;
         // proceed with saving
-        widget.bookmarksManager.saveLocal(
+        widget.bookmarksManager.localEngine.save(
           surahIndex,
           _selectedAyat,
         );
         // sync bookmark to cloud
-        widget.bookmarksManager.saveRemote(
+        widget.bookmarksManager.remoteEngine?.save(
           surahIndex,
           _selectedAyat,
         );
@@ -443,9 +444,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       await QuranNotesManager.instance.uploadLocalNotesIfAny(user.uid);
 
       /// fetch bookmark
-      NQBookmark? bookmark = await widget.bookmarksManager.fetchRemote();
+      NQBookmark? bookmark = await widget.bookmarksManager.remoteEngine?.fetch();
       if (bookmark != null) {
-        widget.bookmarksManager.saveLocal(
+        widget.bookmarksManager.localEngine.save(
           bookmark.surah,
           bookmark.ayat,
         );
