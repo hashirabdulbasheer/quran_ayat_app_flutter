@@ -54,7 +54,7 @@ class MyAppState extends State<MyApp> {
       themeMode: QuranThemeManager.instance.currentAppThemeMode,
       home: QuranAyatScreen(
         bookmarksManager: QuranBookmarksManager(
-          localEngine: QuranLocalBookmarksEngine.instance,
+          localEngine: QuranLocalBookmarksEngine(),
           remoteEngine: QuranFirebaseBookmarksEngine.instance,
         ),
       ),

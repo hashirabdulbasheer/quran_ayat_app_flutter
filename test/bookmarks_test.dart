@@ -3,7 +3,7 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'package:quran_ayat/features/bookmark/domain/interfaces/bookmark_interface.dart';
 
-class _BookmarksSpy extends QuranBookmarksInterface {
+class _BookmarksMock extends QuranBookmarksInterface {
   final List<NQBookmark> bookmarks = [];
 
   @override
@@ -39,7 +39,7 @@ void main() {
     () async {
       // Arrange
       QuranBookmarksManager sut = QuranBookmarksManager(
-        localEngine: _BookmarksSpy(),
+        localEngine: _BookmarksMock(),
       );
 
       // Act
@@ -62,8 +62,8 @@ void main() {
     'Clear Remote',
     () async {
       // Arrange
-      _BookmarksSpy local = _BookmarksSpy();
-      _BookmarksSpy remote = _BookmarksSpy();
+      _BookmarksMock local = _BookmarksMock();
+      _BookmarksMock remote = _BookmarksMock();
       QuranBookmarksManager sut = QuranBookmarksManager(
         localEngine: local,
         remoteEngine: remote,
@@ -90,7 +90,7 @@ void main() {
     () async {
       // Arrange
       QuranBookmarksManager sut = QuranBookmarksManager(
-        localEngine: _BookmarksSpy(),
+        localEngine: _BookmarksMock(),
       );
 
       // Act
@@ -114,7 +114,7 @@ void main() {
     () async {
       // Arrange
       QuranBookmarksManager sut = QuranBookmarksManager(
-        localEngine: _BookmarksSpy(),
+        localEngine: _BookmarksMock(),
       );
 
       // Act
@@ -147,7 +147,7 @@ void main() {
     () async {
       // Arrange
       QuranBookmarksManager sut = QuranBookmarksManager(
-        localEngine: _BookmarksSpy(),
+        localEngine: _BookmarksMock(),
       );
 
       // Act
@@ -162,7 +162,7 @@ void main() {
 
       // Assert
       expect(
-        (sut.localEngine as _BookmarksSpy).bookmarks.length == 2,
+        (sut.localEngine as _BookmarksMock).bookmarks.length == 2,
         true,
       );
     },
@@ -172,8 +172,8 @@ void main() {
     'Save and Fetch Remote',
     () async {
       // Arrange
-      _BookmarksSpy local = _BookmarksSpy();
-      _BookmarksSpy remote = _BookmarksSpy();
+      _BookmarksMock local = _BookmarksMock();
+      _BookmarksMock remote = _BookmarksMock();
       QuranBookmarksManager sut = QuranBookmarksManager(
         localEngine: local,
         remoteEngine: remote,
@@ -209,7 +209,7 @@ void main() {
     () async {
       // Arrange
       QuranBookmarksManager sut = QuranBookmarksManager(
-        localEngine: _BookmarksSpy(),
+        localEngine: _BookmarksMock(),
       );
 
       // Act

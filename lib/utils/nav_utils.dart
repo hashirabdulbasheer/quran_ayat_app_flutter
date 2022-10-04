@@ -20,7 +20,7 @@ class QuranNavigator {
           surahIndex: surahIndex,
           ayaIndex: ayaIndex,
           bookmarksManager: QuranBookmarksManager(
-            localEngine: QuranLocalBookmarksEngine.instance,
+            localEngine: QuranLocalBookmarksEngine(),
             remoteEngine: QuranFirebaseBookmarksEngine.instance,
           ),
         ),

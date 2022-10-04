@@ -36,7 +36,7 @@ class QuranNavDrawer extends StatelessWidget {
               destination: QuranProfileScreen(
                 user: userParam,
                 bookmarksManager: QuranBookmarksManager(
-                  localEngine: QuranLocalBookmarksEngine.instance,
+                  localEngine: QuranLocalBookmarksEngine(),
                   remoteEngine: QuranFirebaseBookmarksEngine.instance,
                 ),
               ),

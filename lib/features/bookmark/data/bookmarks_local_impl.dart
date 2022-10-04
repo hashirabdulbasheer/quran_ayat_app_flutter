@@ -3,11 +3,6 @@ import '../../../utils/prefs_utils.dart';
 import '../domain/interfaces/bookmark_interface.dart';
 
 class QuranLocalBookmarksEngine implements QuranBookmarksInterface {
-  static final QuranLocalBookmarksEngine instance =
-      QuranLocalBookmarksEngine._privateConstructor();
-
-  QuranLocalBookmarksEngine._privateConstructor();
-
   @override
   Future<bool> save(
     int sura,
