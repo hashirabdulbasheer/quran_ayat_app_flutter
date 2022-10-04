@@ -1,19 +1,22 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:noble_quran/models/bookmark.dart';
-import '../../../models/qr_user_model.dart';
-import '../../auth/domain/auth_factory.dart';
 import '../domain/interfaces/bookmark_interface.dart';
 
 class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
+  final String userId;
+
+  QuranFirebaseBookmarksEngine({
+    required this.userId,
+  });
+
   @override
   Future<bool> save(
     int sura,
     int aya,
   ) async {
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
+    if (userId != "") {
       DatabaseReference ref =
-          FirebaseDatabase.instance.ref("bookmarks/${user.uid}");
+          FirebaseDatabase.instance.ref("bookmarks/$userId");
       await ref.set({
         "sura": sura,
         "aya": aya,
@@ -27,10 +30,9 @@ class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
 
   @override
   Future<NQBookmark?> fetch() async {
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
+    if (userId != "") {
       DatabaseReference ref =
-          FirebaseDatabase.instance.ref("bookmarks/${user.uid}");
+          FirebaseDatabase.instance.ref("bookmarks/$userId");
       final snapshot = await ref.get();
       Map<String, dynamic>? resultList =
           snapshot.value as Map<String, dynamic>?;

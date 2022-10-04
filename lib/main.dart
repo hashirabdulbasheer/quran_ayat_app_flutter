@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/bookmark/data/bookmarks_local_impl.dart';
-import 'package:quran_ayat/features/bookmark/data/firebase_bookmarks_impl.dart';
-import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
+import 'composer.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/notes/data/hive_notes_impl.dart';
-import 'quran_ayat_screen.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
 import 'features/settings/domain/theme_manager.dart';
@@ -52,12 +49,7 @@ class MyAppState extends State<MyApp> {
       theme: QuranThemeManager.instance.theme,
       darkTheme: QuranThemeManager.instance.darkTheme,
       themeMode: QuranThemeManager.instance.currentAppThemeMode,
-      home: QuranAyatScreen(
-        bookmarksManager: QuranBookmarksManager(
-          localEngine: QuranLocalBookmarksEngine(),
-          remoteEngine: QuranFirebaseBookmarksEngine(),
-        ),
-      ),
+      home: QuranComposer.composeAyatScreen(),
     );
   }
 

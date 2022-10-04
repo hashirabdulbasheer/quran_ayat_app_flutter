@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../features/bookmark/data/bookmarks_local_impl.dart';
-import '../features/bookmark/data/firebase_bookmarks_impl.dart';
-import '../features/bookmark/domain/bookmarks_manager.dart';
-import '../quran_ayat_screen.dart';
+import 'package:quran_ayat/composer.dart';
 
 class QuranNavigator {
-
   /// navigate to ayat screen
   static void navigateToAyatScreen(
     BuildContext context, {
@@ -16,17 +11,11 @@ class QuranNavigator {
     Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (context) => QuranAyatScreen(
-          surahIndex: surahIndex,
+        builder: (context) => QuranComposer.composeAyatScreen(
+          suraIndex: surahIndex,
           ayaIndex: ayaIndex,
-          bookmarksManager: QuranBookmarksManager(
-            localEngine: QuranLocalBookmarksEngine(),
-            remoteEngine: QuranFirebaseBookmarksEngine(),
-          ),
         ),
       ),
     );
   }
-
-
 }
