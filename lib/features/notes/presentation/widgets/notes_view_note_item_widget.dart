@@ -29,17 +29,17 @@ class QuranViewNoteItemWidget extends StatelessWidget {
           children: [
             Text(
               "${note.suraIndex}:${note.ayaIndex}",
-              style: Theme.of(context).textTheme.subtitle1,
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 5),
             Text(
               note.note,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             const SizedBox(height: 10),
             Text(
               QuranNotesManager.instance.formattedDate(note.createdOn),
-              style: Theme.of(context).textTheme.subtitle2,
+              style: Theme.of(context).textTheme.titleSmall,
             ),
           ],
         ),

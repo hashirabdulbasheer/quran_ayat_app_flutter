@@ -47,10 +47,13 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                     enabled: !isContinuousPlay,
                     popupProps: const PopupPropsMultiSelection.menu(),
                     itemAsString: (surah) =>
-                        "(${surah.number}) ${surah.transliterationEn}",
-                    dropdownSearchDecoration: const InputDecoration(
-                      labelText: "Surah",
-                      hintText: "select surah",
+                        '(${surah.number}) ${surah.transliterationEn}',
+                    dropdownDecoratorProps: const DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        labelText: "Surah",
+                        hintText: "select surah",
+                      ),
+                      textAlign: TextAlign.start,
                     ),
                     onChanged: (value) => onSurahSelected(value),
                     selectedItem: currentlySelectedSurah,
@@ -87,9 +90,11 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                         item,
                       ),
                       enabled: !isContinuousPlay,
-                      dropdownSearchDecoration: const InputDecoration(
-                        labelText: "Ayat",
-                        hintText: "ayat index",
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          labelText: "Ayat",
+                          hintText: "ayat index",
+                        ),
                       ),
                       items: List<int>.generate(
                         currentlySelectedSurah?.totalVerses ?? 0,

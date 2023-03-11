@@ -9,19 +9,23 @@ import 'misc/url/url_strategy.dart';
 import 'features/settings/domain/theme_manager.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.1.6";
+const String appVersion = "v2.1.7";
 
 void main() async {
   usePathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await QuranHiveNotesEngine.instance.initialize();
   await QuranAuthFactory.engine.initialize();
-  runApp(const MyApp());
+  runApp(MyApp(
+    homeScreen: QuranComposer.composeAyatScreen(),
+  ));
   _loadQuranWords();
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final Widget homeScreen;
+
+  const MyApp({Key? key, required this.homeScreen,}) : super(key: key);
 
   @override
   State<MyApp> createState() => MyAppState();
@@ -49,7 +53,7 @@ class MyAppState extends State<MyApp> {
       theme: QuranThemeManager.instance.theme,
       darkTheme: QuranThemeManager.instance.darkTheme,
       themeMode: QuranThemeManager.instance.currentAppThemeMode,
-      home: QuranComposer.composeAyatScreen(),
+      home: widget.homeScreen,
     );
   }
 

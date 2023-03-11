@@ -16,9 +16,9 @@ class QuranThemeManager {
     appBarTheme:
         const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
     textTheme: const TextTheme(
-      bodyText1: TextStyle(color: Colors.black),
-      subtitle1: TextStyle(color: Colors.black87),
-      subtitle2: TextStyle(
+      bodyLarge: TextStyle(color: Colors.black),
+      titleMedium: TextStyle(color: Colors.black87),
+      titleSmall: TextStyle(
         color: Colors.black54,
         fontSize: 12,
       ),
@@ -41,9 +41,9 @@ class QuranThemeManager {
     backgroundColor: const Color(0xFF212121),
     cardColor: Colors.black54,
     textTheme: const TextTheme(
-      bodyText1: TextStyle(color: Colors.white),
-      subtitle1: TextStyle(color: Colors.white60),
-      subtitle2: TextStyle(
+      bodyLarge: TextStyle(color: Colors.white),
+      titleMedium: TextStyle(color: Colors.white60),
+      titleSmall: TextStyle(
         color: Colors.white60,
         fontSize: 12,
       ),

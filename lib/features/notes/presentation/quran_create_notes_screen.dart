@@ -116,7 +116,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       Widget okButton = TextButton(
-        style: TextButton.styleFrom(primary: Colors.red),
+        style: TextButton.styleFrom(foregroundColor: Colors.red),
         child: const Text("Delete"),
         onPressed: () => {
           if (_deleteNote(user))

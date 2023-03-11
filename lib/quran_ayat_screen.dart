@@ -5,7 +5,7 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'features/auth/domain/auth_factory.dart';
+import 'package:quran_ayat/features/auth/domain/interfaces/quran_auth_interface.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_header_widget.dart';
@@ -26,6 +26,7 @@ import 'quran_search_screen.dart';
 import 'utils/utils.dart';
 
 class QuranAyatScreen extends StatefulWidget {
+  final QuranAuthInterface? authEngine;
   final int? surahIndex;
   final int? ayaIndex;
 
@@ -35,6 +36,7 @@ class QuranAyatScreen extends StatefulWidget {
     Key? key,
     this.surahIndex,
     this.ayaIndex,
+    this.authEngine,
     required this.bookmarksManager,
   }) : super(key: key);
 
@@ -70,14 +72,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     // else use gray button
     if (QuranThemeManager.instance.isDarkMode()) {
       return ElevatedButton.styleFrom(
-        primary: Colors.white70,
+        backgroundColor: Colors.white70,
         shadowColor: Colors.transparent,
         textStyle: const TextStyle(color: Colors.black),
       );
     }
 
     return ElevatedButton.styleFrom(
-      primary: Colors.black12,
+      backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       textStyle: const TextStyle(color: Colors.deepPurple),
     );
@@ -109,7 +111,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     });
 
     /// register for auth changes
-    QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
+    widget.authEngine?.registerAuthChangeListener(_authChangeListener);
 
     // register for settings changes
     QuranSettingsManager.instance.registerListener(_settingsChangedListener);
@@ -118,7 +120,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   @override
   void dispose() {
     super.dispose();
-    QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
+    widget.authEngine?.unregisterAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.removeListeners();
     _isAudioContinuousModeEnabled.value = false;
     _isAudioContinuousModeEnabled.dispose();
@@ -146,7 +148,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         child: Scaffold(
           drawer: widget.surahIndex == null
               ? QuranNavDrawer(
-                  user: QuranAuthFactory.engine.getUser(),
+                  user: widget.authEngine?.getUser(),
                   bookmarksManager: widget.bookmarksManager,
                 )
               : null,
@@ -438,7 +440,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   void _authChangeListener() async {
-    QuranUser? user = QuranAuthFactory.engine.getUser();
+    QuranUser? user = widget.authEngine?.getUser();
     if (user != null) {
       /// upload local notes
       await QuranNotesManager.instance.uploadLocalNotesIfAny(user.uid);

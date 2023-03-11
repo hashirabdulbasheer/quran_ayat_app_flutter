@@ -1,21 +1,24 @@
-import 'package:quran_ayat/models/qr_user_model.dart';
-import 'package:quran_ayat/quran_ayat_screen.dart';
+import 'package:quran_ayat/features/auth/domain/auth_factory.dart';
+import 'package:quran_ayat/features/auth/domain/interfaces/quran_auth_interface.dart';
 
-import 'features/auth/domain/auth_factory.dart';
 import 'features/bookmark/data/bookmarks_local_impl.dart';
 import 'features/bookmark/data/firebase_bookmarks_impl.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
+import 'models/qr_user_model.dart';
+import 'quran_ayat_screen.dart';
 
 class QuranComposer {
   static QuranAyatScreen composeAyatScreen({
+    QuranAuthInterface? authEngine,
     int? suraIndex,
     int? ayaIndex,
   }) {
-    QuranUser? user = QuranAuthFactory.engine.getUser();
+    QuranUser? user = authEngine?.getUser();
     if (user != null) {
       return QuranAyatScreen(
         surahIndex: suraIndex,
         ayaIndex: ayaIndex,
+        authEngine: QuranAuthFactory.engine,
         bookmarksManager: QuranBookmarksManager(
           localEngine: QuranLocalBookmarksEngine(),
           remoteEngine: QuranFirebaseBookmarksEngine(
