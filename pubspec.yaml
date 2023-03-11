@@ -36,11 +36,9 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   noble_quran:
-    path: ../noble_quran_flutter_package
-
-#    git:
-#      url: https://github.com/hashirabdulbasheer/noble_quran_flutter_package.git
-#      ref: master
+    git:
+      url: https://github.com/hashirabdulbasheer/noble_quran_flutter_package.git
+      ref: master
 
 
   # The following adds the Cupertino Icons font to your application.
