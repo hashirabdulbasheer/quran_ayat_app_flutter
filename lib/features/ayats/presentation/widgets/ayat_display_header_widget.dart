@@ -46,8 +46,6 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                     items: surahTitles,
                     enabled: !isContinuousPlay,
                     popupProps: const PopupPropsMultiSelection.menu(),
-                    itemAsString: (surah) =>
-                        '(${surah.number}) ${surah.transliterationEn}',
                     dropdownDecoratorProps: const DropDownDecoratorProps(
                       dropdownSearchDecoration: InputDecoration(
                         labelText: "Surah",
