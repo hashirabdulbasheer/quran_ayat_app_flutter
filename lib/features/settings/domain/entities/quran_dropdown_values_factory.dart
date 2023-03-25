@@ -24,7 +24,7 @@ class QuranDropdownValuesFactory {
       case QuranSettingsConstants.audioReciterId:
         return NobleQuran.getAllReciters()
             .map((e) => QuranDropdownValue(
-                  title: "${e.name} (${e.bitrate})",
+                  title: e.name,
                   content: e,
                   key: e.subfolder,
                 ))
