@@ -5,7 +5,7 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/auth/domain/interfaces/quran_auth_interface.dart';
+import 'features/auth/domain/auth_factory.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_header_widget.dart';
@@ -26,7 +26,6 @@ import 'quran_search_screen.dart';
 import 'utils/utils.dart';
 
 class QuranAyatScreen extends StatefulWidget {
-  final QuranAuthInterface? authEngine;
   final int? surahIndex;
   final int? ayaIndex;
 
@@ -36,7 +35,6 @@ class QuranAyatScreen extends StatefulWidget {
     Key? key,
     this.surahIndex,
     this.ayaIndex,
-    this.authEngine,
     required this.bookmarksManager,
   }) : super(key: key);
 
@@ -111,7 +109,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     });
 
     /// register for auth changes
-    widget.authEngine?.registerAuthChangeListener(_authChangeListener);
+    QuranAuthFactory.engine?.registerAuthChangeListener(_authChangeListener);
 
     // register for settings changes
     QuranSettingsManager.instance.registerListener(_settingsChangedListener);
@@ -120,7 +118,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   @override
   void dispose() {
     super.dispose();
-    widget.authEngine?.unregisterAuthChangeListener(_authChangeListener);
+    QuranAuthFactory.engine?.unregisterAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.removeListeners();
     _isAudioContinuousModeEnabled.value = false;
     _isAudioContinuousModeEnabled.dispose();
@@ -148,7 +146,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         child: Scaffold(
           drawer: widget.surahIndex == null
               ? QuranNavDrawer(
-                  user: widget.authEngine?.getUser(),
+                  user: QuranAuthFactory.engine?.getUser(),
                   bookmarksManager: widget.bookmarksManager,
                 )
               : null,
@@ -440,7 +438,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   void _authChangeListener() async {
-    QuranUser? user = widget.authEngine?.getUser();
+    QuranUser? user = QuranAuthFactory.engine?.getUser();
     if (user != null) {
       /// upload local notes
       await QuranNotesManager.instance.uploadLocalNotesIfAny(user.uid);
