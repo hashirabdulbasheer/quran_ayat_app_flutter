@@ -34,23 +34,6 @@ class _QuranAyatDisplayNotesWidgetState
   @override
   Widget build(BuildContext context) {
     QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user == null) {
-      return Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: SizedBox(
-          height: 50,
-          child: ElevatedButton(
-            onPressed: () => {
-              if (_isInteractionAllowedOnScreen())
-                {_goToLoginScreen()}
-              else
-                {_showMessage(QuranStrings.contPlayMessage)},
-            },
-            child: const Text("Login to add notes"),
-          ),
-        ),
-      );
-    }
     // logged in
     if (widget.currentlySelectedSurah == null) {
       return Container();
@@ -101,7 +84,7 @@ class _QuranAyatDisplayNotesWidgetState
         const SizedBox(
           height: 10,
         ),
-        surahIndex != null
+        surahIndex != null && user != null
             ? FutureBuilder<List<QuranNote>>(
                 future: QuranNotesManager.instance.fetch(
                   user.uid,
@@ -220,7 +203,13 @@ class _QuranAyatDisplayNotesWidgetState
                   }
                 },
               )
-            : Container(),
+            : TextButton(
+          onPressed: () => _goToCreateNoteScreen(),
+          child: const SizedBox(
+            height: 100,
+            child: Center(child: Text("Add Note")),
+          ),
+        ),
       ],
     );
   }
@@ -245,21 +234,27 @@ class _QuranAyatDisplayNotesWidgetState
   }
 
   void _goToCreateNoteScreen({QuranNote? note}) {
-    if (widget.currentlySelectedSurah != null) {
-      int? surahIndex = widget.currentlySelectedSurah?.number;
-      if (surahIndex != null) {
-        Navigator.push<void>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => QuranCreateNotesScreen(
-              note: note,
-              suraIndex: surahIndex,
-              ayaIndex: widget.currentlySelectedAya,
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user == null) {
+      _goToLoginScreen();
+    } else {
+      if (widget.currentlySelectedSurah != null) {
+        int? surahIndex = widget.currentlySelectedSurah?.number;
+        if (surahIndex != null) {
+          Navigator.push<void>(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  QuranCreateNotesScreen(
+                    note: note,
+                    suraIndex: surahIndex,
+                    ayaIndex: widget.currentlySelectedAya,
+                  ),
             ),
-          ),
-        ).then((value) {
-          setState(() {});
-        });
+          ).then((value) {
+            setState(() {});
+          });
+        }
       }
     }
   }
