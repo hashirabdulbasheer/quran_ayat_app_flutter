@@ -6,11 +6,13 @@ import '../../domain/settings_manager.dart';
 
 class QuranOnOffSettingsTileWidget extends StatefulWidget {
   final QuranSetting setting;
+  final bool defaultValue;
   final void Function(bool)? onChanged;
 
   const QuranOnOffSettingsTileWidget({
     Key? key,
     required this.setting,
+    required this.defaultValue,
     this.onChanged,
   }) : super(key: key);
 
@@ -36,7 +38,14 @@ class _QuranOnOffSettingsTileWidgetState
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              bool isSwitched = snapshot.data == "true" ? true : false;
+              bool isSwitched = false;
+              if (snapshot.data == "true") {
+                  isSwitched = true;
+              } else if (snapshot.data == "false") {
+                  isSwitched = false;
+              } else {
+                isSwitched = widget.defaultValue;
+              }
 
               return _tile(
                 isSwitched: isSwitched,

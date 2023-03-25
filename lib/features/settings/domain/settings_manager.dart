@@ -123,11 +123,11 @@ class QuranSettingsManager {
 
   Future<bool> isAudioControlsEnabled() async {
     String isEnabledStr = await getValue(_audioControlSettings);
-    if (isEnabledStr == "true") {
-      return true;
+    if (isEnabledStr == "false") {
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   Future<NQTranslation> getTranslation() async {

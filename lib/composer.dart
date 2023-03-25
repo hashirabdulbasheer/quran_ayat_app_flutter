@@ -18,7 +18,6 @@ class QuranComposer {
       return QuranAyatScreen(
         surahIndex: suraIndex,
         ayaIndex: ayaIndex,
-        authEngine: QuranAuthFactory.engine,
         bookmarksManager: QuranBookmarksManager(
           localEngine: QuranLocalBookmarksEngine(),
           remoteEngine: QuranFirebaseBookmarksEngine(
