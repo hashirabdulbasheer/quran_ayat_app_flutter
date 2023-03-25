@@ -27,24 +27,57 @@ class QuranNavDrawer extends StatelessWidget {
     QuranUser? userParam = user;
     if (userParam != null) {
       /// Logged In
-      return Drawer(
+      return Theme(
+        data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+        child: Drawer(
+          child: QuranNavDrawerItemsWidget(
+            items: [
+              const QuranNavDrawerHeaderWidget(),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Profile',
+                icon: Icons.account_circle,
+                destination: QuranProfileScreen(
+                  user: userParam,
+                  onLogOutTapped: () => {_onLogout()},
+                ),
+              ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Notes',
+                icon: Icons.edit_note_sharp,
+                destination: QuranViewNotesScreen(user: userParam),
+              ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Search',
+                icon: Icons.search_rounded,
+                destination: const QuranSearchScreen(),
+              ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Settings',
+                icon: Icons.settings,
+                destination: const QuranSettingsScreen(),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    /// Logged out
+    return Theme(
+      data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+      child: Drawer(
         child: QuranNavDrawerItemsWidget(
           items: [
             const QuranNavDrawerHeaderWidget(),
             QuranNavDrawerRowWidget(
               context: context,
-              title: 'Profile',
-              icon: Icons.account_circle,
-              destination: QuranProfileScreen(
-                user: userParam,
-                onLogOutTapped: () => {_onLogout()},
-              ),
-            ),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Notes',
-              icon: Icons.edit_note_sharp,
-              destination: QuranViewNotesScreen(user: userParam),
+              title: 'Login',
+              icon: Icons.account_circle_outlined,
+              destination: const QuranLoginScreen(),
             ),
             QuranNavDrawerRowWidget(
               context: context,
@@ -60,33 +93,6 @@ class QuranNavDrawer extends StatelessWidget {
             ),
           ],
         ),
-      );
-    }
-
-    /// Logged out
-    return Drawer(
-      child: QuranNavDrawerItemsWidget(
-        items: [
-          const QuranNavDrawerHeaderWidget(),
-          QuranNavDrawerRowWidget(
-            context: context,
-            title: 'Login',
-            icon: Icons.account_circle_outlined,
-            destination: const QuranLoginScreen(),
-          ),
-          QuranNavDrawerRowWidget(
-            context: context,
-            title: 'Search',
-            icon: Icons.search_rounded,
-            destination: const QuranSearchScreen(),
-          ),
-          QuranNavDrawerRowWidget(
-            context: context,
-            title: 'Settings',
-            icon: Icons.settings,
-            destination: const QuranSettingsScreen(),
-          ),
-        ],
       ),
     );
   }
