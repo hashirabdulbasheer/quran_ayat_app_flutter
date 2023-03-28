@@ -98,7 +98,7 @@ class QuranSettingsManager {
 
   QuranSettingsManager._privateConstructor();
 
-  final double _fontScaleFactor = 0.6;
+  final double _fontScaleFactor = 0.7;
 
   List<QuranSetting> generateSettings() {
     return [
