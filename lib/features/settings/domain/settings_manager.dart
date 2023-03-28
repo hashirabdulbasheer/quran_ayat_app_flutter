@@ -138,6 +138,13 @@ class QuranSettingsManager {
     return fontSize;
   }
 
+  Future<void> resetFontSize() async {
+    double fontSize = 1;
+    save(_fontSizeSetting, "$fontSize",);
+
+    return;
+  }
+
   Future<void> incrementFontSize() async {
     double fontSize = await getFontScale();
     if (fontSize < _fontScaleFactor*10) {
