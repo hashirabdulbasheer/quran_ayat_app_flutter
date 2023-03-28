@@ -98,7 +98,7 @@ class QuranSettingsManager {
 
   QuranSettingsManager._privateConstructor();
 
-  final double _fontScaleFactor = 0.6;
+  final double _fontScaleFactor = 0.7;
 
   List<QuranSetting> generateSettings() {
     return [
@@ -136,6 +136,13 @@ class QuranSettingsManager {
     }
 
     return fontSize;
+  }
+
+  Future<void> resetFontSize() async {
+    double fontSize = 1;
+    save(_fontSizeSetting, "$fontSize",);
+
+    return;
   }
 
   Future<void> incrementFontSize() async {

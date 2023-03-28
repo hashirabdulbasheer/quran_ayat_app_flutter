@@ -278,11 +278,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                ElevatedButton(onPressed: _incrementFontSize,
-                                  child: const Text("+", style: TextStyle(fontSize: 20),),),
-                                const SizedBox(width: 10,),
-                                ElevatedButton(onPressed: _decrementFontSize,
-                                  child: const Text("-", style: TextStyle(fontSize: 20),),),
+                                  IconButton(onPressed: _incrementFontSize, icon: const Icon(Icons.add, size: 15,),),
+                                  IconButton(onPressed: _decrementFontSize, icon: const Icon(Icons.remove, size: 15,),),
+                                  IconButton(onPressed: _resetFontSize, icon: const Icon(Icons.refresh, size: 15,),),
                               ],),
                             ),
 
@@ -376,6 +374,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         ),
       ),
     );
+  }
+
+  void _resetFontSize() {
+    setState(() {
+      QuranSettingsManager.instance.resetFontSize();
+    });
   }
 
   void _incrementFontSize() {
