@@ -82,7 +82,23 @@ class QuranSettingsManager {
     type: QuranSettingType.dropdown,
   );
 
+  final QuranSetting _fontSizeSetting = QuranSetting(
+    name: "Select font size",
+    description: "adjust font size",
+    id: QuranSettingsConstants.fontSizeId,
+    showSearchBoxInDropdown: false,
+    possibleValues: QuranDropdownValuesFactory.createValues(
+      QuranSettingsConstants.audioReciterId,
+    ),
+    defaultValue: QuranDropdownValuesFactory.defaultValue(
+      QuranSettingsConstants.audioReciterId,
+    ),
+    type: QuranSettingType.dropdown,
+  );
+
   QuranSettingsManager._privateConstructor();
+
+  final double _fontScaleFactor = 0.6;
 
   List<QuranSetting> generateSettings() {
     return [
@@ -110,6 +126,36 @@ class QuranSettingsManager {
     QuranSettingsRepository repository = QuranSettingsRepositoryImpl();
 
     return repository.getValue(setting);
+  }
+
+  Future<double> getFontScale() async {
+    String fontScaleStr = await getValue(_fontSizeSetting);
+    double fontSize = 1;
+    if (double.tryParse(fontScaleStr) != null) {
+      fontSize = double.parse(fontScaleStr);
+    }
+
+    return fontSize;
+  }
+
+  Future<void> incrementFontSize() async {
+    double fontSize = await getFontScale();
+    if (fontSize < _fontScaleFactor*10) {
+      fontSize = fontSize / _fontScaleFactor;
+    }
+    save(_fontSizeSetting, "$fontSize",);
+
+    return;
+  }
+
+  Future<void> decrementFontSize() async {
+    double fontSize = await getFontScale();
+    if (fontSize > _fontScaleFactor*2) {
+      fontSize = fontSize * _fontScaleFactor;
+    }
+    save(_fontSizeSetting, "$fontSize",);
+
+    return;
   }
 
   Future<bool> isTransliterationEnabled() async {

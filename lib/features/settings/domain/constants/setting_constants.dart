@@ -4,4 +4,5 @@ class QuranSettingsConstants {
   static const String translationId = "quran_app_translation";
   static const String audioControlsId = "quran_app_audio_controls";
   static const String audioReciterId = "quran_app_audio_reciter";
+  static const String fontSizeId = "quran_app_font_size";
 }

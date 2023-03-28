@@ -2,6 +2,7 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../utils/utils.dart';
+import '../../../settings/domain/settings_manager.dart';
 
 class QuranFullAyatRowWidget extends StatelessWidget {
   final Future<NQSurah>? futureMethodThatReturnsSelectedSurah;
@@ -17,12 +18,29 @@ class QuranFullAyatRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<double>(
+      future: QuranSettingsManager.instance.getFontScale(),
+      builder: (
+          BuildContext context,
+          AsyncSnapshot<double> snapshot,
+          ) {
+        double fontScale = 1;
+        if (!snapshot.hasError && snapshot.data != null) {
+          fontScale = snapshot.data as double;
+        }
+
+        return _body(context, fontScale,);
+      },
+    );
+  }
+
+  Widget _body(BuildContext context, double fontScale,) {
     return FutureBuilder<NQSurah>(
       future: futureMethodThatReturnsSelectedSurah,
       builder: (
-        BuildContext context,
-        AsyncSnapshot<NQSurah> snapshot,
-      ) {
+          BuildContext context,
+          AsyncSnapshot<NQSurah> snapshot,
+          ) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return const Padding(
@@ -53,11 +71,11 @@ class QuranFullAyatRowWidget extends StatelessWidget {
                           child: Text(
                             _stripHtmlIfNeeded(ayats[ayaIndex - 1].text),
                             textAlign:
-                                QuranUtils.isArabic(ayats[ayaIndex - 1].text)
-                                    ? TextAlign.end
-                                    : TextAlign.start,
+                            QuranUtils.isArabic(ayats[ayaIndex - 1].text)
+                                ? TextAlign.end
+                                : TextAlign.start,
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: fontScale * 16,
                               height: 1.5,
                               fontFamily: fontFamily,
                               color: Colors.black87,
