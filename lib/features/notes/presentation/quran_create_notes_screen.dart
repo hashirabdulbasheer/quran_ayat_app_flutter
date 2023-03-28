@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:noble_quran/models/surah_title.dart';
+import 'package:noble_quran/noble_quran.dart';
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
+import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
+import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
 import '../domain/entities/quran_note.dart';
 import '../domain/notes_manager.dart';
 import 'widgets/notes_create_controls_widget.dart';
@@ -41,9 +45,31 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
           children: [
             const QuranOfflineHeaderWidget(),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5,),
               child: Text(
                 "Enter your notes for ${widget.suraIndex}:${widget.ayaIndex}",
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5,),
+              child: QuranFullAyatRowWidget(
+                futureMethodThatReturnsSelectedSurah:
+                NobleQuran.getSurahArabic(
+                  widget.suraIndex-1,
+                ),
+                ayaIndex: widget.ayaIndex,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10,),
+              child: QuranAyatDisplayTranslationWidget(
+                currentlySelectedSurah: NQSurahTitle(number: widget.suraIndex,
+                                                      name: '',
+                                                      transliterationEn: '',
+                                                      translationEn: '',
+                                                      totalVerses: 0,
+                                                      revelationType: RevelationType.MECCAN,),
+                currentlySelectedAya: widget.ayaIndex,
               ),
             ),
             Container(
