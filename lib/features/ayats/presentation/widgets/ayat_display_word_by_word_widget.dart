@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
+import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 
 import '../../../../misc/constants/string_constants.dart';
 import '../../../../misc/enums/quran_font_family_enum.dart';
@@ -17,6 +18,24 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<double>(
+      future: QuranSettingsManager.instance.getFontScale(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<double> snapshot,
+      ) {
+        double fontScale = 1;
+        if (!snapshot.hasError && snapshot.data != null) {
+          fontScale = snapshot.data as double;
+        }
+
+        return _body(context, fontScale,);
+      },
+    );
+    // return _body(context);
+  }
+
+  Widget _body(BuildContext context, double fontScale,) {
     return Semantics(
       enabled: true,
       excludeSemantics: false,
@@ -80,7 +99,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                           maxLines: 1,
                                           style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 30,
+                                            fontSize: fontScale * 30,
                                             fontFamily: QuranFontFamily
                                                 .arabic.rawString,
                                           ),
@@ -100,9 +119,9 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                         ),
                                         child: Text(
                                           e.tr,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             color: Colors.black54,
-                                            fontSize: 14,
+                                            fontSize: fontScale * 14,
                                           ),
                                           textDirection: TextDirection.ltr,
                                         ),

@@ -273,6 +273,19 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
                             const SizedBox(height: 25),
 
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                ElevatedButton(onPressed: _incrementFontSize,
+                                  child: const Text("+", style: TextStyle(fontSize: 20),),),
+                                const SizedBox(width: 10,),
+                                ElevatedButton(onPressed: _decrementFontSize,
+                                  child: const Text("-", style: TextStyle(fontSize: 20),),),
+                              ],),
+                            ),
+
                             /// body
                             Card(
                               elevation: 5,
@@ -363,6 +376,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         ),
       ),
     );
+  }
+
+  void _incrementFontSize() {
+    setState(() {
+      QuranSettingsManager.instance.incrementFontSize();
+    });
+  }
+
+  void _decrementFontSize() {
+    setState(() {
+      QuranSettingsManager.instance.decrementFontSize();
+    });
   }
 
   void _navigateToBookmark(NQBookmark? bookmark) {
