@@ -2,7 +2,7 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../utils/utils.dart';
-import '../../../settings/domain/settings_manager.dart';
+import 'font_scaler_widget.dart';
 
 class QuranFullAyatRowWidget extends StatelessWidget {
   final Future<NQSurah>? futureMethodThatReturnsSelectedSurah;
@@ -18,20 +18,7 @@ class QuranFullAyatRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<double>(
-      future: QuranSettingsManager.instance.getFontScale(),
-      builder: (
-          BuildContext context,
-          AsyncSnapshot<double> snapshot,
-          ) {
-        double fontScale = 1;
-        if (!snapshot.hasError && snapshot.data != null) {
-          fontScale = snapshot.data as double;
-        }
-
-        return _body(context, fontScale,);
-      },
-    );
+    return QuranFontScalerWidget(body: _body);
   }
 
   Widget _body(BuildContext context, double fontScale,) {
