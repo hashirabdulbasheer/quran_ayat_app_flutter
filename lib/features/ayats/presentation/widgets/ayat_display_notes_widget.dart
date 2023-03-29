@@ -11,6 +11,7 @@ import '../../../notes/domain/entities/quran_note.dart';
 import '../../../notes/domain/notes_manager.dart';
 import '../../../notes/presentation/quran_create_notes_screen.dart';
 import '../../../notes/presentation/widgets/offline_header_widget.dart';
+import 'font_scaler_widget.dart';
 
 class QuranAyatDisplayNotesWidget extends StatefulWidget {
   final NQSurahTitle? currentlySelectedSurah;
@@ -31,8 +32,13 @@ class QuranAyatDisplayNotesWidget extends StatefulWidget {
 
 class _QuranAyatDisplayNotesWidgetState
     extends State<QuranAyatDisplayNotesWidget> {
+
   @override
   Widget build(BuildContext context) {
+    return QuranFontScalerWidget(body: _body);
+  }
+
+  Widget _body(BuildContext context, double fontScale,) {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     // logged in
     if (widget.currentlySelectedSurah == null) {
@@ -171,6 +177,7 @@ class _QuranAyatDisplayNotesWidgetState
                                       children: [
                                         Text(
                                           notes[index].note,
+                                          textScaleFactor: fontScale,
                                           style: const TextStyle(fontSize: 14),
                                         ),
                                         const SizedBox(

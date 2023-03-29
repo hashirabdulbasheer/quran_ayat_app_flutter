@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
-import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 
 import '../../../../misc/constants/string_constants.dart';
 import '../../../../misc/enums/quran_font_family_enum.dart';
 import '../../../../quran_search_screen.dart';
+import 'font_scaler_widget.dart';
 
 class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
   final List<NQWord> words;
@@ -18,21 +18,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<double>(
-      future: QuranSettingsManager.instance.getFontScale(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<double> snapshot,
-      ) {
-        double fontScale = 1;
-        if (!snapshot.hasError && snapshot.data != null) {
-          fontScale = snapshot.data as double;
-        }
-
-        return _body(context, fontScale,);
-      },
-    );
-    // return _body(context);
+    return QuranFontScalerWidget(body: _body);
   }
 
   Widget _body(BuildContext context, double fontScale,) {
@@ -97,9 +83,10 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                           e.ar,
                                           softWrap: false,
                                           maxLines: 1,
+                                          textScaleFactor: fontScale,
                                           style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: fontScale * 30,
+                                            fontSize: 30,
                                             fontFamily: QuranFontFamily
                                                 .arabic.rawString,
                                           ),
@@ -119,9 +106,10 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                         ),
                                         child: Text(
                                           e.tr,
+                                          textScaleFactor: fontScale,
                                           style: TextStyle(
                                             color: Colors.black54,
-                                            fontSize: fontScale * 14,
+                                            fontSize: 14,
                                           ),
                                           textDirection: TextDirection.ltr,
                                         ),
