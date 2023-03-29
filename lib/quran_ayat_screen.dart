@@ -271,8 +271,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               currentlySelectedAya: _selectedAyat,
                             ),
 
-                            const SizedBox(height: 25),
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
