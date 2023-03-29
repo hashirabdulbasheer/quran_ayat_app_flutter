@@ -74,8 +74,9 @@ class QuranFullAyatRowWidget extends StatelessWidget {
                             QuranUtils.isArabic(ayats[ayaIndex - 1].text)
                                 ? TextAlign.end
                                 : TextAlign.start,
+                            textScaleFactor: fontScale,
                             style: TextStyle(
-                              fontSize: fontScale * 16,
+                              fontSize: 16,
                               height: 1.5,
                               fontFamily: fontFamily,
                               color: Colors.black87,

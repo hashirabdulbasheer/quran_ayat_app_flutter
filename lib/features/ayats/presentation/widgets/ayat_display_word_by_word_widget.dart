@@ -97,9 +97,10 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                           e.ar,
                                           softWrap: false,
                                           maxLines: 1,
+                                          textScaleFactor: fontScale,
                                           style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: fontScale * 30,
+                                            fontSize: 30,
                                             fontFamily: QuranFontFamily
                                                 .arabic.rawString,
                                           ),
@@ -119,9 +120,10 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                         ),
                                         child: Text(
                                           e.tr,
+                                          textScaleFactor: fontScale,
                                           style: TextStyle(
                                             color: Colors.black54,
-                                            fontSize: fontScale * 14,
+                                            fontSize: 14,
                                           ),
                                           textDirection: TextDirection.ltr,
                                         ),
