@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/ayats/presentation/widgets/font_scaler_widget.dart';
 import '../../../misc/enums/quran_font_family_enum.dart';
+import '../../ayats/presentation/widgets/font_scaler_widget.dart';
 import 'widgets/list_widget.dart';
 import '../../settings/domain/settings_manager.dart';
 
