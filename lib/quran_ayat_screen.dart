@@ -5,6 +5,7 @@ import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/contextList/presentation/quran_context_list_screen.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
@@ -276,6 +277,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
+                                  IconButton(onPressed: _navigateToContextListScreen, icon: const Icon(Icons.list_alt, size: 15,),),
+                                  const Spacer(),
                                   IconButton(onPressed: _incrementFontSize, icon: const Icon(Icons.add, size: 15,),),
                                   IconButton(onPressed: _decrementFontSize, icon: const Icon(Icons.remove, size: 15,),),
                                   IconButton(onPressed: _resetFontSize, icon: const Icon(Icons.refresh, size: 15,),),
@@ -581,6 +584,21 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   void _showMessage(String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _navigateToContextListScreen() {
+    if(_selectedSurah != null && _selectedAyat != null) {
+      Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              QuranContextListScreen(
+                title: _selectedSurah!.transliterationEn,
+                surahIndex: _selectedSurah!.number-1,
+                ayaIndex: _selectedAyat,),
+        ),
+      );
+    }
   }
 
   ///
