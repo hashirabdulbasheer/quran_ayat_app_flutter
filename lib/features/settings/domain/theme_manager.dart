@@ -42,7 +42,7 @@ class QuranThemeManager {
     cardColor: Colors.black54,
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Colors.white),
-      titleMedium: TextStyle(color: Colors.white60),
+      titleMedium: TextStyle(color: Colors.white),
       titleSmall: TextStyle(
         color: Colors.white60,
         fontSize: 12,

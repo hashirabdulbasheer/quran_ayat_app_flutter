@@ -63,54 +63,63 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
   }
 
   Widget _listItem(int index, double fontScale,) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Directionality(
-            textDirection: TextDirection.rtl,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${index + 1}) ",
-                  textScaleFactor: fontScale,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Flexible(
-                  child: Text(
-                    _arabic?.aya[index].text ?? "",
-                    textScaleFactor: fontScale,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontFamily: QuranFontFamily.arabic.rawString,
+    return ListTile(
+      onTap: () => _onListTileTap(index),
+      style: null,
+      title: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "${index + 1} ",
+              textScaleFactor: fontScale,
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).textTheme.titleSmall?.color?.withOpacity(0.5),
+              ),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Directionality(
+              textDirection: TextDirection.rtl,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Text(
+                      _arabic?.aya[index].text ?? "",
+                      textScaleFactor: fontScale,
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: QuranFontFamily.arabic.rawString,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            _translation?.aya[index].text ?? "",
-            textScaleFactor: fontScale,
-            style: const TextStyle(
-              fontSize: 16,
-              height: 1.5,
+            const SizedBox(
+              height: 10,
             ),
-          ),
-        ],
+            Text(
+              _translation?.aya[index].text ?? "",
+              textScaleFactor: fontScale,
+              style: const TextStyle(
+                fontSize: 16,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  void _onListTileTap(int index) {
+    Navigator.pop(context, index + 1,);
   }
 
   Future<bool> _fetchSurah() async {

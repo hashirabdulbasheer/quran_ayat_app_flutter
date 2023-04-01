@@ -586,9 +586,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void _navigateToContextListScreen() {
-    if(_selectedSurah != null && _selectedAyat != null) {
-      Navigator.push<void>(
+  void _navigateToContextListScreen() async {
+    if(_selectedSurah != null) {
+      int? selectedAyaIndex = await Navigator.push<int>(
         context,
         MaterialPageRoute(
           builder: (context) =>
@@ -598,6 +598,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 ayaIndex: _selectedAyat,),
         ),
       );
+
+      if(selectedAyaIndex != null) {
+        setState(() {
+          _selectedAyat = selectedAyaIndex;
+        });
+      }
+
     }
   }
 
