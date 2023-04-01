@@ -68,22 +68,23 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            "${index + 1} ",
+            textScaleFactor: fontScale,
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).textTheme.titleSmall?.color?.withOpacity(0.5),
+            ),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
           Directionality(
             textDirection: TextDirection.rtl,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "${index + 1}) ",
-                  textScaleFactor: fontScale,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
                 Flexible(
                   child: Text(
                     _arabic?.aya[index].text ?? "",
