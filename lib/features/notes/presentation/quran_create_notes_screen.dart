@@ -52,12 +52,15 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 5,),
-              child: QuranFullAyatRowWidget(
-                futureMethodThatReturnsSelectedSurah:
-                NobleQuran.getSurahArabic(
-                  widget.suraIndex-1,
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: QuranFullAyatRowWidget(
+                  futureMethodThatReturnsSelectedSurah:
+                  NobleQuran.getSurahArabic(
+                    widget.suraIndex-1,
+                  ),
+                  ayaIndex: widget.ayaIndex,
                 ),
-                ayaIndex: widget.ayaIndex,
               ),
             ),
             Padding(
