@@ -57,7 +57,7 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
 
   Widget _list() {
     return ListWidget(
-      initialAyaIndex: widget.ayaIndex-1,
+      initialIndex: widget.ayaIndex-1,
       itemsCount: _arabic?.aya.length ?? 0,
       itemContent: (index) => QuranFontScalerWidget(body: (context, fontScale,) => _listItemBody(index, fontScale,)),
     );

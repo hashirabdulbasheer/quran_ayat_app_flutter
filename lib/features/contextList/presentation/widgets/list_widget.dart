@@ -3,12 +3,12 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class ListWidget extends StatefulWidget {
   final int itemsCount;
-  final int? initialAyaIndex;
+  final int? initialIndex;
   final Widget Function(int,) itemContent;
 
   const ListWidget({
     Key? key,
-    this.initialAyaIndex,
+    this.initialIndex,
     required this.itemContent,
     required this.itemsCount,
   }) : super(key: key);
@@ -41,7 +41,7 @@ class _ListWidgetState extends State<ListWidget> {
   }
 
   void _scrollToAyat() {
-    _itemScrollController.jumpTo(index: widget.initialAyaIndex ?? 0);
+    _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
   }
 
 }
