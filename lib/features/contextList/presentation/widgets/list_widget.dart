@@ -5,7 +5,7 @@ import '../../../ayats/presentation/widgets/font_scaler_widget.dart';
 class ListWidget extends StatefulWidget {
   final int itemsCount;
   final int? initialAyaIndex;
-  final Widget Function(int, double,) itemContent;
+  final Widget Function(int,) itemContent;
 
   const ListWidget({
     Key? key,
@@ -30,17 +30,14 @@ class _ListWidgetState extends State<ListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return QuranFontScalerWidget(body: _body);
+    return _body();
   }
 
-  Widget _body(
-      BuildContext context,
-      double fontScale,
-      ) {
+  Widget _body() {
     return ScrollablePositionedList.separated(
         itemScrollController: _itemScrollController,
         itemCount: widget.itemsCount,
-        itemBuilder: (context, index,) => widget.itemContent(index, fontScale,),
+        itemBuilder: (context, index,) => widget.itemContent(index,),
         separatorBuilder: (context, index,) => const Divider(thickness: 0.2,),);
   }
 
