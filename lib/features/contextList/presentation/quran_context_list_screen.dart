@@ -64,9 +64,7 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
 
   Widget _listItem(int index, double fontScale,) {
     return ListTile(
-      onTap: () {
-
-      },
+      onTap: () => _onListTileTap(index),
       style: null,
       title: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -118,6 +116,10 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
         ),
       ),
     );
+  }
+
+  void _onListTileTap(int index) {
+    Navigator.pop(context, index + 1,);
   }
 
   Future<bool> _fetchSurah() async {
