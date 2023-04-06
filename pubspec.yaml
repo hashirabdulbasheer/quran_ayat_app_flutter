@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.3.9+1
+version: 2.4.0+1
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -90,9 +90,10 @@ flutter:
       fonts:
         - asset: assets/fonts/Manjari-Regular.ttf
 
-    - family: KFGQPC Uthmanic Script HAFS Regular
+    # https://fonts.qurancomplex.gov.sa/wp02/en/%D8%AD%D9%81%D8%B5/
+    - family: KFGQPC HAFS Uthmanic Script Regular
       fonts:
-        - asset: assets/fonts/KFGQPC_Uthmanic_Script_HAFS_Regular.otf
+        - asset: assets/fonts/UthmanicHafs_V20.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
