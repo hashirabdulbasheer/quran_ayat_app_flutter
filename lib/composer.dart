@@ -1,4 +1,3 @@
-import 'package:quran_ayat/features/auth/domain/auth_factory.dart';
 import 'package:quran_ayat/features/auth/domain/interfaces/quran_auth_interface.dart';
 
 import 'features/bookmark/data/bookmarks_local_impl.dart';
@@ -28,6 +27,8 @@ class QuranComposer {
     }
 
     return QuranAyatScreen(
+      surahIndex: suraIndex,
+      ayaIndex: ayaIndex,
       bookmarksManager: QuranBookmarksManager(
         localEngine: QuranLocalBookmarksEngine(),
       ),

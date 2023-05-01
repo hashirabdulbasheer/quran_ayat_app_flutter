@@ -222,7 +222,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                               child: TextField(
                                 textAlign: TextAlign.right,
                                 autofocus: true,
-                                style: const TextStyle(fontSize: 25),
+                                style: TextStyle(fontSize: 25, fontFamily: QuranFontFamily.arabic.rawString,),
                                 textDirection: TextDirection.rtl,
                                 onSubmitted: (value) =>
                                     _onSearchTextFieldSubmitted(value),
