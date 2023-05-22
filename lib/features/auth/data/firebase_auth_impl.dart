@@ -38,6 +38,8 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
         password: password,
       );
 
+      QuranLogger.logAnalytics("login");
+
       return QuranResponse(
         isSuccessful: true,
         message: "Logged In 👍",
@@ -79,6 +81,8 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
         password: password,
       );
       await credential.user?.updateDisplayName(name);
+
+      QuranLogger.logAnalytics("sign_up");
 
       return QuranResponse(
         isSuccessful: true,

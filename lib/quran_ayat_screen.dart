@@ -6,6 +6,7 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/contextList/presentation/quran_context_list_screen.dart';
+import 'package:quran_ayat/utils/logger_utils.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
@@ -15,6 +16,7 @@ import 'features/ayats/presentation/widgets/ayat_display_surah_progress_widget.d
 import 'features/ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_transliteration_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_word_by_word_widget.dart';
+import 'features/bookmark/data/firebase_bookmarks_impl.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
@@ -110,10 +112,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     });
 
     /// register for auth changes
-    QuranAuthFactory.engine?.registerAuthChangeListener(_authChangeListener);
+    QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
 
     // register for settings changes
     QuranSettingsManager.instance.registerListener(_settingsChangedListener);
+
+    // calling it once manually to initialize notes/bookmarks
+    _authChangeListener();
   }
 
   @override
@@ -437,6 +442,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           ),
         );
       });
+      QuranLogger.logAnalytics("share");
     }
   }
 
@@ -468,10 +474,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   void _authChangeListener() async {
-    QuranUser? user = QuranAuthFactory.engine?.getUser();
+    QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       /// upload local notes
       await QuranNotesManager.instance.uploadLocalNotesIfAny(user.uid);
+
+      widget.bookmarksManager.remoteEngine ??= QuranFirebaseBookmarksEngine(
+          userId: user.uid,
+        );
 
       /// fetch bookmark
       NQBookmark? bookmark = await widget.bookmarksManager.remoteEngine?.fetch();
@@ -505,6 +515,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
           },
         );
+        QuranLogger.logAnalytics("url-search");
       } else {
         // not a search url
         // check for surah/ayat format
@@ -527,6 +538,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               }
             }
           } catch (_) {}
+          QuranLogger.logAnalytics("url-sura-aya");
         } else if (suraIndex != null && suraIndex.isNotEmpty) {
           // has only one
           // the last path will be surah index
@@ -537,6 +549,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               _selectedSurah = _surahTitles[selectedSurahIndex];
             }
           } catch (_) {}
+          QuranLogger.logAnalytics("url-aya");
         }
       }
     }

@@ -342,6 +342,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     _resultsController.sink.add(results);
     _resultsController.done;
     _log("Searching  $enteredText ... Found ${results.length}");
+    QuranLogger.logAnalytics("search");
   }
 
   Future<bool> _onWillPop() async {
