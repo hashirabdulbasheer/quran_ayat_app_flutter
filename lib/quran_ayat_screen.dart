@@ -6,6 +6,7 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/contextList/presentation/quran_context_list_screen.dart';
+import 'package:quran_ayat/utils/logger_utils.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
@@ -437,6 +438,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           ),
         );
       });
+      QuranLogger.logAnalytics("share");
     }
   }
 
@@ -505,6 +507,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             ),
           },
         );
+        QuranLogger.logAnalytics("url-search");
       } else {
         // not a search url
         // check for surah/ayat format
@@ -527,6 +530,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               }
             }
           } catch (_) {}
+          QuranLogger.logAnalytics("url-sura-aya");
         } else if (suraIndex != null && suraIndex.isNotEmpty) {
           // has only one
           // the last path will be surah index
@@ -537,6 +541,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
               _selectedSurah = _surahTitles[selectedSurahIndex];
             }
           } catch (_) {}
+          QuranLogger.logAnalytics("url-aya");
         }
       }
     }

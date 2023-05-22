@@ -261,6 +261,7 @@ class _QuranAyatDisplayNotesWidgetState
           ).then((value) {
             setState(() {});
           });
+          QuranLogger.logAnalytics("add_note");
         }
       }
     }

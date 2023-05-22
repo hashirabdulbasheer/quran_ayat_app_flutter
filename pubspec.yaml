@@ -56,6 +56,7 @@ dependencies:
   just_audio: ^0.9.28
   http: ^0.13.5
   scrollable_positioned_list: ^0.3.5
+  firebase_analytics: ^10.4.1
 
 dev_dependencies:
   flutter_test:

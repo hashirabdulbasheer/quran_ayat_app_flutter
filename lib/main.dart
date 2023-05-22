@@ -7,6 +7,8 @@ import 'features/notes/data/hive_notes_impl.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
 import 'features/settings/domain/theme_manager.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+
 
 // TODO: Update before release
 const String appVersion = "v2.4.1";
@@ -16,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await QuranHiveNotesEngine.instance.initialize();
   await QuranAuthFactory.engine.initialize();
+  FirebaseAnalytics.instance.logAppOpen();
   runApp(MyApp(
     homeScreen: QuranComposer.composeAyatScreen(),
   ));
