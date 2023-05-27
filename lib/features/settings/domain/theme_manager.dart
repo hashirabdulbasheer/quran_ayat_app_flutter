@@ -66,6 +66,7 @@ class QuranThemeManager {
 
   /// loads the current theme and notify listeners about the theme change
   void loadThemeAndNotifyListeners() async {
+    /*
     if (isSystemDarkMode()) {
       // respect system dark mode
       _appTheme = ThemeMode.dark;
@@ -80,6 +81,11 @@ class QuranThemeManager {
         _appTheme = ThemeMode.dark;
       }
     }
+    */
+
+    // forcing dark theme for now
+    _appTheme = ThemeMode.dark;
+
     // inform all listeners
     _themeStream.add("quran_theme_changed_event");
   }
