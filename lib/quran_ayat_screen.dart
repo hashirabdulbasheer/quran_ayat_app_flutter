@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -218,6 +220,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 tooltip: "Copy to clipboard",
                 onPressed: () => _onCopyToClipboardIconPressed(context),
                 icon: const Icon(Icons.share),
+              ),
+              IconButton(
+                tooltip: "Random verse",
+                onPressed: () => _randomVersePressed(),
+                icon: const Icon(Icons.auto_awesome_outlined),
               ),
               QuranBookmarkIconWidget(
                 bookmarksManager: widget.bookmarksManager,
@@ -446,6 +453,18 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     }
   }
 
+  void _randomVersePressed() {
+    try {
+      int randomSurahIndex = Random().nextInt(114);
+      int randomAyaIndex = Random().nextInt(
+          _surahTitles[randomSurahIndex].totalVerses,) + 1;
+      setState(() {
+        _selectedSurah = _surahTitles[randomSurahIndex];
+        _selectedAyat = randomAyaIndex;
+      });
+    } catch (_) {}
+  }
+
   ///
   /// Bookmark
   ///
@@ -490,6 +509,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
           bookmark.surah,
           bookmark.ayat,
         );
+
+        /// displays the bookmark page if available on load
+        _selectedAyat = bookmark.ayat;
+        _selectedSurah = _surahTitles[bookmark.surah];
       }
     }
     setState(() {});
