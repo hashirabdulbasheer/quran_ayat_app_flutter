@@ -116,9 +116,10 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
 
   @override
   QuranUser? getUser() {
-    if (_user != null) {
-      return _user;
-    }
+    // TODO: Commenting to test if this solved the user session expiration issue
+    // if (_user != null) {
+    //   return _user;
+    // }
     FirebaseAuth.instance.currentUser?.reload();
     User? user = FirebaseAuth.instance.currentUser;
     _user = _mapFirebaseUserToQuranUser(user);
