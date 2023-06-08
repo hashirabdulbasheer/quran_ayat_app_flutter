@@ -511,8 +511,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
         );
 
         /// displays the bookmark page if available on load
-        _selectedAyat = bookmark.ayat;
-        _selectedSurah = _surahTitles[bookmark.surah];
+        // Load bookmark only if page loaded first time and not through links
+        // TODO: Work around hack, change this logic later on
+        if (_selectedAyat == 1 && _selectedSurah == _surahTitles.first) {
+          _selectedAyat = bookmark.ayat;
+          _selectedSurah = _surahTitles[bookmark.surah];
+        }
       }
     }
     setState(() {});
