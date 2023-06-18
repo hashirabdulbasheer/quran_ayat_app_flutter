@@ -1,16 +1,22 @@
+import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
+
 import '../../../models/qr_response_model.dart';
 import '../../../utils/utils.dart';
-import '../data/firebase_notes_impl.dart';
 import '../data/hive_notes_impl.dart';
+import '../data/quran_notes_impl.dart';
 import 'entities/quran_note.dart';
 import 'interfaces/quran_notes_interface.dart';
 import 'package:intl/intl.dart' as intl;
 
-class QuranNotesManager implements QuranNotesInterface {
+class QuranNotesManager implements QuranNotesDataSource {
   static final QuranNotesManager instance =
       QuranNotesManager._privateConstructor();
 
-  QuranNotesManager._privateConstructor();
+  QuranNotesManager._privateConstructor() {
+    _notesEngine = QuranNotesEngine(dataSource: QuranFirebaseEngine.instance);
+  }
+
+  late QuranNotesEngine _notesEngine;
 
   @override
   Future<QuranResponse> create(
@@ -25,7 +31,7 @@ class QuranNotesManager implements QuranNotesInterface {
       );
     } else {
       /// ONLINE
-      return await QuranFirebaseNotesEngine.instance.create(
+      return await _notesEngine.create(
         userId,
         note,
       );
@@ -39,7 +45,7 @@ class QuranNotesManager implements QuranNotesInterface {
   ) async {
     /// Supporting delete for online only
     if (!await isOffline()) {
-      return QuranFirebaseNotesEngine.instance.delete(
+      return _notesEngine.delete(
         userId,
         note,
       );
@@ -67,7 +73,7 @@ class QuranNotesManager implements QuranNotesInterface {
       );
     } else {
       /// ONLINE
-      return await QuranFirebaseNotesEngine.instance.fetch(
+      return await _notesEngine.fetch(
         userId,
         suraIndex,
         ayaIndex,
@@ -83,7 +89,7 @@ class QuranNotesManager implements QuranNotesInterface {
     }
 
     /// ONLINE
-    return QuranFirebaseNotesEngine.instance.initialize();
+    return _notesEngine.initialize();
   }
 
   @override
@@ -93,7 +99,7 @@ class QuranNotesManager implements QuranNotesInterface {
   ) async {
     if (!await isOffline()) {
       /// ONLINE
-      return QuranFirebaseNotesEngine.instance.update(
+      return _notesEngine.update(
         userId,
         note,
       );
@@ -133,7 +139,7 @@ class QuranNotesManager implements QuranNotesInterface {
     }
 
     /// ONLINE
-    return QuranFirebaseNotesEngine.instance.fetchAll(userId);
+    return _notesEngine.fetchAll(userId);
   }
 
   Future<List<QuranNote>> fetchAllLocal(String userId) {

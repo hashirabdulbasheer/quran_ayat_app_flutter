@@ -1,14 +1,16 @@
-import 'package:firebase_database/firebase_database.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../utils/utils.dart';
+import '../../core/data/quran_data_interface.dart';
 import '../domain/entities/quran_note.dart';
 import '../domain/interfaces/quran_notes_interface.dart';
 
-class QuranFirebaseNotesEngine implements QuranNotesInterface {
-  static final QuranFirebaseNotesEngine instance =
-      QuranFirebaseNotesEngine._privateConstructor();
 
-  QuranFirebaseNotesEngine._privateConstructor();
+class QuranNotesEngine implements QuranNotesDataSource {
+
+  late final QuranDataSource dataSource;
+
+
+  QuranNotesEngine({required this.dataSource});
 
   @override
   Future<void> initialize() async {
@@ -20,14 +22,12 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
     String userId,
     QuranNote note,
   ) async {
-    DatabaseReference ref = FirebaseDatabase.instance
-        .ref("notes/$userId/${note.suraIndex}/${note.ayaIndex}");
-    DatabaseReference newPostRef = ref.push();
-    await newPostRef.set(note.toMap());
+    await dataSource.create("notes/$userId/${note.suraIndex}/${note.ayaIndex}",
+                  note.toMap(),);
 
     return QuranResponse(
       isSuccessful: true,
-      message: "Success",
+      message: "success",
     );
   }
 
@@ -38,10 +38,7 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
     int ayaIndex,
   ) async {
     List<QuranNote> notes = [];
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref("notes/$userId/$suraIndex/$ayaIndex");
-    final snapshot = await ref.get();
-    Map<String, dynamic>? resultList = snapshot.value as Map<String, dynamic>?;
+    Map<String, dynamic>? resultList = await dataSource.fetch("notes/$userId/$suraIndex/$ayaIndex", suraIndex, ayaIndex,);
     if (resultList != null) {
       for (String k in resultList.keys) {
         QuranNote note = QuranNote(
@@ -72,11 +69,7 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
     QuranNote note,
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
-      DatabaseReference ref = FirebaseDatabase.instance
-          .ref("notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}");
-      await ref.set(note.toMap());
-
-      return true;
+      return await dataSource.update("notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}", note.toMap(),);
     }
 
     return false;
@@ -88,11 +81,7 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
     QuranNote note,
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
-      DatabaseReference ref = FirebaseDatabase.instance
-          .ref("notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}");
-      await ref.remove();
-
-      return true;
+      return await dataSource.delete("notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}");
     }
 
     return false;
@@ -101,9 +90,7 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
   @override
   Future<List<QuranNote>> fetchAll(String userId) async {
     List<QuranNote> notes = [];
-    DatabaseReference ref = FirebaseDatabase.instance.ref("notes/$userId");
-    final snapshot = await ref.get();
-    Map<String, dynamic>? resultList = snapshot.value as Map<String, dynamic>?;
+    Map<String, dynamic>? resultList = await dataSource.fetchAll("notes/$userId");
     for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
       for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
         if (resultList != null) {
@@ -147,9 +134,7 @@ class QuranFirebaseNotesEngine implements QuranNotesInterface {
   @Deprecated("a different method to parse all results")
   Future<List<QuranNote>> fetchAllMethod2(String userId) async {
     List<QuranNote> notes = [];
-    DatabaseReference ref = FirebaseDatabase.instance.ref("notes/$userId");
-    final snapshot = await ref.get();
-    Map<String, dynamic>? resultList = snapshot.value as Map<String, dynamic>?;
+    Map<String, dynamic>? resultList = await dataSource.fetchAll("notes/$userId");
     if (resultList != null) {
       for (String suraIndex in resultList.keys) {
         try {
