@@ -7,8 +7,7 @@ import '../domain/interfaces/quran_notes_interface.dart';
 
 class QuranNotesEngine implements QuranNotesDataSource {
 
-  late final QuranDataSource dataSource;
-
+  final QuranDataSource dataSource;
 
   QuranNotesEngine({required this.dataSource});
 

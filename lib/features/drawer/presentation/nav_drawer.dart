@@ -8,6 +8,7 @@ import '../../auth/presentation/quran_profile_screen.dart';
 import '../../bookmark/domain/bookmarks_manager.dart';
 import '../../notes/presentation/quran_view_notes_screen.dart';
 import '../../settings/presentation/quran_settings_screen.dart';
+import '../../tags/presentation/quran_view_tags_screen.dart';
 import 'widgets/nav_drawer_header.dart';
 import 'widgets/nav_drawer_items_widget.dart';
 import 'widgets/nav_drawer_row.dart';
@@ -47,6 +48,12 @@ class QuranNavDrawer extends StatelessWidget {
                 title: 'Notes',
                 icon: Icons.edit_note_sharp,
                 destination: QuranViewNotesScreen(user: userParam),
+              ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Tags',
+                icon: Icons.tag,
+                destination: QuranViewTagsScreen(user: userParam),
               ),
               QuranNavDrawerRowWidget(
                 context: context,

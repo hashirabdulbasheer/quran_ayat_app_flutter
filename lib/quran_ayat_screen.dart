@@ -27,6 +27,7 @@ import 'features/drawer/presentation/nav_drawer.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
+import 'features/tags/presentation/quran_tag_display.dart';
 import 'misc/constants/string_constants.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
@@ -126,8 +127,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     // calling it once manually to initialize notes/bookmarks
     _authChangeListener();
 
-    _subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) async {
-      if(!await QuranUtils.isOffline()) {
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      if (!await QuranUtils.isOffline()) {
         // back online
         _authChangeListener();
       }
@@ -301,12 +304,37 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  IconButton(onPressed: _navigateToContextListScreen, icon: const Icon(Icons.list_alt, size: 15,),),
+                                  IconButton(
+                                    onPressed: _navigateToContextListScreen,
+                                    icon: const Icon(
+                                      Icons.list_alt,
+                                      size: 15,
+                                    ),
+                                  ),
                                   const Spacer(),
-                                  IconButton(onPressed: _incrementFontSize, icon: const Icon(Icons.add, size: 15,),),
-                                  IconButton(onPressed: _decrementFontSize, icon: const Icon(Icons.remove, size: 15,),),
-                                  IconButton(onPressed: _resetFontSize, icon: const Icon(Icons.refresh, size: 15,),),
-                              ],),
+                                  IconButton(
+                                    onPressed: _incrementFontSize,
+                                    icon: const Icon(
+                                      Icons.add,
+                                      size: 15,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: _decrementFontSize,
+                                    icon: const Icon(
+                                      Icons.remove,
+                                      size: 15,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: _resetFontSize,
+                                    icon: const Icon(
+                                      Icons.refresh,
+                                      size: 15,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
 
                             /// body
@@ -358,24 +386,31 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               ),
                             ),
 
-                            // transliterationWidget if enabled
+                            /// transliterationWidget if enabled
                             QuranAyatDisplayTransliterationWidget(
                               currentlySelectedSurah: _selectedSurah,
                               currentlySelectedAya: _selectedAyat,
                             ),
 
-                            // translation widget
+                            /// translation widget
                             QuranAyatDisplayTranslationWidget(
                               currentlySelectedSurah: _selectedSurah,
                               currentlySelectedAya: _selectedAyat,
                             ),
 
-                            // audio controls
+                            /// audio controls
                             QuranAyatDisplayAudioControlsWidget(
                               currentlySelectedSurah: _selectedSurah,
                               currentlySelectedAya: _selectedAyat,
                               onAudioPlayStatusChanged:
                                   _onAudioPlayStatusChanged,
+                              continuousMode: _isAudioContinuousModeEnabled,
+                            ),
+
+                            /// Tags
+                            QuranAyatDisplayTagsWidget(
+                              currentlySelectedSurah: _selectedSurah,
+                              ayaIndex: _selectedAyat,
                               continuousMode: _isAudioContinuousModeEnabled,
                             ),
 
@@ -469,7 +504,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
     try {
       int randomSurahIndex = Random().nextInt(114);
       int randomAyaIndex = Random().nextInt(
-          _surahTitles[randomSurahIndex].totalVerses,) + 1;
+            _surahTitles[randomSurahIndex].totalVerses,
+          ) +
+          1;
       setState(() {
         _selectedSurah = _surahTitles[randomSurahIndex];
         _selectedAyat = randomAyaIndex;
@@ -511,11 +548,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       await QuranNotesManager.instance.uploadLocalNotesIfAny(user.uid);
 
       widget.bookmarksManager.remoteEngine ??= QuranFirebaseBookmarksEngine(
-          userId: user.uid,
-        );
+        userId: user.uid,
+      );
 
       /// fetch bookmark
-      NQBookmark? bookmark = await widget.bookmarksManager.remoteEngine?.fetch();
+      NQBookmark? bookmark =
+          await widget.bookmarksManager.remoteEngine?.fetch();
       if (bookmark != null) {
         widget.bookmarksManager.localEngine.save(
           bookmark.surah,
@@ -639,24 +677,23 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   }
 
   void _navigateToContextListScreen() async {
-    if(_selectedSurah != null) {
+    if (_selectedSurah != null) {
       int? selectedAyaIndex = await Navigator.push<int>(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              QuranContextListScreen(
-                title: _selectedSurah!.transliterationEn,
-                surahIndex: _selectedSurah!.number-1,
-                ayaIndex: _selectedAyat,),
+          builder: (context) => QuranContextListScreen(
+            title: _selectedSurah!.transliterationEn,
+            surahIndex: _selectedSurah!.number - 1,
+            ayaIndex: _selectedAyat,
+          ),
         ),
       );
 
-      if(selectedAyaIndex != null) {
+      if (selectedAyaIndex != null) {
         setState(() {
           _selectedAyat = selectedAyaIndex;
         });
       }
-
     }
   }
 
