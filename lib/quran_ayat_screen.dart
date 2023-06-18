@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,6 +68,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   final ValueNotifier<bool> _isAudioContinuousModeEnabled =
       ValueNotifier(false);
 
+  late final StreamSubscription _subscription;
+
   ///
   /// Theme
   ///
@@ -121,15 +125,23 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
     // calling it once manually to initialize notes/bookmarks
     _authChangeListener();
+
+    _subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) async {
+      if(!await QuranUtils.isOffline()) {
+        // back online
+        _authChangeListener();
+      }
+    });
   }
 
   @override
   void dispose() {
-    super.dispose();
     QuranAuthFactory.engine?.unregisterAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.removeListeners();
     _isAudioContinuousModeEnabled.value = false;
     _isAudioContinuousModeEnabled.dispose();
+    _subscription.cancel();
+    super.dispose();
   }
 
   @override
