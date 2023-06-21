@@ -64,7 +64,7 @@ class _QuranAyatDisplayTagsWidgetState
             children: [
               const Text("Tags"),
               ElevatedButton(
-                onPressed: () => _displayTextInputDialog(
+                onPressed: () => _displayAddTagDialog(
                   user?.uid,
                 ),
                 child: const Text("Add"),
@@ -113,7 +113,7 @@ class _QuranAyatDisplayTagsWidgetState
                         }
 
                         return TextButton(
-                          onPressed: () => _displayTextInputDialog(
+                          onPressed: () => _displayAddTagDialog(
                             user.uid,
                           ),
                           child: const SizedBox(
@@ -126,7 +126,7 @@ class _QuranAyatDisplayTagsWidgetState
                 },
               )
             : TextButton(
-                onPressed: () => _displayTextInputDialog(
+                onPressed: () => _displayAddTagDialog(
                   user?.uid,
                 ),
                 child: const SizedBox(
@@ -204,10 +204,11 @@ class _QuranAyatDisplayTagsWidgetState
   /// Dialog Utils
   ///
   ///
-  Future<void> _displayTextInputDialog(
+  Future<void> _displayAddTagDialog(
     String? userId,
   ) async {
     if (userId == null) return;
+    _selectedTag = "";
 
     return showDialog(
       context: context,
@@ -422,10 +423,6 @@ class _QuranAyatDisplayTagsWidgetState
     // validation
     if (newTagString.isEmpty || surahIndex == null) {
       // invalid
-      setState(() {
-        _selectedTag = "";
-      });
-
       return false;
     }
     QuranTagsManager manager = QuranTagsManager.instance;
@@ -459,10 +456,6 @@ class _QuranAyatDisplayTagsWidgetState
           return true;
         } else {
            // duplicate tag found
-          setState(() {
-            _selectedTag = "";
-          });
-
           return false;
         }
       }
