@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
@@ -25,7 +26,8 @@ class QuranAyatDisplayTagsWidget extends StatefulWidget {
 
 class _QuranAyatDisplayTagsWidgetState
     extends State<QuranAyatDisplayTagsWidget> {
-  final TextEditingController _textFieldController = TextEditingController();
+  String _selectedTag = "";
+  final _openDropDownProgKey = GlobalKey<DropdownSearchState<String>>();
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +172,10 @@ class _QuranAyatDisplayTagsWidgetState
                   width: 30,
                   child: TextButton(
                     onPressed: () => _displayRemovalConfirmationDialog(
-                        tag, tagString, user.uid),
+                      tag,
+                      tagString,
+                      user.uid,
+                    ),
                     child: const Text(
                       "X",
                       style: TextStyle(
@@ -204,8 +209,6 @@ class _QuranAyatDisplayTagsWidgetState
   ) async {
     if (userId == null) return;
 
-    _textFieldController.text = "";
-
     return showDialog(
       context: context,
       builder: (
@@ -213,13 +216,37 @@ class _QuranAyatDisplayTagsWidgetState
       ) {
         return AlertDialog(
           title: const Text(
-            'Tag',
+            'Select Tag',
           ),
-          content: TextField(
-            onChanged: (value) {},
-            controller: _textFieldController,
-            decoration:
-                const InputDecoration(hintText: "Enter a name for the tag"),
+          content: DropdownSearch<String>(
+            key: _openDropDownProgKey,
+            asyncItems: (_) => _fetchAllTags(userId),
+            popupProps: PopupPropsMultiSelection.menu(
+              showSearchBox: true,
+              showSelectedItems: true,
+              emptyBuilder: (
+                context,
+                searchEntry,
+              ) =>
+                  Center(
+                child: MaterialButton(
+                  color: Colors.green,
+                  child: const Text("Add New"),
+                  onPressed: () => addNewTag(searchEntry),
+                ),
+              ),
+            ),
+            dropdownDecoratorProps: const DropDownDecoratorProps(
+              dropdownSearchDecoration: InputDecoration(
+                labelText: "Enter tag name",
+                hintText: "Select/Add tag",
+              ),
+              textAlign: TextAlign.start,
+            ),
+            onChanged: (value) => {
+              if (value != null) {_selectedTag = value},
+            },
+            selectedItem: _selectedTag,
           ),
           actions: <Widget>[
             TextButton(
@@ -243,6 +270,25 @@ class _QuranAyatDisplayTagsWidgetState
           ],
         );
       },
+    );
+  }
+
+  void addNewTag(String newTag) {
+    if (newTag.isNotEmpty) {
+      _selectedTag = newTag;
+      _openDropDownProgKey.currentState?.changeSelectedItem(newTag);
+      _openDropDownProgKey.currentState?.closeDropDownSearch();
+      setState(() {});
+    } else {
+      _showMessage("Enter a tag name");
+    }
+  }
+
+  Future<List<String>> _fetchAllTags(
+    String userId,
+  ) async {
+    return Future.value(
+      _mapToString(await QuranTagsManager.instance.fetchAll(userId)),
     );
   }
 
@@ -299,11 +345,11 @@ class _QuranAyatDisplayTagsWidgetState
   ) async {
     if (await _saveTag(userId)) {
       _showMessage(
-        "Saved  👍",
+        "Saved 👍",
       );
     } else {
       _showMessage(
-        "Error Saving tag!",
+        "Error Saving tag 😔",
       );
     }
   }
@@ -323,7 +369,7 @@ class _QuranAyatDisplayTagsWidgetState
       );
     } else {
       _showMessage(
-        "Error Removing tag!",
+        "Error Removing tag 😔",
       );
     }
   }
@@ -371,11 +417,15 @@ class _QuranAyatDisplayTagsWidgetState
   Future<bool> _saveTag(
     String userId,
   ) async {
-    String newTagString = _textFieldController.text.toLowerCase().trim();
+    String newTagString = _selectedTag.toLowerCase().trim();
     int? surahIndex = widget.currentlySelectedSurah?.number;
     // validation
     if (newTagString.isEmpty || surahIndex == null) {
       // invalid
+      setState(() {
+        _selectedTag = "";
+      });
+
       return false;
     }
     QuranTagsManager manager = QuranTagsManager.instance;
@@ -402,9 +452,18 @@ class _QuranAyatDisplayTagsWidgetState
             currentTag,
           );
 
-          setState(() {});
+          setState(() {
+            _selectedTag = "";
+          });
 
           return true;
+        } else {
+           // duplicate tag found
+          setState(() {
+            _selectedTag = "";
+          });
+
+          return false;
         }
       }
     }
@@ -424,8 +483,22 @@ class _QuranAyatDisplayTagsWidgetState
       newTag,
     );
 
-    setState(() {});
+    setState(() {
+      _selectedTag = "";
+    });
 
     return true;
+  }
+
+  /// Utils
+  ///
+  List<String> _mapToString(List<QuranTag> tags) {
+    Set<String> tagStrings = {};
+    for (QuranTag quranTag in tags) {
+      List<String> tags = quranTag.tag;
+      tagStrings.addAll(tags);
+    }
+
+    return tagStrings.toList();
   }
 }
