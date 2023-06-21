@@ -4,9 +4,7 @@ import '../../core/data/quran_data_interface.dart';
 import '../domain/entities/quran_note.dart';
 import '../domain/interfaces/quran_notes_interface.dart';
 
-
 class QuranNotesEngine implements QuranNotesDataSource {
-
   final QuranDataSource dataSource;
 
   QuranNotesEngine({required this.dataSource});
@@ -21,8 +19,10 @@ class QuranNotesEngine implements QuranNotesDataSource {
     String userId,
     QuranNote note,
   ) async {
-    await dataSource.create("notes/$userId/${note.suraIndex}/${note.ayaIndex}",
-                  note.toMap(),);
+    await dataSource.create(
+      "notes/$userId/${note.suraIndex}/${note.ayaIndex}",
+      note.toMap(),
+    );
 
     return QuranResponse(
       isSuccessful: true,
@@ -37,7 +37,9 @@ class QuranNotesEngine implements QuranNotesDataSource {
     int ayaIndex,
   ) async {
     List<QuranNote> notes = [];
-    Map<String, dynamic>? resultList = await dataSource.fetch("notes/$userId/$suraIndex/$ayaIndex", suraIndex, ayaIndex,);
+    Map<String, dynamic>? resultList = await dataSource.fetch(
+      "notes/$userId/$suraIndex/$ayaIndex",
+    );
     if (resultList != null) {
       for (String k in resultList.keys) {
         QuranNote note = QuranNote(
@@ -68,7 +70,10 @@ class QuranNotesEngine implements QuranNotesDataSource {
     QuranNote note,
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
-      return await dataSource.update("notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}", note.toMap(),);
+      return await dataSource.update(
+        "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}",
+        note.toMap(),
+      );
     }
 
     return false;
@@ -80,7 +85,8 @@ class QuranNotesEngine implements QuranNotesDataSource {
     QuranNote note,
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
-      return await dataSource.delete("notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}");
+      return await dataSource.delete(
+          "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}");
     }
 
     return false;
@@ -89,7 +95,8 @@ class QuranNotesEngine implements QuranNotesDataSource {
   @override
   Future<List<QuranNote>> fetchAll(String userId) async {
     List<QuranNote> notes = [];
-    Map<String, dynamic>? resultList = await dataSource.fetchAll("notes/$userId");
+    Map<String, dynamic>? resultList =
+        await dataSource.fetchAll("notes/$userId") as Map<String, dynamic>?;
     for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
       for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
         if (resultList != null) {
@@ -133,7 +140,8 @@ class QuranNotesEngine implements QuranNotesDataSource {
   @Deprecated("a different method to parse all results")
   Future<List<QuranNote>> fetchAllMethod2(String userId) async {
     List<QuranNote> notes = [];
-    Map<String, dynamic>? resultList = await dataSource.fetchAll("notes/$userId");
+    Map<String, dynamic>? resultList =
+        await dataSource.fetchAll("notes/$userId") as Map<String, dynamic>?;
     if (resultList != null) {
       for (String suraIndex in resultList.keys) {
         try {

@@ -49,13 +49,15 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                           return const Center(child: Text('No tags'));
                         }
 
+                        List<String> tagStrings = _mapToString(tags);
+
                         return ListView.separated(
                           itemBuilder: (
                             context,
                             index,
                           ) {
                             return ListTile(
-                              title: Text(tags[index].tag as String),
+                              title: Text(tagStrings[index]),
                               onTap: () => {print("tag tapped")},
                             );
                           },
@@ -65,7 +67,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                           ) {
                             return const Divider(thickness: 1);
                           },
-                          itemCount: tags.length,
+                          itemCount: tagStrings.length,
                         );
                       }
                   }
@@ -78,13 +80,13 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     );
   }
 
-  List<Widget> _tagChildWidgets(QuranTag tag) {
-    List<Widget> children = [];
-    List<String> tags = tag.tag;
-    for (String tag in tags) {
-      children.add(Text(tag));
+  List<String> _mapToString(List<QuranTag> tags) {
+    Set<String> tagStrings = {};
+    for (QuranTag quranTag in tags) {
+      List<String> tags = quranTag.tag;
+      tagStrings.addAll(tags);
     }
 
-    return children;
+    return tagStrings.toList();
   }
 }

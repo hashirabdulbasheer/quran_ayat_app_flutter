@@ -38,8 +38,6 @@ class QuranTagsEngine implements QuranTagsDataSource {
   ) async {
     Map<String, dynamic>? resultList = await dataSource.fetch(
       "tags/$userId/$suraIndex/$ayaIndex",
-      suraIndex,
-      ayaIndex,
     );
     if (resultList != null && resultList.isNotEmpty) {
       String firstItemId = resultList.keys.first;
@@ -48,7 +46,11 @@ class QuranTagsEngine implements QuranTagsDataSource {
       return QuranTag(
         suraIndex: suraIndex,
         ayaIndex: ayaIndex,
-        tag: firstItem["tag"] != null ? (firstItem["tag"] as List).map((dynamic e) => e.toString()).toList() : [],
+        tag: firstItem["tag"] != null
+            ? (firstItem["tag"] as List)
+                .map((dynamic e) => e.toString())
+                .toList()
+            : [],
         createdOn: firstItem["createdOn"] as int,
         id: firstItemId,
         localId: "${firstItem["localId"]}",
@@ -65,7 +67,6 @@ class QuranTagsEngine implements QuranTagsDataSource {
     QuranTag tag,
   ) async {
     if (tag.id != null && tag.id?.isEmpty == false) {
-
       return await dataSource.update(
         "tags/$userId/${tag.suraIndex}/${tag.ayaIndex}/${tag.id}",
         tag.toMap(),
@@ -91,35 +92,76 @@ class QuranTagsEngine implements QuranTagsDataSource {
   @override
   Future<List<QuranTag>> fetchAll(String userId) async {
     List<QuranTag> tags = [];
-    Map<String, dynamic>? resultList =
-        await dataSource.fetchAll("tags/$userId");
-    for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
-      for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
-        if (resultList != null) {
+    try {
+      List<dynamic>? resultList =
+          await dataSource.fetchAll("tags/$userId") as List<dynamic>?;
+      if (resultList == null) {
+        return [];
+      }
+      for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
+        for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
           try {
             Map<String, dynamic>? tagsList =
-                resultList["$surahIndex"]["$ayaIndex"] as Map<String, dynamic>?;
-            if (tagsList != null) {
+                resultList[surahIndex][ayaIndex] as Map<String, dynamic>?;
+            if (tagsList != null && tagsList.isNotEmpty) {
               for (String tagsId in tagsList.keys) {
-                // print("$surahIndex:$ayaIndex : ${tagsList[tagsId]["tag"]}");
-                // print("******");
-                try {
-                  QuranTag tag = QuranTag(
-                    suraIndex: surahIndex,
-                    ayaIndex: ayaIndex,
-                    tag: tagsList[tagsId]["tag"] as List<String>,
-                    createdOn: tagsList[tagsId]["createdOn"] as int,
-                    id: tagsId,
-                    localId: "${tagsList[tagsId]["localId"] ?? ""}",
-                    status: QuranUtils.statusFromString(
-                      "${tagsList[tagsId]["status"] ?? ""}",
-                    ),
-                  );
-                  tags.add(tag);
-                } catch (_) {}
+                QuranTag tag = QuranTag(
+                  suraIndex: surahIndex,
+                  ayaIndex: ayaIndex,
+                  tag: tagsList[tagsId]["tag"] != null
+                      ? (tagsList[tagsId]["tag"] as List)
+                          .map((dynamic e) => e.toString())
+                          .toList()
+                      : [],
+                  createdOn: tagsList[tagsId]["createdOn"] as int,
+                  id: tagsId,
+                  localId: "${tagsList[tagsId]["localId"] ?? ""}",
+                  status: QuranUtils.statusFromString(
+                    "${tagsList[tagsId]["status"] ?? ""}",
+                  ),
+                );
+                tags.add(tag);
               }
             }
           } catch (_) {}
+        }
+      }
+
+      /*
+    for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
+      for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
+        try {
+          Map<String, dynamic>? tagsList =
+          resultList["$surahIndex"]["$ayaIndex"] as Map<String, dynamic>?;
+          print(tagsList.toString());
+          if (tagsList != null) {
+            for (String tagsId in tagsList.keys) {
+              print("$surahIndex:$ayaIndex : ${tagsList[tagsId]["tag"]}");
+              print("******");
+              try {
+                QuranTag tag = QuranTag(
+                  suraIndex: surahIndex,
+                  ayaIndex: ayaIndex,
+                  tag: tagsList[tagsId]["tag"] != null
+                      ? (tagsList[tagsId]["tag"] as List)
+                      .map((dynamic e) => e.toString())
+                      .toList()
+                      : [],
+                  createdOn: tagsList[tagsId]["createdOn"] as int,
+                  id: tagsId,
+                  localId: "${tagsList[tagsId]["localId"] ?? ""}",
+                  status: QuranUtils.statusFromString(
+                    "${tagsList[tagsId]["status"] ?? ""}",
+                  ),
+                );
+                tags.add(tag);
+              } catch (_) {}
+            }
+          } else {
+            print("tagsList null");
+          }
+        } catch (_) {
+          print("error");
         }
       }
     }
@@ -129,6 +171,10 @@ class QuranTagsEngine implements QuranTagsDataSource {
       b,
     ) =>
         b.createdOn.compareTo(a.createdOn));
+    */
+    } catch (error) {
+      print(error);
+    }
 
     return tags;
   }
@@ -137,7 +183,7 @@ class QuranTagsEngine implements QuranTagsDataSource {
   Future<List<QuranTag>> fetchAllMethod2(String userId) async {
     List<QuranTag> tags = [];
     Map<String, dynamic>? resultList =
-        await dataSource.fetchAll("tags/$userId");
+        await dataSource.fetchAll("tags/$userId") as Map<String, dynamic>?;
     if (resultList != null) {
       for (String suraIndex in resultList.keys) {
         try {

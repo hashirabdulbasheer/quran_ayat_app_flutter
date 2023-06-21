@@ -28,8 +28,6 @@ class QuranFirebaseEngine implements QuranDataSource {
   @override
   Future<Map<String, dynamic>?> fetch(
     String path,
-    int suraIndex,
-    int ayaIndex,
   ) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
     final snapshot = await ref.get();
@@ -59,10 +57,10 @@ class QuranFirebaseEngine implements QuranDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>?> fetchAll(String path) async {
+  Future<dynamic> fetchAll(String path) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
-    final snapshot = await ref.get();
+    DataSnapshot snapshot = await ref.get();
 
-    return snapshot.value as Map<String, dynamic>?;
+    return snapshot.value as dynamic;
   }
 }
