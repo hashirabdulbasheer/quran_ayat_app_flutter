@@ -219,35 +219,8 @@ class _QuranAyatDisplayTagsWidgetState
           title: const Text(
             'Select Tag',
           ),
-          content: DropdownSearch<String>(
-            key: _openDropDownProgKey,
-            asyncItems: (_) => _fetchAllTags(userId),
-            popupProps: PopupPropsMultiSelection.menu(
-              showSearchBox: true,
-              showSelectedItems: true,
-              emptyBuilder: (
-                context,
-                searchEntry,
-              ) =>
-                  Center(
-                child: MaterialButton(
-                  color: Colors.green,
-                  child: const Text("Add New"),
-                  onPressed: () => addNewTag(searchEntry),
-                ),
-              ),
-            ),
-            dropdownDecoratorProps: const DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
-                labelText: "Enter tag name",
-                hintText: "Select/Add tag",
-              ),
-              textAlign: TextAlign.start,
-            ),
-            onChanged: (value) => {
-              if (value != null) {_selectedTag = value},
-            },
-            selectedItem: _selectedTag,
+          content: _addDialogTagSelectorField(
+            userId,
           ),
           actions: <Widget>[
             TextButton(
@@ -271,6 +244,43 @@ class _QuranAyatDisplayTagsWidgetState
           ],
         );
       },
+    );
+  }
+
+  Widget _addDialogTagSelectorField(String userId) {
+    return DropdownSearch<String>(
+      key: _openDropDownProgKey,
+      asyncItems: (_) => _fetchAllTags(userId),
+      popupProps: PopupPropsMultiSelection.menu(
+        showSearchBox: true,
+        showSelectedItems: true,
+        emptyBuilder: (
+          context,
+          searchEntry,
+        ) =>
+            Padding(
+          padding: const EdgeInsetsDirectional.symmetric(
+            horizontal: 10,
+            vertical: 10,
+          ),
+          child: MaterialButton(
+            color: Colors.green,
+            child: Text("Add tag - \"$searchEntry\""),
+            onPressed: () => addNewTag(searchEntry),
+          ),
+        ),
+      ),
+      dropdownDecoratorProps: const DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(
+          labelText: "Enter tag name",
+          hintText: "Select/Add tag",
+        ),
+        textAlign: TextAlign.start,
+      ),
+      onChanged: (value) => {
+        if (value != null) {_selectedTag = value},
+      },
+      selectedItem: _selectedTag,
     );
   }
 
@@ -455,7 +465,7 @@ class _QuranAyatDisplayTagsWidgetState
 
           return true;
         } else {
-           // duplicate tag found
+          // duplicate tag found
           return false;
         }
       }
