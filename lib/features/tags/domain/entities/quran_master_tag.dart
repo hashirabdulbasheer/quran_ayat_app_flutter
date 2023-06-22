@@ -1,7 +1,7 @@
 import 'quran_master_tag_aya.dart';
 
 class QuranMasterTag {
-  final int id;
+  final String? id;
   final String name;
   final List<QuranMasterTagAya> ayas;
   final int createdOn;
@@ -19,7 +19,7 @@ class QuranMasterTag {
     return <String, dynamic>{
       "id": id,
       "name": name,
-      "ayas": ayas,
+      "ayas": ayas.map((e) => e.toMap()).toList(),
       "createdOn": createdOn,
       "status": status,
     };

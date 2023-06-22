@@ -6,6 +6,7 @@ import '../../../utils/utils.dart';
 import 'package:intl/intl.dart' as intl;
 
 import '../data/quran_tags_impl.dart';
+import 'entities/quran_master_tag.dart';
 import 'entities/quran_tag.dart';
 import 'interfaces/quran_tags_interface.dart';
 
@@ -32,6 +33,25 @@ class QuranTagsManager implements QuranTagsDataSource {
     } else {
       /// ONLINE
       return await _tagsEngine.create(
+        userId,
+        tag,
+      );
+    }
+  }
+
+  @override
+  Future<QuranResponse> createMaster(
+    String userId,
+    QuranMasterTag tag,
+  ) async {
+    if (await isOffline()) {
+      return QuranResponse(
+        isSuccessful: false,
+        message: "No internet",
+      );
+    } else {
+      /// ONLINE
+      return await _tagsEngine.createMaster(
         userId,
         tag,
       );
@@ -94,6 +114,23 @@ class QuranTagsManager implements QuranTagsDataSource {
     if (!await isOffline()) {
       /// ONLINE
       return _tagsEngine.update(
+        userId,
+        tag,
+      );
+    }
+
+    /// OFFLINE
+    return false;
+  }
+
+  @override
+  Future<bool> updateMaster(
+    String userId,
+    QuranMasterTag tag,
+  ) async {
+    if (!await isOffline()) {
+      /// ONLINE
+      return _tagsEngine.updateMaster(
         userId,
         tag,
       );
