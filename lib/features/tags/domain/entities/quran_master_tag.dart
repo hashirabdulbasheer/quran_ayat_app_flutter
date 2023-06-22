@@ -24,4 +24,8 @@ class QuranMasterTag {
       "status": status,
     };
   }
+
+  bool containsTag(String tag) {
+    return name == tag;
+  }
 }

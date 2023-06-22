@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quran_ayat/composer.dart';
+import 'package:quran_ayat/features/tags/domain/entities/quran_master_tag.dart';
 import 'package:quran_ayat/features/tags/presentation/quran_results_screen.dart';
 
 import '../features/tags/domain/entities/quran_index.dart';
@@ -24,12 +25,12 @@ class QuranNavigator {
 
   static void navigationToResultsScreen(
     BuildContext context,
-    List<QuranIndex> quranIndices,
+    QuranMasterTag tag,
   ) {
     Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (context) => QuranResultsScreen(quranIndices: quranIndices),
+        builder: (context) => QuranResultsScreen(tag: tag),
       ),
     );
   }

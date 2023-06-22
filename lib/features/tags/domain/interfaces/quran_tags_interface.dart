@@ -21,7 +21,7 @@ abstract class QuranTagsDataSource {
     int ayaIndex,
   );
 
-  Future<List<QuranTag>> fetchAll(String userId);
+  Future<List<QuranMasterTag>> fetchAll(String userId);
 
   Future<bool> delete(
     String userId,

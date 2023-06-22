@@ -1,3 +1,5 @@
+import 'package:quran_ayat/features/tags/domain/entities/quran_master_tag_aya.dart';
+
 import '../../../models/qr_response_model.dart';
 import '../../../utils/utils.dart';
 import '../../core/data/quran_data_interface.dart';
@@ -122,97 +124,35 @@ class QuranTagsEngine implements QuranTagsDataSource {
   }
 
   @override
-  Future<List<QuranTag>> fetchAll(String userId) async {
-    List<QuranTag> tags = [];
+  Future<List<QuranMasterTag>> fetchAll(String userId) async {
+    List<QuranMasterTag> tags = [];
     try {
-      List<dynamic>? resultList =
-          await dataSource.fetchAll("tags-master/$userId") as List<dynamic>?;
+      Map<String, dynamic>? resultList = await dataSource
+          .fetchAll("tags-master/$userId") as Map<String, dynamic>?;
       if (resultList == null) {
         return [];
       }
-      print(resultList);
-      /*
-      for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
-        for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
-          try {
-            Map<String, dynamic>? tagsList =
-                resultList[surahIndex][ayaIndex] as Map<String, dynamic>?;
-            if (tagsList != null && tagsList.isNotEmpty) {
-              for (String tagsId in tagsList.keys) {
-                QuranTag tag = QuranTag(
-                  suraIndex: surahIndex,
-                  ayaIndex: ayaIndex,
-                  tag: tagsList[tagsId]["tag"] != null
-                      ? (tagsList[tagsId]["tag"] as List)
-                          .map((dynamic e) => e.toString())
-                          .toList()
-                      : [],
-                  createdOn: tagsList[tagsId]["createdOn"] as int,
-                  id: tagsId,
-                  localId: "${tagsList[tagsId]["localId"] ?? ""}",
-                  status: QuranUtils.statusFromString(
-                    "${tagsList[tagsId]["status"] ?? ""}",
-                  ),
-                );
-                tags.add(tag);
-              }
-            }
-          } catch (_) {}
-        }
+      for (String tagKey in resultList.keys) {
+        Map<String, dynamic> tag = resultList[tagKey] as Map<String, dynamic>;
+        QuranMasterTag masterTag = QuranMasterTag(
+          id: tagKey,
+          name: tag["name"] as String,
+          ayas: tag["ayas"] != null
+              ? (tag["ayas"] as List<dynamic>)
+                  .map((dynamic e) => QuranMasterTagAya(
+                        suraIndex: e["sura"] as int,
+                        ayaIndex: e["aya"] as int,
+                      ))
+                  .toList()
+              : [],
+          createdOn: tag["createdOn"] as int,
+          status: tag["status"] as String,
+        );
+        tags.add(masterTag);
       }
-      */
     } catch (error) {
       print(error);
     }
-
-    return tags;
-  }
-
-  @Deprecated("a different method to parse all results")
-  Future<List<QuranTag>> fetchAllMethod2(String userId) async {
-    List<QuranTag> tags = [];
-    Map<String, dynamic>? resultList =
-        await dataSource.fetchAll("tags/$userId") as Map<String, dynamic>?;
-    if (resultList != null) {
-      for (String suraIndex in resultList.keys) {
-        try {
-          Map<String, dynamic>? ayatList =
-              resultList[suraIndex] as Map<String, dynamic>?;
-          if (ayatList != null) {
-            for (String ayaIndex in ayatList.keys) {
-              Map<String, dynamic>? tagsList =
-                  ayatList[ayaIndex] as Map<String, dynamic>?;
-              if (tagsList != null) {
-                for (String tagsId in tagsList.keys) {
-                  // print("$suraIndex:$ayaIndex : ${tagsList[tagsId]["tag"]}");
-                  // print("******");
-                  try {
-                    QuranTag tag = QuranTag(
-                      suraIndex: int.parse(suraIndex),
-                      ayaIndex: int.parse(ayaIndex),
-                      tag: tagsList[tagsId]["tag"] as List<String>,
-                      createdOn: tagsList[tagsId]["createdOn"] as int,
-                      id: tagsId,
-                      localId: "${tagsList[tagsId]["localId"] ?? ""}",
-                      status: QuranUtils.statusFromString(
-                        "${tagsList[tagsId]["status"] ?? ""}",
-                      ),
-                    );
-                    tags.add(tag);
-                  } catch (_) {}
-                }
-              }
-            }
-          }
-        } catch (_) {}
-      }
-    }
-    // sort
-    tags.sort((
-      a,
-      b,
-    ) =>
-        b.createdOn.compareTo(a.createdOn));
 
     return tags;
   }

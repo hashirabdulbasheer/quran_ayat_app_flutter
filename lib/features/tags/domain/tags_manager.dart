@@ -1,16 +1,13 @@
-import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
-import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
-
+import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../utils/utils.dart';
 import 'package:intl/intl.dart' as intl;
-
+import '../../core/data/quran_firebase_engine.dart';
 import '../data/quran_tags_impl.dart';
 import 'entities/quran_master_tag.dart';
 import 'entities/quran_tag.dart';
-import 'interfaces/quran_tags_interface.dart';
 
-class QuranTagsManager implements QuranTagsDataSource {
+class QuranTagsManager {
   static final QuranTagsManager instance =
       QuranTagsManager._privateConstructor();
 
@@ -39,10 +36,9 @@ class QuranTagsManager implements QuranTagsDataSource {
     }
   }
 
-  @override
   Future<QuranResponse> createMaster(
     String userId,
-    QuranMasterTag tag,
+    String tag,
   ) async {
     if (await isOffline()) {
       return QuranResponse(
@@ -51,9 +47,17 @@ class QuranTagsManager implements QuranTagsDataSource {
       );
     } else {
       /// ONLINE
+      QuranMasterTag masterTag = QuranMasterTag(
+        id: "${DateTime.now().millisecondsSinceEpoch}",
+        name: tag,
+        ayas: [],
+        createdOn: DateTime.now().millisecondsSinceEpoch,
+        status: QuranStatusEnum.created.rawString(),
+      );
+
       return await _tagsEngine.createMaster(
         userId,
-        tag,
+        masterTag,
       );
     }
   }
@@ -126,14 +130,16 @@ class QuranTagsManager implements QuranTagsDataSource {
   @override
   Future<bool> updateMaster(
     String userId,
-    QuranMasterTag tag,
+    QuranMasterTag? tag,
   ) async {
     if (!await isOffline()) {
       /// ONLINE
-      return _tagsEngine.updateMaster(
-        userId,
-        tag,
-      );
+      if (tag != null) {
+        return _tagsEngine.updateMaster(
+          userId,
+          tag,
+        );
+      }
     }
 
     /// OFFLINE
@@ -141,7 +147,7 @@ class QuranTagsManager implements QuranTagsDataSource {
   }
 
   @override
-  Future<List<QuranTag>> fetchAll(String userId) async {
+  Future<List<QuranMasterTag>> fetchAll(String userId) async {
     if (await isOffline()) {
       /// OFFLINE
       return [];

@@ -1,9 +1,11 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
+import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
+import '../domain/entities/quran_master_tag.dart';
+import '../domain/entities/quran_master_tag_aya.dart';
 import '../domain/entities/quran_tag.dart';
 import '../domain/tags_manager.dart';
 
@@ -26,8 +28,7 @@ class QuranAyatDisplayTagsWidget extends StatefulWidget {
 
 class _QuranAyatDisplayTagsWidgetState
     extends State<QuranAyatDisplayTagsWidget> {
-  String _selectedTag = "";
-  final _openDropDownProgKey = GlobalKey<DropdownSearchState<String>>();
+  QuranMasterTag? _selectedTag;
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +209,8 @@ class _QuranAyatDisplayTagsWidgetState
     String? userId,
   ) async {
     if (userId == null) return;
-    _selectedTag = "";
+
+    _selectedTag = null;
 
     return showDialog(
       context: context,
@@ -248,58 +250,44 @@ class _QuranAyatDisplayTagsWidgetState
   }
 
   Widget _addDialogTagSelectorField(String userId) {
-    return DropdownSearch<String>(
-      key: _openDropDownProgKey,
+    return DropdownSearch<QuranMasterTag>(
       asyncItems: (_) => _fetchAllTags(userId),
       popupProps: PopupPropsMultiSelection.menu(
         showSearchBox: true,
-        showSelectedItems: true,
         emptyBuilder: (
           context,
           searchEntry,
         ) =>
-            Padding(
-          padding: const EdgeInsetsDirectional.symmetric(
+            const Padding(
+          padding: EdgeInsetsDirectional.symmetric(
             horizontal: 10,
             vertical: 10,
           ),
-          child: MaterialButton(
-            color: Colors.green,
-            child: Text("Add tag - \"$searchEntry\""),
-            onPressed: () => addNewTag(searchEntry),
+          child: Text(
+            "No tags found\n\nPlease add a tag through Menu Drawer-Tags",
           ),
         ),
       ),
       dropdownDecoratorProps: const DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
-          labelText: "Enter tag name",
-          hintText: "Select/Add tag",
+          labelText: "Tag",
+          hintText: "select tag",
         ),
         textAlign: TextAlign.start,
       ),
       onChanged: (value) => {
         if (value != null) {_selectedTag = value},
       },
+      itemAsString: (item) => item.name,
       selectedItem: _selectedTag,
     );
   }
 
-  void addNewTag(String newTag) {
-    if (newTag.isNotEmpty) {
-      _selectedTag = newTag;
-      _openDropDownProgKey.currentState?.changeSelectedItem(newTag);
-      _openDropDownProgKey.currentState?.closeDropDownSearch();
-      setState(() {});
-    } else {
-      _showMessage("Enter a tag name");
-    }
-  }
-
-  Future<List<String>> _fetchAllTags(
+  Future<List<QuranMasterTag>> _fetchAllTags(
     String userId,
   ) async {
     return Future.value(
-      _mapToString(await QuranTagsManager.instance.fetchAll(userId)),
+      await QuranTagsManager.instance.fetchAll(userId),
     );
   }
 
@@ -428,13 +416,16 @@ class _QuranAyatDisplayTagsWidgetState
   Future<bool> _saveTag(
     String userId,
   ) async {
-    String newTagString = _selectedTag.toLowerCase().trim();
+    if (_selectedTag == null) return false;
+
+    String? newTagString = _selectedTag?.name.toLowerCase().trim();
     int? surahIndex = widget.currentlySelectedSurah?.number;
     // validation
-    if (newTagString.isEmpty || surahIndex == null) {
+    if (newTagString == null || newTagString.isEmpty || surahIndex == null) {
       // invalid
       return false;
     }
+
     QuranTagsManager manager = QuranTagsManager.instance;
     QuranTag? currentTag = await manager.fetch(
       userId,
@@ -442,66 +433,89 @@ class _QuranAyatDisplayTagsWidgetState
       widget.ayaIndex,
     );
 
-    if (currentTag != null) {
-      // Update flow
-      List<String> currentTagStrings = currentTag.tag;
-      if (currentTagStrings.isNotEmpty) {
-        if (!currentTagStrings.contains(newTagString)) {
-          // there is no duplicate
-          // already contains tags - so update
-          currentTagStrings.add(newTagString);
-          currentTag = currentTag.copyWith(
-            tag: currentTagStrings,
-            status: QuranStatusEnum.updated,
-          );
-          await manager.update(
-            userId,
-            currentTag,
-          );
-
-          setState(() {
-            _selectedTag = "";
-          });
-
-          return true;
-        } else {
-          // duplicate tag found
-          return false;
-        }
-      }
+    if (currentTag == null || currentTag.tag.isEmpty) {
+      // create a new tag
+      return await _createNewTag(userId, surahIndex, widget.ayaIndex, newTagString,);
+    } else {
+      // update existing tag
+      return await _updateTag(userId, currentTag, newTagString,);
     }
+  }
 
-    // create a new tag
+  /// Helpers
+  ///
+
+  Future<bool> _createNewTag(String userId, int suraIndex, int ayaIndex, String newTagString,) async {
+    QuranTagsManager manager = QuranTagsManager.instance;
     QuranTag newTag = QuranTag(
-      suraIndex: surahIndex,
-      ayaIndex: widget.ayaIndex,
+      suraIndex: suraIndex,
+      ayaIndex: ayaIndex,
       tag: [newTagString],
       localId: DateTime.now().millisecondsSinceEpoch.toString(),
       createdOn: DateTime.now().millisecondsSinceEpoch,
       status: QuranStatusEnum.created,
     );
 
+    // create tag
     await manager.create(
       userId,
       newTag,
     );
 
+    // update tag-master to add the aya infor
+    _selectedTag?.ayas.add(QuranMasterTagAya(
+      suraIndex: newTag.suraIndex,
+      ayaIndex: newTag.ayaIndex,
+    ));
+    await manager.updateMaster(
+      userId,
+      _selectedTag,
+    );
+
     setState(() {
-      _selectedTag = "";
+      _selectedTag = null;
     });
 
     return true;
   }
 
-  /// Utils
-  ///
-  List<String> _mapToString(List<QuranTag> tags) {
-    Set<String> tagStrings = {};
-    for (QuranTag quranTag in tags) {
-      List<String> tags = quranTag.tag;
-      tagStrings.addAll(tags);
+  Future<bool> _updateTag(String userId, QuranTag currentTag, String newTagString,) async {
+    if (currentTag.tag.contains(newTagString)) {
+      // duplicate
+      return false;
     }
 
-    return tagStrings.toList();
+    // there is no duplicate
+    // already contains tags - so update
+    QuranTagsManager manager = QuranTagsManager.instance;
+    List<String> currentTagStrings = currentTag.tag;
+    currentTagStrings.add(newTagString);
+    currentTag = currentTag.copyWith(
+      tag: currentTagStrings,
+      status: QuranStatusEnum.updated,
+    );
+
+    // update tag
+    await manager.update(
+      userId,
+      currentTag,
+    );
+
+    // update tag-master to add the aya infor
+    _selectedTag?.ayas.add(QuranMasterTagAya(
+      suraIndex: currentTag.suraIndex,
+      ayaIndex: currentTag.ayaIndex,
+    ));
+    await manager.updateMaster(
+      userId,
+      _selectedTag,
+    );
+
+    setState(() {
+      _selectedTag = null;
+    });
+
+    return true;
   }
+
 }

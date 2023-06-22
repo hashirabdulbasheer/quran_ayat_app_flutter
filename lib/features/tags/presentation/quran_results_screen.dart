@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/tags/domain/entities/quran_master_tag_aya.dart';
 import '../../settings/domain/settings_manager.dart';
 import '../domain/entities/quran_index.dart';
+import '../domain/entities/quran_master_tag.dart';
 
 class QuranResultsScreen extends StatefulWidget {
-  final List<QuranIndex> quranIndices;
+  final QuranMasterTag tag;
 
   const QuranResultsScreen({
     Key? key,
-    required this.quranIndices,
+    required this.tag,
   }) : super(key: key);
 
   @override
@@ -73,31 +75,38 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
   Widget _listRow(
     QuranIndex index,
   ) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(index.surahTitle ?? ""),
-            Text("${index.surahIndex}: ${index.ayaIndex}"),
-          ],
-        ),
-        Text(index.translationAya ?? ""),
-      ],
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${index.surahIndex}: ${index.ayaIndex}"),
+              Text(index.surahTitle ?? "n/a"),
+            ],
+          ),
+          Text(index.translationAya ?? ""),
+        ],
+      ),
     );
   }
 
   Future<List<QuranIndex>> _fetchDetails() async {
     List<QuranIndex> updatedIndices = [];
-    for (QuranIndex index in widget.quranIndices) {
+    for (QuranMasterTagAya aya in widget.tag.ayas) {
       NQTranslation translation =
           await QuranSettingsManager.instance.getTranslation();
       NQSurah translationSurah = await NobleQuran.getTranslationString(
-        index.surahIndex,
+        aya.suraIndex - 1,
         translation,
       );
-      updatedIndices.add(index.copyWith(
-        translationAya: translationSurah.aya[index.ayaIndex].text,
+      updatedIndices.add(QuranIndex(
+        surahIndex: aya.suraIndex,
+        ayaIndex: aya.ayaIndex,
         surahTitle: translationSurah.name,
+        translationAya: translationSurah.aya[aya.ayaIndex].text,
       ));
     }
 

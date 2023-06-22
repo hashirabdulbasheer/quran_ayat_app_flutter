@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/tags/domain/entities/quran_index.dart';
-import 'package:quran_ayat/utils/nav_utils.dart';
-
 import '../../../models/qr_user_model.dart';
-import '../domain/entities/quran_tag.dart';
+import '../../../utils/nav_utils.dart';
+import '../domain/entities/quran_master_tag.dart';
 import '../domain/tags_manager.dart';
-
-class QuranTagForView {
-
-}
 
 class QuranViewTagsScreen extends StatefulWidget {
   final QuranUser user;
@@ -23,6 +17,9 @@ class QuranViewTagsScreen extends StatefulWidget {
 }
 
 class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
+  final TextEditingController _textEditingController = TextEditingController();
+  List<QuranMasterTag> _tags = [];
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -30,15 +27,23 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Tags"),
+          actions: [
+            IconButton(
+              onPressed: () => _displayAddTagDialog(
+                widget.user.uid,
+              ),
+              icon: const Icon(Icons.add),
+            ),
+          ],
         ),
         body: Column(
           children: [
             Expanded(
-              child: FutureBuilder<List<QuranTag>>(
+              child: FutureBuilder<List<QuranMasterTag>>(
                 future: QuranTagsManager.instance.fetchAll(widget.user.uid),
                 builder: (
                   BuildContext context,
-                  AsyncSnapshot<List<QuranTag>> snapshot,
+                  AsyncSnapshot<List<QuranMasterTag>> snapshot,
                 ) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
@@ -50,12 +55,10 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                       if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else {
-                        List<QuranTag> tags = snapshot.data as List<QuranTag>;
-                        if (tags.isEmpty) {
+                        _tags = snapshot.data as List<QuranMasterTag>;
+                        if (_tags.isEmpty) {
                           return const Center(child: Text('No tags'));
                         }
-
-                        List<String> tagStrings = _mapToString(tags);
 
                         return ListView.separated(
                           itemBuilder: (
@@ -63,17 +66,8 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                             index,
                           ) {
                             return ListTile(
-                              title: Text(tagStrings[index]),
-                              onTap: ()  {
-                                List<QuranIndex> indices = [];
-                                for(QuranTag tag in tags) {
-                                  List<String> tagsIntag = tag.tag;
-                                  if(tagsIntag.isNotEmpty && tagsIntag.contains(tagStrings[index])) {
-                                    indices.add(QuranIndex(surahIndex: tag.suraIndex, ayaIndex: tag.ayaIndex));
-                                  }
-                                }
-                                QuranNavigator.navigationToResultsScreen(context, indices);
-                              },
+                              title: Text(_tags[index].name),
+                              onTap: () => _navigateToResults(_tags[index]),
                             );
                           },
                           separatorBuilder: (
@@ -82,7 +76,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                           ) {
                             return const Divider(thickness: 1);
                           },
-                          itemCount: tagStrings.length,
+                          itemCount: _tags.length,
                         );
                       }
                   }
@@ -95,13 +89,81 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     );
   }
 
-  List<String> _mapToString(List<QuranTag> tags) {
-    Set<String> tagStrings = {};
-    for (QuranTag quranTag in tags) {
-      List<String> tags = quranTag.tag;
-      tagStrings.addAll(tags);
+  Future<void> _displayAddTagDialog(
+    String? userId,
+  ) async {
+    if (userId == null) return;
+    _textEditingController.text = "";
+
+    return showDialog(
+      context: context,
+      builder: (
+        context,
+      ) {
+        return AlertDialog(
+          title: const Text(
+            'Select Tag',
+          ),
+          content: TextField(
+            controller: _textEditingController,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            MaterialButton(
+              color: Colors.white60,
+              textColor: Colors.white,
+              child: const Text(
+                'Save',
+                style: TextStyle(
+                  color: Colors.black87,
+                ),
+              ),
+              onPressed: () => {
+                _saveTag(userId),
+                Navigator.of(context).pop(),
+                setState(() {}),
+                _showMessage("Saved 👍"),
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _saveTag(String userId) async {
+    String newTag = _textEditingController.text.toLowerCase().trim();
+    if (newTag.isEmpty || _tags.any((item) => item.containsTag(newTag))) {
+      _showMessage("Error saving tag 😔");
+
+      return;
+    }
+    await QuranTagsManager.instance.createMaster(
+      userId,
+      newTag,
+    );
+  }
+
+  void _navigateToResults(QuranMasterTag tag) {
+    if (tag.ayas.isEmpty) {
+      _showMessage("Tag not used");
+
+      return;
     }
 
-    return tagStrings.toList();
+    QuranNavigator.navigationToResultsScreen(
+      context,
+      tag,
+    );
+  }
+
+  void _showMessage(
+    String message,
+  ) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }
