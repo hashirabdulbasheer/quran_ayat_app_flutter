@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quran_ayat/composer.dart';
+import 'package:quran_ayat/features/tags/presentation/quran_results_screen.dart';
+
+import '../features/tags/domain/entities/quran_index.dart';
 
 class QuranNavigator {
   /// navigate to ayat screen
@@ -15,6 +18,18 @@ class QuranNavigator {
           suraIndex: surahIndex,
           ayaIndex: ayaIndex,
         ),
+      ),
+    );
+  }
+
+  static void navigationToResultsScreen(
+    BuildContext context,
+    List<QuranIndex> quranIndices,
+  ) {
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuranResultsScreen(quranIndices: quranIndices),
       ),
     );
   }

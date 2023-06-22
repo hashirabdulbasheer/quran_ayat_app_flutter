@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/tags/domain/entities/quran_index.dart';
+import 'package:quran_ayat/utils/nav_utils.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../domain/entities/quran_tag.dart';
 import '../domain/tags_manager.dart';
+
+class QuranTagForView {
+
+}
 
 class QuranViewTagsScreen extends StatefulWidget {
   final QuranUser user;
@@ -58,7 +64,16 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                           ) {
                             return ListTile(
                               title: Text(tagStrings[index]),
-                              onTap: () => {print("tag tapped")},
+                              onTap: ()  {
+                                List<QuranIndex> indices = [];
+                                for(QuranTag tag in tags) {
+                                  List<String> tagsIntag = tag.tag;
+                                  if(tagsIntag.isNotEmpty && tagsIntag.contains(tagStrings[index])) {
+                                    indices.add(QuranIndex(surahIndex: tag.suraIndex, ayaIndex: tag.ayaIndex));
+                                  }
+                                }
+                                QuranNavigator.navigationToResultsScreen(context, indices);
+                              },
                             );
                           },
                           separatorBuilder: (
