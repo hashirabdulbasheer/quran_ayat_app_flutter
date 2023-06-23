@@ -108,9 +108,12 @@ class _QuranAyatDisplayTagsWidgetState
                       } else {
                         QuranTag? tag = snapshot.data;
                         if (tag != null && tag.tag.isNotEmpty) {
-                          return _tagsWidget(
-                            tag,
-                            user,
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: _tagsWidget(
+                              tag,
+                              user,
+                            ),
                           );
                         }
 
@@ -194,7 +197,7 @@ class _QuranAyatDisplayTagsWidgetState
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: children,
       ),
     );
