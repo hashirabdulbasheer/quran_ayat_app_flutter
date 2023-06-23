@@ -4,14 +4,16 @@ class QuranNavDrawerRowWidget extends StatelessWidget {
   final BuildContext context;
   final String title;
   final IconData icon;
-  final Widget destination;
+  final Widget? destination;
+  final Function? onSelected;
 
   const QuranNavDrawerRowWidget({
     Key? key,
     required this.context,
     required this.title,
     required this.icon,
-    required this.destination,
+    this.destination,
+    this.onSelected,
   }) : super(key: key);
 
   @override
@@ -25,11 +27,21 @@ class QuranNavDrawerRowWidget extends StatelessWidget {
       ),
       onTap: () => {
         Navigator.of(context).pop(),
-        Navigator.push<void>(
-          context,
-          MaterialPageRoute(builder: (context) => destination),
-        ),
+        _onTapped(),
       },
     );
+  }
+
+  void _onTapped() {
+    if (destination != null) {
+      Navigator.push<void>(
+        context,
+        MaterialPageRoute(builder: (context) => destination!),
+      );
+    } else {
+      if (onSelected != null) {
+        onSelected!();
+      }
+    }
   }
 }

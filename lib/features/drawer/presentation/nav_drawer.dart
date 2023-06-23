@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/settings/domain/constants/setting_constants.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../main.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../quran_search_screen.dart';
@@ -67,6 +70,14 @@ class QuranNavDrawer extends StatelessWidget {
                 icon: Icons.settings,
                 destination: const QuranSettingsScreen(),
               ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Feedback',
+                icon: Icons.email,
+                onSelected: () => _launchUrl(Uri.parse(
+                  QuranSettingsConstants.feedbackEmailUrl,
+                )),
+              ),
             ],
           ),
         ),
@@ -98,6 +109,14 @@ class QuranNavDrawer extends StatelessWidget {
               icon: Icons.settings,
               destination: const QuranSettingsScreen(),
             ),
+            QuranNavDrawerRowWidget(
+              context: context,
+              title: 'Feedback',
+              icon: Icons.email,
+              onSelected: () => _launchUrl(Uri.parse(
+                QuranSettingsConstants.feedbackEmailUrl,
+              )),
+            ),
           ],
         ),
       ),
@@ -108,5 +127,11 @@ class QuranNavDrawer extends StatelessWidget {
     QuranResponse _ = await QuranAuthFactory.engine.logout();
     // clear stored data
     bookmarksManager.localEngine.clear();
+  }
+
+  Future<void> _launchUrl(Uri uri) async {
+    if (!await launchUrl(uri)) {
+      print('Could not launch $uri');
+    }
   }
 }
