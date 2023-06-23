@@ -149,49 +149,41 @@ class _QuranAyatDisplayTagsWidgetState
   ) {
     List<Widget> children = [];
     for (String tagString in tag.tag) {
-      children.add(Container(
-        padding: const EdgeInsetsDirectional.fromSTEB(
-          10,
-          0,
-          0,
-          0,
-        ),
-        decoration: const BoxDecoration(
-          color: Colors.white60,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
+      children.add(Directionality(
+        textDirection: TextDirection.ltr,
+        child: Tooltip(
+          message: "Remove tag",
+          child: TextButton.icon(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white60),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                ),
+              ),
+            ),
+            onPressed: () => _displayRemovalConfirmationDialog(
+              tag,
+              tagString,
+              user.uid,
+            ),
+            icon: const Icon(
+              Icons.close,
+              size: 20,
+              color: Colors.black87,
+            ),
+            label: Text(
               tagString,
               style: const TextStyle(
                 color: Colors.black87,
               ),
             ),
-            Tooltip(
-              message: "Remove tag",
-              child: SizedBox(
-                width: 30,
-                child: TextButton(
-                  onPressed: () => _displayRemovalConfirmationDialog(
-                    tag,
-                    tagString,
-                    user.uid,
-                  ),
-                  child: const Text(
-                    "X",
-                    style: TextStyle(
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ));
-      children.add(const SizedBox(width: 10,));
+      children.add(const SizedBox(
+        width: 10,
+      ));
     }
 
     return SingleChildScrollView(
