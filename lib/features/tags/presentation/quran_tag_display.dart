@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:quran_ayat/features/tags/presentation/quran_view_tags_screen.dart';
 import '../../../misc/enums/quran_status_enum.dart';
@@ -187,10 +188,15 @@ class _QuranAyatDisplayTagsWidgetState
           ],
         ),
       ));
+      children.add(const SizedBox(width: 10,));
     }
 
-    return Row(
-      children: children,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: children,
+      ),
     );
   }
 
