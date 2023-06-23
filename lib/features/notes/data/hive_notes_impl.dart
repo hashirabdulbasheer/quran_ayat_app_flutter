@@ -6,7 +6,7 @@ import '../domain/entities/quran_note.dart';
 import '../domain/interfaces/quran_notes_interface.dart';
 import 'models/quran_note_dto.dart';
 
-class QuranHiveNotesEngine implements QuranNotesInterface {
+class QuranHiveNotesEngine implements QuranNotesDataSource {
   static final QuranHiveNotesEngine instance =
       QuranHiveNotesEngine._privateConstructor();
 

@@ -1,39 +1,63 @@
-import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
-
+import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../utils/utils.dart';
-import '../data/hive_notes_impl.dart';
-import '../data/quran_notes_impl.dart';
-import 'entities/quran_note.dart';
-import 'interfaces/quran_notes_interface.dart';
 import 'package:intl/intl.dart' as intl;
+import '../../core/data/quran_firebase_engine.dart';
+import '../data/quran_tags_impl.dart';
+import 'entities/quran_master_tag.dart';
+import 'entities/quran_tag.dart';
 
-class QuranNotesManager implements QuranNotesDataSource {
-  static final QuranNotesManager instance =
-      QuranNotesManager._privateConstructor();
+class QuranTagsManager {
+  static final QuranTagsManager instance =
+      QuranTagsManager._privateConstructor();
 
-  QuranNotesManager._privateConstructor() {
-    _notesEngine = QuranNotesEngine(dataSource: QuranFirebaseEngine.instance);
+  QuranTagsManager._privateConstructor() {
+    _tagsEngine = QuranTagsEngine(dataSource: QuranFirebaseEngine.instance);
   }
 
-  late QuranNotesEngine _notesEngine;
+  late QuranTagsEngine _tagsEngine;
 
   @override
   Future<QuranResponse> create(
     String userId,
-    QuranNote note,
+    QuranTag tag,
   ) async {
     if (await isOffline()) {
-      /// OFFLINE
-      return await QuranHiveNotesEngine.instance.create(
-        userId,
-        note,
+      return QuranResponse(
+        isSuccessful: false,
+        message: "No internet",
       );
     } else {
       /// ONLINE
-      return await _notesEngine.create(
+      return await _tagsEngine.create(
         userId,
-        note,
+        tag,
+      );
+    }
+  }
+
+  Future<QuranResponse> createMaster(
+    String userId,
+    String tag,
+  ) async {
+    if (await isOffline()) {
+      return QuranResponse(
+        isSuccessful: false,
+        message: "No internet",
+      );
+    } else {
+      /// ONLINE
+      QuranMasterTag masterTag = QuranMasterTag(
+        id: "${DateTime.now().millisecondsSinceEpoch}",
+        name: tag,
+        ayas: [],
+        createdOn: DateTime.now().millisecondsSinceEpoch,
+        status: QuranStatusEnum.created.rawString(),
+      );
+
+      return await _tagsEngine.createMaster(
+        userId,
+        masterTag,
       );
     }
   }
@@ -41,39 +65,33 @@ class QuranNotesManager implements QuranNotesDataSource {
   @override
   Future<bool> delete(
     String userId,
-    QuranNote note,
+    QuranTag tag,
   ) async {
     /// Supporting delete for online only
     if (!await isOffline()) {
-      return _notesEngine.delete(
+      return _tagsEngine.delete(
         userId,
-        note,
+        tag,
       );
     }
 
     /// OFFLINE
-    return QuranHiveNotesEngine.instance.delete(
-      userId,
-      note,
-    );
+    return false;
   }
 
   @override
-  Future<List<QuranNote>> fetch(
+  Future<QuranTag?> fetch(
     String userId,
     int suraIndex,
     int ayaIndex,
   ) async {
     if (await isOffline()) {
       /// OFFLINE
-      return await QuranHiveNotesEngine.instance.fetch(
-        userId,
-        suraIndex,
-        ayaIndex,
-      );
+      return null;
     } else {
       /// ONLINE
-      return await _notesEngine.fetch(
+      ///
+      return await _tagsEngine.fetch(
         userId,
         suraIndex,
         ayaIndex,
@@ -85,75 +103,58 @@ class QuranNotesManager implements QuranNotesDataSource {
   Future<void> initialize() async {
     if (await isOffline()) {
       /// OFFLINE
-      await QuranHiveNotesEngine.instance.initialize();
+      return;
     }
 
     /// ONLINE
-    return _notesEngine.initialize();
+    return _tagsEngine.initialize();
   }
 
   @override
   Future<bool> update(
     String userId,
-    QuranNote note,
+    QuranTag tag,
   ) async {
     if (!await isOffline()) {
       /// ONLINE
-      return _notesEngine.update(
+      return _tagsEngine.update(
         userId,
-        note,
+        tag,
       );
     }
 
     /// OFFLINE
-    return QuranHiveNotesEngine.instance.update(
-      userId,
-      note,
-    );
-  }
-
-  Future<void> uploadLocalNotesIfAny(String userId) async {
-    if (!await isOffline()) {
-      // ONLINE -> Upload all local notes if any
-      List<QuranNote> localNotes = await fetchAllLocal(userId);
-      for (QuranNote note in localNotes) {
-        // create online copy
-        create(
-          userId,
-          note,
-        );
-        // delete local copy
-        deleteLocal(
-          userId,
-          note,
-        );
-      }
-    }
+    return false;
   }
 
   @override
-  Future<List<QuranNote>> fetchAll(String userId) async {
+  Future<bool> updateMaster(
+    String userId,
+    QuranMasterTag? tag,
+  ) async {
+    if (!await isOffline()) {
+      /// ONLINE
+      if (tag != null) {
+        return _tagsEngine.updateMaster(
+          userId,
+          tag,
+        );
+      }
+    }
+
+    /// OFFLINE
+    return false;
+  }
+
+  @override
+  Future<List<QuranMasterTag>> fetchAll(String userId) async {
     if (await isOffline()) {
       /// OFFLINE
-      return await QuranHiveNotesEngine.instance.fetchAll(userId);
+      return [];
     }
 
     /// ONLINE
-    return _notesEngine.fetchAll(userId);
-  }
-
-  Future<List<QuranNote>> fetchAllLocal(String userId) {
-    return QuranHiveNotesEngine.instance.fetchAll(userId);
-  }
-
-  Future<bool> deleteLocal(
-    String userId,
-    QuranNote note,
-  ) {
-    return QuranHiveNotesEngine.instance.delete(
-      userId,
-      note,
-    );
+    return _tagsEngine.fetchAll(userId);
   }
 
   Future<bool> isOffline() async {

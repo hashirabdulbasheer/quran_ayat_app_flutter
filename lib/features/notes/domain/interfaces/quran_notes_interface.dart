@@ -1,7 +1,7 @@
 import '../../../../models/qr_response_model.dart';
 import '../entities/quran_note.dart';
 
-abstract class QuranNotesInterface {
+abstract class QuranNotesDataSource {
   Future<void> initialize();
 
   Future<QuranResponse> create(

@@ -11,7 +11,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 
 // TODO: Update before release
-const String appVersion = "v2.4.6";
+const String appVersion = "v2.4.7";
 
 void main() async {
   usePathUrlStrategy();
