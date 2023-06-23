@@ -167,6 +167,17 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
       return;
     }
 
+    if (tag.ayas.length == 1) {
+      // there is only one aya, go directly to the aya
+      QuranNavigator.navigateToAyatScreen(
+        context,
+        surahIndex: tag.ayas.first.suraIndex - 1,
+        ayaIndex: tag.ayas.first.ayaIndex,
+      );
+
+      return;
+    }
+
     QuranNavigator.navigationToResultsScreen(
       context,
       tag,
