@@ -305,10 +305,10 @@ class _QuranAyatDisplayTagsWidgetState
       ) {
         return AlertDialog(
           title: const Text(
-            'Remove?',
+            'Remove Tag?',
           ),
-          content: const Text(
-            "Are you sure that you want to remove this tag?",
+          content: Text(
+            "Are you sure that you want to remove - \"$selectedTag\"?",
           ),
           actions: <Widget>[
             TextButton(
@@ -408,6 +408,20 @@ class _QuranAyatDisplayTagsWidgetState
       );
     }
 
+    // update tag-master to remove the aya infor
+    try {
+      List<QuranMasterTag> masterTags = await _fetchAllTags(userId);
+      QuranMasterTag masterTag =
+          masterTags.firstWhere((element) => element.name == selectedTag);
+      masterTag.ayas.removeWhere((element) =>
+          element.suraIndex == currentTag.suraIndex &&
+          element.ayaIndex == currentTag.ayaIndex);
+      await manager.updateMaster(
+        userId,
+        masterTag,
+      );
+    } catch (_) {}
+
     setState(() {});
 
     return true;
@@ -435,17 +449,31 @@ class _QuranAyatDisplayTagsWidgetState
 
     if (currentTag == null || currentTag.tag.isEmpty) {
       // create a new tag
-      return await _createNewTag(userId, surahIndex, widget.ayaIndex, newTagString,);
+      return await _createNewTag(
+        userId,
+        surahIndex,
+        widget.ayaIndex,
+        newTagString,
+      );
     } else {
       // update existing tag
-      return await _updateTag(userId, currentTag, newTagString,);
+      return await _updateTag(
+        userId,
+        currentTag,
+        newTagString,
+      );
     }
   }
 
   /// Helpers
   ///
 
-  Future<bool> _createNewTag(String userId, int suraIndex, int ayaIndex, String newTagString,) async {
+  Future<bool> _createNewTag(
+    String userId,
+    int suraIndex,
+    int ayaIndex,
+    String newTagString,
+  ) async {
     QuranTagsManager manager = QuranTagsManager.instance;
     QuranTag newTag = QuranTag(
       suraIndex: suraIndex,
@@ -479,7 +507,11 @@ class _QuranAyatDisplayTagsWidgetState
     return true;
   }
 
-  Future<bool> _updateTag(String userId, QuranTag currentTag, String newTagString,) async {
+  Future<bool> _updateTag(
+    String userId,
+    QuranTag currentTag,
+    String newTagString,
+  ) async {
     if (currentTag.tag.contains(newTagString)) {
       // duplicate
       return false;
@@ -517,5 +549,4 @@ class _QuranAyatDisplayTagsWidgetState
 
     return true;
   }
-
 }
