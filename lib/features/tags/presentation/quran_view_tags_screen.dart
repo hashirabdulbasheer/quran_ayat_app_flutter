@@ -1,4 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/tags/domain/entities/quran_master_tag_aya.dart';
+import 'package:share_plus/share_plus.dart';
+import '../../../misc/constants/string_constants.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/nav_utils.dart';
 import '../domain/entities/quran_master_tag.dart';
@@ -28,6 +33,12 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
         appBar: AppBar(
           title: const Text("Tags"),
           actions: [
+            IconButton(
+              onPressed: () => _exportTags(),
+              icon: const Icon(
+                Icons.share,
+              ),
+            ),
             IconButton(
               onPressed: () => _displayAddTagDialog(
                 widget.user.uid,
@@ -189,5 +200,22 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
   ) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _exportTags() async {
+    String exported = "";
+    List<QuranMasterTag> allTags = await QuranTagsManager.instance.fetchAll(
+      widget.user.uid,
+    );
+    for (QuranMasterTag tag in allTags) {
+      String tagString = "${tag.name}: ";
+      tagString +=
+          tag.ayas.map((val) => "${val.suraIndex}:${val.ayaIndex}").join(',');
+      exported += "$tagString\n";
+    }
+
+    Share.share(
+      'Tags exported from uxQuran QuranAyat app: https://uxquran.com\n\n$exported',
+    );
   }
 }
