@@ -107,11 +107,9 @@ class _QuranAyatDisplayTagsWidgetState
                       } else {
                         QuranTag? tag = snapshot.data;
                         if (tag != null && tag.tag.isNotEmpty) {
-                          return Row(
-                            children: _tagsWidget(
-                              tag,
-                              user,
-                            ),
+                          return _tagsWidget(
+                            tag,
+                            user,
                           );
                         }
 
@@ -141,60 +139,59 @@ class _QuranAyatDisplayTagsWidgetState
     );
   }
 
-  List<Widget> _tagsWidget(
+  Widget _tagsWidget(
     QuranTag tag,
     QuranUser user,
   ) {
     List<Widget> children = [];
     for (String tagString in tag.tag) {
-      children.add(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          padding: const EdgeInsetsDirectional.fromSTEB(
-            10,
-            0,
-            0,
-            0,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white60,
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                tagString,
-                style: const TextStyle(
-                  color: Colors.black87,
-                ),
+      children.add(Container(
+        padding: const EdgeInsetsDirectional.fromSTEB(
+          10,
+          0,
+          0,
+          0,
+        ),
+        decoration: const BoxDecoration(
+          color: Colors.white60,
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              tagString,
+              style: const TextStyle(
+                color: Colors.black87,
               ),
-              Tooltip(
-                message: "Remove tag",
-                child: SizedBox(
-                  width: 30,
-                  child: TextButton(
-                    onPressed: () => _displayRemovalConfirmationDialog(
-                      tag,
-                      tagString,
-                      user.uid,
-                    ),
-                    child: const Text(
-                      "X",
-                      style: TextStyle(
-                        color: Colors.black87,
-                      ),
+            ),
+            Tooltip(
+              message: "Remove tag",
+              child: SizedBox(
+                width: 30,
+                child: TextButton(
+                  onPressed: () => _displayRemovalConfirmationDialog(
+                    tag,
+                    tagString,
+                    user.uid,
+                  ),
+                  child: const Text(
+                    "X",
+                    style: TextStyle(
+                      color: Colors.black87,
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ));
     }
 
-    return children;
+    return Row(
+      children: children,
+    );
   }
 
   void _showMessage(
