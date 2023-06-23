@@ -4,6 +4,7 @@ import 'package:noble_quran/models/surah_title.dart';
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
+import '../../auth/presentation/quran_login_screen.dart';
 import '../domain/entities/quran_master_tag.dart';
 import '../domain/entities/quran_master_tag_aya.dart';
 import '../domain/entities/quran_tag.dart';
@@ -208,7 +209,11 @@ class _QuranAyatDisplayTagsWidgetState
   Future<void> _displayAddTagDialog(
     String? userId,
   ) async {
-    if (userId == null) return;
+    if (userId == null) {
+      _goToLoginScreen();
+
+      return;
+    }
 
     _selectedTag = null;
 
@@ -548,5 +553,14 @@ class _QuranAyatDisplayTagsWidgetState
     });
 
     return true;
+  }
+
+  void _goToLoginScreen() {
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
+    ).then((value) {
+      setState(() {});
+    });
   }
 }
