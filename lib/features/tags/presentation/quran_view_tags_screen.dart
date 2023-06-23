@@ -57,7 +57,20 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                       } else {
                         _tags = snapshot.data as List<QuranMasterTag>;
                         if (_tags.isEmpty) {
-                          return const Center(child: Text('No tags'));
+                          return Center(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height - 50,
+                              child: TextButton(
+                                child: const Text(
+                                  'Add new tag',
+                                ),
+                                onPressed: () => _displayAddTagDialog(
+                                  widget.user.uid,
+                                ),
+                              ),
+                            ),
+                          );
                         }
 
                         return ListView.separated(
