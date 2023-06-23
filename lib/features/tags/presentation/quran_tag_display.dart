@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:quran_ayat/features/tags/presentation/quran_view_tags_screen.dart';
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
@@ -263,13 +264,35 @@ class _QuranAyatDisplayTagsWidgetState
           context,
           searchEntry,
         ) =>
-            const Padding(
-          padding: EdgeInsetsDirectional.symmetric(
-            horizontal: 10,
-            vertical: 10,
-          ),
-          child: Text(
-            "No tags found\n\nPlease add a tag through Menu Drawer-Tags",
+            Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              const Text("No tags found"),
+              const SizedBox(
+                height: 20,
+              ),
+              MaterialButton(
+                color: Colors.white70,
+                onPressed: () => {
+                  Navigator.of(context).pop(),
+                  _goToViewTagsScreen(),
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Click here to add a tag.",
+                    style: TextStyle(
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -559,6 +582,24 @@ class _QuranAyatDisplayTagsWidgetState
     Navigator.push<void>(
       context,
       MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
+    ).then((value) {
+      setState(() {});
+    });
+  }
+
+  void _goToViewTagsScreen() {
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user == null) {
+      return;
+    }
+
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuranViewTagsScreen(
+          user: user,
+        ),
+      ),
     ).then((value) {
       setState(() {});
     });
