@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../domain/entities/quran_note.dart';
@@ -25,7 +26,17 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(title: const Text("Notes")),
+        appBar: AppBar(
+          title: const Text("Notes"),
+          actions: [
+            IconButton(
+              onPressed: () => _exportTags(),
+              icon: const Icon(
+                Icons.share,
+              ),
+            ),
+          ],
+        ),
         body: Column(
           children: [
             const QuranOfflineHeaderWidget(),
@@ -95,6 +106,21 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _exportTags() async {
+    String exported = "";
+    List<QuranNote> allNotes =
+        await QuranNotesManager.instance.fetchAll(widget.user.uid);
+    for (QuranNote note in allNotes) {
+      String noteString =
+          "${note.suraIndex}:${note.ayaIndex}, ${note.note}, ${note.createdOn} ";
+      exported += "$noteString\n";
+    }
+
+    Share.share(
+      'Notes exported from uxQuran QuranAyat app: https://uxquran.com\n\n$exported',
     );
   }
 }
