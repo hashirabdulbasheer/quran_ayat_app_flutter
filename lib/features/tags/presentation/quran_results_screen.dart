@@ -3,6 +3,7 @@ import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/tags/domain/entities/quran_master_tag_aya.dart';
+import '../../../utils/nav_utils.dart';
 import '../../settings/domain/settings_manager.dart';
 import '../domain/entities/quran_index.dart';
 import '../domain/entities/quran_master_tag.dart';
@@ -52,8 +53,12 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
                 ) {
                   return ListTile(
                     title: _listRow(indices[index]),
-                    onTap: () {
-                      print("asds");
+                    onTap: () => {
+                      QuranNavigator.navigateToAyatScreen(
+                        context,
+                        surahIndex: indices[index].surahIndex - 1,
+                        ayaIndex: indices[index].ayaIndex,
+                      ),
                     },
                   );
                 },
@@ -83,11 +88,27 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${index.surahIndex}: ${index.ayaIndex}"),
-              Text(index.surahTitle ?? "n/a"),
+              Text(
+                "${index.surahIndex}: ${index.ayaIndex}",
+                style: const TextStyle(
+                  color: Colors.white60,
+                ),
+              ),
+              Text(
+                index.surahTitle ?? "",
+                style: const TextStyle(
+                  color: Colors.white60,
+                ),
+              ),
             ],
           ),
+          const SizedBox(
+            height: 10,
+          ),
           Text(index.translationAya ?? ""),
+          const SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
