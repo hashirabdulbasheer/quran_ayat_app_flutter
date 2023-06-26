@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/notes/domain/entities/quran_note.dart';
 
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
+import '../../notes/domain/notes_manager.dart';
 import '../../tags/domain/entities/quran_master_tag.dart';
 import '../../tags/domain/entities/quran_master_tag_aya.dart';
 import '../../tags/domain/tags_manager.dart';
@@ -13,36 +15,57 @@ import 'package:redux/redux.dart';
 @immutable
 class AppState {
   final List<QuranMasterTag> originalTags;
+  final List<QuranNote> originalNotes;
   final Map<String, List<String>> tags;
+  final Map<String, List<QuranNote>> notes;
   final StateError? error;
   final bool isLoading;
 
   const AppState({
     this.tags = const {},
+    this.notes = const {},
     this.originalTags = const [],
+    this.originalNotes = const [],
     this.error,
     this.isLoading = false,
   });
 
   AppState copyWith({
     List<QuranMasterTag>? originalTags,
+    List<QuranNote>? originalNotes,
     Map<String, List<String>>? tags,
+    Map<String, List<QuranNote>>? notes,
     StateError? error,
     bool? isLoading,
   }) {
     return AppState(
       tags: tags ?? this.tags,
+      notes: notes ?? this.notes,
       originalTags: originalTags ?? this.originalTags,
+      originalNotes: originalNotes ?? this.originalNotes,
       error: error ?? this.error,
       isLoading: isLoading ?? this.isLoading,
     );
   }
 
-  List<String>? getTags(int surahIndex, int ayaIndex,) {
+  List<String>? getTags(
+    int surahIndex,
+    int ayaIndex,
+  ) {
     String key = "${surahIndex}_$ayaIndex";
 
     return tags[key];
   }
+
+  List<QuranNote>? getNotes(
+      int surahIndex,
+      int ayaIndex,
+      ) {
+    String key = "${surahIndex}_$ayaIndex";
+
+    return notes[key];
+  }
+
 }
 
 enum AppStateTagModifyAction { create, addAya, removeAya, delete }
@@ -59,6 +82,8 @@ class AppStateResetAction extends AppStateAction {}
 /// TAG ACTIONS
 ///
 class AppStateFetchTagsAction extends AppStateAction {}
+
+class AppStateFetchNotesAction extends AppStateAction {}
 
 class AppStateLoadingAction extends AppStateAction {
   final bool isLoading;
@@ -90,6 +115,14 @@ class AppStateFetchTagsSucceededAction extends AppStateAction {
   );
 }
 
+class AppStateFetchNotesSucceededAction extends AppStateAction {
+  final List<QuranNote> fetchedNotes;
+
+  AppStateFetchNotesSucceededAction(
+    this.fetchedNotes,
+  );
+}
+
 class AppStateModifyTagSucceededAction extends AppStateAction {}
 
 class AppStateModifyTagFailureAction extends AppStateAction {
@@ -118,8 +151,8 @@ AppState appStateReducer(
         stateTags[key]?.add(tag.name);
       }
     }
-    
-    return AppState(
+
+    return state.copyWith(
       originalTags: action.fetchedTags,
       tags: stateTags,
     );
@@ -130,6 +163,20 @@ AppState appStateReducer(
     return state.copyWith(error: StateError(action.message));
   } else if (action is AppStateLoadingAction) {
     return state.copyWith(isLoading: action.isLoading);
+  } else if (action is AppStateFetchNotesSucceededAction) {
+    Map<String, List<QuranNote>> stateNotes = {};
+    for (QuranNote note in action.fetchedNotes) {
+      String key = "${note.suraIndex}_${note.ayaIndex}";
+      if (stateNotes[key] == null) {
+        stateNotes[key] = [];
+      }
+      stateNotes[key]?.add(note);
+    }
+
+    return state.copyWith(
+      originalNotes: action.fetchedNotes,
+      notes: stateNotes,
+    );
   }
 
   return state;
@@ -146,6 +193,7 @@ void appStateMiddleware(
   if (action is AppStateInitializeAction) {
     // Initialization actions
     store.dispatch(AppStateFetchTagsAction());
+    store.dispatch(AppStateFetchNotesAction());
   } else if (action is AppStateFetchTagsAction) {
     // Fetch tags
     QuranUser? user = QuranAuthFactory.engine.getUser();
@@ -229,6 +277,15 @@ void appStateMiddleware(
       }
 
       store.dispatch(AppStateFetchTagsAction());
+    }
+  } else if (action is AppStateFetchNotesAction) {
+    // Fetch tags
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      List<QuranNote> notes = await QuranNotesManager.instance.fetchAll(
+        user.uid,
+      );
+      store.dispatch(AppStateFetchNotesSucceededAction(notes));
     }
   }
   next(action);
