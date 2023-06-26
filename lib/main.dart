@@ -13,7 +13,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:redux/redux.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.4.9";
+const String appVersion = "v2.5.0";
 
 void main() async {
   usePathUrlStrategy();
