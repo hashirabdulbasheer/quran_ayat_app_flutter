@@ -127,7 +127,7 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
         surahIndex: aya.suraIndex,
         ayaIndex: aya.ayaIndex,
         surahTitle: translationSurah.name,
-        translationAya: translationSurah.aya[aya.ayaIndex].text,
+        translationAya: translationSurah.aya[aya.ayaIndex - 1].text,
       ));
     }
 
