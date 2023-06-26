@@ -5,7 +5,6 @@ import 'package:intl/intl.dart' as intl;
 import '../../core/data/quran_firebase_engine.dart';
 import '../data/quran_tags_impl.dart';
 import 'entities/quran_master_tag.dart';
-import 'entities/quran_tag.dart';
 
 class QuranTagsManager {
   static final QuranTagsManager instance =
@@ -16,27 +15,6 @@ class QuranTagsManager {
   }
 
   late QuranTagsEngine _tagsEngine;
-
-  /*
-  @override
-  Future<QuranResponse> create(
-    String userId,
-    QuranTag tag,
-  ) async {
-    if (await isOffline()) {
-      return QuranResponse(
-        isSuccessful: false,
-        message: "No internet",
-      );
-    } else {
-      /// ONLINE
-      return await _tagsEngine.create(
-        userId,
-        tag,
-      );
-    }
-  }
-   */
 
   Future<QuranResponse> createMaster(
     String userId,
@@ -64,46 +42,6 @@ class QuranTagsManager {
     }
   }
 
-  /*
-  @override
-  Future<bool> delete(
-    String userId,
-    QuranTag tag,
-  ) async {
-    /// Supporting delete for online only
-    if (!await isOffline()) {
-      return _tagsEngine.delete(
-        userId,
-        tag,
-      );
-    }
-
-    /// OFFLINE
-    return false;
-  }
-
-
-  @override
-  Future<QuranTag?> fetch(
-    String userId,
-    int suraIndex,
-    int ayaIndex,
-  ) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return null;
-    } else {
-      /// ONLINE
-      ///
-      return await _tagsEngine.fetch(
-        userId,
-        suraIndex,
-        ayaIndex,
-      );
-    }
-  }
-*/
-
   @override
   Future<void> initialize() async {
     if (await isOffline()) {
@@ -114,25 +52,6 @@ class QuranTagsManager {
     /// ONLINE
     return _tagsEngine.initialize();
   }
-
-  /*
-  @override
-  Future<bool> update(
-    String userId,
-    QuranTag tag,
-  ) async {
-    if (!await isOffline()) {
-      /// ONLINE
-      return _tagsEngine.update(
-        userId,
-        tag,
-      );
-    }
-
-    /// OFFLINE
-    return false;
-  }
-  */
 
   @override
   Future<bool> updateMaster(
@@ -149,6 +68,7 @@ class QuranTagsManager {
       }
     }
     print("out");
+
     /// OFFLINE
     return false;
   }
