@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import '../../../models/qr_user_model.dart';
+import '../../core/domain/app_state.dart';
 import '../domain/auth_factory.dart';
 import '../../../utils/utils.dart';
 import 'quran_signup_screen.dart';
@@ -160,6 +162,8 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
         if (response.isSuccessful) {
           QuranUser? user = QuranAuthFactory.engine.getUser();
           if (user != null) {
+            StoreProvider.of<AppState>(context)
+                .dispatch(AppStateInitializeAction());
             Navigator.of(context).pop();
             _showMessage("Logged in 👍");
           }
