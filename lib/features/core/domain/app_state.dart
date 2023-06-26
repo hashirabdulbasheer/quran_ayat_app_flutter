@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/notes/domain/entities/quran_note.dart';
 
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
+import '../../notes/domain/entities/quran_note.dart';
 import '../../notes/domain/notes_manager.dart';
 import '../../tags/domain/entities/quran_master_tag.dart';
 import '../../tags/domain/entities/quran_master_tag_aya.dart';
