@@ -16,7 +16,7 @@ class QuranTagsManager {
 
   late QuranTagsEngine _tagsEngine;
 
-  Future<QuranResponse> createMaster(
+  Future<QuranResponse> create(
     String userId,
     String tag,
   ) async {
@@ -35,7 +35,7 @@ class QuranTagsManager {
         status: QuranStatusEnum.created.rawString(),
       );
 
-      return await _tagsEngine.createMaster(
+      return await _tagsEngine.create(
         userId,
         masterTag,
       );
@@ -54,14 +54,14 @@ class QuranTagsManager {
   }
 
   @override
-  Future<bool> updateMaster(
+  Future<bool> update(
     String userId,
     QuranMasterTag? tag,
   ) async {
     if (!await isOffline()) {
       /// ONLINE
       if (tag != null) {
-        return _tagsEngine.updateMaster(
+        return _tagsEngine.update(
           userId,
           tag,
         );

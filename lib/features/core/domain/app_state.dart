@@ -156,7 +156,7 @@ void appStateMiddleware(
       String userId = user.uid;
       switch (action.action) {
         case AppStateTagModifyAction.create:
-          QuranResponse response = await QuranTagsManager.instance.createMaster(
+          QuranResponse response = await QuranTagsManager.instance.create(
             userId,
             action.tag,
           );
@@ -176,7 +176,7 @@ void appStateMiddleware(
             masterTag.ayas.removeWhere((element) =>
                 element.suraIndex == action.surahIndex &&
                 element.ayaIndex == action.ayaIndex);
-            if (await QuranTagsManager.instance.updateMaster(
+            if (await QuranTagsManager.instance.update(
               userId,
               masterTag,
             )) {
@@ -202,7 +202,7 @@ void appStateMiddleware(
               suraIndex: action.surahIndex,
               ayaIndex: action.ayaIndex,
             ));
-            if (await QuranTagsManager.instance.updateMaster(
+            if (await QuranTagsManager.instance.update(
               userId,
               masterTag,
             )) {

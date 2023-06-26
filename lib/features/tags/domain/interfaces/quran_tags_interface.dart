@@ -4,14 +4,14 @@ import '../entities/quran_master_tag.dart';
 abstract class QuranTagsDataSource {
   Future<void> initialize();
 
-  Future<QuranResponse> createMaster(
+  Future<QuranResponse> create(
     String userId,
     QuranMasterTag masterTag,
   );
 
   Future<List<QuranMasterTag>> fetchAll(String userId);
 
-  Future<bool> updateMaster(
+  Future<bool> update(
     String userId,
     QuranMasterTag note,
   );
