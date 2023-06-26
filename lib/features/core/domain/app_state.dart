@@ -25,6 +25,8 @@ class AppStateAction {}
 
 class AppStateInitializeAction extends AppStateAction {}
 
+class AppStateResetAction extends AppStateAction {}
+
 class AppStateFetchTagsAction extends AppStateAction {}
 
 class AppStateFetchTagsSucceededAction extends AppStateAction {
@@ -57,6 +59,9 @@ AppState appStateReducer(
     return AppState(
       tags: stateTags,
     );
+  } else if (action is AppStateResetAction) {
+
+    return const AppState(tags: {});
   }
 
   return state;
@@ -71,6 +76,7 @@ void appStateMiddleware(
   NextDispatcher next,
 ) async {
   if (action is AppStateInitializeAction) {
+    // initialization actions
     store.dispatch(AppStateFetchTagsAction());
   } else if (action is AppStateFetchTagsAction) {
     QuranUser? user = QuranAuthFactory.engine?.getUser();
