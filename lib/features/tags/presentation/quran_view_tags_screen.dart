@@ -1,11 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/tags/domain/entities/quran_master_tag_aya.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../../misc/constants/string_constants.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/nav_utils.dart';
+import '../../core/domain/app_state.dart';
 import '../domain/entities/quran_master_tag.dart';
 import '../domain/tags_manager.dart';
 
@@ -23,7 +22,6 @@ class QuranViewTagsScreen extends StatefulWidget {
 
 class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
   final TextEditingController _textEditingController = TextEditingController();
-  List<QuranMasterTag> _tags = [];
 
   @override
   Widget build(BuildContext context) {
@@ -40,58 +38,42 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
               ),
             ),
             IconButton(
-              onPressed: () => _displayAddTagDialog(
-                widget.user.uid,
-              ),
+              onPressed: () => _displayAddTagDialog(),
               icon: const Icon(Icons.add),
             ),
           ],
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: FutureBuilder<List<QuranMasterTag>>(
-                future: QuranTagsManager.instance.fetchAll(widget.user.uid),
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<QuranMasterTag>> snapshot,
-                ) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    default:
-                      if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else {
-                        _tags = snapshot.data as List<QuranMasterTag>;
-                        if (_tags.isEmpty) {
-                          return Center(
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height - 50,
-                              child: TextButton(
-                                child: const Text(
-                                  'Add new tag',
-                                ),
-                                onPressed: () => _displayAddTagDialog(
-                                  widget.user.uid,
-                                ),
-                              ),
-                            ),
-                          );
-                        }
+        body: StoreBuilder<AppState>(
+          builder: (
+            BuildContext context,
+            Store<AppState> store,
+          ) {
+            List<QuranMasterTag> tags = _tags();
 
-                        return ListView.separated(
+            return Column(
+              children: [
+                Expanded(
+                  child: tags.isEmpty
+                      ? Center(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height - 50,
+                            child: TextButton(
+                              child: const Text(
+                                'Add new tag',
+                              ),
+                              onPressed: () => _displayAddTagDialog(),
+                            ),
+                          ),
+                        )
+                      : ListView.separated(
                           itemBuilder: (
                             context,
                             index,
                           ) {
                             return ListTile(
-                              title: Text(_tags[index].name),
-                              onTap: () => _navigateToResults(_tags[index]),
+                              title: Text(tags[index].name),
+                              onTap: () => _navigateToResults(tags[index]),
                             );
                           },
                           separatorBuilder: (
@@ -100,23 +82,18 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                           ) {
                             return const Divider(thickness: 1);
                           },
-                          itemCount: _tags.length,
-                        );
-                      }
-                  }
-                },
-              ),
-            ),
-          ],
+                          itemCount: tags.length,
+                        ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Future<void> _displayAddTagDialog(
-    String? userId,
-  ) async {
-    if (userId == null) return;
+  Future<void> _displayAddTagDialog() {
     _textEditingController.text = "";
 
     return showDialog(
@@ -146,7 +123,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                 ),
               ),
               onPressed: () => {
-                _saveTag(userId),
+                _saveTag(),
                 Navigator.of(context).pop(),
                 setState(() {}),
                 _showMessage("Saved 👍"),
@@ -158,17 +135,19 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     );
   }
 
-  void _saveTag(String userId) async {
+  void _saveTag() {
     String newTag = _textEditingController.text.toLowerCase().trim();
-    if (newTag.isEmpty || _tags.any((item) => item.containsTag(newTag))) {
+    if (newTag.isEmpty || _tags().any((item) => item.containsTag(newTag))) {
       _showMessage("Error saving tag 😔");
 
       return;
     }
-    await QuranTagsManager.instance.createMaster(
-      userId,
-      newTag,
-    );
+    StoreProvider.of<AppState>(context).dispatch(AppStateModifyTagAction(
+      surahIndex: 0,
+      ayaIndex: 0,
+      tag: newTag,
+      action: AppStateTagModifyAction.create,
+    ));
   }
 
   void _navigateToResults(QuranMasterTag tag) {
@@ -202,11 +181,12 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
         .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  Future<void> _exportTags() async {
+  List<QuranMasterTag> _tags() =>
+      StoreProvider.of<AppState>(context).state.originalTags;
+
+  void _exportTags() {
     String exported = "";
-    List<QuranMasterTag> allTags = await QuranTagsManager.instance.fetchAll(
-      widget.user.uid,
-    );
+    List<QuranMasterTag> allTags = _tags();
     for (QuranMasterTag tag in allTags) {
       String tagString = "${tag.name}: ";
       tagString +=

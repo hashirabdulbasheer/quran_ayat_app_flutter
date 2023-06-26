@@ -112,7 +112,7 @@ AppState appStateReducer(
         stateTags[key]?.add(tag.name);
       }
     }
-
+    
     return AppState(
       originalTags: action.fetchedTags,
       tags: stateTags,
