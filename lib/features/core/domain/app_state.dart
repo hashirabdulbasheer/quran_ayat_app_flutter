@@ -58,14 +58,13 @@ class AppState {
   }
 
   List<QuranNote>? getNotes(
-      int surahIndex,
-      int ayaIndex,
-      ) {
+    int surahIndex,
+    int ayaIndex,
+  ) {
     String key = "${surahIndex}_$ayaIndex";
 
     return notes[key];
   }
-
 }
 
 enum AppStateTagModifyAction { create, addAya, removeAya, delete }
@@ -82,8 +81,6 @@ class AppStateResetAction extends AppStateAction {}
 /// TAG ACTIONS
 ///
 class AppStateFetchTagsAction extends AppStateAction {}
-
-class AppStateFetchNotesAction extends AppStateAction {}
 
 class AppStateLoadingAction extends AppStateAction {
   final bool isLoading;
@@ -129,6 +126,48 @@ class AppStateModifyTagFailureAction extends AppStateAction {
   final String message;
 
   AppStateModifyTagFailureAction({
+    required this.message,
+  });
+}
+
+/// NOTES ACTIONS
+///
+class AppStateFetchNotesAction extends AppStateAction {}
+
+class AppStateCreateNoteAction extends AppStateAction {
+  final QuranNote note;
+
+  AppStateCreateNoteAction({
+    required this.note,
+  });
+}
+
+class AppStateCreateNoteSucceededAction extends AppStateAction {}
+
+class AppStateDeleteNoteAction extends AppStateAction {
+  final QuranNote note;
+
+  AppStateDeleteNoteAction({
+    required this.note,
+  });
+}
+
+class AppStateDeleteNoteSucceededAction extends AppStateAction {}
+
+class AppStateUpdateNoteAction extends AppStateAction {
+  final QuranNote note;
+
+  AppStateUpdateNoteAction({
+    required this.note,
+  });
+}
+
+class AppStateUpdateNoteSucceededAction extends AppStateAction {}
+
+class AppStateNotesFailureAction extends AppStateAction {
+  final String message;
+
+  AppStateNotesFailureAction({
     required this.message,
   });
 }
@@ -287,6 +326,58 @@ void appStateMiddleware(
       );
       store.dispatch(AppStateFetchNotesSucceededAction(notes));
     }
+  } else if (action is AppStateCreateNoteAction) {
+    // Fetch tags
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      QuranResponse response = await QuranNotesManager.instance.create(
+        user.uid,
+        action.note,
+      );
+      if (response.isSuccessful) {
+        store.dispatch(AppStateCreateNoteSucceededAction());
+      } else {
+        store.dispatch(
+          AppStateNotesFailureAction(message: "Error creating note"),
+        );
+      }
+    }
+    store.dispatch(AppStateFetchNotesAction());
+  } else if (action is AppStateDeleteNoteAction) {
+    // Fetch tags
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      bool status = await QuranNotesManager.instance.delete(
+        user.uid,
+        action.note,
+      );
+      if (status) {
+        store.dispatch(AppStateDeleteNoteSucceededAction());
+      } else {
+        store.dispatch(
+          AppStateNotesFailureAction(message: "Error deleting note"),
+        );
+      }
+    }
+    store.dispatch(AppStateFetchNotesAction());
+  } else if (action is AppStateUpdateNoteAction) {
+    // Fetch tags
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      print(action.note.note);
+      bool status = await QuranNotesManager.instance.update(
+        user.uid,
+        action.note,
+      );
+      if (status) {
+        store.dispatch(AppStateUpdateNoteSucceededAction());
+      } else {
+        store.dispatch(
+          AppStateNotesFailureAction(message: "Error updating note"),
+        );
+      }
+    }
+    store.dispatch(AppStateFetchNotesAction());
   }
   next(action);
 }

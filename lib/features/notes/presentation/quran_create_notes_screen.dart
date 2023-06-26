@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/noble_quran.dart';
 import '../../../misc/enums/quran_status_enum.dart';
@@ -7,8 +8,8 @@ import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
+import '../../core/domain/app_state.dart';
 import '../domain/entities/quran_note.dart';
-import '../domain/notes_manager.dart';
 import 'widgets/notes_create_controls_widget.dart';
 import 'widgets/notes_update_controls_widget.dart';
 import 'widgets/offline_header_widget.dart';
@@ -45,33 +46,50 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
           children: [
             const QuranOfflineHeaderWidget(),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5,),
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                10,
+                10,
+                5,
+              ),
               child: Text(
                 "Enter your notes for ${widget.suraIndex}:${widget.ayaIndex}",
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5,),
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                10,
+                10,
+                5,
+              ),
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: QuranFullAyatRowWidget(
                   futureMethodThatReturnsSelectedSurah:
-                  NobleQuran.getSurahArabic(
-                    widget.suraIndex-1,
+                      NobleQuran.getSurahArabic(
+                    widget.suraIndex - 1,
                   ),
                   ayaIndex: widget.ayaIndex,
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10,),
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                0,
+                10,
+                10,
+              ),
               child: QuranAyatDisplayTranslationWidget(
-                currentlySelectedSurah: NQSurahTitle(number: widget.suraIndex,
-                                                      name: '',
-                                                      transliterationEn: '',
-                                                      translationEn: '',
-                                                      totalVerses: 0,
-                                                      revelationType: RevelationType.MECCAN,),
+                currentlySelectedSurah: NQSurahTitle(
+                  number: widget.suraIndex,
+                  name: '',
+                  transliterationEn: '',
+                  translationEn: '',
+                  totalVerses: 0,
+                  revelationType: RevelationType.MECCAN,
+                ),
                 currentlySelectedAya: widget.ayaIndex,
               ),
             ),
@@ -118,7 +136,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   ///
   ///  BUTTON ACTIONS
   ///
-  void _createButtonPressed(Function onComplete) async {
+  void _createButtonPressed(Function onComplete) {
     if (_notesController.text.isNotEmpty) {
       QuranUser? user = QuranAuthFactory.engine.getUser();
       if (user != null) {
@@ -130,10 +148,9 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
           localId: QuranUtils.uniqueId(),
           status: QuranStatusEnum.created,
         );
-        await QuranNotesManager.instance.create(
-          user.uid,
-          note,
-        );
+        StoreProvider.of<AppState>(context).dispatch(AppStateCreateNoteAction(
+          note: note,
+        ));
         onComplete();
       }
     } else {
@@ -148,7 +165,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
         style: TextButton.styleFrom(foregroundColor: Colors.red),
         child: const Text("Delete"),
         onPressed: () => {
-          if (_deleteNote(user))
+          if (_deleteNote())
             {
               _showMessage("Deleted 👍"),
               Navigator.of(context).pop(),
@@ -180,13 +197,12 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
     }
   }
 
-  bool _deleteNote(QuranUser user) {
+  bool _deleteNote() {
     QuranNote? noteParam = widget.note;
     if (noteParam != null) {
-      QuranNotesManager.instance.delete(
-        user.uid,
-        noteParam,
-      );
+      StoreProvider.of<AppState>(context).dispatch(AppStateDeleteNoteAction(
+        note: noteParam,
+      ));
 
       return true;
     }
@@ -204,10 +220,9 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
             createdOn: DateTime.now().millisecondsSinceEpoch,
             note: _notesController.text,
           );
-          QuranNotesManager.instance.update(
-            user.uid,
-            note,
-          );
+          StoreProvider.of<AppState>(context).dispatch(AppStateUpdateNoteAction(
+            note: note,
+          ));
           _showMessage("Updated 👍");
         } else {
           _showMessage("Sorry 😔, unable to update the note at the moment.");
