@@ -17,6 +17,7 @@ class QuranTagsManager {
 
   late QuranTagsEngine _tagsEngine;
 
+  /*
   @override
   Future<QuranResponse> create(
     String userId,
@@ -35,6 +36,7 @@ class QuranTagsManager {
       );
     }
   }
+   */
 
   Future<QuranResponse> createMaster(
     String userId,
@@ -62,6 +64,7 @@ class QuranTagsManager {
     }
   }
 
+  /*
   @override
   Future<bool> delete(
     String userId,
@@ -78,6 +81,7 @@ class QuranTagsManager {
     /// OFFLINE
     return false;
   }
+
 
   @override
   Future<QuranTag?> fetch(
@@ -98,6 +102,7 @@ class QuranTagsManager {
       );
     }
   }
+*/
 
   @override
   Future<void> initialize() async {
@@ -110,6 +115,7 @@ class QuranTagsManager {
     return _tagsEngine.initialize();
   }
 
+  /*
   @override
   Future<bool> update(
     String userId,
@@ -126,6 +132,7 @@ class QuranTagsManager {
     /// OFFLINE
     return false;
   }
+  */
 
   @override
   Future<bool> updateMaster(
@@ -141,7 +148,7 @@ class QuranTagsManager {
         );
       }
     }
-
+    print("out");
     /// OFFLINE
     return false;
   }

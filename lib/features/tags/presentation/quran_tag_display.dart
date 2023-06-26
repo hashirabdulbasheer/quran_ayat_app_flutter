@@ -1,6 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:quran_ayat/features/tags/presentation/quran_view_tags_screen.dart';
@@ -10,9 +9,7 @@ import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../core/domain/app_state.dart';
 import '../domain/entities/quran_master_tag.dart';
-import '../domain/entities/quran_master_tag_aya.dart';
 import '../domain/entities/quran_tag.dart';
-import '../domain/tags_manager.dart';
 
 class QuranAyatDisplayTagsWidget extends StatefulWidget {
   final NQSurahTitle? currentlySelectedSurah;
@@ -129,7 +126,6 @@ class _QuranAyatDisplayTagsWidgetState
               ),
             ),
             onPressed: () => _displayRemovalConfirmationDialog(
-              tag,
               tagString,
               user.uid,
             ),
@@ -191,9 +187,7 @@ class _QuranAyatDisplayTagsWidgetState
           title: const Text(
             'Select Tag',
           ),
-          content: _addDialogTagSelectorField(
-            userId,
-          ),
+          content: _addDialogTagSelectorField(),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -209,7 +203,7 @@ class _QuranAyatDisplayTagsWidgetState
                 ),
               ),
               onPressed: () => {
-                _onSaveButtonTapped(userId),
+                _onSaveButtonTapped(),
                 Navigator.of(context).pop(),
               },
             ),
@@ -219,9 +213,9 @@ class _QuranAyatDisplayTagsWidgetState
     );
   }
 
-  Widget _addDialogTagSelectorField(String userId) {
+  Widget _addDialogTagSelectorField() {
     return DropdownSearch<QuranMasterTag>(
-      asyncItems: (_) => _fetchAllTags(userId),
+      items: _fetchAllTags(),
       popupProps: PopupPropsMultiSelection.menu(
         showSearchBox: true,
         emptyBuilder: (
@@ -275,16 +269,11 @@ class _QuranAyatDisplayTagsWidgetState
     );
   }
 
-  Future<List<QuranMasterTag>> _fetchAllTags(
-    String userId,
-  ) async {
-    return Future.value(
-      await QuranTagsManager.instance.fetchAll(userId),
-    );
+  List<QuranMasterTag> _fetchAllTags() {
+    return StoreProvider.of<AppState>(context).state.originalTags;
   }
 
   Future<void> _displayRemovalConfirmationDialog(
-    QuranTag tag,
     String selectedTag,
     String? userId,
   ) async {
@@ -318,8 +307,6 @@ class _QuranAyatDisplayTagsWidgetState
               ),
               onPressed: () => {
                 _onRemoveButtonTapped(
-                  userId,
-                  tag,
                   selectedTag,
                 ),
                 Navigator.of(context).pop(),
@@ -331,216 +318,63 @@ class _QuranAyatDisplayTagsWidgetState
     );
   }
 
-  void _onSaveButtonTapped(
-    String userId,
-  ) async {
-    if (await _saveTag(userId)) {
-      _showMessage(
-        "Saved 👍",
-      );
-    } else {
-      _showMessage(
-        "Error Saving tag 😔",
-      );
+  void _onSaveButtonTapped() {
+    if (_selectedTag == null) return;
+    String? newTagString = _selectedTag?.name.toLowerCase().trim();
+    int? surahIndex = widget.currentlySelectedSurah?.number;
+    // validation
+    if (newTagString == null || newTagString.isEmpty || surahIndex == null) {
+      // invalid
+      return;
     }
+    StoreProvider.of<AppState>(context).dispatch(AppStateModifyTagAction(
+      surahIndex: surahIndex,
+      ayaIndex: widget.ayaIndex,
+      tag: newTagString,
+      action: AppStateTagModifyAction.addAya,
+    ));
+
+    _showMessage(
+      "Saved 👍",
+    );
   }
 
   void _onRemoveButtonTapped(
-    String userId,
-    QuranTag tag,
     String selectedTag,
-  ) async {
-    if (await _removeTag(
-      userId,
-      tag,
+  ) {
+    _removeTag(
       selectedTag,
-    )) {
-      _showMessage(
-        "Removed tag  👍",
-      );
-    } else {
-      _showMessage(
-        "Error Removing tag 😔",
-      );
-    }
+    );
+    _showMessage(
+      "Removed tag  👍",
+    );
   }
 
   /// Actions
   ///
 
-  Future<bool> _removeTag(
-    String userId,
-    QuranTag currentTag,
+  bool _removeTag(
     String selectedTag,
-  ) async {
+  ) {
     int? surahIndex = widget.currentlySelectedSurah?.number;
     // validation
     if (surahIndex == null) {
       // invalid
       return false;
     }
-    QuranTagsManager manager = QuranTagsManager.instance;
-    if (currentTag.tag.length > 1) {
-      // more than one items
-      List<String> currentTagStrings = currentTag.tag;
-      currentTagStrings.remove(selectedTag);
-      currentTag = currentTag.copyWith(
-        tag: currentTagStrings,
-        status: QuranStatusEnum.updated,
-      );
-      await manager.update(
-        userId,
-        currentTag,
-      );
-    } else {
-      // only one item
-      await manager.delete(
-        userId,
-        currentTag,
-      );
-    }
 
-    // update tag-master to remove the aya infor
-    try {
-      List<QuranMasterTag> masterTags = await _fetchAllTags(userId);
-      QuranMasterTag masterTag =
-          masterTags.firstWhere((element) => element.name == selectedTag);
-      masterTag.ayas.removeWhere((element) =>
-          element.suraIndex == currentTag.suraIndex &&
-          element.ayaIndex == currentTag.ayaIndex);
-      await manager.updateMaster(
-        userId,
-        masterTag,
-      );
-    } catch (_) {}
-
-    setState(() {});
+    StoreProvider.of<AppState>(context).dispatch(AppStateModifyTagAction(
+      surahIndex: surahIndex,
+      ayaIndex: widget.ayaIndex,
+      tag: selectedTag,
+      action: AppStateTagModifyAction.removeAya,
+    ));
 
     return true;
-  }
-
-  Future<bool> _saveTag(
-    String userId,
-  ) async {
-    if (_selectedTag == null) return false;
-
-    String? newTagString = _selectedTag?.name.toLowerCase().trim();
-    int? surahIndex = widget.currentlySelectedSurah?.number;
-    // validation
-    if (newTagString == null || newTagString.isEmpty || surahIndex == null) {
-      // invalid
-      return false;
-    }
-
-    QuranTagsManager manager = QuranTagsManager.instance;
-    QuranTag? currentTag = await manager.fetch(
-      userId,
-      surahIndex,
-      widget.ayaIndex,
-    );
-
-    if (currentTag == null || currentTag.tag.isEmpty) {
-      // create a new tag
-      return await _createNewTag(
-        userId,
-        surahIndex,
-        widget.ayaIndex,
-        newTagString,
-      );
-    } else {
-      // update existing tag
-      return await _updateTag(
-        userId,
-        currentTag,
-        newTagString,
-      );
-    }
   }
 
   /// Helpers
   ///
-
-  Future<bool> _createNewTag(
-    String userId,
-    int suraIndex,
-    int ayaIndex,
-    String newTagString,
-  ) async {
-    QuranTagsManager manager = QuranTagsManager.instance;
-    QuranTag newTag = QuranTag(
-      suraIndex: suraIndex,
-      ayaIndex: ayaIndex,
-      tag: [newTagString],
-      localId: DateTime.now().millisecondsSinceEpoch.toString(),
-      createdOn: DateTime.now().millisecondsSinceEpoch,
-      status: QuranStatusEnum.created,
-    );
-
-    // create tag
-    await manager.create(
-      userId,
-      newTag,
-    );
-
-    // update tag-master to add the aya infor
-    _selectedTag?.ayas.add(QuranMasterTagAya(
-      suraIndex: newTag.suraIndex,
-      ayaIndex: newTag.ayaIndex,
-    ));
-    await manager.updateMaster(
-      userId,
-      _selectedTag,
-    );
-
-    setState(() {
-      _selectedTag = null;
-    });
-
-    return true;
-  }
-
-  Future<bool> _updateTag(
-    String userId,
-    QuranTag currentTag,
-    String newTagString,
-  ) async {
-    if (currentTag.tag.contains(newTagString)) {
-      // duplicate
-      return false;
-    }
-
-    // there is no duplicate
-    // already contains tags - so update
-    QuranTagsManager manager = QuranTagsManager.instance;
-    List<String> currentTagStrings = currentTag.tag;
-    currentTagStrings.add(newTagString);
-    currentTag = currentTag.copyWith(
-      tag: currentTagStrings,
-      status: QuranStatusEnum.updated,
-    );
-
-    // update tag
-    await manager.update(
-      userId,
-      currentTag,
-    );
-
-    // update tag-master to add the aya infor
-    _selectedTag?.ayas.add(QuranMasterTagAya(
-      suraIndex: currentTag.suraIndex,
-      ayaIndex: currentTag.ayaIndex,
-    ));
-    await manager.updateMaster(
-      userId,
-      _selectedTag,
-    );
-
-    setState(() {
-      _selectedTag = null;
-    });
-
-    return true;
-  }
 
   void _goToLoginScreen() {
     Navigator.push<void>(

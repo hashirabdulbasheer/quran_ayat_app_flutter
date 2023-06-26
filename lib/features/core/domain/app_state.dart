@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../tags/domain/entities/quran_master_tag.dart';
@@ -11,12 +12,34 @@ import 'package:redux/redux.dart';
 ///
 @immutable
 class AppState {
+  final List<QuranMasterTag> originalTags;
   final Map<String, List<String>> tags;
+  final StateError? error;
+  final bool isLoading;
 
   const AppState({
     this.tags = const {},
+    this.originalTags = const [],
+    this.error,
+    this.isLoading = false,
   });
+
+  AppState copyWith({
+    List<QuranMasterTag>? originalTags,
+    Map<String, List<String>>? tags,
+    StateError? error,
+    bool? isLoading,
+  }) {
+    return AppState(
+      tags: tags ?? this.tags,
+      originalTags: originalTags ?? this.originalTags,
+      error: error ?? this.error,
+      isLoading: isLoading ?? this.isLoading,
+    );
+  }
 }
+
+enum AppStateTagModifyAction { create, addAya, removeAya, delete }
 
 /// ACTIONS
 ///
@@ -27,7 +50,31 @@ class AppStateInitializeAction extends AppStateAction {}
 
 class AppStateResetAction extends AppStateAction {}
 
+/// TAG ACTIONS
+///
 class AppStateFetchTagsAction extends AppStateAction {}
+
+class AppStateLoadingAction extends AppStateAction {
+  final bool isLoading;
+
+  AppStateLoadingAction({
+    required this.isLoading,
+  });
+}
+
+class AppStateModifyTagAction extends AppStateAction {
+  final int surahIndex;
+  final int ayaIndex;
+  final String tag;
+  final AppStateTagModifyAction action;
+
+  AppStateModifyTagAction({
+    required this.surahIndex,
+    required this.ayaIndex,
+    required this.tag,
+    required this.action,
+  });
+}
 
 class AppStateFetchTagsSucceededAction extends AppStateAction {
   final List<QuranMasterTag> fetchedTags;
@@ -35,6 +82,16 @@ class AppStateFetchTagsSucceededAction extends AppStateAction {
   AppStateFetchTagsSucceededAction(
     this.fetchedTags,
   );
+}
+
+class AppStateModifyTagSucceededAction extends AppStateAction {}
+
+class AppStateModifyTagFailureAction extends AppStateAction {
+  final String message;
+
+  AppStateModifyTagFailureAction({
+    required this.message,
+  });
 }
 
 /// REDUCER
@@ -57,11 +114,16 @@ AppState appStateReducer(
     }
 
     return AppState(
+      originalTags: action.fetchedTags,
       tags: stateTags,
     );
   } else if (action is AppStateResetAction) {
-
+    // Reset Tag
     return const AppState(tags: {});
+  } else if (action is AppStateModifyTagFailureAction) {
+    return state.copyWith(error: StateError(action.message));
+  } else if (action is AppStateLoadingAction) {
+    return state.copyWith(isLoading: action.isLoading);
   }
 
   return state;
@@ -76,15 +138,91 @@ void appStateMiddleware(
   NextDispatcher next,
 ) async {
   if (action is AppStateInitializeAction) {
-    // initialization actions
+    // Initialization actions
     store.dispatch(AppStateFetchTagsAction());
   } else if (action is AppStateFetchTagsAction) {
-    QuranUser? user = QuranAuthFactory.engine?.getUser();
+    // Fetch tags
+    QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       List<QuranMasterTag> tags = await QuranTagsManager.instance.fetchAll(
         user.uid,
       );
       store.dispatch(AppStateFetchTagsSucceededAction(tags));
+    }
+  } else if (action is AppStateModifyTagAction) {
+    // Modify tags
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      String userId = user.uid;
+      switch (action.action) {
+        case AppStateTagModifyAction.create:
+          QuranResponse response = await QuranTagsManager.instance.createMaster(
+            userId,
+            action.tag,
+          );
+          if (response.isSuccessful) {
+            store.dispatch(AppStateModifyTagSucceededAction());
+          } else {
+            store.dispatch(AppStateModifyTagFailureAction(
+              message: "Error creating tag - ${action.tag}",
+            ));
+          }
+          break;
+
+        case AppStateTagModifyAction.removeAya:
+          try {
+            QuranMasterTag masterTag = store.state.originalTags
+                .firstWhere((element) => element.name == action.tag);
+            masterTag.ayas.removeWhere((element) =>
+                element.suraIndex == action.surahIndex &&
+                element.ayaIndex == action.ayaIndex);
+            if (await QuranTagsManager.instance.updateMaster(
+              userId,
+              masterTag,
+            )) {
+              store.dispatch(AppStateModifyTagSucceededAction());
+            } else {
+              store.dispatch(
+                AppStateModifyTagFailureAction(message: "Error updating"),
+              );
+            }
+          } catch (error) {
+            print(error);
+          }
+          break;
+
+        case AppStateTagModifyAction.addAya:
+          try {
+            QuranMasterTag masterTag = store.state.originalTags
+                .firstWhere((element) => element.name == action.tag);
+            masterTag.ayas.removeWhere((element) =>
+                element.suraIndex == action.surahIndex &&
+                element.ayaIndex == action.ayaIndex);
+            masterTag.ayas.add(QuranMasterTagAya(
+              suraIndex: action.surahIndex,
+              ayaIndex: action.ayaIndex,
+            ));
+            if (await QuranTagsManager.instance.updateMaster(
+              userId,
+              masterTag,
+            )) {
+              store.dispatch(AppStateModifyTagSucceededAction());
+            } else {
+              store.dispatch(
+                AppStateModifyTagFailureAction(message: "Error updating"),
+              );
+            }
+          } catch (error) {
+            print(error);
+          }
+          break;
+
+        case AppStateTagModifyAction.delete:
+          // TODO: Not implemented
+          break;
+      }
+
+      store.dispatch(AppStateFetchTagsAction());
     }
   }
   next(action);
