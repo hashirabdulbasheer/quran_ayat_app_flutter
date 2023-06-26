@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:quran_ayat/features/tags/presentation/quran_view_tags_screen.dart';
+import 'package:redux/redux.dart';
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
@@ -49,60 +50,70 @@ class _QuranAyatDisplayTagsWidgetState
       );
     }
 
-    return Column(
-      children: [
-        const SizedBox(
-          height: 20,
-        ),
-        Container(
-          height: 50,
-          decoration: const BoxDecoration(
-            border: Border.fromBorderSide(
-              BorderSide(color: Colors.black12),
+    return StoreBuilder<AppState>(
+      builder: (
+        BuildContext context,
+        Store<AppState> store,
+      ) {
+        return Column(
+          children: [
+            const SizedBox(
+              height: 20,
             ),
-            color: Colors.black12,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          padding: const EdgeInsets.fromLTRB(
-            10,
-            0,
-            10,
-            0,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Tags"),
-              ElevatedButton(
-                onPressed: () => _displayAddTagDialog(
-                  user?.uid,
+            Container(
+              height: 50,
+              decoration: const BoxDecoration(
+                border: Border.fromBorderSide(
+                  BorderSide(color: Colors.black12),
                 ),
-                child: const Text("Add"),
+                color: Colors.black12,
+                borderRadius: BorderRadius.all(Radius.circular(5)),
               ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        surahIndex != null && user != null && tag != null && tag.tag.isNotEmpty
-            ? SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: _tagsWidget(
-                  tag,
-                  user,
-                ),
-              )
-            : TextButton(
-                onPressed: () => _displayAddTagDialog(
-                  user?.uid,
-                ),
-                child: const SizedBox(
-                  height: 30,
-                  child: Center(child: Text("Add Tag")),
-                ),
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                0,
+                10,
+                0,
               ),
-      ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Tags"),
+                  ElevatedButton(
+                    onPressed: () => _displayAddTagDialog(
+                      user?.uid,
+                    ),
+                    child: const Text("Add"),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            surahIndex != null &&
+                    user != null &&
+                    tag != null &&
+                    tag.tag.isNotEmpty
+                ? SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: _tagsWidget(
+                      tag,
+                      user,
+                    ),
+                  )
+                : TextButton(
+                    onPressed: () => _displayAddTagDialog(
+                      user?.uid,
+                    ),
+                    child: const SizedBox(
+                      height: 30,
+                      child: Center(child: Text("Add Tag")),
+                    ),
+                  ),
+          ],
+        );
+      },
     );
   }
 
@@ -280,8 +291,8 @@ class _QuranAyatDisplayTagsWidgetState
                 surahIndex,
                 widget.ayaIndex,
               );
-      if(currentTagsForAya != null && currentTagsForAya.isNotEmpty) {
-        for(String alreadyAddedTag in currentTagsForAya) {
+      if (currentTagsForAya != null && currentTagsForAya.isNotEmpty) {
+        for (String alreadyAddedTag in currentTagsForAya) {
           tags.removeWhere((element) => element.name == alreadyAddedTag);
         }
       }

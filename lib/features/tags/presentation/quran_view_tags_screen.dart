@@ -6,7 +6,6 @@ import '../../../models/qr_user_model.dart';
 import '../../../utils/nav_utils.dart';
 import '../../core/domain/app_state.dart';
 import '../domain/entities/quran_master_tag.dart';
-import '../domain/tags_manager.dart';
 
 class QuranViewTagsScreen extends StatefulWidget {
   final QuranUser user;
