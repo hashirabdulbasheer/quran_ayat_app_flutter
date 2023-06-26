@@ -37,6 +37,12 @@ class AppState {
       isLoading: isLoading ?? this.isLoading,
     );
   }
+
+  List<String>? getTags(int surahIndex, int ayaIndex,) {
+    String key = "${surahIndex}_$ayaIndex";
+
+    return tags[key];
+  }
 }
 
 enum AppStateTagModifyAction { create, addAya, removeAya, delete }

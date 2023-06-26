@@ -270,7 +270,24 @@ class _QuranAyatDisplayTagsWidgetState
   }
 
   List<QuranMasterTag> _fetchAllTags() {
-    return StoreProvider.of<AppState>(context).state.originalTags;
+    int? surahIndex = widget.currentlySelectedSurah?.number;
+    List<QuranMasterTag> tags =
+        List.from(StoreProvider.of<AppState>(context).state.originalTags);
+    if (surahIndex != null) {
+      // remove already added tags from the list
+      List<String>? currentTagsForAya =
+          StoreProvider.of<AppState>(context).state.getTags(
+                surahIndex,
+                widget.ayaIndex,
+              );
+      if(currentTagsForAya != null && currentTagsForAya.isNotEmpty) {
+        for(String alreadyAddedTag in currentTagsForAya) {
+          tags.removeWhere((element) => element.name == alreadyAddedTag);
+        }
+      }
+    }
+
+    return tags;
   }
 
   Future<void> _displayRemovalConfirmationDialog(
