@@ -1,12 +1,14 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:quran_ayat/features/tags/presentation/quran_view_tags_screen.dart';
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
+import '../../core/domain/app_state.dart';
 import '../domain/entities/quran_master_tag.dart';
 import '../domain/entities/quran_master_tag_aya.dart';
 import '../domain/entities/quran_tag.dart';
@@ -42,6 +44,13 @@ class _QuranAyatDisplayTagsWidgetState
 
     QuranUser? user = QuranAuthFactory.engine.getUser();
     int? surahIndex = widget.currentlySelectedSurah?.number;
+    QuranTag? tag;
+    if (surahIndex != null) {
+      tag = _fetchTag(
+        surahIndex,
+        widget.ayaIndex,
+      );
+    }
 
     return Column(
       children: [
@@ -79,56 +88,13 @@ class _QuranAyatDisplayTagsWidgetState
         const SizedBox(
           height: 10,
         ),
-        surahIndex != null && user != null
-            ? FutureBuilder<QuranTag?>(
-                future: QuranTagsManager.instance.fetch(
-                  user.uid,
-                  surahIndex,
-                  widget.ayaIndex,
+        surahIndex != null && user != null && tag != null && tag.tag.isNotEmpty
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _tagsWidget(
+                  tag,
+                  user,
                 ),
-                // async work
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<QuranTag?> snapshot,
-                ) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return SizedBox(
-                        height: 200,
-                        width: MediaQuery.of(context).size.width,
-                        child: const Center(
-                          child: Text('Loading....'),
-                        ),
-                      );
-                    default:
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Error: ${snapshot.error}'),
-                        );
-                      } else {
-                        QuranTag? tag = snapshot.data;
-                        if (tag != null && tag.tag.isNotEmpty) {
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: _tagsWidget(
-                              tag,
-                              user,
-                            ),
-                          );
-                        }
-
-                        return TextButton(
-                          onPressed: () => _displayAddTagDialog(
-                            user.uid,
-                          ),
-                          child: const SizedBox(
-                            height: 30,
-                            child: Center(child: Text("Add Tag")),
-                          ),
-                        );
-                      }
-                  }
-                },
               )
             : TextButton(
                 onPressed: () => _displayAddTagDialog(
@@ -601,5 +567,22 @@ class _QuranAyatDisplayTagsWidgetState
     ).then((value) {
       setState(() {});
     });
+  }
+
+  QuranTag? _fetchTag(
+    int surahIndex,
+    int ayaIndex,
+  ) {
+    String key = "${surahIndex}_$ayaIndex";
+    List<String>? tags = StoreProvider.of<AppState>(context).state.tags[key];
+
+    return QuranTag(
+      suraIndex: surahIndex,
+      ayaIndex: ayaIndex,
+      tag: tags ?? [],
+      localId: "${DateTime.now().millisecondsSinceEpoch}",
+      createdOn: DateTime.now().millisecondsSinceEpoch,
+      status: QuranStatusEnum.created,
+    );
   }
 }
