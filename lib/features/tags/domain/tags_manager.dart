@@ -67,7 +67,6 @@ class QuranTagsManager {
         );
       }
     }
-    print("out");
 
     /// OFFLINE
     return false;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
+import '../../../utils/logger_utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../notes/domain/entities/quran_note.dart';
 import '../../notes/domain/notes_manager.dart';
@@ -65,6 +66,11 @@ class AppState {
 
     return notes[key];
   }
+
+  @override
+  String toString() {
+    return "Tags: ${originalTags.length}, Notes: ${originalNotes.length}, Error: $error, isLoading: $isLoading";
+  }
 }
 
 enum AppStateTagModifyAction { create, addAya, removeAya, delete }
@@ -72,7 +78,12 @@ enum AppStateTagModifyAction { create, addAya, removeAya, delete }
 /// ACTIONS
 ///
 
-class AppStateAction {}
+class AppStateAction {
+  @override
+  String toString() {
+    return "$runtimeType";
+  }
+}
 
 class AppStateInitializeAction extends AppStateAction {}
 
@@ -364,7 +375,6 @@ void appStateMiddleware(
     // Fetch tags
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
-      print(action.note.note);
       bool status = await QuranNotesManager.instance.update(
         user.uid,
         action.note,
@@ -391,6 +401,6 @@ class LoggerMiddleware<State> implements MiddlewareClass<State> {
   ) {
     next(action);
 
-    print("Middleware: { ${action.runtimeType} }");
+    QuranLogger.log("Logger: Action: $action, State: {${store.state}}");
   }
 }
