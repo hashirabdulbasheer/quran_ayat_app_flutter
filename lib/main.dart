@@ -23,14 +23,7 @@ void main() async {
   await QuranAuthFactory.engine.initialize();
   FirebaseAnalytics.instance.logAppOpen();
   runApp(MyApp(
-    homeScreen: StoreBuilder<AppState>(
-      onInit: (store) => store.dispatch(AppStateInitializeAction()),
-      builder: (
-        BuildContext context,
-        Store<AppState> store,
-      ) =>
-          QuranComposer.composeAyatScreen(),
-    ),
+    homeScreen: QuranComposer.composeAyatScreen(),
   ));
   _loadQuranWords();
 }

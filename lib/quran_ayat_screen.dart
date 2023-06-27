@@ -5,12 +5,14 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/contextList/presentation/quran_context_list_screen.dart';
 import 'package:quran_ayat/utils/logger_utils.dart';
+import 'package:redux/redux.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
@@ -23,6 +25,7 @@ import 'features/ayats/presentation/widgets/ayat_display_word_by_word_widget.dar
 import 'features/bookmark/data/firebase_bookmarks_impl.dart';
 import 'features/bookmark/domain/bookmarks_manager.dart';
 import 'features/bookmark/presentation/bookmark_icon_widget.dart';
+import 'features/core/domain/app_state/app_state.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/settings/domain/settings_manager.dart';
@@ -408,10 +411,17 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             ),
 
                             /// Tags
-                            QuranAyatDisplayTagsWidget(
-                              currentlySelectedSurah: _selectedSurah,
-                              ayaIndex: _selectedAyat,
-                              continuousMode: _isAudioContinuousModeEnabled,
+                            StoreBuilder<AppState>(
+                              onInit: (store) => store.dispatch(AppStateInitializeAction()),
+                              builder: (
+                                  BuildContext context,
+                                  Store<AppState> store,
+                                  ) =>
+                                  QuranAyatDisplayTagsWidget(
+                                    currentlySelectedSurah: _selectedSurah,
+                                    ayaIndex: _selectedAyat,
+                                    continuousMode: _isAudioContinuousModeEnabled,
+                                  ),
                             ),
 
                             /// Notes

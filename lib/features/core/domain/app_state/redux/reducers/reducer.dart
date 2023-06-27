@@ -28,7 +28,7 @@ AppState appStateReducer(
     );
   } else if (action is AppStateResetAction) {
     // Reset Tag
-    return const AppState(tags: {});
+    return const AppState();
   } else if (action is AppStateModifyTagFailureAction) {
     return state.copyWith(error: StateError(action.message));
   } else if (action is AppStateLoadingAction) {
