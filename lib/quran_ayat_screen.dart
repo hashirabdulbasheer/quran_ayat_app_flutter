@@ -425,10 +425,16 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             ),
 
                             /// Notes
-                            QuranAyatDisplayNotesWidget(
-                              currentlySelectedSurah: _selectedSurah,
-                              currentlySelectedAya: _selectedAyat,
-                              continuousMode: _isAudioContinuousModeEnabled,
+                            StoreBuilder<AppState>(
+                              builder: (
+                                  BuildContext context,
+                                  Store<AppState> store,
+                                  ) =>
+                                  QuranAyatDisplayNotesWidget(
+                                    currentlySelectedSurah: _selectedSurah,
+                                    currentlySelectedAya: _selectedAyat,
+                                    continuousMode: _isAudioContinuousModeEnabled,
+                                  ),
                             ),
 
                             const SizedBox(height: 30),
