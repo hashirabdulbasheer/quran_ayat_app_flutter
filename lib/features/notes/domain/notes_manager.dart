@@ -12,11 +12,10 @@ class QuranNotesManager implements QuranNotesDataSource {
   static final QuranNotesManager instance =
       QuranNotesManager._privateConstructor();
 
-  QuranNotesManager._privateConstructor() {
-    _notesEngine = QuranNotesEngine(dataSource: QuranFirebaseEngine.instance);
-  }
+  QuranNotesManager._privateConstructor();
 
-  late QuranNotesEngine _notesEngine;
+  final QuranNotesEngine _notesEngine =
+      QuranNotesEngine(dataSource: QuranFirebaseEngine.instance);
 
   @override
   Future<QuranResponse> create(

@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../models/qr_user_model.dart';
-import '../../core/domain/app_state.dart';
+import '../../core/domain/app_state/app_state.dart';
 import '../domain/entities/quran_note.dart';
 import 'quran_create_notes_screen.dart';
 import 'widgets/notes_view_note_item_widget.dart';

@@ -107,7 +107,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                         child: Text(
                                           e.tr,
                                           textScaleFactor: fontScale,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             color: Colors.black54,
                                             fontSize: 14,
                                           ),

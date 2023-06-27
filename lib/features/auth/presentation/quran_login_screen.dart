@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import '../../../models/qr_user_model.dart';
-import '../../core/domain/app_state.dart';
+import '../../core/domain/app_state/app_state.dart';
 import '../domain/auth_factory.dart';
 import '../../../utils/utils.dart';
 import 'quran_signup_screen.dart';

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/tags/domain/entities/quran_tag_aya.dart';
 import '../../../utils/nav_utils.dart';
 import '../../settings/domain/settings_manager.dart';
 import '../domain/entities/quran_index.dart';
 import '../domain/entities/quran_tag.dart';
+import '../domain/entities/quran_tag_aya.dart';
 
 class QuranResultsScreen extends StatefulWidget {
   final QuranTag tag;

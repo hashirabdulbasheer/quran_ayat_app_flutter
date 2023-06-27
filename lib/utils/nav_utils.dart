@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/composer.dart';
-import 'package:quran_ayat/features/tags/domain/entities/quran_tag.dart';
-import 'package:quran_ayat/features/tags/presentation/quran_results_screen.dart';
 
-import '../features/tags/domain/entities/quran_index.dart';
+import '../composer.dart';
+import '../features/tags/domain/entities/quran_tag.dart';
+import '../features/tags/presentation/quran_results_screen.dart';
+
 
 class QuranNavigator {
   /// navigate to ayat screen

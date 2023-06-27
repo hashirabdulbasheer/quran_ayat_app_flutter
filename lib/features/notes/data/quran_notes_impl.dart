@@ -86,7 +86,7 @@ class QuranNotesEngine implements QuranNotesDataSource {
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
       return await dataSource.delete(
-          "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}");
+          "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}",);
     }
 
     return false;

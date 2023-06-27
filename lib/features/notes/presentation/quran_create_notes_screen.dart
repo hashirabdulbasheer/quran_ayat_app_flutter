@@ -8,7 +8,7 @@ import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
-import '../../core/domain/app_state.dart';
+import '../../core/domain/app_state/app_state.dart';
 import '../domain/entities/quran_note.dart';
 import 'widgets/notes_create_controls_widget.dart';
 import 'widgets/notes_update_controls_widget.dart';

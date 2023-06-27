@@ -10,11 +10,10 @@ class QuranTagsManager {
   static final QuranTagsManager instance =
       QuranTagsManager._privateConstructor();
 
-  QuranTagsManager._privateConstructor() {
-    _tagsEngine = QuranTagsEngine(dataSource: QuranFirebaseEngine.instance);
-  }
+  QuranTagsManager._privateConstructor();
 
-  late QuranTagsEngine _tagsEngine;
+  final QuranTagsEngine _tagsEngine =
+      QuranTagsEngine(dataSource: QuranFirebaseEngine.instance);
 
   Future<QuranResponse> create(
     String userId,
@@ -42,7 +41,6 @@ class QuranTagsManager {
     }
   }
 
-  @override
   Future<void> initialize() async {
     if (await isOffline()) {
       /// OFFLINE
@@ -53,7 +51,6 @@ class QuranTagsManager {
     return _tagsEngine.initialize();
   }
 
-  @override
   Future<bool> update(
     String userId,
     QuranTag? tag,
@@ -72,7 +69,6 @@ class QuranTagsManager {
     return false;
   }
 
-  @override
   Future<List<QuranTag>> fetchAll(String userId) async {
     if (await isOffline()) {
       /// OFFLINE

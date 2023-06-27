@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quran_ayat/features/settings/domain/constants/setting_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../main.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../quran_search_screen.dart';

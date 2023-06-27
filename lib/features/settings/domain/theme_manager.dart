@@ -2,9 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:quran_ayat/features/settings/domain/constants/setting_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../misc/enums/quran_theme_enum.dart';
 
 class QuranThemeManager {
   static final QuranThemeManager instance =
