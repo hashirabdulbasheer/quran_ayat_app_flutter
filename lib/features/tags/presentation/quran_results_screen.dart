@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/tags/domain/entities/quran_master_tag_aya.dart';
+import 'package:quran_ayat/features/tags/domain/entities/quran_tag_aya.dart';
 import '../../../utils/nav_utils.dart';
 import '../../settings/domain/settings_manager.dart';
 import '../domain/entities/quran_index.dart';
-import '../domain/entities/quran_master_tag.dart';
+import '../domain/entities/quran_tag.dart';
 
 class QuranResultsScreen extends StatefulWidget {
-  final QuranMasterTag tag;
+  final QuranTag tag;
 
   const QuranResultsScreen({
     Key? key,
@@ -116,7 +116,7 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
 
   Future<List<QuranIndex>> _fetchDetails() async {
     List<QuranIndex> updatedIndices = [];
-    for (QuranMasterTagAya aya in widget.tag.ayas) {
+    for (QuranTagAya aya in widget.tag.ayas) {
       NQTranslation translation =
           await QuranSettingsManager.instance.getTranslation();
       NQSurah translationSurah = await NobleQuran.getTranslationString(

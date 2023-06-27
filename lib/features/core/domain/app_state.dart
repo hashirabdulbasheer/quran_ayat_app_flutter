@@ -6,8 +6,8 @@ import '../../../utils/logger_utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../notes/domain/entities/quran_note.dart';
 import '../../notes/domain/notes_manager.dart';
-import '../../tags/domain/entities/quran_master_tag.dart';
-import '../../tags/domain/entities/quran_master_tag_aya.dart';
+import '../../tags/domain/entities/quran_tag.dart';
+import '../../tags/domain/entities/quran_tag_aya.dart';
 import '../../tags/domain/tags_manager.dart';
 import 'package:redux/redux.dart';
 
@@ -15,7 +15,7 @@ import 'package:redux/redux.dart';
 ///
 @immutable
 class AppState {
-  final List<QuranMasterTag> originalTags;
+  final List<QuranTag> originalTags;
   final List<QuranNote> originalNotes;
   final Map<String, List<String>> tags;
   final Map<String, List<QuranNote>> notes;
@@ -32,7 +32,7 @@ class AppState {
   });
 
   AppState copyWith({
-    List<QuranMasterTag>? originalTags,
+    List<QuranTag>? originalTags,
     List<QuranNote>? originalNotes,
     Map<String, List<String>>? tags,
     Map<String, List<QuranNote>>? notes,
@@ -116,7 +116,7 @@ class AppStateModifyTagAction extends AppStateAction {
 }
 
 class AppStateFetchTagsSucceededAction extends AppStateAction {
-  final List<QuranMasterTag> fetchedTags;
+  final List<QuranTag> fetchedTags;
 
   AppStateFetchTagsSucceededAction(
     this.fetchedTags,
@@ -192,8 +192,8 @@ AppState appStateReducer(
 ) {
   if (action is AppStateFetchTagsSucceededAction) {
     Map<String, List<String>> stateTags = {};
-    for (QuranMasterTag tag in action.fetchedTags) {
-      for (QuranMasterTagAya aya in tag.ayas) {
+    for (QuranTag tag in action.fetchedTags) {
+      for (QuranTagAya aya in tag.ayas) {
         String key = "${aya.suraIndex}_${aya.ayaIndex}";
         if (stateTags[key] == null) {
           stateTags[key] = [];
@@ -248,7 +248,7 @@ void appStateMiddleware(
     // Fetch tags
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
-      List<QuranMasterTag> tags = await QuranTagsManager.instance.fetchAll(
+      List<QuranTag> tags = await QuranTagsManager.instance.fetchAll(
         user.uid,
       );
       store.dispatch(AppStateFetchTagsSucceededAction(tags));
@@ -275,7 +275,7 @@ void appStateMiddleware(
 
         case AppStateTagModifyAction.removeAya:
           try {
-            QuranMasterTag masterTag = store.state.originalTags
+            QuranTag masterTag = store.state.originalTags
                 .firstWhere((element) => element.name == action.tag);
             masterTag.ayas.removeWhere((element) =>
                 element.suraIndex == action.surahIndex &&
@@ -297,12 +297,12 @@ void appStateMiddleware(
 
         case AppStateTagModifyAction.addAya:
           try {
-            QuranMasterTag masterTag = store.state.originalTags
+            QuranTag masterTag = store.state.originalTags
                 .firstWhere((element) => element.name == action.tag);
             masterTag.ayas.removeWhere((element) =>
                 element.suraIndex == action.surahIndex &&
                 element.ayaIndex == action.ayaIndex);
-            masterTag.ayas.add(QuranMasterTagAya(
+            masterTag.ayas.add(QuranTagAya(
               suraIndex: action.surahIndex,
               ayaIndex: action.ayaIndex,
             ));

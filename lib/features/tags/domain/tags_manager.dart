@@ -4,7 +4,7 @@ import '../../../utils/utils.dart';
 import 'package:intl/intl.dart' as intl;
 import '../../core/data/quran_firebase_engine.dart';
 import '../data/quran_tags_impl.dart';
-import 'entities/quran_master_tag.dart';
+import 'entities/quran_tag.dart';
 
 class QuranTagsManager {
   static final QuranTagsManager instance =
@@ -27,7 +27,7 @@ class QuranTagsManager {
       );
     } else {
       /// ONLINE
-      QuranMasterTag masterTag = QuranMasterTag(
+      QuranTag masterTag = QuranTag(
         id: "${DateTime.now().millisecondsSinceEpoch}",
         name: tag,
         ayas: [],
@@ -56,7 +56,7 @@ class QuranTagsManager {
   @override
   Future<bool> update(
     String userId,
-    QuranMasterTag? tag,
+    QuranTag? tag,
   ) async {
     if (!await isOffline()) {
       /// ONLINE
@@ -73,7 +73,7 @@ class QuranTagsManager {
   }
 
   @override
-  Future<List<QuranMasterTag>> fetchAll(String userId) async {
+  Future<List<QuranTag>> fetchAll(String userId) async {
     if (await isOffline()) {
       /// OFFLINE
       return [];

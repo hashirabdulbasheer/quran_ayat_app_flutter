@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quran_ayat/composer.dart';
-import 'package:quran_ayat/features/tags/domain/entities/quran_master_tag.dart';
+import 'package:quran_ayat/features/tags/domain/entities/quran_tag.dart';
 import 'package:quran_ayat/features/tags/presentation/quran_results_screen.dart';
 
 import '../features/tags/domain/entities/quran_index.dart';
@@ -25,7 +25,7 @@ class QuranNavigator {
 
   static void navigationToResultsScreen(
     BuildContext context,
-    QuranMasterTag tag,
+    QuranTag tag,
   ) {
     Navigator.push<void>(
       context,

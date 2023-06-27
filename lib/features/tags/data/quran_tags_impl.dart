@@ -1,7 +1,7 @@
 import '../../../models/qr_response_model.dart';
 import '../../core/data/quran_data_interface.dart';
-import '../domain/entities/quran_master_tag.dart';
-import '../domain/entities/quran_master_tag_aya.dart';
+import '../domain/entities/quran_tag.dart';
+import '../domain/entities/quran_tag_aya.dart';
 import '../domain/interfaces/quran_tags_interface.dart';
 
 class QuranTagsEngine implements QuranTagsDataSource {
@@ -17,7 +17,7 @@ class QuranTagsEngine implements QuranTagsDataSource {
   @override
   Future<QuranResponse> create(
     String userId,
-    QuranMasterTag masterTag,
+    QuranTag masterTag,
   ) async {
     await dataSource.create(
       "tags-master/$userId",
@@ -33,7 +33,7 @@ class QuranTagsEngine implements QuranTagsDataSource {
   @override
   Future<bool> update(
     String userId,
-    QuranMasterTag masterTag,
+    QuranTag masterTag,
   ) async {
     if (masterTag.id != null && masterTag.id?.isEmpty == false) {
       return await dataSource.update(
@@ -46,8 +46,8 @@ class QuranTagsEngine implements QuranTagsDataSource {
   }
 
   @override
-  Future<List<QuranMasterTag>> fetchAll(String userId) async {
-    List<QuranMasterTag> tags = [];
+  Future<List<QuranTag>> fetchAll(String userId) async {
+    List<QuranTag> tags = [];
     try {
       Map<String, dynamic>? resultList = await dataSource
           .fetchAll("tags-master/$userId") as Map<String, dynamic>?;
@@ -56,12 +56,12 @@ class QuranTagsEngine implements QuranTagsDataSource {
       }
       for (String tagKey in resultList.keys) {
         Map<String, dynamic> tag = resultList[tagKey] as Map<String, dynamic>;
-        QuranMasterTag masterTag = QuranMasterTag(
+        QuranTag masterTag = QuranTag(
           id: tagKey,
           name: tag["name"] as String,
           ayas: tag["ayas"] != null
               ? (tag["ayas"] as List<dynamic>)
-                  .map((dynamic e) => QuranMasterTagAya(
+                  .map((dynamic e) => QuranTagAya(
                         suraIndex: e["sura"] as int,
                         ayaIndex: e["aya"] as int,
                       ))

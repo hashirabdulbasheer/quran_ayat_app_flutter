@@ -1,8 +1,8 @@
-class QuranMasterTagAya {
+class QuranTagAya {
   final int suraIndex;
   final int ayaIndex;
 
-  QuranMasterTagAya({
+  QuranTagAya({
     required this.suraIndex,
     required this.ayaIndex,
   });

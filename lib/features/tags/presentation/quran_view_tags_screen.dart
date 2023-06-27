@@ -5,7 +5,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/nav_utils.dart';
 import '../../core/domain/app_state.dart';
-import '../domain/entities/quran_master_tag.dart';
+import '../domain/entities/quran_tag.dart';
 
 class QuranViewTagsScreen extends StatefulWidget {
   final QuranUser user;
@@ -47,7 +47,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
             BuildContext context,
             Store<AppState> store,
           ) {
-            List<QuranMasterTag> tags = _tags();
+            List<QuranTag> tags = _tags();
 
             return Column(
               children: [
@@ -149,7 +149,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     ));
   }
 
-  void _navigateToResults(QuranMasterTag tag) {
+  void _navigateToResults(QuranTag tag) {
     if (tag.ayas.isEmpty) {
       _showMessage("Tag not used");
 
@@ -180,13 +180,13 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
         .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  List<QuranMasterTag> _tags() =>
+  List<QuranTag> _tags() =>
       StoreProvider.of<AppState>(context).state.originalTags;
 
   void _exportTags() {
     String exported = "";
-    List<QuranMasterTag> allTags = _tags();
-    for (QuranMasterTag tag in allTags) {
+    List<QuranTag> allTags = _tags();
+    for (QuranTag tag in allTags) {
       String tagString = "${tag.name}: ";
       tagString +=
           tag.ayas.map((val) => "${val.suraIndex}:${val.ayaIndex}").join(',');

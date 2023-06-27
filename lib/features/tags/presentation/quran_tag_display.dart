@@ -4,12 +4,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:quran_ayat/features/tags/presentation/quran_view_tags_screen.dart';
 import 'package:redux/redux.dart';
-import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../core/domain/app_state.dart';
-import '../domain/entities/quran_master_tag.dart';
 import '../domain/entities/quran_tag.dart';
 
 class QuranAyatDisplayTagsWidget extends StatefulWidget {
@@ -31,7 +29,7 @@ class QuranAyatDisplayTagsWidget extends StatefulWidget {
 
 class _QuranAyatDisplayTagsWidgetState
     extends State<QuranAyatDisplayTagsWidget> {
-  QuranMasterTag? _selectedTag;
+  QuranTag? _selectedTag;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,7 @@ class _QuranAyatDisplayTagsWidgetState
 
     QuranUser? user = QuranAuthFactory.engine.getUser();
     int? surahIndex = widget.currentlySelectedSurah?.number;
-    QuranTag? tag;
+    List<String>? tag;
     if (surahIndex != null) {
       tag = _fetchTag(
         surahIndex,
@@ -91,10 +89,7 @@ class _QuranAyatDisplayTagsWidgetState
             const SizedBox(
               height: 10,
             ),
-            surahIndex != null &&
-                    user != null &&
-                    tag != null &&
-                    tag.tag.isNotEmpty
+            surahIndex != null && user != null && tag != null && tag.isNotEmpty
                 ? SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: _tagsWidget(
@@ -118,11 +113,11 @@ class _QuranAyatDisplayTagsWidgetState
   }
 
   Widget _tagsWidget(
-    QuranTag tag,
+    List<String> tag,
     QuranUser user,
   ) {
     List<Widget> children = [];
-    for (String tagString in tag.tag) {
+    for (String tagString in tag) {
       children.add(Directionality(
         textDirection: TextDirection.ltr,
         child: Tooltip(
@@ -225,7 +220,7 @@ class _QuranAyatDisplayTagsWidgetState
   }
 
   Widget _addDialogTagSelectorField() {
-    return DropdownSearch<QuranMasterTag>(
+    return DropdownSearch<QuranTag>(
       items: _fetchAllTags(),
       popupProps: PopupPropsMultiSelection.menu(
         showSearchBox: true,
@@ -280,9 +275,9 @@ class _QuranAyatDisplayTagsWidgetState
     );
   }
 
-  List<QuranMasterTag> _fetchAllTags() {
+  List<QuranTag> _fetchAllTags() {
     int? surahIndex = widget.currentlySelectedSurah?.number;
-    List<QuranMasterTag> tags =
+    List<QuranTag> tags =
         List.from(StoreProvider.of<AppState>(context).state.originalTags);
     if (surahIndex != null) {
       // remove already added tags from the list
@@ -431,20 +426,12 @@ class _QuranAyatDisplayTagsWidgetState
     });
   }
 
-  QuranTag? _fetchTag(
+  List<String>? _fetchTag(
     int surahIndex,
     int ayaIndex,
   ) {
     String key = "${surahIndex}_$ayaIndex";
-    List<String>? tags = StoreProvider.of<AppState>(context).state.tags[key];
 
-    return QuranTag(
-      suraIndex: surahIndex,
-      ayaIndex: ayaIndex,
-      tag: tags ?? [],
-      localId: "${DateTime.now().millisecondsSinceEpoch}",
-      createdOn: DateTime.now().millisecondsSinceEpoch,
-      status: QuranStatusEnum.created,
-    );
+    return StoreProvider.of<AppState>(context).state.tags[key];
   }
 }
