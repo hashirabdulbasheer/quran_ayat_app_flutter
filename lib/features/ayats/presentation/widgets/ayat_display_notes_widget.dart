@@ -9,6 +9,7 @@ import '../../../../utils/utils.dart';
 import '../../../auth/domain/auth_factory.dart';
 import '../../../auth/presentation/quran_login_screen.dart';
 import '../../../core/domain/app_state/app_state.dart';
+import '../../../core/presentation/shimmer.dart';
 import '../../../notes/domain/entities/quran_note.dart';
 import '../../../notes/domain/notes_manager.dart';
 import '../../../notes/presentation/quran_create_notes_screen.dart';
@@ -101,80 +102,102 @@ class _QuranAyatDisplayNotesWidgetState
         const SizedBox(
           height: 10,
         ),
-        surahIndex != null && user != null && notes != null && notes.isNotEmpty
-            ? ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: notes.length,
-                shrinkWrap: true,
-                separatorBuilder: (
-                  BuildContext context,
-                  int index,
-                ) {
-                  return const Divider(
-                    thickness: 1,
-                  );
-                },
-                itemBuilder: (
-                  BuildContext context,
-                  int index,
-                ) {
-                  TextDirection textDirection = TextDirection.ltr;
-                  if (!QuranUtils.isEnglish(notes[index].note)) {
-                    textDirection = TextDirection.rtl;
-                  }
+        _bodyContent(
+          surahIndex,
+          user,
+          notes,
+          fontScale,
+        ),
+      ],
+    );
+  }
 
-                  return Directionality(
-                    textDirection: textDirection,
-                    child: ListTile(
-                      onTap: () => {
-                        if (_isInteractionAllowedOnScreen())
-                          {
-                            _goToCreateNoteScreen(
-                              note: notes[index],
-                            ),
-                          }
-                        else
-                          {
-                            _showMessage(
-                              QuranStrings.contPlayMessage,
-                            ),
-                          },
-                      },
-                      title: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              notes[index].note,
-                              textScaleFactor: fontScale,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              QuranNotesManager.instance.formattedDate(
-                                notes[index].createdOn,
-                              ),
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
+  Widget _bodyContent(
+    int? surahIndex,
+    QuranUser? user,
+    List<QuranNote>? notes,
+    double fontScale,
+  ) {
+    if (StoreProvider.of<AppState>(context).state.isLoading) {
+      return const QuranShimmer(height: 100);
+    }
+    if (surahIndex != null &&
+        user != null &&
+        notes != null &&
+        notes.isNotEmpty) {
+      return ListView.separated(
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: notes.length,
+        shrinkWrap: true,
+        separatorBuilder: (
+          BuildContext context,
+          int index,
+        ) {
+          return const Divider(
+            thickness: 1,
+          );
+        },
+        itemBuilder: (
+          BuildContext context,
+          int index,
+        ) {
+          TextDirection textDirection = TextDirection.ltr;
+          if (!QuranUtils.isEnglish(notes[index].note)) {
+            textDirection = TextDirection.rtl;
+          }
+
+          return Directionality(
+            textDirection: textDirection,
+            child: ListTile(
+              onTap: () => {
+                if (_isInteractionAllowedOnScreen())
+                  {
+                    _goToCreateNoteScreen(
+                      note: notes[index],
                     ),
-                  );
-                },
-              )
-            : TextButton(
-                onPressed: () => _goToCreateNoteScreen(),
-                child: const SizedBox(
-                  height: 100,
-                  child: Center(child: Text("Add Note")),
+                  }
+                else
+                  {
+                    _showMessage(
+                      QuranStrings.contPlayMessage,
+                    ),
+                  },
+              },
+              title: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      notes[index].note,
+                      textScaleFactor: fontScale,
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      QuranNotesManager.instance.formattedDate(
+                        notes[index].createdOn,
+                      ),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ],
                 ),
               ),
-      ],
+            ),
+          );
+        },
+      );
+    }
+
+    return TextButton(
+      onPressed: () => _goToCreateNoteScreen(),
+      child: const SizedBox(
+        height: 100,
+        child: Center(child: Text("Add Note")),
+      ),
     );
   }
 
