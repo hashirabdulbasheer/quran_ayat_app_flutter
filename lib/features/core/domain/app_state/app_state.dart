@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import '../../../notes/domain/entities/quran_note.dart';
 import '../../../tags/domain/entities/quran_tag.dart';
 
@@ -9,12 +10,12 @@ export "redux/actions/actions.dart";
 /// STATE
 ///
 @immutable
-class AppState {
+class AppState extends Equatable {
   final List<QuranTag> originalTags;
   final List<QuranNote> originalNotes;
   final Map<String, List<String>> tags;
   final Map<String, List<QuranNote>> notes;
-  final StateError? error;
+  final String? lastActionStatus;
   final bool isLoading;
 
   const AppState({
@@ -22,7 +23,7 @@ class AppState {
     this.notes = const {},
     this.originalTags = const [],
     this.originalNotes = const [],
-    this.error,
+    this.lastActionStatus,
     this.isLoading = false,
   });
 
@@ -31,7 +32,7 @@ class AppState {
     List<QuranNote>? originalNotes,
     Map<String, List<String>>? tags,
     Map<String, List<QuranNote>>? notes,
-    StateError? error,
+    String? lastActionStatus,
     bool? isLoading,
   }) {
     return AppState(
@@ -39,7 +40,7 @@ class AppState {
       notes: notes ?? this.notes,
       originalTags: originalTags ?? this.originalTags,
       originalNotes: originalNotes ?? this.originalNotes,
-      error: error ?? this.error,
+      lastActionStatus: lastActionStatus ?? this.lastActionStatus,
       isLoading: isLoading ?? this.isLoading,
     );
   }
@@ -64,6 +65,14 @@ class AppState {
 
   @override
   String toString() {
-    return "Tags: ${originalTags.length}, Notes: ${originalNotes.length}, Error: $error, isLoading: $isLoading";
+    return "Tags: ${originalTags.length}, Notes: ${originalNotes.length}, Status: $lastActionStatus, isLoading: $isLoading";
   }
+
+  @override
+  List<Object?> get props => [
+        originalTags,
+        originalNotes,
+        lastActionStatus,
+        isLoading,
+      ];
 }

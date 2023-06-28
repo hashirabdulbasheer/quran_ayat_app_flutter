@@ -31,11 +31,17 @@ class AppStateFetchTagsSucceededAction extends AppStateAction {
   final List<QuranTag> fetchedTags;
 
   AppStateFetchTagsSucceededAction(
-      this.fetchedTags,
-      );
+    this.fetchedTags,
+  );
 }
 
-class AppStateModifyTagSucceededAction extends AppStateAction {}
+class AppStateModifyTagSucceededAction extends AppStateAction {
+  final String successMessage;
+
+  AppStateModifyTagSucceededAction({
+    required this.successMessage,
+  });
+}
 
 class AppStateModifyTagFailureAction extends AppStateAction {
   final String message;
@@ -44,3 +50,5 @@ class AppStateModifyTagFailureAction extends AppStateAction {
     required this.message,
   });
 }
+
+class AppStateResetStatusAction extends AppStateAction {}

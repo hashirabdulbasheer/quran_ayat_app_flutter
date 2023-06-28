@@ -1,4 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
@@ -11,6 +13,20 @@ import '../models/qr_word_model.dart';
 import 'package:intl/intl.dart' as intl;
 
 class QuranUtils {
+  static void showMessage(
+    BuildContext context,
+    String? message,
+  ) {
+    if (message != null && message.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Directionality(
+          textDirection: TextDirection.ltr,
+          child: Text(message),
+        ),
+      ));
+    }
+  }
+
   static Future<bool> isOffline() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile ||

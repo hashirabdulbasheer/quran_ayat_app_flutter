@@ -59,6 +59,8 @@ dependencies:
   share_plus: ^7.0.2
   redux: ^5.0.0
   flutter_redux: ^0.10.0
+  either_dart: ^1.0.0
+  equatable: ^2.0.5
 
 dev_dependencies:
   flutter_test:

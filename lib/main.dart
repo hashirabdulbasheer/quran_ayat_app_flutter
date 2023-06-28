@@ -43,6 +43,7 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   final store = Store<AppState>(
     appStateReducer,
+    distinct: true,
     initialState: const AppState(),
     middleware: [
       appStateMiddleware,

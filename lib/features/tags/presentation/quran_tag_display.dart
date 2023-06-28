@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
@@ -49,6 +50,11 @@ class _QuranAyatDisplayTagsWidgetState
     }
 
     return StoreBuilder<AppState>(
+      onDidChange: (
+        oldStore,
+        updatedStore,
+      ) =>
+          _onStoreDidChange(updatedStore),
       builder: (
         BuildContext context,
         Store<AppState> store,
@@ -161,13 +167,6 @@ class _QuranAyatDisplayTagsWidgetState
         children: children,
       ),
     );
-  }
-
-  void _showMessage(
-    String message,
-  ) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   /// Dialog Utils
@@ -356,27 +355,12 @@ class _QuranAyatDisplayTagsWidgetState
       tag: newTagString,
       action: AppStateTagModifyAction.addAya,
     ));
-
-    _showMessage(
-      "Saved 👍",
-    );
-  }
-
-  void _onRemoveButtonTapped(
-    String selectedTag,
-  ) {
-    _removeTag(
-      selectedTag,
-    );
-    _showMessage(
-      "Removed tag  👍",
-    );
   }
 
   /// Actions
   ///
 
-  bool _removeTag(
+  bool _onRemoveButtonTapped(
     String selectedTag,
   ) {
     int? surahIndex = widget.currentlySelectedSurah?.number;
@@ -433,5 +417,16 @@ class _QuranAyatDisplayTagsWidgetState
     String key = "${surahIndex}_$ayaIndex";
 
     return StoreProvider.of<AppState>(context).state.tags[key];
+  }
+
+  void _onStoreDidChange(Store<AppState> store) {
+    if (store.state.lastActionStatus != null &&
+        store.state.lastActionStatus?.isNotEmpty == true) {
+      QuranUtils.showMessage(
+        context,
+        store.state.lastActionStatus,
+      );
+      store.dispatch(AppStateResetStatusAction());
+    }
   }
 }

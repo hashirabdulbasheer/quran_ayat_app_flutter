@@ -30,7 +30,9 @@ AppState appStateReducer(
     // Reset Tag
     return const AppState();
   } else if (action is AppStateModifyTagFailureAction) {
-    return state.copyWith(error: StateError(action.message));
+    return state.copyWith(lastActionStatus: action.message);
+  } else if (action is AppStateModifyTagSucceededAction) {
+    return state.copyWith(lastActionStatus: action.successMessage);
   } else if (action is AppStateLoadingAction) {
     return state.copyWith(isLoading: action.isLoading);
   } else if (action is AppStateFetchNotesSucceededAction) {
@@ -47,6 +49,8 @@ AppState appStateReducer(
       originalNotes: action.fetchedNotes,
       notes: stateNotes,
     );
+  } else if (action is AppStateResetStatusAction) {
+    return state.copyWith(lastActionStatus: "");
   }
 
   return state;

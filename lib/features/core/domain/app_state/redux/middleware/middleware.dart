@@ -1,3 +1,4 @@
+import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../../models/qr_response_model.dart';
@@ -14,10 +15,10 @@ import '../../app_state.dart';
 ///
 
 void appStateMiddleware(
-    Store<AppState> store,
-    dynamic action,
-    NextDispatcher next,
-    ) async {
+  Store<AppState> store,
+  dynamic action,
+  NextDispatcher next,
+) async {
   if (action is AppStateInitializeAction) {
     // Initialization actions
     store.dispatch(AppStateFetchTagsAction());
@@ -43,10 +44,12 @@ void appStateMiddleware(
             action.tag,
           );
           if (response.isSuccessful) {
-            store.dispatch(AppStateModifyTagSucceededAction());
+            store.dispatch(AppStateModifyTagSucceededAction(
+              successMessage: "Saved tag - ${action.tag} 👍",
+            ));
           } else {
             store.dispatch(AppStateModifyTagFailureAction(
-              message: "Error creating tag - ${action.tag}",
+              message: "Error creating tag - ${action.tag} 😔",
             ));
           }
           break;
@@ -56,20 +59,24 @@ void appStateMiddleware(
             QuranTag masterTag = store.state.originalTags
                 .firstWhere((element) => element.name == action.tag);
             masterTag.ayas.removeWhere((element) =>
-            element.suraIndex == action.surahIndex &&
+                element.suraIndex == action.surahIndex &&
                 element.ayaIndex == action.ayaIndex);
             if (await QuranTagsManager.instance.update(
               userId,
               masterTag,
             )) {
-              store.dispatch(AppStateModifyTagSucceededAction());
+              store.dispatch(AppStateModifyTagSucceededAction(
+                successMessage: "Removed tag - ${action.tag} 👍",
+              ));
             } else {
               store.dispatch(
-                AppStateModifyTagFailureAction(message: "Error updating"),
+                AppStateModifyTagFailureAction(
+                  message: "Error removing tag - ${action.tag} 😔",
+                ),
               );
             }
           } catch (error) {
-            print(error);
+            QuranLogger.logE(error);
           }
           break;
 
@@ -78,7 +85,7 @@ void appStateMiddleware(
             QuranTag masterTag = store.state.originalTags
                 .firstWhere((element) => element.name == action.tag);
             masterTag.ayas.removeWhere((element) =>
-            element.suraIndex == action.surahIndex &&
+                element.suraIndex == action.surahIndex &&
                 element.ayaIndex == action.ayaIndex);
             masterTag.ayas.add(QuranTagAya(
               suraIndex: action.surahIndex,
@@ -88,19 +95,23 @@ void appStateMiddleware(
               userId,
               masterTag,
             )) {
-              store.dispatch(AppStateModifyTagSucceededAction());
+              store.dispatch(AppStateModifyTagSucceededAction(
+                successMessage: "Saved tag - ${action.tag} 👍",
+              ));
             } else {
               store.dispatch(
-                AppStateModifyTagFailureAction(message: "Error updating"),
+                AppStateModifyTagFailureAction(
+                  message: "Error saving tag - ${action.tag} 😔",
+                ),
               );
             }
           } catch (error) {
-            print(error);
+            QuranLogger.logE(error);
           }
           break;
 
         case AppStateTagModifyAction.delete:
-        // TODO: Not implemented
+          // TODO: Not implemented
           break;
       }
 
