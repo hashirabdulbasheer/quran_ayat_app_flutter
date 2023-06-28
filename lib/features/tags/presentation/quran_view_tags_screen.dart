@@ -44,6 +44,11 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
           ],
         ),
         body: StoreBuilder<AppState>(
+          onDidChange: (
+            old,
+            updated,
+          ) =>
+              _onStoreDidChange(),
           builder: (
             BuildContext context,
             Store<AppState> store,
@@ -128,11 +133,6 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
               onPressed: () => {
                 _saveTag(),
                 Navigator.of(context).pop(),
-                setState(() {}),
-                QuranUtils.showMessage(
-                  context,
-                  "Saved 👍",
-                ),
               },
             ),
           ],
@@ -185,13 +185,6 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     );
   }
 
-  // void _showMessage(
-  //   String message,
-  // ) {
-  //   ScaffoldMessenger.of(context)
-  //       .showSnackBar(SnackBar(content: Text(message)));
-  // }
-
   List<QuranTag> _tags() =>
       StoreProvider.of<AppState>(context).state.originalTags;
 
@@ -208,5 +201,19 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     Share.share(
       'Tags exported from uxQuran QuranAyat app: https://uxquran.com\n\n$exported',
     );
+  }
+
+  void _onStoreDidChange() {
+    Store<AppState> store = StoreProvider.of<AppState>(context);
+    var listOfActions = [
+      (AppStateCreateTagSucceededAction).toString(),
+    ];
+    if (listOfActions.contains(store.state.lastActionStatus.action)) {
+      QuranUtils.showMessage(
+        context,
+        store.state.lastActionStatus.message,
+      );
+      store.dispatch(AppStateResetStatusAction());
+    }
   }
 }

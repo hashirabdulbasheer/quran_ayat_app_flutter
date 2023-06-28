@@ -415,7 +415,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               onDidChange: (
                                 old,
                                 updated,
-                              ) => _onStoreDidChange(),
+                              ) =>
+                                  _onStoreDidChange(),
                               builder: (
                                 BuildContext context,
                                 Store<AppState> store,
@@ -745,15 +746,12 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   void _onStoreDidChange() {
     Store<AppState> store = StoreProvider.of<AppState>(context);
-    if (store.state.lastActionStatus != null &&
-        (store.state.lastActionStatus?.action ==
-                (AppStateAddTagSucceededAction).toString() ||
-            store.state.lastActionStatus?.action ==
-                (AppStateRemoveTagSucceededAction).toString() ||
-            store.state.lastActionStatus?.action ==
-                (AppStateRemoveTagFailureAction).toString() ||
-            store.state.lastActionStatus?.action ==
-                (AppStateAddTagFailureAction).toString())) {
+    var listOfActions = [
+      (AppStateAddTagSucceededAction).toString(),
+      (AppStateRemoveTagSucceededAction).toString(),
+      (AppStateAddTagFailureAction).toString(),
+    ];
+    if (listOfActions.contains(store.state.lastActionStatus.action)) {
       QuranUtils.showMessage(
         context,
         store.state.lastActionStatus?.message,
