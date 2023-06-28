@@ -133,10 +133,10 @@ void appStateMiddleware(
         action.note,
       );
       if (response.isSuccessful) {
-        store.dispatch(AppStateCreateNoteSucceededAction());
+        store.dispatch(AppStateCreateNoteSucceededAction(message: "Saved 👍"));
       } else {
         store.dispatch(
-          AppStateNotesFailureAction(message: "Error creating note"),
+          AppStateNotesFailureAction(message: "Error creating note 😔"),
         );
       }
     }
@@ -150,10 +150,10 @@ void appStateMiddleware(
         action.note,
       );
       if (status) {
-        store.dispatch(AppStateDeleteNoteSucceededAction());
+        store.dispatch(AppStateDeleteNoteSucceededAction(message: "Deleted 👍"));
       } else {
         store.dispatch(
-          AppStateNotesFailureAction(message: "Error deleting note"),
+          AppStateNotesFailureAction(message: "Error deleting note 😔"),
         );
       }
     }
@@ -167,10 +167,10 @@ void appStateMiddleware(
         action.note,
       );
       if (status) {
-        store.dispatch(AppStateUpdateNoteSucceededAction());
+        store.dispatch(AppStateUpdateNoteSucceededAction(message: "Updated 👍"));
       } else {
         store.dispatch(
-          AppStateNotesFailureAction(message: "Error updating note"),
+          AppStateNotesFailureAction(message: "Error updating note 😔"),
         );
       }
     }

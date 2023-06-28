@@ -9,8 +9,16 @@ class AppStateFetchNotesSucceededAction extends AppStateAction {
   final List<QuranNote> fetchedNotes;
 
   AppStateFetchNotesSucceededAction(
-      this.fetchedNotes,
-      );
+    this.fetchedNotes,
+  );
+}
+
+class AppStateNoteOperationsResponseBaseAction extends AppStateAction {
+  final String message;
+
+  AppStateNoteOperationsResponseBaseAction({
+    required this.message,
+  });
 }
 
 class AppStateCreateNoteAction extends AppStateAction {
@@ -21,7 +29,10 @@ class AppStateCreateNoteAction extends AppStateAction {
   });
 }
 
-class AppStateCreateNoteSucceededAction extends AppStateAction {}
+class AppStateCreateNoteSucceededAction
+    extends AppStateNoteOperationsResponseBaseAction {
+  AppStateCreateNoteSucceededAction({required super.message});
+}
 
 class AppStateDeleteNoteAction extends AppStateAction {
   final QuranNote note;
@@ -31,7 +42,10 @@ class AppStateDeleteNoteAction extends AppStateAction {
   });
 }
 
-class AppStateDeleteNoteSucceededAction extends AppStateAction {}
+class AppStateDeleteNoteSucceededAction
+    extends AppStateNoteOperationsResponseBaseAction {
+  AppStateDeleteNoteSucceededAction({required super.message});
+}
 
 class AppStateUpdateNoteAction extends AppStateAction {
   final QuranNote note;
@@ -41,12 +55,12 @@ class AppStateUpdateNoteAction extends AppStateAction {
   });
 }
 
-class AppStateUpdateNoteSucceededAction extends AppStateAction {}
+class AppStateUpdateNoteSucceededAction
+    extends AppStateNoteOperationsResponseBaseAction {
+  AppStateUpdateNoteSucceededAction({required super.message});
+}
 
-class AppStateNotesFailureAction extends AppStateAction {
-  final String message;
-
-  AppStateNotesFailureAction({
-    required this.message,
-  });
+class AppStateNotesFailureAction
+    extends AppStateNoteOperationsResponseBaseAction {
+  AppStateNotesFailureAction({required super.message});
 }

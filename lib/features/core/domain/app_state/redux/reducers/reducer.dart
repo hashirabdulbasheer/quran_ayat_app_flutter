@@ -66,10 +66,28 @@ AppState appStateReducer(
       notes: stateNotes,
     );
   } else if (action is AppStateResetStatusAction) {
-    return state.copyWith(lastActionStatus: const AppStateActionStatus(
-      action: "",
-      message: "",
-    ));
+    return state.copyWith(
+      lastActionStatus: const AppStateActionStatus(
+        action: "",
+        message: "",
+      ),
+    );
+  } else if (action is AppStateCreateNoteSucceededAction ||
+      action is AppStateUpdateNoteSucceededAction ||
+      action is AppStateDeleteNoteSucceededAction) {
+    return state.copyWith(
+      lastActionStatus: AppStateActionStatus(
+        action: action.runtimeType.toString(),
+        message: (action as AppStateNoteOperationsResponseBaseAction).message,
+      ),
+    );
+  } else if (action is AppStateNotesFailureAction) {
+    return state.copyWith(
+      lastActionStatus: AppStateActionStatus(
+        action: action.runtimeType.toString(),
+        message: action.message,
+      ),
+    );
   }
 
   return state;
