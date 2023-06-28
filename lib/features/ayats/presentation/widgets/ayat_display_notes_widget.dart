@@ -102,11 +102,14 @@ class _QuranAyatDisplayNotesWidgetState
         const SizedBox(
           height: 10,
         ),
-        _bodyContent(
-          surahIndex,
-          user,
-          notes,
-          fontScale,
+        QuranShimmer(
+          isLoading: StoreProvider.of<AppState>(context).state.isLoading,
+          child: _bodyContent(
+            surahIndex,
+            user,
+            notes,
+            fontScale,
+          ),
         ),
       ],
     );
@@ -118,9 +121,6 @@ class _QuranAyatDisplayNotesWidgetState
     List<QuranNote>? notes,
     double fontScale,
   ) {
-    if (StoreProvider.of<AppState>(context).state.isLoading) {
-      return const QuranShimmer(height: 100);
-    }
     if (surahIndex != null &&
         user != null &&
         notes != null &&

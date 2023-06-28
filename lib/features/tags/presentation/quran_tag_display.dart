@@ -84,10 +84,13 @@ class _QuranAyatDisplayTagsWidgetState
         const SizedBox(
           height: 10,
         ),
-        _body(
-          surahIndex,
-          user,
-          tag,
+        QuranShimmer(
+          isLoading: StoreProvider.of<AppState>(context).state.isLoading,
+          child: _body(
+            surahIndex,
+            user,
+            tag,
+          ),
         ),
       ],
     );
@@ -98,12 +101,6 @@ class _QuranAyatDisplayTagsWidgetState
     QuranUser? user,
     List<String>? tag,
   ) {
-    if (StoreProvider.of<AppState>(context).state.isLoading) {
-      return const QuranShimmer(
-        height: 30,
-      );
-    }
-
     if (surahIndex != null && user != null && tag != null && tag.isNotEmpty) {
       return SizedBox(
         width: MediaQuery.of(context).size.width,
