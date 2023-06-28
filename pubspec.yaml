@@ -61,6 +61,7 @@ dependencies:
   flutter_redux: ^0.10.0
   either_dart: ^1.0.0
   equatable: ^2.0.5
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

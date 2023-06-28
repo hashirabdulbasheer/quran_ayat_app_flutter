@@ -6,6 +6,7 @@ import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../core/presentation/shimmer.dart';
 import '../domain/entities/quran_tag.dart';
 import 'quran_view_tags_screen.dart';
 
@@ -83,24 +84,44 @@ class _QuranAyatDisplayTagsWidgetState
         const SizedBox(
           height: 10,
         ),
-        surahIndex != null && user != null && tag != null && tag.isNotEmpty
-            ? SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: _tagsWidget(
-                  tag,
-                  user,
-                ),
-              )
-            : TextButton(
-                onPressed: () => _displayAddTagDialog(
-                  user?.uid,
-                ),
-                child: const SizedBox(
-                  height: 30,
-                  child: Center(child: Text("Add Tag")),
-                ),
-              ),
+        _body(
+          surahIndex,
+          user,
+          tag,
+        ),
       ],
+    );
+  }
+
+  Widget _body(
+    int? surahIndex,
+    QuranUser? user,
+    List<String>? tag,
+  ) {
+    if (StoreProvider.of<AppState>(context).state.isLoading) {
+      return const QuranShimmer(
+        height: 30,
+      );
+    }
+
+    if (surahIndex != null && user != null && tag != null && tag.isNotEmpty) {
+      return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: _tagsWidget(
+          tag,
+          user,
+        ),
+      );
+    }
+
+    return TextButton(
+      onPressed: () => _displayAddTagDialog(
+        user?.uid,
+      ),
+      child: const SizedBox(
+        height: 30,
+        child: Center(child: Text("Add Tag")),
+      ),
     );
   }
 

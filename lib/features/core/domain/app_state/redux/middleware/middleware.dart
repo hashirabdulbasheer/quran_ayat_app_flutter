@@ -27,15 +27,18 @@ void appStateMiddleware(
     // Fetch tags
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
+      store.dispatch(AppStateLoadingAction(isLoading: true));
       List<QuranTag> tags = await QuranTagsManager.instance.fetchAll(
         user.uid,
       );
       store.dispatch(AppStateFetchTagsSucceededAction(tags));
+      store.dispatch(AppStateLoadingAction(isLoading: false));
     }
   } else if (action is AppStateCreateTagAction) {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       String userId = user.uid;
+      store.dispatch(AppStateLoadingAction(isLoading: true));
       QuranResponse response = await QuranTagsManager.instance.create(
         userId,
         action.tag,
@@ -49,12 +52,14 @@ void appStateMiddleware(
           message: "Error creating tag - ${action.tag} 😔",
         ));
       }
+      store.dispatch(AppStateLoadingAction(isLoading: false));
       store.dispatch(AppStateFetchTagsAction());
     }
   } else if (action is AppStateAddTagAction) {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
       String userId = user.uid;
+      store.dispatch(AppStateLoadingAction(isLoading: true));
       try {
         QuranTag masterTag = store.state.originalTags
             .firstWhere((element) => element.name == action.tag);
@@ -82,11 +87,13 @@ void appStateMiddleware(
       } catch (error) {
         QuranLogger.logE(error);
       }
+      store.dispatch(AppStateLoadingAction(isLoading: false));
       store.dispatch(AppStateFetchTagsAction());
     }
   } else if (action is AppStateRemoveTagAction) {
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
+      store.dispatch(AppStateLoadingAction(isLoading: true));
       String userId = user.uid;
       try {
         QuranTag masterTag = store.state.originalTags
@@ -111,6 +118,7 @@ void appStateMiddleware(
       } catch (error) {
         QuranLogger.logE(error);
       }
+      store.dispatch(AppStateLoadingAction(isLoading: false));
       store.dispatch(AppStateFetchTagsAction());
     }
   } else if (action is AppStateDeleteTagAction) {
@@ -119,15 +127,18 @@ void appStateMiddleware(
     // Fetch tags
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
+      store.dispatch(AppStateLoadingAction(isLoading: true));
       List<QuranNote> notes = await QuranNotesManager.instance.fetchAll(
         user.uid,
       );
+      store.dispatch(AppStateLoadingAction(isLoading: false));
       store.dispatch(AppStateFetchNotesSucceededAction(notes));
     }
   } else if (action is AppStateCreateNoteAction) {
     // Fetch tags
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
+      store.dispatch(AppStateLoadingAction(isLoading: true));
       QuranResponse response = await QuranNotesManager.instance.create(
         user.uid,
         action.note,
@@ -140,11 +151,13 @@ void appStateMiddleware(
         );
       }
     }
+    store.dispatch(AppStateLoadingAction(isLoading: false));
     store.dispatch(AppStateFetchNotesAction());
   } else if (action is AppStateDeleteNoteAction) {
     // Fetch tags
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
+      store.dispatch(AppStateLoadingAction(isLoading: true));
       bool status = await QuranNotesManager.instance.delete(
         user.uid,
         action.note,
@@ -157,11 +170,13 @@ void appStateMiddleware(
         );
       }
     }
+    store.dispatch(AppStateLoadingAction(isLoading: false));
     store.dispatch(AppStateFetchNotesAction());
   } else if (action is AppStateUpdateNoteAction) {
     // Fetch tags
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user != null) {
+      store.dispatch(AppStateLoadingAction(isLoading: true));
       bool status = await QuranNotesManager.instance.update(
         user.uid,
         action.note,
@@ -174,6 +189,7 @@ void appStateMiddleware(
         );
       }
     }
+    store.dispatch(AppStateLoadingAction(isLoading: false));
     store.dispatch(AppStateFetchNotesAction());
   }
   next(action);
