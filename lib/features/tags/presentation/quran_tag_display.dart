@@ -2,8 +2,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:quran_ayat/utils/utils.dart';
-import 'package:redux/redux.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
@@ -49,72 +47,60 @@ class _QuranAyatDisplayTagsWidgetState
       );
     }
 
-    return StoreBuilder<AppState>(
-      onDidChange: (
-        oldStore,
-        updatedStore,
-      ) =>
-          _onStoreDidChange(updatedStore),
-      builder: (
-        BuildContext context,
-        Store<AppState> store,
-      ) {
-        return Column(
-          children: [
-            const SizedBox(
-              height: 20,
+    return Column(
+      children: [
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          height: 50,
+          decoration: const BoxDecoration(
+            border: Border.fromBorderSide(
+              BorderSide(color: Colors.black12),
             ),
-            Container(
-              height: 50,
-              decoration: const BoxDecoration(
-                border: Border.fromBorderSide(
-                  BorderSide(color: Colors.black12),
+            color: Colors.black12,
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          padding: const EdgeInsets.fromLTRB(
+            10,
+            0,
+            10,
+            0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Tags"),
+              ElevatedButton(
+                onPressed: () => _displayAddTagDialog(
+                  user?.uid,
                 ),
-                color: Colors.black12,
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+                child: const Text("Add"),
               ),
-              padding: const EdgeInsets.fromLTRB(
-                10,
-                0,
-                10,
-                0,
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        surahIndex != null && user != null && tag != null && tag.isNotEmpty
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: _tagsWidget(
+                  tag,
+                  user,
+                ),
+              )
+            : TextButton(
+                onPressed: () => _displayAddTagDialog(
+                  user?.uid,
+                ),
+                child: const SizedBox(
+                  height: 30,
+                  child: Center(child: Text("Add Tag")),
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("Tags"),
-                  ElevatedButton(
-                    onPressed: () => _displayAddTagDialog(
-                      user?.uid,
-                    ),
-                    child: const Text("Add"),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            surahIndex != null && user != null && tag != null && tag.isNotEmpty
-                ? SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: _tagsWidget(
-                      tag,
-                      user,
-                    ),
-                  )
-                : TextButton(
-                    onPressed: () => _displayAddTagDialog(
-                      user?.uid,
-                    ),
-                    child: const SizedBox(
-                      height: 30,
-                      child: Center(child: Text("Add Tag")),
-                    ),
-                  ),
-          ],
-        );
-      },
+      ],
     );
   }
 
@@ -349,11 +335,10 @@ class _QuranAyatDisplayTagsWidgetState
       // invalid
       return;
     }
-    StoreProvider.of<AppState>(context).dispatch(AppStateModifyTagAction(
+    StoreProvider.of<AppState>(context).dispatch(AppStateAddTagAction(
       surahIndex: surahIndex,
       ayaIndex: widget.ayaIndex,
       tag: newTagString,
-      action: AppStateTagModifyAction.addAya,
     ));
   }
 
@@ -370,11 +355,10 @@ class _QuranAyatDisplayTagsWidgetState
       return false;
     }
 
-    StoreProvider.of<AppState>(context).dispatch(AppStateModifyTagAction(
+    StoreProvider.of<AppState>(context).dispatch(AppStateRemoveTagAction(
       surahIndex: surahIndex,
       ayaIndex: widget.ayaIndex,
       tag: selectedTag,
-      action: AppStateTagModifyAction.removeAya,
     ));
 
     return true;
@@ -417,16 +401,5 @@ class _QuranAyatDisplayTagsWidgetState
     String key = "${surahIndex}_$ayaIndex";
 
     return StoreProvider.of<AppState>(context).state.tags[key];
-  }
-
-  void _onStoreDidChange(Store<AppState> store) {
-    if (store.state.lastActionStatus != null &&
-        store.state.lastActionStatus?.isNotEmpty == true) {
-      QuranUtils.showMessage(
-        context,
-        store.state.lastActionStatus,
-      );
-      store.dispatch(AppStateResetStatusAction());
-    }
   }
 }

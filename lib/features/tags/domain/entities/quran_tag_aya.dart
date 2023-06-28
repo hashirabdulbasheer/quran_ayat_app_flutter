@@ -1,8 +1,10 @@
-class QuranTagAya {
+import 'package:equatable/equatable.dart';
+
+class QuranTagAya extends Equatable {
   final int suraIndex;
   final int ayaIndex;
 
-  QuranTagAya({
+  const QuranTagAya({
     required this.suraIndex,
     required this.ayaIndex,
   });
@@ -13,4 +15,15 @@ class QuranTagAya {
       "aya": ayaIndex,
     };
   }
+
+  @override
+  String toString() {
+    return 'QuranTagAya{suraIndex: $suraIndex, ayaIndex: $ayaIndex}';
+  }
+
+  @override
+  List<Object> get props => [
+        suraIndex,
+        ayaIndex,
+      ];
 }

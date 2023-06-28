@@ -1,6 +1,8 @@
+import 'package:equatable/equatable.dart';
+
 import '../../../../misc/enums/quran_status_enum.dart';
 
-class QuranNote {
+class QuranNote extends Equatable {
   final String? id;
   final String localId;
   final int suraIndex;
@@ -9,7 +11,7 @@ class QuranNote {
   final int createdOn;
   final QuranStatusEnum status;
 
-  QuranNote({
+  const QuranNote({
     required this.suraIndex,
     required this.ayaIndex,
     required this.note,
@@ -47,4 +49,20 @@ class QuranNote {
       "createdOn": createdOn,
     };
   }
+
+  @override
+  String toString() {
+    return 'QuranNote{id: $id, localId: $localId, suraIndex: $suraIndex, ayaIndex: $ayaIndex, note: $note, createdOn: $createdOn, status: ${status.rawString()}}';
+  }
+
+  @override
+  List<Object?> get props => [
+        id,
+        localId,
+        suraIndex,
+        ayaIndex,
+        note,
+        createdOn,
+        status,
+      ];
 }

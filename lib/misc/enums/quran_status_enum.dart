@@ -1,5 +1,5 @@
 /// Quran Update Status
-enum QuranStatusEnum { created, updated, deleted }
+enum QuranStatusEnum  { created, updated, deleted }
 
 extension QuranStatusEnumToString on QuranStatusEnum {
   String rawString() {

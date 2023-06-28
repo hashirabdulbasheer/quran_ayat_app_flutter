@@ -7,9 +7,9 @@ import '../../app_state.dart';
 ///
 
 AppState appStateReducer(
-    AppState state,
-    dynamic action,
-    ) {
+  AppState state,
+  dynamic action,
+) {
   if (action is AppStateFetchTagsSucceededAction) {
     Map<String, List<String>> stateTags = {};
     for (QuranTag tag in action.fetchedTags) {
@@ -29,10 +29,26 @@ AppState appStateReducer(
   } else if (action is AppStateResetAction) {
     // Reset Tag
     return const AppState();
-  } else if (action is AppStateModifyTagFailureAction) {
-    return state.copyWith(lastActionStatus: action.message);
-  } else if (action is AppStateModifyTagSucceededAction) {
-    return state.copyWith(lastActionStatus: action.successMessage);
+  } else if (action is AppStateCreateTagFailureAction ||
+      action is AppStateAddTagFailureAction ||
+      action is AppStateRemoveTagFailureAction ||
+      action is AppStateDeleteTagFailureAction) {
+    return state.copyWith(
+      lastActionStatus: AppStateActionStatus(
+        action: action.runtimeType.toString(),
+        message: (action as AppStateModifyTagResponseBaseAction).message,
+      ),
+    );
+  } else if (action is AppStateCreateTagSucceededAction ||
+      action is AppStateAddTagSucceededAction ||
+      action is AppStateRemoveTagSucceededAction ||
+      action is AppStateDeleteTagSucceededAction) {
+    return state.copyWith(
+      lastActionStatus: AppStateActionStatus(
+        action: action.runtimeType.toString(),
+        message: (action as AppStateModifyTagResponseBaseAction).message,
+      ),
+    );
   } else if (action is AppStateLoadingAction) {
     return state.copyWith(isLoading: action.isLoading);
   } else if (action is AppStateFetchNotesSucceededAction) {
@@ -50,7 +66,10 @@ AppState appStateReducer(
       notes: stateNotes,
     );
   } else if (action is AppStateResetStatusAction) {
-    return state.copyWith(lastActionStatus: "");
+    return state.copyWith(lastActionStatus: const AppStateActionStatus(
+      action: "",
+      message: "",
+    ));
   }
 
   return state;

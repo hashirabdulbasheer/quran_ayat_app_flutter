@@ -1,13 +1,15 @@
+import 'package:equatable/equatable.dart';
+
 import 'quran_tag_aya.dart';
 
-class QuranTag {
+class QuranTag extends Equatable {
   final String? id;
   final String name;
   final List<QuranTagAya> ayas;
   final int createdOn;
   final String status;
 
-  QuranTag({
+  const QuranTag({
     required this.id,
     required this.name,
     required this.ayas,
@@ -28,4 +30,18 @@ class QuranTag {
   bool containsTag(String tag) {
     return name == tag;
   }
+
+  @override
+  String toString() {
+    return 'QuranTag{id: $id, name: $name, ayas: $ayas, createdOn: $createdOn, status: $status}';
+  }
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        ayas,
+        createdOn,
+        status,
+      ];
 }

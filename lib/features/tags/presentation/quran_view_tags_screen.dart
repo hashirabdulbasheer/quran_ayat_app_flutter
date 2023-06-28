@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 import '../../../models/qr_user_model.dart';
@@ -102,9 +103,12 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
       ) {
         return AlertDialog(
           title: const Text(
-            'Select Tag',
+            'Create Tag',
           ),
           content: TextField(
+            decoration: const InputDecoration(
+              hintText: 'Enter tag',
+            ),
             controller: _textEditingController,
           ),
           actions: <Widget>[
@@ -125,7 +129,10 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
                 _saveTag(),
                 Navigator.of(context).pop(),
                 setState(() {}),
-                _showMessage("Saved 👍"),
+                QuranUtils.showMessage(
+                  context,
+                  "Saved 👍",
+                ),
               },
             ),
           ],
@@ -137,21 +144,26 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
   void _saveTag() {
     String newTag = _textEditingController.text.toLowerCase().trim();
     if (newTag.isEmpty || _tags().any((item) => item.containsTag(newTag))) {
-      _showMessage("Error saving tag 😔");
+      QuranUtils.showMessage(
+        context,
+        "Error saving tag 😔",
+      );
 
       return;
     }
-    StoreProvider.of<AppState>(context).dispatch(AppStateModifyTagAction(
+    StoreProvider.of<AppState>(context).dispatch(AppStateCreateTagAction(
       surahIndex: 0,
       ayaIndex: 0,
       tag: newTag,
-      action: AppStateTagModifyAction.create,
     ));
   }
 
   void _navigateToResults(QuranTag tag) {
     if (tag.ayas.isEmpty) {
-      _showMessage("Tag not used");
+      QuranUtils.showMessage(
+        context,
+        "Tag not used",
+      );
 
       return;
     }
@@ -173,12 +185,12 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     );
   }
 
-  void _showMessage(
-    String message,
-  ) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
+  // void _showMessage(
+  //   String message,
+  // ) {
+  //   ScaffoldMessenger.of(context)
+  //       .showSnackBar(SnackBar(content: Text(message)));
+  // }
 
   List<QuranTag> _tags() =>
       StoreProvider.of<AppState>(context).state.originalTags;

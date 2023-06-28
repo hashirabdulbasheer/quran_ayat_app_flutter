@@ -412,29 +412,32 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
                             /// Tags
                             StoreBuilder<AppState>(
-                              onInit: (store) => store.dispatch(AppStateInitializeAction()),
+                              onDidChange: (
+                                old,
+                                updated,
+                              ) => _onStoreDidChange(),
                               builder: (
-                                  BuildContext context,
-                                  Store<AppState> store,
-                                  ) =>
+                                BuildContext context,
+                                Store<AppState> store,
+                              ) =>
                                   QuranAyatDisplayTagsWidget(
-                                    currentlySelectedSurah: _selectedSurah,
-                                    ayaIndex: _selectedAyat,
-                                    continuousMode: _isAudioContinuousModeEnabled,
-                                  ),
+                                currentlySelectedSurah: _selectedSurah,
+                                ayaIndex: _selectedAyat,
+                                continuousMode: _isAudioContinuousModeEnabled,
+                              ),
                             ),
 
                             /// Notes
                             StoreBuilder<AppState>(
                               builder: (
-                                  BuildContext context,
-                                  Store<AppState> store,
-                                  ) =>
+                                BuildContext context,
+                                Store<AppState> store,
+                              ) =>
                                   QuranAyatDisplayNotesWidget(
-                                    currentlySelectedSurah: _selectedSurah,
-                                    currentlySelectedAya: _selectedAyat,
-                                    continuousMode: _isAudioContinuousModeEnabled,
-                                  ),
+                                currentlySelectedSurah: _selectedSurah,
+                                currentlySelectedAya: _selectedAyat,
+                                continuousMode: _isAudioContinuousModeEnabled,
+                              ),
                             ),
 
                             const SizedBox(height: 30),
@@ -737,6 +740,25 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
       default:
         break;
+    }
+  }
+
+  void _onStoreDidChange() {
+    Store<AppState> store = StoreProvider.of<AppState>(context);
+    if (store.state.lastActionStatus != null &&
+        (store.state.lastActionStatus?.action ==
+                (AppStateAddTagSucceededAction).toString() ||
+            store.state.lastActionStatus?.action ==
+                (AppStateRemoveTagSucceededAction).toString() ||
+            store.state.lastActionStatus?.action ==
+                (AppStateRemoveTagFailureAction).toString() ||
+            store.state.lastActionStatus?.action ==
+                (AppStateAddTagFailureAction).toString())) {
+      QuranUtils.showMessage(
+        context,
+        store.state.lastActionStatus?.message,
+      );
+      store.dispatch(AppStateResetStatusAction());
     }
   }
 }
