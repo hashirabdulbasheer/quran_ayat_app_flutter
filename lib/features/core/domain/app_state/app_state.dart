@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import '../../../notes/domain/entities/quran_note.dart';
-import '../../../tags/domain/redux/tag_aya/tag_operations_state.dart';
+import '../../../tags/domain/redux/tags_operations/tag_operations_state.dart';
 import 'redux/actions/actions.dart';
 export "redux/reducers/reducer.dart";
 export "redux/middleware/middleware.dart";

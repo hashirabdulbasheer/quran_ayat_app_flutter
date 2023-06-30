@@ -1,5 +1,5 @@
 import '../../../../../notes/domain/entities/quran_note.dart';
-import '../../../../../tags/domain/redux/tag_aya/reducers/reducer.dart';
+import '../../../../../tags/domain/redux/tags_operations/reducers/reducer.dart';
 import '../../app_state.dart';
 
 /// REDUCER

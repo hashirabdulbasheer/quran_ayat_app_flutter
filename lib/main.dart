@@ -6,7 +6,7 @@ import 'composer.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
 import 'features/notes/data/hive_notes_impl.dart';
-import 'features/tags/domain/redux/tag_aya/middleware/middleware.dart';
+import 'features/tags/domain/redux/tags_operations/middleware/middleware.dart';
 import 'utils/logger_utils.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';

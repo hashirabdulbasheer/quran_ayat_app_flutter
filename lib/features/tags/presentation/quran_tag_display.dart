@@ -2,14 +2,13 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:quran_ayat/features/tags/domain/redux/tag_aya/tag_operations_state.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../core/presentation/shimmer.dart';
 import '../domain/entities/quran_tag.dart';
-import '../domain/redux/tag_aya/actions/actions.dart';
+import '../domain/redux/tags_operations/actions/actions.dart';
 import 'quran_view_tags_screen.dart';
 
 class QuranAyatDisplayTagsWidget extends StatefulWidget {
