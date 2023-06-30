@@ -11,6 +11,7 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/contextList/presentation/quran_context_list_screen.dart';
+import 'package:quran_ayat/features/tags/domain/redux/tag_aya/tag_operations_state.dart';
 import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
 import 'features/auth/domain/auth_factory.dart';
@@ -30,6 +31,7 @@ import 'features/drawer/presentation/nav_drawer.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
+import 'features/tags/domain/redux/tag_aya/actions/actions.dart';
 import 'features/tags/presentation/quran_tag_display.dart';
 import 'misc/constants/string_constants.dart';
 import 'models/qr_user_model.dart';
@@ -415,13 +417,11 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               onDidChange: (
                                 old,
                                 updated,
-                              ) =>
-                                  _onStoreDidChange(),
+                              ) => _onStoreDidChange(),
                               builder: (
                                 BuildContext context,
                                 Store<AppState> store,
-                              ) =>
-                                  QuranAyatDisplayTagsWidget(
+                              ) => QuranAyatDisplayTagsWidget(
                                 currentlySelectedSurah: _selectedSurah,
                                 ayaIndex: _selectedAyat,
                                 continuousMode: _isAudioContinuousModeEnabled,
@@ -747,9 +747,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   void _onStoreDidChange() {
     Store<AppState> store = StoreProvider.of<AppState>(context);
     var listOfActions = [
-      (AppStateAddTagSucceededAction).toString(),
-      (AppStateRemoveTagSucceededAction).toString(),
-      (AppStateAddTagFailureAction).toString(),
+      (AddTagOperationSucceededAction).toString(),
+      (RemoveTagOperationSucceededAction).toString(),
+      (AddTagOperationFailureAction).toString(),
     ];
     if (listOfActions.contains(store.state.lastActionStatus.action)) {
       QuranUtils.showMessage(

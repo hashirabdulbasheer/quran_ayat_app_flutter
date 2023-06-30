@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../../tags/domain/entities/quran_tag.dart';
+
 export "notes_actions.dart";
 export "tag_actions.dart";
 
@@ -40,3 +42,48 @@ class AppStateActionStatus extends Equatable {
 class AppStateInitializeAction extends AppStateAction {}
 
 class AppStateResetAction extends AppStateAction {}
+
+/// TAG ACTIONS
+///
+class AppStateFetchTagsAction extends AppStateAction {}
+
+class AppStateLoadingAction extends AppStateAction {
+  final bool isLoading;
+
+  AppStateLoadingAction({
+    required this.isLoading,
+  });
+}
+
+class AppStateTagBaseAction extends AppStateAction {
+  final int surahIndex;
+  final int ayaIndex;
+  final String tag;
+
+  AppStateTagBaseAction({
+    required this.surahIndex,
+    required this.ayaIndex,
+    required this.tag,
+  });
+}
+
+/// Response
+///
+
+class AppStateFetchTagsSucceededAction extends AppStateAction {
+  final List<QuranTag> fetchedTags;
+
+  AppStateFetchTagsSucceededAction(
+      this.fetchedTags,
+      );
+}
+
+class AppStateModifyTagResponseBaseAction extends AppStateAction {
+  final String message;
+
+  AppStateModifyTagResponseBaseAction({
+    required this.message,
+  });
+}
+
+class AppStateResetStatusAction extends AppStateAction {}

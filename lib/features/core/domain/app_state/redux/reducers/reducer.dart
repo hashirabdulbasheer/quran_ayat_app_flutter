@@ -1,6 +1,5 @@
 import '../../../../../notes/domain/entities/quran_note.dart';
-import '../../../../../tags/domain/entities/quran_tag.dart';
-import '../../../../../tags/domain/entities/quran_tag_aya.dart';
+import '../../../../../tags/domain/redux/tag_aya/reducers/reducer.dart';
 import '../../app_state.dart';
 
 /// REDUCER
@@ -10,28 +9,11 @@ AppState appStateReducer(
   AppState state,
   dynamic action,
 ) {
-  if (action is AppStateFetchTagsSucceededAction) {
-    Map<String, List<String>> stateTags = {};
-    for (QuranTag tag in action.fetchedTags) {
-      for (QuranTagAya aya in tag.ayas) {
-        String key = "${aya.suraIndex}_${aya.ayaIndex}";
-        if (stateTags[key] == null) {
-          stateTags[key] = [];
-        }
-        stateTags[key]?.add(tag.name);
-      }
-    }
-
-    return state.copyWith(
-      originalTags: action.fetchedTags,
-      tags: stateTags,
-    );
-  } else if (action is AppStateResetAction) {
+  print("appStateReducer -> $action");
+  if (action is AppStateResetAction) {
     // Reset Tag
     return const AppState();
   } else if (action is AppStateCreateTagFailureAction ||
-      action is AppStateAddTagFailureAction ||
-      action is AppStateRemoveTagFailureAction ||
       action is AppStateDeleteTagFailureAction) {
     return state.copyWith(
       lastActionStatus: AppStateActionStatus(
@@ -40,8 +22,6 @@ AppState appStateReducer(
       ),
     );
   } else if (action is AppStateCreateTagSucceededAction ||
-      action is AppStateAddTagSucceededAction ||
-      action is AppStateRemoveTagSucceededAction ||
       action is AppStateDeleteTagSucceededAction) {
     return state.copyWith(
       lastActionStatus: AppStateActionStatus(
@@ -90,5 +70,10 @@ AppState appStateReducer(
     );
   }
 
-  return state;
+  return state.copyWith(
+    tags: tagOperationsReducer(
+      state.tags,
+      action,
+    ),
+  );
 }

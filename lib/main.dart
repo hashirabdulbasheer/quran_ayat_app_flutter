@@ -6,6 +6,7 @@ import 'composer.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
 import 'features/notes/data/hive_notes_impl.dart';
+import 'features/tags/domain/redux/tag_aya/middleware/middleware.dart';
 import 'utils/logger_utils.dart';
 import 'utils/search_utils.dart';
 import 'misc/url/url_strategy.dart';
@@ -49,13 +50,14 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  final store = Store<AppState>(
+  final store = Store(
     appStateReducer,
     distinct: true,
     initialState: const AppState(),
     middleware: [
       appStateMiddleware,
       LoggerMiddleware<AppState>(),
+      ...createTagOperationsMiddleware(),
     ],
   );
 
@@ -74,7 +76,7 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider<AppState>(
+    return StoreProvider(
       store: store,
       child: MaterialApp(
         title: 'Quran',

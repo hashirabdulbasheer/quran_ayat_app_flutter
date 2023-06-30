@@ -7,6 +7,7 @@ import '../../../models/qr_user_model.dart';
 import '../../../utils/nav_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/entities/quran_tag.dart';
+import '../domain/redux/tag_aya/tag_operations_state.dart';
 
 class QuranViewTagsScreen extends StatefulWidget {
   final QuranUser user;
@@ -186,7 +187,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
   }
 
   List<QuranTag> _tags() =>
-      StoreProvider.of<AppState>(context).state.originalTags;
+      StoreProvider.of<TagOperationsState>(context).state.originalTags;
 
   void _exportTags() {
     String exported = "";
