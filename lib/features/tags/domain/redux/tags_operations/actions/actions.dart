@@ -43,3 +43,5 @@ class RemoveTagOperationFailureAction
     required super.message,
   });
 }
+
+class ResetTagsAction extends AppStateAction {}

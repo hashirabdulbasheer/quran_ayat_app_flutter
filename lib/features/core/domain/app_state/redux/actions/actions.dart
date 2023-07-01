@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../../notes/domain/entities/quran_note.dart';
 import '../../../../../tags/domain/entities/quran_tag.dart';
 
-export "notes_actions.dart";
 export "tag_actions.dart";
 
 /// ACTIONS
@@ -87,3 +87,24 @@ class AppStateModifyTagResponseBaseAction extends AppStateAction {
 }
 
 class AppStateResetStatusAction extends AppStateAction {}
+
+/// NOTES ACTIONS
+///
+class AppStateFetchNotesAction extends AppStateAction {}
+
+class AppStateFetchNotesSucceededAction extends AppStateAction {
+  final List<QuranNote> fetchedNotes;
+
+  AppStateFetchNotesSucceededAction(
+      this.fetchedNotes,
+      );
+}
+
+class AppStateNoteOperationsResponseBaseAction extends AppStateAction {
+  final String message;
+
+  AppStateNoteOperationsResponseBaseAction({
+    required this.message,
+  });
+}
+

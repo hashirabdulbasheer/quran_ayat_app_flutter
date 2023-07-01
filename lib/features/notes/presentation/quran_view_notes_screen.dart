@@ -102,5 +102,5 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
   }
 
   List<QuranNote> _notes() =>
-      StoreProvider.of<AppState>(context).state.originalNotes;
+      StoreProvider.of<AppState>(context).state.notes.originalNotes;
 }

@@ -250,7 +250,7 @@ class _QuranAyatDisplayNotesWidgetState
     int surahIndex,
     int ayaIndex,
   ) {
-    return StoreProvider.of<AppState>(context).state.getNotes(
+    return StoreProvider.of<AppState>(context).state.notes.getNotes(
               surahIndex,
               ayaIndex,
             ) ??

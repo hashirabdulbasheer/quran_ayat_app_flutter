@@ -46,7 +46,7 @@ class TagOperationsState extends Equatable {
 
   @override
   String toString() {
-    return 'TagOperationsState{originalTags: ${originalTags.length}, tags: $tags, lastActionStatus: $lastActionStatus, isLoading: $isLoading}';
+    return 'TagOperationsState{originalTags: ${originalTags.length}, lastActionStatus: $lastActionStatus, isLoading: $isLoading}';
   }
 
   @override

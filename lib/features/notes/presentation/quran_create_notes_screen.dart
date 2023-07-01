@@ -11,6 +11,7 @@ import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/entities/quran_note.dart';
+import '../domain/redux/actions/actions.dart';
 import 'widgets/notes_create_controls_widget.dart';
 import 'widgets/notes_update_controls_widget.dart';
 import 'widgets/offline_header_widget.dart';
@@ -40,105 +41,112 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
       appBar: AppBar(
         title: const Text("Notes"),
       ),
-      body: StoreBuilder<AppState>(
-        onDidChange: (
-          old,
-          updated,
-        ) =>
-            _onStoreDidChange(),
-        builder: (
-          BuildContext context,
-          Store<AppState> store,
-        ) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const QuranOfflineHeaderWidget(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    10,
-                    10,
-                    10,
-                    5,
-                  ),
-                  child: Text(
-                    "Enter your notes for ${widget.suraIndex}:${widget.ayaIndex}",
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    10,
-                    10,
-                    10,
-                    5,
-                  ),
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: QuranFullAyatRowWidget(
-                      futureMethodThatReturnsSelectedSurah:
-                          NobleQuran.getSurahArabic(
-                        widget.suraIndex - 1,
-                      ),
-                      ayaIndex: widget.ayaIndex,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    10,
-                    0,
-                    10,
-                    10,
-                  ),
-                  child: QuranAyatDisplayTranslationWidget(
-                    currentlySelectedSurah: NQSurahTitle(
-                      number: widget.suraIndex,
-                      name: '',
-                      transliterationEn: '',
-                      translationEn: '',
-                      totalVerses: 0,
-                      revelationType: RevelationType.MECCAN,
-                    ),
-                    currentlySelectedAya: widget.ayaIndex,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    controller: _notesController
-                      ..text = widget.note?.note ?? "",
-                    maxLines: 10,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                          width: 0.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                widget.note == null
-                    ? QuranNotesCreateControlsWidget(
-                        onConfirmation: () => {
-                          _createButtonPressed(),
-                        },
-                      )
-                    : QuranUpdateControlsWidget(
-                        onDelete: () => {
-                          _deleteButtonPressed(),
-                        },
-                        onUpdate: () => _updateButtonPressed(),
-                      ),
-              ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const QuranOfflineHeaderWidget(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                10,
+                10,
+                5,
+              ),
+              child: Text(
+                "Enter your notes for ${widget.suraIndex}:${widget.ayaIndex}",
+              ),
             ),
-          );
-        },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                10,
+                10,
+                5,
+              ),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: QuranFullAyatRowWidget(
+                  futureMethodThatReturnsSelectedSurah:
+                      NobleQuran.getSurahArabic(
+                    widget.suraIndex - 1,
+                  ),
+                  ayaIndex: widget.ayaIndex,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                0,
+                10,
+                10,
+              ),
+              child: QuranAyatDisplayTranslationWidget(
+                currentlySelectedSurah: NQSurahTitle(
+                  number: widget.suraIndex,
+                  name: '',
+                  transliterationEn: '',
+                  translationEn: '',
+                  totalVerses: 0,
+                  revelationType: RevelationType.MECCAN,
+                ),
+                currentlySelectedAya: widget.ayaIndex,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                controller: _notesController..text = widget.note?.note ?? "",
+                maxLines: 10,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                      width: 0.0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            widget.note == null
+                ? QuranNotesCreateControlsWidget(
+                    onConfirmation: () => {
+                      _createButtonPressed(),
+                    },
+                  )
+                : QuranUpdateControlsWidget(
+                    onDelete: () => {
+                      _deleteButtonPressed(),
+                    },
+                    onUpdate: () => _updateButtonPressed(),
+                  ),
+            const SizedBox(
+              height: 20,
+            ),
+            StoreBuilder<AppState>(
+              onDidChange: (
+                old,
+                updated,
+              ) =>
+                  _onStoreDidChange(),
+              builder: (
+                BuildContext context,
+                Store<AppState> store,
+              ) {
+                if (store.state.notes.isLoading || store.state.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                print("not loading");
+                return Container();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -158,7 +166,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
           localId: QuranUtils.uniqueId(),
           status: QuranStatusEnum.created,
         );
-        StoreProvider.of<AppState>(context).dispatch(AppStateCreateNoteAction(
+        StoreProvider.of<AppState>(context).dispatch(CreateNoteAction(
           note: note,
         ));
       }
@@ -207,7 +215,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   bool _deleteNote() {
     QuranNote? noteParam = widget.note;
     if (noteParam != null) {
-      StoreProvider.of<AppState>(context).dispatch(AppStateDeleteNoteAction(
+      StoreProvider.of<AppState>(context).dispatch(DeleteNoteAction(
         note: noteParam,
       ));
 
@@ -227,7 +235,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
             createdOn: DateTime.now().millisecondsSinceEpoch,
             note: _notesController.text,
           );
-          StoreProvider.of<AppState>(context).dispatch(AppStateUpdateNoteAction(
+          StoreProvider.of<AppState>(context).dispatch(UpdateNoteAction(
             note: note,
           ));
         } else {
@@ -240,35 +248,38 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   }
 
   void _showMessage(String message) {
-    QuranUtils.showMessage(context, message,);
+    QuranUtils.showMessage(
+      context,
+      message,
+    );
   }
 
   void _onStoreDidChange() {
     Store<AppState> store = StoreProvider.of<AppState>(context);
-
-    if(store.state.lastActionStatus.action == (AppStateCreateNoteSucceededAction).toString()) {
-      store.dispatch(AppStateResetStatusAction());
+    AppStateActionStatus status = store.state.notes.lastActionStatus;
+    if (status.action == (CreateNoteSucceededAction).toString()) {
       Navigator.of(context).pop();
-    } else if(store.state.lastActionStatus.action == (AppStateUpdateNoteSucceededAction).toString()) {
-      Navigator.of(context).pop();
+      store.dispatch(ResetNotesStatusAction());
+    } else if (status.action == (UpdateNoteSucceededAction).toString()) {
       QuranUtils.showMessage(
         context,
-        store.state.lastActionStatus.message,
+        status.message,
       );
-      store.dispatch(AppStateResetStatusAction());
-    } else if(store.state.lastActionStatus.action == (AppStateDeleteNoteSucceededAction).toString()) {
       Navigator.of(context).pop();
+      store.dispatch(ResetNotesStatusAction());
+    } else if (status.action == (DeleteNoteSucceededAction).toString()) {
       QuranUtils.showMessage(
         context,
-        store.state.lastActionStatus.message,
+        status.message,
       );
-      store.dispatch(AppStateResetStatusAction());
-    } else if(store.state.lastActionStatus.action == (AppStateNotesFailureAction).toString()) {
+      Navigator.of(context).pop();
+      store.dispatch(ResetNotesStatusAction());
+    } else if (status.action == (NotesFailureAction).toString()) {
       QuranUtils.showMessage(
         context,
-        store.state.lastActionStatus.message,
+        status.message,
       );
-      store.dispatch(AppStateResetStatusAction());
+      store.dispatch(ResetNotesStatusAction());
     }
   }
 }

@@ -8,13 +8,23 @@ import '../tag_operations_state.dart';
 
 /// REDUCER
 ///
-Reducer<TagOperationsState> tagOperationsReducer = combineReducers<TagOperationsState>([
-  TypedReducer<TagOperationsState, AppStateFetchTagsSucceededAction>(tagAyaFetchTagsReducer),
-  TypedReducer<TagOperationsState, AddTagOperationSucceededAction>(tagAyaAddTagsSuccessReducer),
-  TypedReducer<TagOperationsState, AddTagOperationFailureAction>(tagAyaAddTagsFailureReducer),
+Reducer<TagOperationsState> tagOperationsReducer =
+    combineReducers<TagOperationsState>([
+  TypedReducer<TagOperationsState, AppStateFetchTagsSucceededAction>(
+    _tagAyaFetchTagsReducer,
+  ),
+  TypedReducer<TagOperationsState, AddTagOperationSucceededAction>(
+    _tagAyaAddTagsSuccessReducer,
+  ),
+  TypedReducer<TagOperationsState, AddTagOperationFailureAction>(
+    _tagAyaAddTagsFailureReducer,
+  ),
+  TypedReducer<TagOperationsState, ResetTagsAction>(
+    _resetTagsReducer,
+  ),
 ]);
 
-TagOperationsState tagAyaFetchTagsReducer(
+TagOperationsState _tagAyaFetchTagsReducer(
   TagOperationsState state,
   AppStateFetchTagsSucceededAction action,
 ) {
@@ -35,7 +45,7 @@ TagOperationsState tagAyaFetchTagsReducer(
   );
 }
 
-TagOperationsState tagAyaAddTagsSuccessReducer(
+TagOperationsState _tagAyaAddTagsSuccessReducer(
   TagOperationsState state,
   AddTagOperationSucceededAction action,
 ) {
@@ -47,14 +57,26 @@ TagOperationsState tagAyaAddTagsSuccessReducer(
   );
 }
 
-TagOperationsState tagAyaAddTagsFailureReducer(
+TagOperationsState _tagAyaAddTagsFailureReducer(
   TagOperationsState state,
-    AddTagOperationFailureAction action,
+  AddTagOperationFailureAction action,
 ) {
   return state.copyWith(
     lastActionStatus: AppStateActionStatus(
       action: action.runtimeType.toString(),
       message: action.message,
+    ),
+  );
+}
+
+TagOperationsState _resetTagsReducer(
+  TagOperationsState state,
+  ResetTagsAction action,
+) {
+  return state.copyWith(
+    lastActionStatus: const AppStateActionStatus(
+      action: "",
+      message: "",
     ),
   );
 }

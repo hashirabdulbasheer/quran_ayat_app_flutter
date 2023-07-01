@@ -66,65 +66,6 @@ void appStateMiddleware(
       store.dispatch(AppStateLoadingAction(isLoading: false));
       store.dispatch(AppStateFetchNotesSucceededAction(notes));
     }
-  } else if (action is AppStateCreateNoteAction) {
-    // Fetch tags
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
-      store.dispatch(AppStateLoadingAction(isLoading: true));
-      QuranResponse response = await QuranNotesManager.instance.create(
-        user.uid,
-        action.note,
-      );
-      if (response.isSuccessful) {
-        store.dispatch(AppStateCreateNoteSucceededAction(message: "Saved 👍"));
-      } else {
-        store.dispatch(
-          AppStateNotesFailureAction(message: "Error creating note 😔"),
-        );
-      }
-    }
-    store.dispatch(AppStateLoadingAction(isLoading: false));
-    store.dispatch(AppStateFetchNotesAction());
-  } else if (action is AppStateDeleteNoteAction) {
-    // Fetch tags
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
-      store.dispatch(AppStateLoadingAction(isLoading: true));
-      bool status = await QuranNotesManager.instance.delete(
-        user.uid,
-        action.note,
-      );
-      if (status) {
-        store
-            .dispatch(AppStateDeleteNoteSucceededAction(message: "Deleted 👍"));
-      } else {
-        store.dispatch(
-          AppStateNotesFailureAction(message: "Error deleting note 😔"),
-        );
-      }
-    }
-    store.dispatch(AppStateLoadingAction(isLoading: false));
-    store.dispatch(AppStateFetchNotesAction());
-  } else if (action is AppStateUpdateNoteAction) {
-    // Fetch tags
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
-      store.dispatch(AppStateLoadingAction(isLoading: true));
-      bool status = await QuranNotesManager.instance.update(
-        user.uid,
-        action.note,
-      );
-      if (status) {
-        store
-            .dispatch(AppStateUpdateNoteSucceededAction(message: "Updated 👍"));
-      } else {
-        store.dispatch(
-          AppStateNotesFailureAction(message: "Error updating note 😔"),
-        );
-      }
-    }
-    store.dispatch(AppStateLoadingAction(isLoading: false));
-    store.dispatch(AppStateFetchNotesAction());
   }
   next(action);
 }

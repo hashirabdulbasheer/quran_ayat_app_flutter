@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import '../../../notes/domain/entities/quran_note.dart';
+import '../../../notes/domain/redux/notes_state.dart';
 import '../../../tags/domain/redux/tags_operations/tag_operations_state.dart';
 import 'redux/actions/actions.dart';
 export "redux/reducers/reducer.dart";
@@ -12,15 +12,13 @@ export "redux/actions/actions.dart";
 @immutable
 class AppState extends Equatable {
   final TagOperationsState tags;
-  final List<QuranNote> originalNotes;
-  final Map<String, List<QuranNote>> notes;
+  final NotesState notes;
   final AppStateActionStatus lastActionStatus;
   final bool isLoading;
 
   const AppState({
     this.tags = const TagOperationsState(),
-    this.notes = const {},
-    this.originalNotes = const [],
+    this.notes = const NotesState(),
     this.lastActionStatus = const AppStateActionStatus(
       action: "",
       message: "",
@@ -30,38 +28,26 @@ class AppState extends Equatable {
 
   AppState copyWith({
     TagOperationsState? tags,
-    List<QuranNote>? originalNotes,
-    Map<String, List<QuranNote>>? notes,
+    NotesState? notes,
     AppStateActionStatus? lastActionStatus,
     bool? isLoading,
   }) {
     return AppState(
       tags: tags ?? this.tags,
       notes: notes ?? this.notes,
-      originalNotes: originalNotes ?? this.originalNotes,
       lastActionStatus: lastActionStatus ?? this.lastActionStatus,
       isLoading: isLoading ?? this.isLoading,
     );
   }
 
-  List<QuranNote>? getNotes(
-    int surahIndex,
-    int ayaIndex,
-  ) {
-    String key = "${surahIndex}_$ayaIndex";
-
-    return notes[key];
-  }
-
   @override
   String toString() {
-    return "Tags: ${tags.toString()}, Notes: ${originalNotes.length}, Status: $lastActionStatus, isLoading: $isLoading";
+    return "Tags: ${tags.toString()}, Notes: ${notes.toString()}, Status: $lastActionStatus, isLoading: $isLoading";
   }
 
   @override
   List<Object> get props => [
         tags,
-        originalNotes,
         notes,
         lastActionStatus,
         isLoading,
