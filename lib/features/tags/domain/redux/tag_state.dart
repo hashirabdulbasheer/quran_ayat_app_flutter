@@ -1,17 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
-import '../../../../core/domain/app_state/redux/actions/actions.dart';
-import '../../entities/quran_tag.dart';
+import '../../../core/domain/app_state/redux/actions/actions.dart';
+import '../entities/quran_tag.dart';
 
 @immutable
-class TagOperationsState extends Equatable {
+class TagState extends Equatable {
   final List<QuranTag> originalTags;
   final Map<String, List<String>> tags;
   final AppStateActionStatus lastActionStatus;
   final bool isLoading;
 
-  const TagOperationsState({
+  const TagState({
     this.originalTags = const [],
     this.tags = const {},
     this.lastActionStatus = const AppStateActionStatus(
@@ -21,13 +21,13 @@ class TagOperationsState extends Equatable {
     this.isLoading = false,
   });
 
-  TagOperationsState copyWith({
+  TagState copyWith({
     List<QuranTag>? originalTags,
     Map<String, List<String>>? tags,
     AppStateActionStatus? lastActionStatus,
     bool? isLoading,
   }) {
-    return TagOperationsState(
+    return TagState(
       originalTags: originalTags ?? this.originalTags,
       tags: tags ?? this.tags,
       lastActionStatus: lastActionStatus ?? this.lastActionStatus,

@@ -103,7 +103,7 @@ class _QuranAyatDisplayNotesWidgetState
           height: 10,
         ),
         QuranShimmer(
-          isLoading: StoreProvider.of<AppState>(context).state.isLoading,
+          isLoading: StoreProvider.of<AppState>(context).state.notes.isLoading,
           child: _bodyContent(
             surahIndex,
             user,

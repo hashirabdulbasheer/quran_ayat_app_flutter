@@ -7,10 +7,43 @@ import '../actions/actions.dart';
 
 List<Middleware<AppState>> createNotesMiddleware() {
   return [
+    TypedMiddleware<AppState, InitializeNotesAction>(_initializeNotesMiddleware),
+    TypedMiddleware<AppState, FetchNotesAction>(_fetchNotesMiddleware),
     TypedMiddleware<AppState, CreateNoteAction>(_createNoteMiddleware),
     TypedMiddleware<AppState, UpdateNoteAction>(_updateNoteMiddleware),
     TypedMiddleware<AppState, DeleteNoteAction>(_deleteNoteMiddleware),
   ];
+}
+
+void _initializeNotesMiddleware(
+    Store<AppState> store,
+    InitializeNotesAction action,
+    NextDispatcher next,
+    ) {
+  // Initialize notes
+  store.dispatch(FetchNotesAction());
+  next(action);
+}
+
+void _fetchNotesMiddleware(
+  Store<AppState> store,
+  FetchNotesAction action,
+  NextDispatcher next,
+) {
+  // Fetch notes
+  QuranUser? user = QuranAuthFactory.engine.getUser();
+  if (user != null) {
+    store.dispatch(NotesLoadingAction(isLoading: true));
+    QuranNotesManager.instance
+        .fetchAll(
+      user.uid,
+    )
+        .then((notes) {
+      store.dispatch(NotesLoadingAction(isLoading: false));
+      store.dispatch(FetchNotesSucceededAction(notes));
+    });
+  }
+  next(action);
 }
 
 void _createNoteMiddleware(
@@ -18,7 +51,7 @@ void _createNoteMiddleware(
   CreateNoteAction action,
   NextDispatcher next,
 ) {
-  // Fetch notes
+  // Create notes
   QuranUser? user = QuranAuthFactory.engine.getUser();
   if (user != null) {
     store.dispatch(NotesLoadingAction(isLoading: true));
@@ -37,7 +70,7 @@ void _createNoteMiddleware(
       }
     });
     store.dispatch(NotesLoadingAction(isLoading: false));
-    store.dispatch(AppStateFetchNotesAction());
+    store.dispatch(FetchNotesAction());
   }
   next(action);
 }
@@ -66,7 +99,7 @@ void _updateNoteMiddleware(
       }
     });
     store.dispatch(NotesLoadingAction(isLoading: false));
-    store.dispatch(AppStateFetchNotesAction());
+    store.dispatch(FetchNotesAction());
   }
   next(action);
 }
@@ -97,7 +130,7 @@ void _deleteNoteMiddleware(
       }
     });
     store.dispatch(NotesLoadingAction(isLoading: false));
-    store.dispatch(AppStateFetchNotesAction());
+    store.dispatch(FetchNotesAction());
   }
   next(action);
 }

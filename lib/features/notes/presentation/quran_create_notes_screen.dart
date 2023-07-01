@@ -141,7 +141,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                 if (store.state.notes.isLoading || store.state.isLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                print("not loading");
+
                 return Container();
               },
             ),

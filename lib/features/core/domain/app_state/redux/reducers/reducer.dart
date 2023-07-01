@@ -1,53 +1,83 @@
-import '../../../../../notes/domain/entities/quran_note.dart';
+import 'package:redux/redux.dart';
 import '../../../../../notes/domain/redux/reducers/reducer.dart';
-import '../../../../../tags/domain/redux/tags_operations/reducers/reducer.dart';
+import '../../../../../tags/domain/redux/reducers/reducer.dart';
 import '../../app_state.dart';
 
 /// REDUCER
 ///
+Reducer<AppState> appStateReducer = combineReducers<AppState>([
+  TypedReducer<AppState, AppStateInitializeAction>(
+    _initializeAppStateReducer,
+  ),
+  TypedReducer<AppState, AppStateResetAction>(
+    _resetAppStateReducer,
+  ),
+  TypedReducer<AppState, AppStateLoadingAction>(
+    _loadingAppStateReducer,
+  ),
+  TypedReducer<AppState, AppStateResetStatusAction>(
+    _resetAppStateStatusReducer,
+  ),
+  TypedReducer<AppState, dynamic>(
+    _allOtherReducer,
+  ),
+]);
 
-AppState appStateReducer(
+// redirect everything else to child states
+AppState _allOtherReducer(
   AppState state,
   dynamic action,
 ) {
-  if (action is AppStateResetAction) {
-    // Reset Tag
-    return const AppState();
-  } else if (action is AppStateCreateTagFailureAction ||
-      action is AppStateDeleteTagFailureAction) {
-    return state.copyWith(
-      lastActionStatus: AppStateActionStatus(
-        action: action.runtimeType.toString(),
-        message: (action as AppStateModifyTagResponseBaseAction).message,
-      ),
-    );
-  } else if (action is AppStateCreateTagSucceededAction ||
-      action is AppStateDeleteTagSucceededAction) {
-    return state.copyWith(
-      lastActionStatus: AppStateActionStatus(
-        action: action.runtimeType.toString(),
-        message: (action as AppStateModifyTagResponseBaseAction).message,
-      ),
-    );
-  } else if (action is AppStateLoadingAction) {
-    return state.copyWith(isLoading: action.isLoading);
-  } else if (action is AppStateResetStatusAction) {
-    return state.copyWith(
-      lastActionStatus: const AppStateActionStatus(
-        action: "",
-        message: "",
-      ),
-    );
-  }
-
   return state.copyWith(
-    tags: tagOperationsReducer(
+    tags: tagReducer(
       state.tags,
       action,
     ),
     notes: notesReducer(
       state.notes,
       action,
+    ),
+  );
+}
+
+AppState _initializeAppStateReducer(
+  AppState state,
+  AppStateInitializeAction action,
+) {
+  return state.copyWith(
+    tags: tagReducer(
+      state.tags,
+      action,
+    ),
+    notes: notesReducer(
+      state.notes,
+      action,
+    ),
+  );
+}
+
+AppState _resetAppStateReducer(
+  AppState state,
+  AppStateResetAction action,
+) {
+  return const AppState();
+}
+
+AppState _loadingAppStateReducer(
+  AppState state,
+  AppStateLoadingAction action,
+) {
+  return state.copyWith(isLoading: action.isLoading);
+}
+
+AppState _resetAppStateStatusReducer(
+  AppState state,
+  AppStateResetStatusAction action,
+) {
+  return state.copyWith(
+    lastActionStatus: const AppStateActionStatus(
+      action: "",
+      message: "",
     ),
   );
 }

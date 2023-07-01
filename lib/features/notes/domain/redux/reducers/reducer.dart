@@ -4,11 +4,11 @@ import '../../entities/quran_note.dart';
 import '../actions/actions.dart';
 import '../notes_state.dart';
 
-/// REDUCER
+/// NOTES REDUCER
 ///
 
 Reducer<NotesState> notesReducer = combineReducers<NotesState>([
-  TypedReducer<NotesState, AppStateFetchNotesSucceededAction>(
+  TypedReducer<NotesState, FetchNotesSucceededAction>(
     _fetchNotesReducer,
   ),
   TypedReducer<NotesState, ResetNotesStatusAction>(
@@ -33,7 +33,7 @@ Reducer<NotesState> notesReducer = combineReducers<NotesState>([
 
 NotesState _fetchNotesReducer(
   NotesState state,
-  AppStateFetchNotesSucceededAction action,
+  FetchNotesSucceededAction action,
 ) {
   Map<String, List<QuranNote>> stateNotes = {};
   for (QuranNote note in action.fetchedNotes) {

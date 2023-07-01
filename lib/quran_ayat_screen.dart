@@ -30,7 +30,7 @@ import 'features/drawer/presentation/nav_drawer.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
-import 'features/tags/domain/redux/tags_operations/actions/actions.dart';
+import 'features/tags/domain/redux/actions/actions.dart';
 import 'features/tags/presentation/quran_tag_display.dart';
 import 'misc/constants/string_constants.dart';
 import 'models/qr_user_model.dart';
@@ -746,9 +746,9 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   void _onStoreDidChange() {
     Store<AppState> store = StoreProvider.of<AppState>(context);
     var listOfActions = [
-      (AddTagOperationSucceededAction).toString(),
-      (RemoveTagOperationSucceededAction).toString(),
-      (AddTagOperationFailureAction).toString(),
+      (AddTagSucceededAction).toString(),
+      (RemoveTagSucceededAction).toString(),
+      (AddTagFailureAction).toString(),
     ];
     if (listOfActions.contains(store.state.lastActionStatus.action)) {
       QuranUtils.showMessage(

@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import '../../../notes/domain/redux/notes_state.dart';
-import '../../../tags/domain/redux/tags_operations/tag_operations_state.dart';
+import '../../../tags/domain/redux/tag_state.dart';
 import 'redux/actions/actions.dart';
 export "redux/reducers/reducer.dart";
 export "redux/middleware/middleware.dart";
@@ -11,13 +11,13 @@ export "redux/actions/actions.dart";
 ///
 @immutable
 class AppState extends Equatable {
-  final TagOperationsState tags;
+  final TagState tags;
   final NotesState notes;
   final AppStateActionStatus lastActionStatus;
   final bool isLoading;
 
   const AppState({
-    this.tags = const TagOperationsState(),
+    this.tags = const TagState(),
     this.notes = const NotesState(),
     this.lastActionStatus = const AppStateActionStatus(
       action: "",
@@ -27,7 +27,7 @@ class AppState extends Equatable {
   });
 
   AppState copyWith({
-    TagOperationsState? tags,
+    TagState? tags,
     NotesState? notes,
     AppStateActionStatus? lastActionStatus,
     bool? isLoading,

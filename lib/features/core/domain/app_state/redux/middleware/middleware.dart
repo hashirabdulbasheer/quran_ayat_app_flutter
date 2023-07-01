@@ -1,12 +1,6 @@
 import 'package:redux/redux.dart';
-
-import '../../../../../../models/qr_response_model.dart';
-import '../../../../../../models/qr_user_model.dart';
-import '../../../../../auth/domain/auth_factory.dart';
-import '../../../../../notes/domain/entities/quran_note.dart';
-import '../../../../../notes/domain/notes_manager.dart';
-import '../../../../../tags/domain/entities/quran_tag.dart';
-import '../../../../../tags/domain/tags_manager.dart';
+import '../../../../../notes/domain/redux/actions/actions.dart';
+import '../../../../../tags/domain/redux/actions/actions.dart';
 import '../../app_state.dart';
 
 /// MIDDLEWARE
@@ -19,53 +13,8 @@ void appStateMiddleware(
 ) async {
   if (action is AppStateInitializeAction) {
     // Initialization actions
-    store.dispatch(AppStateFetchTagsAction());
-    store.dispatch(AppStateFetchNotesAction());
-  } else if (action is AppStateFetchTagsAction) {
-    // Fetch tags
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
-      store.dispatch(AppStateLoadingAction(isLoading: true));
-      List<QuranTag> tags = await QuranTagsManager.instance.fetchAll(
-        user.uid,
-      );
-      store.dispatch(AppStateFetchTagsSucceededAction(tags));
-      store.dispatch(AppStateLoadingAction(isLoading: false));
-    }
-  } else if (action is AppStateCreateTagAction) {
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
-      String userId = user.uid;
-      store.dispatch(AppStateLoadingAction(isLoading: true));
-      QuranResponse response = await QuranTagsManager.instance.create(
-        userId,
-        action.tag,
-      );
-      if (response.isSuccessful) {
-        store.dispatch(AppStateCreateTagSucceededAction(
-          message: "Saved tag - ${action.tag} 👍",
-        ));
-      } else {
-        store.dispatch(AppStateCreateTagFailureAction(
-          message: "Error creating tag - ${action.tag} 😔",
-        ));
-      }
-      store.dispatch(AppStateLoadingAction(isLoading: false));
-      store.dispatch(AppStateFetchTagsAction());
-    }
-  } else if (action is AppStateDeleteTagAction) {
-    // TODO: To be implemented
-  } else if (action is AppStateFetchNotesAction) {
-    // Fetch tags
-    QuranUser? user = QuranAuthFactory.engine.getUser();
-    if (user != null) {
-      store.dispatch(AppStateLoadingAction(isLoading: true));
-      List<QuranNote> notes = await QuranNotesManager.instance.fetchAll(
-        user.uid,
-      );
-      store.dispatch(AppStateLoadingAction(isLoading: false));
-      store.dispatch(AppStateFetchNotesSucceededAction(notes));
-    }
+    store.dispatch(InitializeTagsAction());
+    store.dispatch(InitializeNotesAction());
   }
   next(action);
 }

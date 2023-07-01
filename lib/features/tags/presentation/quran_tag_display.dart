@@ -8,7 +8,7 @@ import '../../auth/presentation/quran_login_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../core/presentation/shimmer.dart';
 import '../domain/entities/quran_tag.dart';
-import '../domain/redux/tags_operations/actions/actions.dart';
+import '../domain/redux/actions/actions.dart';
 import 'quran_view_tags_screen.dart';
 
 class QuranAyatDisplayTagsWidget extends StatefulWidget {
@@ -86,7 +86,7 @@ class _QuranAyatDisplayTagsWidgetState
           height: 10,
         ),
         QuranShimmer(
-          isLoading: StoreProvider.of<AppState>(context).state.isLoading,
+          isLoading: StoreProvider.of<AppState>(context).state.tags.isLoading,
           child: _body(
             surahIndex,
             user,
@@ -354,7 +354,7 @@ class _QuranAyatDisplayTagsWidgetState
       // invalid
       return;
     }
-    StoreProvider.of<AppState>(context).dispatch(AddTagOperationAction(
+    StoreProvider.of<AppState>(context).dispatch(AddTagAction(
       surahIndex: surahIndex,
       ayaIndex: widget.ayaIndex,
       tag: newTagString,
@@ -374,7 +374,7 @@ class _QuranAyatDisplayTagsWidgetState
       return false;
     }
 
-    StoreProvider.of<AppState>(context).dispatch(RemoveTagOperationAction(
+    StoreProvider.of<AppState>(context).dispatch(RemoveTagAction(
       surahIndex: surahIndex,
       ayaIndex: widget.ayaIndex,
       tag: selectedTag,

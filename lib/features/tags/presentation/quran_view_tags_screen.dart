@@ -7,7 +7,8 @@ import '../../../models/qr_user_model.dart';
 import '../../../utils/nav_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/entities/quran_tag.dart';
-import '../domain/redux/tags_operations/tag_operations_state.dart';
+import '../domain/redux/actions/actions.dart';
+import '../domain/redux/tag_state.dart';
 
 class QuranViewTagsScreen extends StatefulWidget {
   final QuranUser user;
@@ -152,7 +153,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
 
       return;
     }
-    StoreProvider.of<AppState>(context).dispatch(AppStateCreateTagAction(
+    StoreProvider.of<AppState>(context).dispatch(CreateTagAction(
       surahIndex: 0,
       ayaIndex: 0,
       tag: newTag,
@@ -187,7 +188,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
   }
 
   List<QuranTag> _tags() =>
-      StoreProvider.of<TagOperationsState>(context).state.originalTags;
+      StoreProvider.of<AppState>(context).state.tags.originalTags;
 
   void _exportTags() {
     String exported = "";
@@ -207,7 +208,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
   void _onStoreDidChange() {
     Store<AppState> store = StoreProvider.of<AppState>(context);
     var listOfActions = [
-      (AppStateCreateTagSucceededAction).toString(),
+      (CreateTagSucceededAction).toString(),
     ];
     if (listOfActions.contains(store.state.lastActionStatus.action)) {
       QuranUtils.showMessage(

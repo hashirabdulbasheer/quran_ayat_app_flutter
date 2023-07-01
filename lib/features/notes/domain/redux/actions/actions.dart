@@ -3,6 +3,8 @@ import '../../entities/quran_note.dart';
 
 /// NOTES ACTIONS
 ///
+class InitializeNotesAction extends AppStateAction {}
+
 class CreateNoteAction extends AppStateAction {
   final QuranNote note;
 
@@ -11,8 +13,7 @@ class CreateNoteAction extends AppStateAction {
   });
 }
 
-class CreateNoteSucceededAction
-    extends AppStateNoteOperationsResponseBaseAction {
+class CreateNoteSucceededAction extends NoteOperationsResponseBaseAction {
   CreateNoteSucceededAction({required super.message});
 }
 
@@ -24,8 +25,7 @@ class DeleteNoteAction extends AppStateAction {
   });
 }
 
-class DeleteNoteSucceededAction
-    extends AppStateNoteOperationsResponseBaseAction {
+class DeleteNoteSucceededAction extends NoteOperationsResponseBaseAction {
   DeleteNoteSucceededAction({required super.message});
 }
 
@@ -37,12 +37,11 @@ class UpdateNoteAction extends AppStateAction {
   });
 }
 
-class UpdateNoteSucceededAction
-    extends AppStateNoteOperationsResponseBaseAction {
+class UpdateNoteSucceededAction extends NoteOperationsResponseBaseAction {
   UpdateNoteSucceededAction({required super.message});
 }
 
-class NotesFailureAction extends AppStateNoteOperationsResponseBaseAction {
+class NotesFailureAction extends NoteOperationsResponseBaseAction {
   NotesFailureAction({required super.message});
 }
 
@@ -53,5 +52,23 @@ class NotesLoadingAction extends AppStateAction {
 
   NotesLoadingAction({
     required this.isLoading,
+  });
+}
+
+class FetchNotesAction extends AppStateAction {}
+
+class FetchNotesSucceededAction extends AppStateAction {
+  final List<QuranNote> fetchedNotes;
+
+  FetchNotesSucceededAction(
+    this.fetchedNotes,
+  );
+}
+
+class NoteOperationsResponseBaseAction extends AppStateAction {
+  final String message;
+
+  NoteOperationsResponseBaseAction({
+    required this.message,
   });
 }
