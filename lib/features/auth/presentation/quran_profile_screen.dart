@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/utils/logger_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/auth_factory.dart';
 import '../../../models/qr_response_model.dart';
@@ -48,10 +47,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
               20,
             ),
             child: SizedBox(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
+              height: MediaQuery.of(context).size.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -92,17 +88,16 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                         child: SizedBox(
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () =>
-                            {
+                            onPressed: () => {
                               if (!_isLoading) {_updateButtonPressed()},
                             },
                             child: _isLoading
                                 ? const Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            )
+                                    padding: EdgeInsets.all(8.0),
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                    ),
+                                  )
                                 : const Text("Update"),
                           ),
                         ),
@@ -113,23 +108,12 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                     height: 50,
                   ),
                   TextButton(
-                    onPressed: () =>
-                    {
+                    onPressed: () => {
                       _signOutButtonPressed().then((bool value) {
                         Navigator.of(context).pop();
                       }),
                     },
                     child: const Text("Sign Out"),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      QuranLogger.logE(StateError(" this is a test crash"));
-                      throw StateError(" this is a test crash");
-                    },
-                    child: const Text("Test Crash App"),
                   ),
                 ],
               ),

@@ -26,12 +26,11 @@ class QuranLogger {
   ) {
     if (kDebugMode) {
       print(exception);
-    } else {
-      Sentry.captureException(
-        exception,
-        stackTrace: stacktrace,
-      );
     }
+    Sentry.captureException(
+      exception,
+      stackTrace: stacktrace,
+    );
   }
 
   static void logAnalytics(String event) {
