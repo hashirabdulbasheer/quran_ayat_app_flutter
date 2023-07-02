@@ -23,6 +23,7 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     FirebaseAuth.instance.authStateChanges().listen(_authChangeListener);
+    FirebaseAuth.instance.idTokenChanges().listen(_authChangeListener);
 
     return true;
   }
@@ -33,7 +34,7 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     String password,
   ) async {
     try {
-      final _ = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final response = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: username,
         password: password,
       );
@@ -116,11 +117,11 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
 
   @override
   QuranUser? getUser() {
-    // TODO: Commenting to test if this solved the user session expiration issue
     // if (_user != null) {
     //   return _user;
     // }
     FirebaseAuth.instance.currentUser?.reload();
+    FirebaseAuth.instance.currentUser?.getIdToken(true);
     User? user = FirebaseAuth.instance.currentUser;
     _user = _mapFirebaseUserToQuranUser(user);
 
@@ -145,6 +146,13 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
       isSuccessful: true,
       message: "Successfully updated user 👍",
     );
+  }
+
+  @override
+  void updateToken() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser?.getIdToken(true);
+    }
   }
 
   @override

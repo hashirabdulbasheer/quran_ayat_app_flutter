@@ -17,6 +17,8 @@ abstract class QuranAuthInterface {
 
   Future<QuranResponse> update(String name);
 
+  void updateToken();
+
   Future<QuranResponse> logout();
 
   Future<QuranResponse> forgotPassword(String email);
