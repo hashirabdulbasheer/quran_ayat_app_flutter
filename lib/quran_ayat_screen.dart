@@ -29,6 +29,7 @@ import 'features/contextList/presentation/quran_context_list_screen.dart';
 import 'features/core/domain/app_state/app_state.dart';
 import 'features/drawer/presentation/nav_drawer.dart';
 import 'features/notes/domain/notes_manager.dart';
+import 'features/notes/domain/redux/actions/actions.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'features/tags/domain/redux/actions/actions.dart';
@@ -661,6 +662,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   /// display next aya
   bool _moveToNextAyat() {
+    // reset any actions
+    StoreProvider.of<AppState>(context).dispatch(ResetTagsStatusAction());
+    StoreProvider.of<AppState>(context).dispatch(ResetNotesStatusAction());
+
     int totalVerses = _selectedSurah?.totalVerses ?? 0;
     if (_selectedSurah != null) {
       int nextAyat = _selectedAyat + 1;
@@ -679,6 +684,10 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   /// display previous aya
   void _moveToPreviousAyat() {
+    // reset any actions
+    StoreProvider.of<AppState>(context).dispatch(ResetTagsStatusAction());
+    StoreProvider.of<AppState>(context).dispatch(ResetNotesStatusAction());
+
     if (_selectedSurah != null) {
       int prevAyat = _selectedAyat - 1;
       if (prevAyat > 0) {

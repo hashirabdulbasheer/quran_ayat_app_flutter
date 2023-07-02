@@ -115,6 +115,13 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                     },
                     child: const Text("Sign Out"),
                   ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  TextButton(
+                    onPressed: () => throw StateError(" this is a test crash"),
+                    child: const Text("Test Crash App"),
+                  ),
                 ],
               ),
             ),
