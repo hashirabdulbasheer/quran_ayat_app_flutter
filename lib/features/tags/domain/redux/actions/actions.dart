@@ -73,7 +73,7 @@ class RemoveTagFailureAction extends ModifyTagResponseBaseAction {
   });
 }
 
-class ResetTagsAction extends AppStateAction {}
+class ResetTagsStatusAction extends AppStateAction {}
 
 class CreateTagAction extends TagBaseAction {
   CreateTagAction({

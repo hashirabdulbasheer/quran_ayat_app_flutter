@@ -21,6 +21,11 @@ class QuranFirebaseEngine implements QuranDataSource {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
     DatabaseReference newPostRef = ref.push();
     await newPostRef.set(item);
+    try {
+      var _ = await ref.set(item);
+    } catch (_) {
+      return false;
+    }
 
     return true;
   }
@@ -41,8 +46,11 @@ class QuranFirebaseEngine implements QuranDataSource {
     Map<String, dynamic> item,
   ) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
-    await ref.set(item);
-
+    try {
+      var _ = await ref.set(item);
+    } catch (_) {
+      return false;
+    }
     return true;
   }
 
@@ -52,6 +60,11 @@ class QuranFirebaseEngine implements QuranDataSource {
   ) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
     await ref.remove();
+    try {
+      var _ = await ref.remove();
+    } catch (_) {
+      return false;
+    }
 
     return true;
   }

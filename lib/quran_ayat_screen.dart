@@ -753,13 +753,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       (AddTagSucceededAction).toString(),
       (RemoveTagSucceededAction).toString(),
       (AddTagFailureAction).toString(),
+      (RemoveTagFailureAction).toString(),
     ];
-    if (listOfActions.contains(store.state.lastActionStatus.action)) {
+    if (listOfActions.contains(store.state.tags.lastActionStatus.action)) {
       QuranUtils.showMessage(
         context,
-        store.state.lastActionStatus?.message,
+        store.state.tags.lastActionStatus.message,
       );
-      store.dispatch(AppStateResetStatusAction());
+      store.dispatch(ResetTagsStatusAction());
     }
   }
 

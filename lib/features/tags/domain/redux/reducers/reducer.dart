@@ -19,7 +19,7 @@ Reducer<TagState> tagReducer =
   TypedReducer<TagState, AddTagFailureAction>(
     _addTagsFailureReducer,
   ),
-  TypedReducer<TagState, ResetTagsAction>(
+  TypedReducer<TagState, ResetTagsStatusAction>(
     _resetTagsReducer,
   ),
   TypedReducer<TagState, CreateTagSucceededAction>(
@@ -101,7 +101,7 @@ TagState _addTagsFailureReducer(
 
 TagState _resetTagsReducer(
   TagState state,
-  ResetTagsAction action,
+  ResetTagsStatusAction action,
 ) {
   return state.copyWith(
     lastActionStatus: const AppStateActionStatus(
