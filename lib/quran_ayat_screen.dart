@@ -784,14 +784,14 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
   Future<bool> _hasVersionBeenUpdated() async {
     final prefs = await SharedPreferences.getInstance();
     String? lastUpdatedVersion = prefs.getString("app_version");
-    if (lastUpdatedVersion != null && lastUpdatedVersion.isNotEmpty) {
-      if (lastUpdatedVersion == appVersion) {
-        // no change -> ignore
-        return false;
-      }
+    if (lastUpdatedVersion != null &&
+        lastUpdatedVersion.isNotEmpty &&
+        lastUpdatedVersion != appVersion) {
+      // no change -> ignore
+      return true;
     }
 
-    return true;
+    return false;
   }
 
   void _saveAppVersion() async {
