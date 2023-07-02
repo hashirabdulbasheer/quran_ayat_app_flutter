@@ -59,6 +59,7 @@ NotesState _resetNotesStatusReducer(
       action: "",
       message: "",
     ),
+    isLoading: false,
   );
 }
 

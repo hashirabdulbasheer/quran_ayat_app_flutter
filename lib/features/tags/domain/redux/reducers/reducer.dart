@@ -20,7 +20,7 @@ Reducer<TagState> tagReducer =
     _addTagsFailureReducer,
   ),
   TypedReducer<TagState, ResetTagsStatusAction>(
-    _resetTagsReducer,
+    _resetTagsStatusReducer,
   ),
   TypedReducer<TagState, CreateTagSucceededAction>(
     _createTagsSuccessReducer,
@@ -99,7 +99,7 @@ TagState _addTagsFailureReducer(
   );
 }
 
-TagState _resetTagsReducer(
+TagState _resetTagsStatusReducer(
   TagState state,
   ResetTagsStatusAction action,
 ) {
@@ -108,5 +108,6 @@ TagState _resetTagsReducer(
       action: "",
       message: "",
     ),
+    isLoading: false,
   );
 }
