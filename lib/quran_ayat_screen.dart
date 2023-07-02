@@ -12,6 +12,7 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
 import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
@@ -32,6 +33,7 @@ import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'features/tags/domain/redux/actions/actions.dart';
 import 'features/tags/presentation/quran_tag_display.dart';
+import 'main.dart';
 import 'misc/constants/string_constants.dart';
 import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
@@ -416,11 +418,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                               onDidChange: (
                                 old,
                                 updated,
-                              ) => _onStoreDidChange(),
+                              ) =>
+                                  _onStoreDidChange(),
                               builder: (
                                 BuildContext context,
                                 Store<AppState> store,
-                              ) => QuranAyatDisplayTagsWidget(
+                              ) =>
+                                  QuranAyatDisplayTagsWidget(
                                 currentlySelectedSurah: _selectedSurah,
                                 ayaIndex: _selectedAyat,
                                 continuousMode: _isAudioContinuousModeEnabled,
@@ -757,5 +761,40 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       );
       store.dispatch(AppStateResetStatusAction());
     }
+  }
+
+  /// App Version Notifications
+  ///
+
+  @override
+  void didChangeDependencies() {
+    _hasVersionBeenUpdated().then((isUpdated) {
+      if (isUpdated) {
+        QuranUtils.showMessage(
+          context,
+          "App updated to version $appVersion 🎉",
+        );
+        _saveAppVersion();
+      }
+    });
+    super.didChangeDependencies();
+  }
+
+  Future<bool> _hasVersionBeenUpdated() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? lastUpdatedVersion = prefs.getString("app_version");
+    if (lastUpdatedVersion != null && lastUpdatedVersion.isNotEmpty) {
+      if (lastUpdatedVersion == appVersion) {
+        // no change -> ignore
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  void _saveAppVersion() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("app_version", appVersion,);
   }
 }
