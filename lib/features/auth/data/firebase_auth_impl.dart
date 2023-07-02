@@ -23,7 +23,6 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     FirebaseAuth.instance.authStateChanges().listen(_authChangeListener);
-    FirebaseAuth.instance.idTokenChanges().listen(_authChangeListener);
 
     return true;
   }
