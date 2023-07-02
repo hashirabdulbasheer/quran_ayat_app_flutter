@@ -144,7 +144,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
   }
 
   void _saveTag() {
-    String newTag = _textEditingController.text.toLowerCase().trim();
+    String newTag = _textEditingController.text.trim();
     if (newTag.isEmpty || _tags().any((item) => item.containsTag(newTag))) {
       QuranUtils.showMessage(
         context,

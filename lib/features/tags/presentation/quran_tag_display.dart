@@ -347,7 +347,7 @@ class _QuranAyatDisplayTagsWidgetState
 
   void _onSaveButtonTapped() {
     if (_selectedTag == null) return;
-    String? newTagString = _selectedTag?.name.toLowerCase().trim();
+    String? newTagString = _selectedTag?.name.trim();
     int? surahIndex = widget.currentlySelectedSurah?.number;
     // validation
     if (newTagString == null || newTagString.isEmpty || surahIndex == null) {
