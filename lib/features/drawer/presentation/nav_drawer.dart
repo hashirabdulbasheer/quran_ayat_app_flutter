@@ -77,14 +77,6 @@ class QuranNavDrawer extends StatelessWidget {
                   QuranSettingsConstants.feedbackEmailUrl,
                 )),
               ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Test',
-                icon: Icons.email,
-                onSelected: () {
-                   throw StateError("This is a test crash");
-                },
-              ),
             ],
           ),
         ),
