@@ -126,12 +126,12 @@ void _addTagMiddleware(
             ),
           );
         }
+        store.dispatch(AppStateLoadingAction(isLoading: false));
+        store.dispatch(FetchTagsAction());
       });
     } catch (error) {
       QuranLogger.logE(error);
     }
-    store.dispatch(AppStateLoadingAction(isLoading: false));
-    store.dispatch(FetchTagsAction());
   }
   next(action);
 }
@@ -169,12 +169,12 @@ void _removeTagMiddleware(
             ),
           );
         }
+        store.dispatch(AppStateLoadingAction(isLoading: false));
+        store.dispatch(FetchTagsAction());
       });
     } catch (error) {
       QuranLogger.logE(error);
     }
-    store.dispatch(AppStateLoadingAction(isLoading: false));
-    store.dispatch(FetchTagsAction());
   }
   next(action);
 }
