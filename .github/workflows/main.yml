@@ -9,6 +9,8 @@ on:
   
 env:
   FIREBASE_OPTIONS: ${{secrets.FIREBASE_OPTIONS}}  
+  SENTRY_DSN: ${{secrets.SENTRY_DSN}}  
+  SENTRY_ENVIRONMENT: ${{secrets.SENTRY_ENVIRONMENT}}  
 
 jobs:
   build:
