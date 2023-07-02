@@ -19,7 +19,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:redux/redux.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.5.8";
+const String appVersion = "v2.5.9";
 
 void main() async {
   runZonedGuarded(
@@ -31,7 +31,7 @@ void main() async {
       FirebaseAnalytics.instance.logAppOpen();
       await SentryFlutter.init(
         (options) {
-          options.environment = 'develop';
+          // options.environment = 'develop';
           options.release = 'quran-ayat-app@$appVersion';
           options.tracesSampleRate = 1.0;
         },
