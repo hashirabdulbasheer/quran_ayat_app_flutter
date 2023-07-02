@@ -127,7 +127,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
                   TextButton(
                     onPressed: () {
                       QuranLogger.logE(StateError(" this is a test crash"));
-                      throw StateError(" this is a test crash")
+                      throw StateError(" this is a test crash");
                     },
                     child: const Text("Test Crash App"),
                   ),
