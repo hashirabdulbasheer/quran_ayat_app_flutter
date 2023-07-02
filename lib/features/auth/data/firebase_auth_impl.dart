@@ -153,9 +153,11 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
         stacktrace,
       );
 
+      updateToken();
+
       return QuranResponse(
         isSuccessful: false,
-        message: "Firebase: Update Error: ${error.toString()}",
+        message: "Error updating, please try again later.",
       );
     }
   }
