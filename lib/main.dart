@@ -19,7 +19,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:redux/redux.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.6.2";
+const String appVersion = "v2.6.3";
 
 void main() async {
   runZonedGuarded(
