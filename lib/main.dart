@@ -31,7 +31,7 @@ void main() async {
       FirebaseAnalytics.instance.logAppOpen();
       await SentryFlutter.init(
         (options) {
-          options.environment = 'develop';
+          // options.environment = 'develop';
           options.release = 'quran-ayat-app@$appVersion';
           options.tracesSampleRate = 1.0;
         },
