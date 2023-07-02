@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'composer.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
@@ -19,23 +22,45 @@ import 'package:redux/redux.dart';
 const String appVersion = "v2.5.7";
 
 void main() async {
-  usePathUrlStrategy();
-  WidgetsFlutterBinding.ensureInitialized();
-  await QuranHiveNotesEngine.instance.initialize();
-  await QuranAuthFactory.engine.initialize();
-  FirebaseAnalytics.instance.logAppOpen();
-  runApp(MyApp(
-    homeScreen: StoreBuilder<AppState>(
-      rebuildOnChange: false,
-      onInit: (store) => store.dispatch(AppStateInitializeAction()),
-      builder: (
-        BuildContext context,
-        Store<AppState> store,
-      ) =>
-          QuranComposer.composeAyatScreen(),
-    ),
-  ));
-  _loadQuranWords();
+  runZonedGuarded(
+    () async {
+      usePathUrlStrategy();
+      WidgetsFlutterBinding.ensureInitialized();
+      await QuranHiveNotesEngine.instance.initialize();
+      await QuranAuthFactory.engine.initialize();
+      FirebaseAnalytics.instance.logAppOpen();
+      await SentryFlutter.init(
+        (options) {
+          options.environment = 'develop';
+          options.release = 'quran-ayat-app@$appVersion';
+          options.tracesSampleRate = 1.0;
+        },
+      );
+
+      runApp(MyApp(
+        homeScreen: StoreBuilder<AppState>(
+          rebuildOnChange: false,
+          onInit: (store) => store.dispatch(AppStateInitializeAction()),
+          builder: (
+            BuildContext context,
+            Store<AppState> store,
+          ) =>
+              QuranComposer.composeAyatScreen(),
+        ),
+      ));
+
+      _loadQuranWords();
+    },
+    (
+      exception,
+      stackTrace,
+    ) async {
+      await Sentry.captureException(
+        exception,
+        stackTrace: stackTrace,
+      );
+    },
+  );
 }
 
 class MyApp extends StatefulWidget {
