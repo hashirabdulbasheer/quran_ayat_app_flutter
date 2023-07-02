@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:quran_ayat/utils/logger_utils.dart';
 
 import 'quran_data_interface.dart';
 
@@ -23,11 +24,16 @@ class QuranFirebaseEngine implements QuranDataSource {
     await newPostRef.set(item);
     try {
       var _ = await ref.set(item);
-    } catch (_) {
-      return false;
+
+      return true;
+    } catch (error, stacktrace) {
+      QuranLogger.logS(
+        error,
+        stacktrace,
+      );
     }
 
-    return true;
+    return false;
   }
 
   @override
@@ -48,10 +54,16 @@ class QuranFirebaseEngine implements QuranDataSource {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
     try {
       var _ = await ref.set(item);
-    } catch (_) {
-      return false;
+
+      return true;
+    } catch (error, stacktrace) {
+      QuranLogger.logS(
+        error,
+        stacktrace,
+      );
     }
-    return true;
+
+    return false;
   }
 
   @override
@@ -62,11 +74,16 @@ class QuranFirebaseEngine implements QuranDataSource {
     await ref.remove();
     try {
       var _ = await ref.remove();
-    } catch (_) {
-      return false;
+
+      return true;
+    } catch (error, stacktrace) {
+      QuranLogger.logS(
+        error,
+        stacktrace,
+      );
     }
 
-    return true;
+    return false;
   }
 
   @override
