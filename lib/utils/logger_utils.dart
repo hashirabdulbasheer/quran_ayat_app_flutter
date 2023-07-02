@@ -14,11 +14,10 @@ class QuranLogger {
   static void logE(Object exception) {
     if (kDebugMode) {
       print(exception);
-    } else {
-      Sentry.captureException(
-        exception,
-      );
     }
+    Sentry.captureException(
+      exception,
+    );
   }
 
   static void logS(
