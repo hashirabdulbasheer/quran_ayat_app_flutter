@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:redux/redux.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 /// enable/disable logging
 class QuranLogger {
@@ -13,6 +14,24 @@ class QuranLogger {
   static void logE(Object exception) {
     if (kDebugMode) {
       print(exception);
+    } else {
+      Sentry.captureException(
+        exception,
+      );
+    }
+  }
+
+  static void logS(
+    Object exception,
+    dynamic stacktrace,
+  ) {
+    if (kDebugMode) {
+      print(exception);
+    } else {
+      Sentry.captureException(
+        exception,
+        stackTrace: stacktrace,
+      );
     }
   }
 

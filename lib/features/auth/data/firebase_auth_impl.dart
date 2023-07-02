@@ -116,9 +116,9 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
 
   @override
   QuranUser? getUser() {
-    // if (_user != null) {
-    //   return _user;
-    // }
+    if (_user != null) {
+      return _user;
+    }
     FirebaseAuth.instance.currentUser?.reload();
     FirebaseAuth.instance.currentUser?.getIdToken(true);
     User? user = FirebaseAuth.instance.currentUser;
@@ -139,12 +139,27 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
 
   @override
   Future<QuranResponse> update(String name) async {
-    await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
+    try {
+      final _ =
+          await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
 
-    return QuranResponse(
-      isSuccessful: true,
-      message: "Successfully updated user 👍",
-    );
+      return QuranResponse(
+        isSuccessful: true,
+        message: "Successfully updated user 👍",
+      );
+    } catch (error, stacktrace) {
+      QuranLogger.logS(
+        error,
+        stacktrace,
+      );
+
+      updateToken();
+
+      return QuranResponse(
+        isSuccessful: false,
+        message: "Error updating, please try again later.",
+      );
+    }
   }
 
   @override

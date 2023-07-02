@@ -50,3 +50,4 @@ GoogleService-Info.plist
 /lib/firebase_options.dart
 commands.txt
 /ios/firebase_app_id_file.json
+private_commands.txt
