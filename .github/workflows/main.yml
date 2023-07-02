@@ -8,9 +8,7 @@ on:
   workflow_dispatch:
   
 env:
-  FIREBASE_OPTIONS: ${{secrets.FIREBASE_OPTIONS}}  
-  SENTRY_DSN: ${{secrets.SENTRY_DSN}}  
-  SENTRY_ENVIRONMENT: ${{secrets.SENTRY_ENVIRONMENT}}  
+  FIREBASE_OPTIONS: ${{secrets.FIREBASE_OPTIONS}}
 
 jobs:
   build:
@@ -31,7 +29,7 @@ jobs:
       - name: Create Firebase options file
         run: echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
       - name: Run Build Web
-        run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html --dart-define SENTRY_DSN='$SENTRY_DSN'  --dart-define SENTRY_ENVIRONMENT='$SENTRY_ENVIRONMENT'
+        run: flutter build web --release --base-href="/apps/quran-ayat/" --web-renderer=html --dart-define SENTRY_DSN='${{secrets.SENTRY_DSN}}'  --dart-define SENTRY_ENVIRONMENT='${{secrets.SENTRY_ENVIRONMENT}}'
 
       - name: Deploy
         run: |
