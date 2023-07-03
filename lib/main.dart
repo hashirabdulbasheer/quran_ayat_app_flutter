@@ -5,6 +5,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'composer.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
+import 'features/core/domain/env.dart';
 import 'features/notes/data/hive_notes_impl.dart';
 import 'main_common.dart';
 import 'misc/url/url_strategy.dart';
@@ -26,6 +27,12 @@ void main() async {
       await QuranHiveNotesEngine.instance.initialize();
       await QuranAuthFactory.engine.initialize();
       FirebaseAnalytics.instance.logAppOpen();
+
+      BuildEnvironment.init(
+        flavor: BuildFlavor.production,
+        baseUrl: '',
+      );
+
       await SentryFlutter.init(
         (options) {
           // options.environment = 'develop';
