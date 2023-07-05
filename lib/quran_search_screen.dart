@@ -366,7 +366,10 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
         // print(status);
       },
       onError: (error) {
-        QuranLogger.logE(error);
+        QuranLogger.logE(error, {
+          "method": "search-initialize",
+          "error": error.toString(),
+        },);
       },
     );
     _log("Search a word");

@@ -105,7 +105,13 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
         );
       }
     } catch (e) {
-      QuranLogger.logE(e);
+      QuranLogger.logE(
+        e,
+        {
+          "method": "signup",
+          "error": e.toString(),
+        },
+      );
     }
 
     return QuranResponse(
@@ -151,6 +157,11 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
       QuranLogger.logS(
         error,
         stacktrace,
+        {
+          "method": "firebase-auth-update",
+          "error": error.toString(),
+          "stacktrace": stacktrace.toString(),
+        },
       );
 
       updateToken();
