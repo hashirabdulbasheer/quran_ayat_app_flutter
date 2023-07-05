@@ -30,6 +30,11 @@ class QuranFirebaseEngine implements QuranDataSource {
       QuranLogger.logS(
         error,
         stacktrace,
+        {
+          "method": "firebase-create",
+          "error": error.toString(),
+          "stacktrace": stacktrace.toString(),
+        },
       );
     }
 
@@ -60,6 +65,11 @@ class QuranFirebaseEngine implements QuranDataSource {
       QuranLogger.logS(
         error,
         stacktrace,
+        {
+          "method": "firebase-update",
+          "error": error.toString(),
+          "stacktrace": stacktrace.toString(),
+        },
       );
     }
 
@@ -80,6 +90,11 @@ class QuranFirebaseEngine implements QuranDataSource {
       QuranLogger.logS(
         error,
         stacktrace,
+        {
+          "method": "firebase-delete",
+          "error": error.toString(),
+          "stacktrace": stacktrace.toString(),
+        },
       );
     }
 

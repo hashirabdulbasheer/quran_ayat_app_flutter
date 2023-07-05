@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -11,24 +12,30 @@ class QuranLogger {
     }
   }
 
-  static void logE(Object exception) {
-    if (kDebugMode) {
-      print(exception);
-    }
-    Sentry.captureException(
-      exception,
-    );
-  }
-
-  static void logS(
+  static void logE(
     Object exception,
-    dynamic stacktrace,
+    Map<String, String>? details,
   ) {
     if (kDebugMode) {
       print(exception);
     }
     Sentry.captureException(
       exception,
+      hint: details != null ? Hint.withMap(details) : null,
+    );
+  }
+
+  static void logS(
+    Object exception,
+    dynamic stacktrace,
+    Map<String, String>? details,
+  ) {
+    if (kDebugMode) {
+      print(exception);
+    }
+    Sentry.captureException(
+      exception,
+      hint: details != null ? Hint.withMap(details) : null,
       stackTrace: stacktrace,
     );
   }

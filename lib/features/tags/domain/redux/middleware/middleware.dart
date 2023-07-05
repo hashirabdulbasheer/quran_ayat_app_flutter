@@ -20,10 +20,10 @@ List<Middleware<AppState>> createTagOperationsMiddleware() {
 }
 
 void _initializeTagsMiddleware(
-    Store<AppState> store,
-    InitializeTagsAction action,
-    NextDispatcher next,
-    ) {
+  Store<AppState> store,
+  InitializeTagsAction action,
+  NextDispatcher next,
+) {
   // Initialize tags
   store.dispatch(FetchTagsAction());
   next(action);
@@ -130,7 +130,13 @@ void _addTagMiddleware(
         store.dispatch(FetchTagsAction());
       });
     } catch (error) {
-      QuranLogger.logE(error);
+      QuranLogger.logE(
+        error,
+        {
+          "method": "_addTagMiddleware",
+          "error": error.toString(),
+        },
+      );
     }
   }
   next(action);
@@ -173,7 +179,13 @@ void _removeTagMiddleware(
         store.dispatch(FetchTagsAction());
       });
     } catch (error) {
-      QuranLogger.logE(error);
+      QuranLogger.logE(
+        error,
+        {
+          "method": "_removeTagMiddleware",
+          "error": error.toString(),
+        },
+      );
     }
   }
   next(action);

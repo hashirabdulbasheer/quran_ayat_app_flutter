@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/bookmark.dart';
 import 'package:noble_quran/models/surah_title.dart';
@@ -12,6 +11,7 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
@@ -239,8 +239,8 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
             title: const Text("Quran"),
             actions: [
               IconButton(
-                tooltip: "Copy to clipboard",
-                onPressed: () => _onCopyToClipboardIconPressed(context),
+                tooltip: "Share",
+                onPressed: () => _shareAya(),
                 icon: const Icon(Icons.share),
               ),
               IconButton(
@@ -500,27 +500,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
       );
     } else {
       _showMessage(QuranStrings.contPlayMessage);
-    }
-  }
-
-  Future<void> _onCopyToClipboardIconPressed(BuildContext context) async {
-    int? surahIndex = _selectedSurah?.number;
-    if (surahIndex != null) {
-      String surahName = _surahTitles[surahIndex - 1].transliterationEn;
-      int ayaIndex = _selectedAyat;
-      String shareString = await QuranUtils.shareString(
-        surahName,
-        surahIndex,
-        ayaIndex,
-      );
-      Clipboard.setData(ClipboardData(text: shareString)).then((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Copied to clipboard 👍"),
-          ),
-        );
-      });
-      QuranLogger.logAnalytics("share");
     }
   }
 
@@ -805,6 +784,26 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
 
   void _saveAppVersion() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("app_version", appVersion,);
+    await prefs.setString(
+      "app_version",
+      appVersion,
+    );
+  }
+
+  Future<void> _shareAya() async {
+    int? surahIndex = _selectedSurah?.number;
+    if (surahIndex != null) {
+      String surahName = _surahTitles[surahIndex - 1].transliterationEn;
+      int ayaIndex = _selectedAyat;
+      String shareString = await QuranUtils.shareString(
+        surahName,
+        surahIndex,
+        ayaIndex,
+      );
+      Share.share(
+        shareString,
+      );
+      QuranLogger.logAnalytics("share");
+    }
   }
 }
