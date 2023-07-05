@@ -1,4 +1,5 @@
 import '../../../models/qr_response_model.dart';
+import '../../../utils/logger_utils.dart';
 import '../../../utils/utils.dart';
 import '../../core/data/quran_data_interface.dart';
 import '../domain/entities/quran_note.dart';
@@ -86,7 +87,8 @@ class QuranNotesEngine implements QuranNotesDataSource {
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
       return await dataSource.delete(
-          "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}",);
+        "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}",
+      );
     }
 
     return false;
@@ -99,7 +101,7 @@ class QuranNotesEngine implements QuranNotesDataSource {
         await dataSource.fetchAll("notes/$userId") as Map<String, dynamic>?;
     for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
       for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
-        if (resultList != null) {
+        if (resultList != null && resultList.isNotEmpty) {
           try {
             Map<String, dynamic>? notesList =
                 resultList["$surahIndex"]["$ayaIndex"] as Map<String, dynamic>?;
@@ -120,10 +122,21 @@ class QuranNotesEngine implements QuranNotesDataSource {
                     ),
                   );
                   notes.add(note);
-                } catch (_) {}
+                } catch (error) {
+                  QuranLogger.logE(
+                    error,
+                    {
+                      "method": "fetchAll notes",
+                      "error": error.toString(),
+                    },
+                  );
+                }
               }
             }
-          } catch (_) {}
+          } catch (_) {
+            // do not add any exception handling here as there will be many exceptions thrown
+            // for invalid indexes.
+          }
         }
       }
     }

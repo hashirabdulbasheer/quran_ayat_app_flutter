@@ -1,3 +1,5 @@
+import 'package:quran_ayat/utils/logger_utils.dart';
+
 import '../../../models/qr_response_model.dart';
 import '../../core/data/quran_data_interface.dart';
 import '../domain/entities/quran_tag.dart';
@@ -73,7 +75,13 @@ class QuranTagsEngine implements QuranTagsDataSource {
         tags.add(masterTag);
       }
     } catch (error) {
-      print(error);
+      QuranLogger.logE(
+        error,
+        {
+          "method": "quran_tags_impl-fetchAll",
+          "error": error.toString(),
+        },
+      );
     }
 
     return tags;
