@@ -74,14 +74,12 @@ class QuranTagsEngine implements QuranTagsDataSource {
         );
         tags.add(masterTag);
       }
-    } catch (error, stacktrace) {
-      QuranLogger.logS(
+    } catch (error) {
+      QuranLogger.logE(
         error,
-        stacktrace,
         {
           "method": "quran_tags_impl-fetchAll",
           "error": error.toString(),
-          "stacktrace": stacktrace.toString(),
         },
       );
     }
