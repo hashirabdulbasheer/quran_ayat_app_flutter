@@ -1,4 +1,5 @@
 import '../../../models/qr_response_model.dart';
+import '../../../utils/logger_utils.dart';
 import '../../../utils/utils.dart';
 import '../../core/data/quran_data_interface.dart';
 import '../domain/entities/quran_note.dart';
@@ -120,10 +121,34 @@ class QuranNotesEngine implements QuranNotesDataSource {
                     ),
                   );
                   notes.add(note);
-                } catch (_) {}
+                } catch (error, stacktrace) {
+
+                  QuranLogger.logS(
+                    error,
+                    stacktrace,
+                    {
+                      "method": "quran_noted_impl-fetchAll",
+                      "error": error.toString(),
+                      "stacktrace": stacktrace.toString(),
+                    },
+                  );
+
+                }
               }
             }
-          } catch (_) {}
+          } catch (error, stacktrace) {
+
+            QuranLogger.logS(
+              error,
+              stacktrace,
+              {
+                "method": "quran_noted_impl-fetchAll",
+                "error": error.toString(),
+                "stacktrace": stacktrace.toString(),
+              },
+            );
+
+          }
         }
       }
     }
