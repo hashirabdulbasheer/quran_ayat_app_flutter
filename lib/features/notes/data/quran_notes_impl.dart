@@ -123,6 +123,8 @@ class QuranNotesEngine implements QuranNotesDataSource {
                   );
                   notes.add(note);
                 } catch (error) {
+                  QuranLogger.addSentryBreadcrumbs(
+                      "surah=$surahIndex aya=$ayaIndex note=${notesList.toString()}",);
                   QuranLogger.logE(
                     error,
                   );

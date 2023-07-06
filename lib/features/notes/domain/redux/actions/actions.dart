@@ -11,6 +11,11 @@ class CreateNoteAction extends AppStateAction {
   CreateNoteAction({
     required this.note,
   });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, note: ${note.toString()}';
+  }
 }
 
 class CreateNoteSucceededAction extends NoteOperationsResponseBaseAction {
@@ -23,6 +28,11 @@ class DeleteNoteAction extends AppStateAction {
   DeleteNoteAction({
     required this.note,
   });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, note: ${note.toString()}';
+  }
 }
 
 class DeleteNoteSucceededAction extends NoteOperationsResponseBaseAction {
@@ -35,6 +45,11 @@ class UpdateNoteAction extends AppStateAction {
   UpdateNoteAction({
     required this.note,
   });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, note: ${note.toString()}';
+  }
 }
 
 class UpdateNoteSucceededAction extends NoteOperationsResponseBaseAction {
@@ -53,6 +68,11 @@ class NotesLoadingAction extends AppStateAction {
   NotesLoadingAction({
     required this.isLoading,
   });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, isLoading: $isLoading}';
+  }
 }
 
 class FetchNotesAction extends AppStateAction {}
@@ -63,6 +83,11 @@ class FetchNotesSucceededAction extends AppStateAction {
   FetchNotesSucceededAction(
     this.fetchedNotes,
   );
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, fetchedNotes: ${fetchedNotes.length}}';
+  }
 }
 
 class NoteOperationsResponseBaseAction extends AppStateAction {
@@ -71,4 +96,9 @@ class NoteOperationsResponseBaseAction extends AppStateAction {
   NoteOperationsResponseBaseAction({
     required this.message,
   });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, message: $message}';
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
 import '../../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../../tags/domain/redux/actions/actions.dart';
@@ -16,5 +17,6 @@ void appStateMiddleware(
     store.dispatch(InitializeTagsAction());
     store.dispatch(InitializeNotesAction());
   }
+  QuranLogger.addSentryBreadcrumbs(action.toString());
   next(action);
 }
