@@ -22,15 +22,6 @@ class QuranFirebaseEngine implements QuranDataSource {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
     DatabaseReference newPostRef = ref.push();
     await newPostRef.set(item);
-    try {
-      var _ = await ref.set(item);
-
-      return true;
-    } catch (error) {
-      QuranLogger.logE(
-        error,
-      );
-    }
 
     return false;
   }
