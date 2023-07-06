@@ -17,7 +17,7 @@ import 'package:redux/redux.dart';
 ///
 
 // TODO: Update before release
-const String appVersion = "v2.6.6";
+const String appVersion = "v2.6.7";
 
 void main() async {
   runZonedGuarded(
