@@ -125,10 +125,6 @@ class QuranNotesEngine implements QuranNotesDataSource {
                 } catch (error) {
                   QuranLogger.logE(
                     error,
-                    {
-                      "method": "fetchAll notes",
-                      "error": error.toString(),
-                    },
                   );
                 }
               }

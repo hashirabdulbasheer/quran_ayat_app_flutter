@@ -222,7 +222,10 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
                               child: TextField(
                                 textAlign: TextAlign.right,
                                 autofocus: true,
-                                style: TextStyle(fontSize: 25, fontFamily: QuranFontFamily.arabic.rawString,),
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontFamily: QuranFontFamily.arabic.rawString,
+                                ),
                                 textDirection: TextDirection.rtl,
                                 onSubmitted: (value) =>
                                     _onSearchTextFieldSubmitted(value),
@@ -366,10 +369,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
         // print(status);
       },
       onError: (error) {
-        QuranLogger.logE(error, {
-          "method": "search-initialize",
-          "error": error.toString(),
-        },);
+        QuranLogger.logE(error);
       },
     );
     _log("Search a word");
