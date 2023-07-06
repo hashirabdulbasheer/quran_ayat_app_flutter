@@ -77,10 +77,6 @@ class QuranTagsEngine implements QuranTagsDataSource {
     } catch (error) {
       QuranLogger.logE(
         error,
-        {
-          "method": "quran_tags_impl-fetchAll",
-          "error": error.toString(),
-        },
       );
     }
 

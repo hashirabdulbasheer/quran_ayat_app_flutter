@@ -22,21 +22,6 @@ class QuranFirebaseEngine implements QuranDataSource {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
     DatabaseReference newPostRef = ref.push();
     await newPostRef.set(item);
-    try {
-      var _ = await ref.set(item);
-
-      return true;
-    } catch (error, stacktrace) {
-      QuranLogger.logS(
-        error,
-        stacktrace,
-        {
-          "method": "firebase-create",
-          "error": error.toString(),
-          "stacktrace": stacktrace.toString(),
-        },
-      );
-    }
 
     return false;
   }
@@ -61,15 +46,9 @@ class QuranFirebaseEngine implements QuranDataSource {
       var _ = await ref.set(item);
 
       return true;
-    } catch (error, stacktrace) {
-      QuranLogger.logS(
+    } catch (error) {
+      QuranLogger.logE(
         error,
-        stacktrace,
-        {
-          "method": "firebase-update",
-          "error": error.toString(),
-          "stacktrace": stacktrace.toString(),
-        },
       );
     }
 
@@ -86,15 +65,9 @@ class QuranFirebaseEngine implements QuranDataSource {
       var _ = await ref.remove();
 
       return true;
-    } catch (error, stacktrace) {
-      QuranLogger.logS(
+    } catch (error) {
+      QuranLogger.logE(
         error,
-        stacktrace,
-        {
-          "method": "firebase-delete",
-          "error": error.toString(),
-          "stacktrace": stacktrace.toString(),
-        },
       );
     }
 

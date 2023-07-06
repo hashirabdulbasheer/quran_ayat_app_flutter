@@ -9,8 +9,13 @@ class FetchTagsSucceededAction extends AppStateAction {
   final List<QuranTag> fetchedTags;
 
   FetchTagsSucceededAction(
-      this.fetchedTags,
-      );
+    this.fetchedTags,
+  );
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, fetchedTags: ${fetchedTags.length}';
+  }
 }
 
 class TagBaseAction extends AppStateAction {
@@ -23,6 +28,11 @@ class TagBaseAction extends AppStateAction {
     required this.ayaIndex,
     required this.tag,
   });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, surahIndex: $surahIndex, ayaIndex: $ayaIndex, tag: $tag}';
+  }
 }
 
 class ModifyTagResponseBaseAction extends AppStateAction {
@@ -31,6 +41,11 @@ class ModifyTagResponseBaseAction extends AppStateAction {
   ModifyTagResponseBaseAction({
     required this.message,
   });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, message: $message}';
+  }
 }
 
 class AddTagAction extends TagBaseAction {
@@ -114,4 +129,3 @@ class DeleteTagFailureAction extends ModifyTagResponseBaseAction {
     required super.message,
   });
 }
-

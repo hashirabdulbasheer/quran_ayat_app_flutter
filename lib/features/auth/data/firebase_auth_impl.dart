@@ -33,7 +33,7 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     String password,
   ) async {
     try {
-      final response = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final _ = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: username,
         password: password,
       );
@@ -107,10 +107,6 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     } catch (e) {
       QuranLogger.logE(
         e,
-        {
-          "method": "signup",
-          "error": e.toString(),
-        },
       );
     }
 
@@ -153,15 +149,9 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
         isSuccessful: true,
         message: "Successfully updated user 👍",
       );
-    } catch (error, stacktrace) {
-      QuranLogger.logS(
+    } catch (error) {
+      QuranLogger.logE(
         error,
-        stacktrace,
-        {
-          "method": "firebase-auth-update",
-          "error": error.toString(),
-          "stacktrace": stacktrace.toString(),
-        },
       );
 
       updateToken();

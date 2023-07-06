@@ -44,6 +44,11 @@ class AppStateLoadingAction extends AppStateAction {
   AppStateLoadingAction({
     required this.isLoading,
   });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, isLoading: $isLoading}';
+  }
 }
 
 class AppStateResetStatusAction extends AppStateAction {}
