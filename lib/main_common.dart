@@ -6,6 +6,7 @@ import 'composer.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
 import 'features/core/domain/env.dart';
+import 'features/newAyat/domain/redux/middleware/middleware.dart';
 import 'features/notes/data/hive_notes_impl.dart';
 import 'features/notes/domain/redux/middleware/middleware.dart';
 import 'features/tags/domain/redux/middleware/middleware.dart';
@@ -42,6 +43,7 @@ class MyAppState extends State<MyApp> {
       LoggerMiddleware<AppState>(),
       ...createTagOperationsMiddleware(),
       ...createNotesMiddleware(),
+      ...createReaderScreenMiddleware(),
     ],
   );
 

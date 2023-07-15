@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+import '../../../../../newAyat/domain/redux/reducers/reducers.dart';
 import '../../../../../notes/domain/redux/reducers/reducer.dart';
 import '../../../../../tags/domain/redux/reducers/reducer.dart';
 import '../../app_state.dart';
@@ -35,6 +36,10 @@ AppState _allOtherReducer(
     ),
     notes: notesReducer(
       state.notes,
+      action,
+    ),
+    reader: readerScreenReducer(
+      state.reader,
       action,
     ),
   );
