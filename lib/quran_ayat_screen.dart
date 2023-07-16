@@ -406,13 +406,13 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                             ),
 
                             /// audio controls
-                            QuranAyatDisplayAudioControlsWidget(
-                              currentlySelectedSurah: _selectedSurah,
-                              currentlySelectedAya: _selectedAyat,
-                              onAudioPlayStatusChanged:
-                                  _onAudioPlayStatusChanged,
-                              continuousMode: _isAudioContinuousModeEnabled,
-                            ),
+                            // QuranAyatDisplayAudioControlsWidget(
+                            //   currentlySelectedSurah: _selectedSurah,
+                            //   currentlySelectedAya: _selectedAyat,
+                            //   onAudioPlayStatusChanged:
+                            //       _onAudioPlayStatusChanged,
+                            //   continuousMode: _isAudioContinuousModeEnabled,
+                            // ),
 
                             /// Tags
                             StoreBuilder<AppState>(

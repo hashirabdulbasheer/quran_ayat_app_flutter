@@ -25,6 +25,15 @@ Reducer<ReaderScreenState> readerScreenReducer =
   TypedReducer<ReaderScreenState, HideLoadingAction>(
     _hideLoadingReducer,
   ),
+  TypedReducer<ReaderScreenState, NextAyaAction>(
+    _nextAyaReducer,
+  ),
+  TypedReducer<ReaderScreenState, PreviousAyaAction>(
+    _previousAyaReducer,
+  ),
+  TypedReducer<ReaderScreenState, SetAudioContinuousPlayMode>(
+    _audioContinuousModeReducer,
+  ),
 ]);
 
 ReaderScreenState _initReaderScreenReducer(
@@ -66,7 +75,7 @@ ReaderScreenState _ayaSelectedReducer(
 
 ReaderScreenState _showLoadingReducer(
   ReaderScreenState state,
-  ShowLoadingAction action,
+  ShowLoadingAction _,
 ) {
   return state.copyWith(
     isLoading: true,
@@ -75,9 +84,50 @@ ReaderScreenState _showLoadingReducer(
 
 ReaderScreenState _hideLoadingReducer(
   ReaderScreenState state,
-  HideLoadingAction action,
+  HideLoadingAction _,
 ) {
   return state.copyWith(
     isLoading: false,
+  );
+}
+
+ReaderScreenState _nextAyaReducer(
+  ReaderScreenState state,
+  NextAyaAction _,
+) {
+  int totalVerses = state.currentSurahDetails().totalVerses;
+  int nextAyat = state.currentAya + 1;
+  if (nextAyat <= totalVerses) {
+    return state.copyWith(
+      currentAya: nextAyat,
+    );
+  }
+
+  // sura completed - stop continuous play
+  return state.copyWith(
+    isAudioContinuousModeEnabled: false,
+  );
+}
+
+ReaderScreenState _previousAyaReducer(
+  ReaderScreenState state,
+  PreviousAyaAction _,
+) {
+  int prevAyat = state.currentAya - 1;
+  if (prevAyat > 0) {
+    return state.copyWith(
+      currentAya: prevAyat,
+    );
+  }
+
+  return state;
+}
+
+ReaderScreenState _audioContinuousModeReducer(
+  ReaderScreenState state,
+  SetAudioContinuousPlayMode action,
+) {
+  return state.copyWith(
+    isAudioContinuousModeEnabled: action.isEnabled,
   );
 }

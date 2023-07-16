@@ -1,7 +1,9 @@
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
 import '../../../../core/domain/app_state/app_state.dart';
+import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
+import '../../../../tags/domain/redux/actions/actions.dart';
 import '../actions/actions.dart';
 
 List<Middleware<AppState>> createReaderScreenMiddleware() {
@@ -17,6 +19,12 @@ List<Middleware<AppState>> createReaderScreenMiddleware() {
     ),
     TypedMiddleware<AppState, ResetFontSizeAction>(
       _resetFontSizeMiddleware,
+    ),
+    TypedMiddleware<AppState, NextAyaAction>(
+      _nextAyaMiddleware,
+    ),
+    TypedMiddleware<AppState, PreviousAyaAction>(
+      _previousAyaMiddleware,
     ),
   ];
 }
@@ -65,5 +73,25 @@ void _resetFontSizeMiddleware(
   store.dispatch(ShowLoadingAction());
   QuranSettingsManager.instance.resetFontSize();
   store.dispatch(HideLoadingAction());
+  next(action);
+}
+
+void _nextAyaMiddleware(
+    Store<AppState> store,
+    NextAyaAction action,
+    NextDispatcher next,
+    ) {
+  store.dispatch(ResetTagsStatusAction());
+  store.dispatch(ResetNotesStatusAction());
+  next(action);
+}
+
+void _previousAyaMiddleware(
+    Store<AppState> store,
+    PreviousAyaAction action,
+    NextDispatcher next,
+    ) {
+  store.dispatch(ResetTagsStatusAction());
+  store.dispatch(ResetNotesStatusAction());
   next(action);
 }

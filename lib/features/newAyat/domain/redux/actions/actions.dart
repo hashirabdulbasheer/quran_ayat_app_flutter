@@ -52,3 +52,20 @@ class ResetFontSizeAction extends AppStateAction {}
 class ShowLoadingAction extends AppStateAction {}
 
 class HideLoadingAction extends AppStateAction {}
+
+class SetAudioContinuousPlayMode extends AppStateAction {
+  final bool isEnabled;
+
+  SetAudioContinuousPlayMode({
+    required this.isEnabled,
+  });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, isEnabled: $isEnabled';
+  }
+}
+
+class NextAyaAction extends AppStateAction {}
+
+class PreviousAyaAction extends AppStateAction {}

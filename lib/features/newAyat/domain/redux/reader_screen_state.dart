@@ -7,11 +7,13 @@ class ReaderScreenState extends Equatable {
   final List<NQSurahTitle> surahTitles;
   final int currentSurah;
   final int currentAya;
+  final bool isAudioContinuousModeEnabled;
   final bool isLoading;
 
   const ReaderScreenState({
     this.surahTitles = const [],
     this.isLoading = false,
+    this.isAudioContinuousModeEnabled = false,
     this.currentSurah = 1,
     this.currentAya = 1,
   });
@@ -20,6 +22,7 @@ class ReaderScreenState extends Equatable {
     List<NQSurahTitle>? surahTitles,
     int? currentSurah,
     int? currentAya,
+    bool? isAudioContinuousModeEnabled,
     bool? isLoading,
   }) {
     return ReaderScreenState(
@@ -27,6 +30,8 @@ class ReaderScreenState extends Equatable {
       currentSurah: currentSurah ?? this.currentSurah,
       currentAya: currentAya ?? this.currentAya,
       isLoading: isLoading ?? this.isLoading,
+      isAudioContinuousModeEnabled:
+          isAudioContinuousModeEnabled ?? this.isAudioContinuousModeEnabled,
     );
   }
 
@@ -40,7 +45,7 @@ class ReaderScreenState extends Equatable {
 
   @override
   String toString() {
-    return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, isLoading: $isLoading";
+    return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading";
   }
 
   @override
@@ -49,5 +54,6 @@ class ReaderScreenState extends Equatable {
         isLoading,
         currentSurah,
         currentAya,
+        isAudioContinuousModeEnabled,
       ];
 }
