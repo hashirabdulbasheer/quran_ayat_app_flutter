@@ -5,15 +5,19 @@ import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/constants/string_constants.dart';
 import '../../ayats/domain/enums/audio_events_enum.dart';
 import '../../ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
+import '../../ayats/presentation/widgets/ayat_display_notes_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_surah_progress_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_transliteration_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_word_by_word_widget.dart';
 import '../../contextList/presentation/quran_context_list_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../settings/domain/theme_manager.dart';
+import '../../tags/presentation/quran_tag_display.dart';
 import '../domain/redux/actions/actions.dart';
 
 class QuranNewAyatScreen extends StatelessWidget {
@@ -26,7 +30,62 @@ class QuranNewAyatScreen extends StatelessWidget {
       child: Scaffold(
         // drawer: null,
         // onDrawerChanged: null,
-        // bottomSheet: Container(),
+        bottomSheet: StoreBuilder<AppState>(
+            builder: (
+                BuildContext context,
+                Store<AppState> store,
+                ) {
+
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                10,
+                10,
+                10,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: _elevatedButtonTheme,
+                          onPressed: () => {
+                            if (_isInteractionAllowedOnScreen(store))
+                              {_moveToPreviousAyat(store,)}
+                            else
+                              {_showMessage(context, QuranStrings.contPlayMessage,)},
+                          },
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: _elevatedButtonIconColor(context,),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: _elevatedButtonTheme,
+                          onPressed: () => {
+                            if (_isInteractionAllowedOnScreen(store,))
+                              {_moveToNextAyat(store,)}
+                            else
+                              {_showMessage(context, QuranStrings.contPlayMessage,)},
+                          },
+                          child: Icon(
+                            Icons.arrow_forward,
+                            color: _elevatedButtonIconColor(context,),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
         appBar: AppBar(
           centerTitle: true,
           title: const Text("Quran"),
@@ -41,167 +100,158 @@ class QuranNewAyatScreen extends StatelessWidget {
             NQSurahTitle currentSurahDetails =
                 store.state.reader.currentSurahDetails();
 
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(
-                20,
-                10,
-                20,
-                10,
-              ),
-              child:  Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  /// header
-                  QuranAyatHeaderWidget(
-                    surahTitles: store.state.reader.surahTitles,
-                    onSurahSelected: (surah) => store
-                        .dispatch(SelectSurahAction(surah: surah.number)),
-                    onAyaNumberSelected: (aya) =>
-                        store.dispatch(SelectAyaAction(aya: aya)),
-                    continuousMode: ValueNotifier(false),
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                  ),
-
-                  /// surah progress
-                  QuranAyatDisplaySurahProgressWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () => _navigateToContextListScreen(
-                            store,
-                            context,
-                          ),
-                          icon: const Icon(
-                            Icons.list_alt,
-                            size: 15,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          onPressed: () => _incrementFontSize(store),
-                          icon: const Icon(
-                            Icons.add,
-                            size: 15,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => _decrementFontSize(store),
-                          icon: const Icon(
-                            Icons.remove,
-                            size: 15,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => _resetFontSize(store),
-                          icon: const Icon(
-                            Icons.refresh,
-                            size: 15,
-                          ),
-                        ),
-                      ],
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  20,
+                  10,
+                  20,
+                  10,
+                ),
+                child:  Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    /// header
+                    QuranAyatHeaderWidget(
+                      surahTitles: store.state.reader.surahTitles,
+                      onSurahSelected: (surah) => store
+                          .dispatch(SelectSurahAction(surah: surah.number)),
+                      onAyaNumberSelected: (aya) =>
+                          store.dispatch(SelectAyaAction(aya: aya)),
+                      continuousMode: ValueNotifier(false),
+                      currentlySelectedSurah: currentSurahDetails,
+                      currentlySelectedAya: currentAyah,
                     ),
-                  ),
 
-                  /// body
-                  Card(
-                    elevation: 5,
-                    child: FutureBuilder<List<List<NQWord>>>(
-                      future: NobleQuran.getSurahWordByWord(
-                        currentSurah,
+                    /// surah progress
+                    QuranAyatDisplaySurahProgressWidget(
+                      currentlySelectedSurah: currentSurahDetails,
+                      currentlySelectedAya: currentAyah,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () => _navigateToContextListScreen(
+                              store,
+                              context,
+                            ),
+                            icon: const Icon(
+                              Icons.list_alt,
+                              size: 15,
+                            ),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                            onPressed: () => _incrementFontSize(store),
+                            icon: const Icon(
+                              Icons.add,
+                              size: 15,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => _decrementFontSize(store),
+                            icon: const Icon(
+                              Icons.remove,
+                              size: 15,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => _resetFontSize(store),
+                            icon: const Icon(
+                              Icons.refresh,
+                              size: 15,
+                            ),
+                          ),
+                        ],
                       ),
-                      // async work
-                      builder: (
-                          BuildContext context,
-                          AsyncSnapshot<List<List<NQWord>>> snapshot,
-                          ) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return SizedBox(
-                              height: 300,
-                              width: MediaQuery.of(context).size.width,
-                              child: const Center(
-                                child: Text('Loading....'),
-                              ),
-                            );
-                          default:
-                            if (snapshot.hasError) {
-                              return Center(
-                                child: Text('Error: ${snapshot.error}'),
-                              );
-                            } else {
-                              List<List<NQWord>> surahWords =
-                              snapshot.data as List<List<NQWord>>;
+                    ),
 
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: QuranAyatDisplayWordByWordWidget(
-                                  words: surahWords[currentAyah - 1],
-                                  continuousMode: ValueNotifier(false),
+                    /// body
+                    Card(
+                      elevation: 5,
+                      child: FutureBuilder<List<List<NQWord>>>(
+                        future: NobleQuran.getSurahWordByWord(
+                          currentSurah,
+                        ),
+                        // async work
+                        builder: (
+                            BuildContext context,
+                            AsyncSnapshot<List<List<NQWord>>> snapshot,
+                            ) {
+                          switch (snapshot.connectionState) {
+                            case ConnectionState.waiting:
+                              return SizedBox(
+                                height: 300,
+                                width: MediaQuery.of(context).size.width,
+                                child: const Center(
+                                  child: Text('Loading....'),
                                 ),
                               );
-                            }
-                        }
-                      },
+                            default:
+                              if (snapshot.hasError) {
+                                return Center(
+                                  child: Text('Error: ${snapshot.error}'),
+                                );
+                              } else {
+                                List<List<NQWord>> surahWords =
+                                snapshot.data as List<List<NQWord>>;
+
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: QuranAyatDisplayWordByWordWidget(
+                                    words: surahWords[currentAyah - 1],
+                                    continuousMode: ValueNotifier(false),
+                                  ),
+                                );
+                              }
+                          }
+                        },
+                      ),
                     ),
-                  ),
 
-                  /// transliterationWidget if enabled
-                  QuranAyatDisplayTransliterationWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                  ),
+                    /// transliterationWidget if enabled
+                    QuranAyatDisplayTransliterationWidget(
+                      currentlySelectedSurah: currentSurahDetails,
+                      currentlySelectedAya: currentAyah,
+                    ),
 
-                  /// translation widget
-                  QuranAyatDisplayTranslationWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                  ),
+                    /// translation widget
+                    QuranAyatDisplayTranslationWidget(
+                      currentlySelectedSurah: currentSurahDetails,
+                      currentlySelectedAya: currentAyah,
+                    ),
 
-                  /// audio controls
-                  QuranAyatDisplayAudioControlsWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                    onAudioPlayStatusChanged:
-                        (event)  => _onAudioPlayStatusChanged(event, store,),
-                    continuousMode: ValueNotifier(store.state.reader.isAudioContinuousModeEnabled),
-                  ),
-/*
-                        /// Tags
-                        StoreBuilder<AppState>(
-                          onDidChange: (old,
-                              updated,) =>
-                              _onStoreDidChange(),
-                          builder: (BuildContext context,
-                              Store<AppState> store,) =>
-                              QuranAyatDisplayTagsWidget(
-                                currentlySelectedSurah: _selectedSurah,
-                                ayaIndex: _selectedAyat,
-                                continuousMode: _isAudioContinuousModeEnabled,
-                              ),
-                        ),
+                    /// audio controls
+                    QuranAyatDisplayAudioControlsWidget(
+                      currentlySelectedSurah: currentSurahDetails,
+                      currentlySelectedAya: currentAyah,
+                      onAudioPlayStatusChanged:
+                          (event)  => _onAudioPlayStatusChanged(event, store,),
+                      continuousMode: ValueNotifier(store.state.reader.isAudioContinuousModeEnabled),
+                    ),
 
-                        /// Notes
-                        StoreBuilder<AppState>(
-                          builder: (BuildContext context,
-                              Store<AppState> store,) =>
-                              QuranAyatDisplayNotesWidget(
-                                currentlySelectedSurah: _selectedSurah,
-                                currentlySelectedAya: _selectedAyat,
-                                continuousMode: _isAudioContinuousModeEnabled,
-                              ),
-                        ),
+                    /// Tags
+                    QuranAyatDisplayTagsWidget(
+                      currentlySelectedSurah: currentSurahDetails,
+                      ayaIndex: currentAyah,
+                      continuousMode: ValueNotifier(store.state.reader.isAudioContinuousModeEnabled),
+                    ),
 
-                        const SizedBox(height: 30),
- */
-                ],
+                    /// Notes
+                    QuranAyatDisplayNotesWidget(
+                      currentlySelectedSurah: currentSurahDetails,
+                      currentlySelectedAya: currentAyah,
+                      continuousMode: ValueNotifier(store.state.reader.isAudioContinuousModeEnabled),
+                    ),
+
+                    const SizedBox(height: 30),
+
+                  ],
+                ),
               ),
             );
           },
@@ -279,6 +329,48 @@ class QuranNewAyatScreen extends StatelessWidget {
   /// display previous aya
   void _moveToPreviousAyat(Store<AppState> store,) {
     store.dispatch(PreviousAyaAction());
+  }
+
+  bool _isInteractionAllowedOnScreen(Store<AppState> store,) {
+    // disable all interactions if continuous play mode is on
+    return !store.state.reader.isAudioContinuousModeEnabled;
+  }
+
+  void _showMessage(BuildContext context, String message,) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  ///
+  /// Theme
+  ///
+
+  ButtonStyle? get _elevatedButtonTheme {
+    // if system dark mode is set then use dark mode buttons
+    // else use gray button
+    if (QuranThemeManager.instance.isDarkMode()) {
+      return ElevatedButton.styleFrom(
+        backgroundColor: Colors.white70,
+        shadowColor: Colors.transparent,
+        textStyle: const TextStyle(color: Colors.black),
+      );
+    }
+
+    return ElevatedButton.styleFrom(
+      backgroundColor: Colors.black12,
+      shadowColor: Colors.transparent,
+      textStyle: const TextStyle(color: Colors.deepPurple),
+    );
+  }
+
+  Color? _elevatedButtonIconColor(BuildContext context,) {
+    // if system dark mode is set then use dark mode buttons
+    // else use primate color
+    if (QuranThemeManager.instance.isDarkMode()) {
+      return null;
+    }
+
+    return Theme.of(context).primaryColor;
   }
 
 }
