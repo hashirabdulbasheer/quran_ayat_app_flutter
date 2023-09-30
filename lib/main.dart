@@ -17,8 +17,36 @@ import 'package:redux/redux.dart';
 ///
 
 // TODO: Update before release
-const String appVersion = "v2.6.9";
+const String appVersion = "v2.7.0";
 
+void main() async {
+  usePathUrlStrategy();
+  WidgetsFlutterBinding.ensureInitialized();
+  await QuranHiveNotesEngine.instance.initialize();
+  await QuranAuthFactory.engine.initialize();
+  FirebaseAnalytics.instance.logAppOpen();
+
+  BuildEnvironment.init(
+    flavor: BuildFlavor.production,
+    baseUrl: '',
+  );
+
+  runApp(MyApp(
+    homeScreen: StoreBuilder<AppState>(
+      rebuildOnChange: false,
+      onInit: (store) => store.dispatch(AppStateInitializeAction()),
+      builder: (
+          BuildContext context,
+          Store<AppState> store,
+          ) =>
+          QuranComposer.composeAyatScreen(),
+    ),
+  ));
+
+  loadQuranWords();
+}
+
+/*
 void main() async {
   runZonedGuarded(
     () async {
@@ -66,3 +94,4 @@ void main() async {
     },
   );
 }
+*/
