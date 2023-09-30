@@ -32,8 +32,12 @@ class QuranThemeManager {
     dividerColor: Colors.white60,
     appBarTheme: const AppBarTheme(
       color: Colors.black,
-      systemOverlayStyle:
-          SystemUiOverlayStyle(systemNavigationBarColor: Colors.black),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.black,
+        statusBarColor: Colors.black,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
     ),
     backgroundColor: const Color(0xFF212121),
     cardColor: Colors.black54,
