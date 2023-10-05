@@ -29,7 +29,8 @@ jobs:
       - name: Create Firebase options file
         run: echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
       - name: Run Build Web
-        run: flutter build web --release --base-href="/apps/quran-ayat/" --dart-define SENTRY_DSN='${{secrets.SENTRY_DSN}}'  --dart-define SENTRY_ENVIRONMENT='${{secrets.SENTRY_ENVIRONMENT}}' --source-maps
+        run: flutter build web --release --base-href="/apps/quran-ayat/" --dart-define SENTRY_DSN='${{secrets.SENTRY_DSN}}'  --dart-define SENTRY_ENVIRONMENT='${{secrets.SENTRY_ENVIRONMENT}}' --source-maps --web-renderer=canvaskit
+
 
       - name: Deploy
         run: |
