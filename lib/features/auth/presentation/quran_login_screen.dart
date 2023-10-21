@@ -42,6 +42,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextField(
+                    autofillHints: const [AutofillHints.email],
                     keyboardType: TextInputType.emailAddress,
                     enabled: !_isLoading,
                     controller: _emailController,

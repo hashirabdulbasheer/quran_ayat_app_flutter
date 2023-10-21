@@ -40,6 +40,7 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
                   TextField(
                     controller: _nameController,
                     enabled: !_isLoading,
+                    autofillHints: const [AutofillHints.name, AutofillHints.username, AutofillHints.creditCardName, AutofillHints.givenName,],
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
@@ -53,6 +54,7 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
                   TextField(
                     controller: _emailController,
                     enabled: !_isLoading,
+                    autofillHints: const [AutofillHints.email],
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
