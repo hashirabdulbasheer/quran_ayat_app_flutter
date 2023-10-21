@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:noble_quran/models/bookmark.dart';
+
 import '../domain/interfaces/bookmark_interface.dart';
 
 class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
@@ -34,8 +35,7 @@ class QuranFirebaseBookmarksEngine implements QuranBookmarksInterface {
       DatabaseReference ref =
           FirebaseDatabase.instance.ref("bookmarks/$userId");
       final snapshot = await ref.get();
-      Map<String, dynamic>? resultList =
-          snapshot.value as Map<String, dynamic>?;
+      dynamic resultList = snapshot.value;
       if (resultList != null) {
         int? sura = resultList["sura"] as int?;
         int? aya = resultList["aya"] as int?;
