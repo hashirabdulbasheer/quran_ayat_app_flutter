@@ -1,4 +1,6 @@
 import 'package:redux/redux.dart';
+
+import '../../../../../auth/domain/auth_factory.dart';
 import '../../../../../newAyat/domain/redux/reducers/reducers.dart';
 import '../../../../../notes/domain/redux/reducers/reducer.dart';
 import '../../../../../tags/domain/redux/reducers/reducer.dart';
@@ -58,6 +60,7 @@ AppState _initializeAppStateReducer(
       state.notes,
       action,
     ),
+    user: QuranAuthFactory.engine?.getUser(),
   );
 }
 
