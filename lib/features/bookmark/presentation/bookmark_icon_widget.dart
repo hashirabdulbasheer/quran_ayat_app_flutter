@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/bookmark.dart';
-import '../domain/bookmarks_manager.dart';
+import 'package:redux/redux.dart';
+
+import '../domain/redux/bookmark_state.dart';
 
 class QuranBookmarkIconWidget extends StatefulWidget {
   final int currentSurahIndex;
@@ -9,11 +12,9 @@ class QuranBookmarkIconWidget extends StatefulWidget {
   final Function onSaveButtonPressed;
   final Function? onCancelButtonPressed;
   final Function? onClearButtonPressed;
-  final QuranBookmarksManager bookmarksManager;
 
   const QuranBookmarkIconWidget({
     Key? key,
-    required this.bookmarksManager,
     required this.currentSurahIndex,
     required this.currentAyaIndex,
     required this.onGoToButtonPressed,
@@ -32,35 +33,40 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<NQBookmark?>(
-      future: widget.bookmarksManager.localEngine.fetch(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<NQBookmark?> snapshot,
-      ) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            );
-          default:
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else {
-              _currentBookmark = snapshot.data;
-
-              return IconButton(
-                tooltip: "display bookmark options",
-                onPressed: () => _showBookmarkAlertDialog(_currentBookmark),
-                icon: _isThisBookmarkedAya(_currentBookmark)
-                    ? const Icon(Icons.bookmark)
-                    : const Icon(Icons.bookmark_border_outlined),
+    return StoreBuilder<BookmarkState>(builder: (
+      BuildContext context,
+      Store<BookmarkState> store,
+    ) {
+      return FutureBuilder<NQBookmark?>(
+        future: store.state.bookmarksManager.localEngine.fetch(),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<NQBookmark?> snapshot,
+        ) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(),
               );
-            }
-        }
-      },
-    );
+            default:
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                _currentBookmark = snapshot.data;
+
+                return IconButton(
+                  tooltip: "display bookmark options",
+                  onPressed: () => _showBookmarkAlertDialog(_currentBookmark),
+                  icon: _isThisBookmarkedAya(_currentBookmark)
+                      ? const Icon(Icons.bookmark)
+                      : const Icon(Icons.bookmark_border_outlined),
+                );
+              }
+          }
+        },
+      );
+    });
   }
 
   void _showBookmarkAlertDialog(NQBookmark? currentBookmark) {
@@ -189,5 +195,4 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
 
     return false;
   }
-
 }

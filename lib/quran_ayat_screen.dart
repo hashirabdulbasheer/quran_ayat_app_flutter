@@ -249,7 +249,6 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 icon: const Icon(Icons.auto_awesome_outlined),
               ),
               QuranBookmarkIconWidget(
-                bookmarksManager: widget.bookmarksManager,
                 currentSurahIndex: surahIndex,
                 currentAyaIndex: _selectedAyat,
                 onSaveButtonPressed: () => {
