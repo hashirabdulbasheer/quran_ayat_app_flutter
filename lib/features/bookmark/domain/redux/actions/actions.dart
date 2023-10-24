@@ -1,10 +1,29 @@
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
 
-class UpdateBookmarkAction extends AppStateAction {
-  final int? surahIndex;
-  final int? ayaIndex;
+// Saves bookmark to local and remote
+class SaveBookmarkAction extends AppStateAction {
+  final int surahIndex;
+  final int ayaIndex;
 
-  UpdateBookmarkAction({
+  SaveBookmarkAction({
+    required this.surahIndex,
+    required this.ayaIndex,
+  });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, surahIndex: $surahIndex, ayaIndex: $ayaIndex';
+  }
+}
+
+class InitBookmarkAction extends AppStateAction {}
+
+// Sets bookmark to state
+class SetBookmarkAction extends AppStateAction {
+  final int surahIndex;
+  final int ayaIndex;
+
+  SetBookmarkAction({
     required this.surahIndex,
     required this.ayaIndex,
   });

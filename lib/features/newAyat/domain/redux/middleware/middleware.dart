@@ -1,5 +1,6 @@
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
+
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
@@ -26,7 +27,18 @@ List<Middleware<AppState>> createReaderScreenMiddleware() {
     TypedMiddleware<AppState, PreviousAyaAction>(
       _previousAyaMiddleware,
     ),
+    TypedMiddleware<AppState, dynamic>(
+      _allOtherReaderMiddleware,
+    ),
   ];
+}
+
+void _allOtherReaderMiddleware(
+  Store<AppState> store,
+  dynamic action,
+  NextDispatcher next,
+) {
+  next(action);
 }
 
 void _initializeMiddleware(
@@ -55,10 +67,10 @@ void _increaseFontSizeMiddleware(
 }
 
 void _decreaseFontSizeMiddleware(
-    Store<AppState> store,
-    DecreaseFontSizeAction action,
-    NextDispatcher next,
-    ) {
+  Store<AppState> store,
+  DecreaseFontSizeAction action,
+  NextDispatcher next,
+) {
   store.dispatch(ShowLoadingAction());
   QuranSettingsManager.instance.decrementFontSize();
   store.dispatch(HideLoadingAction());
@@ -66,10 +78,10 @@ void _decreaseFontSizeMiddleware(
 }
 
 void _resetFontSizeMiddleware(
-    Store<AppState> store,
-    ResetFontSizeAction action,
-    NextDispatcher next,
-    ) {
+  Store<AppState> store,
+  ResetFontSizeAction action,
+  NextDispatcher next,
+) {
   store.dispatch(ShowLoadingAction());
   QuranSettingsManager.instance.resetFontSize();
   store.dispatch(HideLoadingAction());
@@ -77,20 +89,20 @@ void _resetFontSizeMiddleware(
 }
 
 void _nextAyaMiddleware(
-    Store<AppState> store,
-    NextAyaAction action,
-    NextDispatcher next,
-    ) {
+  Store<AppState> store,
+  NextAyaAction action,
+  NextDispatcher next,
+) {
   store.dispatch(ResetTagsStatusAction());
   store.dispatch(ResetNotesStatusAction());
   next(action);
 }
 
 void _previousAyaMiddleware(
-    Store<AppState> store,
-    PreviousAyaAction action,
-    NextDispatcher next,
-    ) {
+  Store<AppState> store,
+  PreviousAyaAction action,
+  NextDispatcher next,
+) {
   store.dispatch(ResetTagsStatusAction());
   store.dispatch(ResetNotesStatusAction());
   next(action);

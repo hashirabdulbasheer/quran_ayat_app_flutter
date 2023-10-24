@@ -1,4 +1,6 @@
+import 'package:quran_ayat/features/bookmark/domain/redux/reducers/reducers.dart';
 import 'package:redux/redux.dart';
+
 import '../actions/actions.dart';
 import '../reader_screen_state.dart';
 
@@ -34,7 +36,19 @@ Reducer<ReaderScreenState> readerScreenReducer =
   TypedReducer<ReaderScreenState, SetAudioContinuousPlayMode>(
     _audioContinuousModeReducer,
   ),
+  TypedReducer<ReaderScreenState, dynamic>(
+    _allOtherReaderReducer,
+  ),
 ]);
+
+ReaderScreenState _allOtherReaderReducer(
+  ReaderScreenState state,
+  dynamic action,
+) {
+  return state.copyWith(
+    bookmarkState: bookmarkReducer(state.bookmarkState, action,),
+  );
+}
 
 ReaderScreenState _initReaderScreenReducer(
   ReaderScreenState state,

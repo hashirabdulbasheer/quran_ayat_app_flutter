@@ -13,9 +13,9 @@ import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'features/auth/domain/auth_factory.dart';
 import 'features/ayats/domain/enums/audio_events_enum.dart';
-import 'features/ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_header_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_notes_widget.dart';
 import 'features/ayats/presentation/widgets/ayat_display_surah_progress_widget.dart';
@@ -248,19 +248,7 @@ class QuranAyatScreenState extends State<QuranAyatScreen> {
                 onPressed: () => _randomVersePressed(),
                 icon: const Icon(Icons.auto_awesome_outlined),
               ),
-              QuranBookmarkIconWidget(
-                currentSurahIndex: surahIndex,
-                currentAyaIndex: _selectedAyat,
-                onSaveButtonPressed: () => {
-                  if (_isInteractionAllowedOnScreen())
-                    {_saveBookmarkDialogAction()}
-                  else
-                    {_showMessage(QuranStrings.contPlayMessage)},
-                },
-                onClearButtonPressed: () => _onBookmarkCleared(context),
-                onGoToButtonPressed: (NQBookmark? bookmark) =>
-                    _navigateToBookmark(bookmark),
-              ),
+              const QuranBookmarkIconWidget(currentSurah: 1, currentAya: 1,),
             ],
           ),
           body: _surahTitles.isEmpty

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/bookmark/domain/redux/middleware/middleware.dart';
 import 'composer.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
@@ -44,6 +45,7 @@ class MyAppState extends State<MyApp> {
       ...createTagOperationsMiddleware(),
       ...createNotesMiddleware(),
       ...createReaderScreenMiddleware(),
+      ...createBookmarkMiddleware(),
     ],
   );
 
