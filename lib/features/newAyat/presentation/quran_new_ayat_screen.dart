@@ -124,11 +124,11 @@ class QuranNewAyatScreen extends StatelessWidget {
             centerTitle: true,
             title: const Text("Quran"),
             actions: [
-              // IconButton(
-              //   tooltip: "Share",
-              //   onPressed: () => _shareAya(),
-              //   icon: const Icon(Icons.share),
-              // ),
+              IconButton(
+                tooltip: "Share",
+                onPressed: () => store.dispatch(ShareAyaAction()),
+                icon: const Icon(Icons.share),
+              ),
               // IconButton(
               //   tooltip: "Random verse",
               //   onPressed: () => _randomVersePressed(),

@@ -69,3 +69,7 @@ class SetAudioContinuousPlayMode extends AppStateAction {
 class NextAyaAction extends AppStateAction {}
 
 class PreviousAyaAction extends AppStateAction {}
+
+class ShareAyaAction extends AppStateAction {}
+
+class RandomAyaAction extends AppStateAction {}

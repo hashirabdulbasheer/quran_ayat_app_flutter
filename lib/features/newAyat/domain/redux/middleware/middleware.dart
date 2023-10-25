@@ -1,6 +1,9 @@
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
+import 'package:share_plus/share_plus.dart';
 
+import '../../../../../utils/logger_utils.dart';
+import '../../../../../utils/utils.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
@@ -26,6 +29,12 @@ List<Middleware<AppState>> createReaderScreenMiddleware() {
     ),
     TypedMiddleware<AppState, PreviousAyaAction>(
       _previousAyaMiddleware,
+    ),
+    TypedMiddleware<AppState, ShareAyaAction>(
+      _shareAyaReaderMiddleware,
+    ),
+    TypedMiddleware<AppState, RandomAyaAction>(
+      _randomAyaReaderMiddleware,
     ),
     TypedMiddleware<AppState, dynamic>(
       _allOtherReaderMiddleware,
@@ -105,5 +114,30 @@ void _previousAyaMiddleware(
 ) {
   store.dispatch(ResetTagsStatusAction());
   store.dispatch(ResetNotesStatusAction());
+  next(action);
+}
+
+void _shareAyaReaderMiddleware(
+  Store<AppState> store,
+  dynamic action,
+  NextDispatcher next,
+) async {
+  String shareString = await QuranUtils.shareString(
+    store.state.reader.currentSurahDetails().transliterationEn,
+    store.state.reader.currentSurah,
+    store.state.reader.currentAya,
+  );
+  Share.share(
+    shareString,
+  );
+  QuranLogger.logAnalytics("share");
+  next(action);
+}
+
+void _randomAyaReaderMiddleware(
+  Store<AppState> store,
+  dynamic action,
+  NextDispatcher next,
+) {
   next(action);
 }

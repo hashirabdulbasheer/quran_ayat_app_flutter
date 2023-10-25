@@ -55,7 +55,7 @@ class QuranUtils {
     int surah,
     int aya,
   ) async {
-    int actualSuraIndex = surah - 1;
+    int actualSuraIndex = surah;
     int actualAyaIndex = aya - 1;
     NQSurah arabicSurah = await NobleQuran.getSurahArabic(actualSuraIndex);
     NQTranslation translation =
