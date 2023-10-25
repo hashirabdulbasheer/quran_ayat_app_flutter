@@ -129,11 +129,11 @@ class QuranNewAyatScreen extends StatelessWidget {
                 onPressed: () => store.dispatch(ShareAyaAction()),
                 icon: const Icon(Icons.share),
               ),
-              // IconButton(
-              //   tooltip: "Random verse",
-              //   onPressed: () => _randomVersePressed(),
-              //   icon: const Icon(Icons.auto_awesome_outlined),
-              // ),
+              IconButton(
+                tooltip: "Random verse",
+                onPressed: () => store.dispatch(RandomAyaAction()),
+                icon: const Icon(Icons.auto_awesome_outlined),
+              ),
               QuranBookmarkIconWidget(
                 currentSurah: currentSurah,
                 currentAya: currentAyah,

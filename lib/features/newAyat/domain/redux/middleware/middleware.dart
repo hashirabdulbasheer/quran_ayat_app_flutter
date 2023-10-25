@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
@@ -139,5 +141,13 @@ void _randomAyaReaderMiddleware(
   dynamic action,
   NextDispatcher next,
 ) {
+  try {
+    int randomSurahIndex = Random().nextInt(114);
+    int randomAyaIndex = Random().nextInt(
+      store.state.reader.surahTitles[randomSurahIndex-1].totalVerses,
+    ) + 1;
+    store.dispatch(SelectSurahAction(surah: randomSurahIndex));
+    store.dispatch(SelectAyaAction(aya: randomAyaIndex));
+  } catch (_) {}
   next(action);
 }
