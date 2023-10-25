@@ -46,7 +46,10 @@ ReaderScreenState _allOtherReaderReducer(
   dynamic action,
 ) {
   return state.copyWith(
-    bookmarkState: bookmarkReducer(state.bookmarkState, action,),
+    bookmarkState: bookmarkReducer(
+      state.bookmarkState,
+      action,
+    ),
   );
 }
 
@@ -63,8 +66,8 @@ ReaderScreenState _setSurahTitlesReducer(
 ) {
   return state.copyWith(
     surahTitles: action.surahs,
-    currentSurah: 0,
-    currentAya: 1,
+    currentSurah: state.bookmarkState.suraIndex ?? 0,
+    currentAya: state.bookmarkState.ayaIndex ?? 1,
   );
 }
 

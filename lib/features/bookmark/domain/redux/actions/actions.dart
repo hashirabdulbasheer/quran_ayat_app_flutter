@@ -17,19 +17,3 @@ class SaveBookmarkAction extends AppStateAction {
 }
 
 class InitBookmarkAction extends AppStateAction {}
-
-// Sets bookmark to state
-class SetBookmarkAction extends AppStateAction {
-  final int surahIndex;
-  final int ayaIndex;
-
-  SetBookmarkAction({
-    required this.surahIndex,
-    required this.ayaIndex,
-  });
-
-  @override
-  String toString() {
-    return '{action: ${super.toString()}, surahIndex: $surahIndex, ayaIndex: $ayaIndex';
-  }
-}

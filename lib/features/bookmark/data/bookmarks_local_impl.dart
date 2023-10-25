@@ -16,7 +16,7 @@ class QuranLocalBookmarksEngine implements QuranBookmarksInterface {
       surah: sura,
       ayat: aya,
       word: 0,
-      seconds: 0,
+      seconds: DateTime.now().millisecondsSinceEpoch,
       pixels: 0,
     );
     await prefs.setString(
