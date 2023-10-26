@@ -144,10 +144,15 @@ void _randomAyaReaderMiddleware(
   try {
     int randomSurahIndex = Random().nextInt(114);
     int randomAyaIndex = Random().nextInt(
-      store.state.reader.surahTitles[randomSurahIndex-1].totalVerses,
-    ) + 1;
-    store.dispatch(SelectSurahAction(surah: randomSurahIndex));
-    store.dispatch(SelectAyaAction(aya: randomAyaIndex));
+          store.state.reader.surahTitles[randomSurahIndex - 1].totalVerses,
+        ) +
+        1;
+    store.dispatch(
+      SelectParticularAyaAction(
+        sura: randomSurahIndex,
+        aya: randomAyaIndex,
+      ),
+    );
   } catch (_) {}
   next(action);
 }

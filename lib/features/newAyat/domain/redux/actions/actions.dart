@@ -43,6 +43,21 @@ class SelectAyaAction extends AppStateAction {
   }
 }
 
+class SelectParticularAyaAction extends AppStateAction {
+  final int sura;
+  final int aya;
+
+  SelectParticularAyaAction({
+    required this.sura,
+    required this.aya,
+  });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, sura: $sura, aya: $aya';
+  }
+}
+
 class IncreaseFontSizeAction extends AppStateAction {}
 
 class DecreaseFontSizeAction extends AppStateAction {}

@@ -36,6 +36,9 @@ Reducer<ReaderScreenState> readerScreenReducer =
   TypedReducer<ReaderScreenState, SetAudioContinuousPlayMode>(
     _audioContinuousModeReducer,
   ),
+  TypedReducer<ReaderScreenState, SelectParticularAyaAction>(
+    _particularAyaSelectedReducer,
+  ),
   TypedReducer<ReaderScreenState, dynamic>(
     _allOtherReaderReducer,
   ),
@@ -78,6 +81,16 @@ ReaderScreenState _surahSelectedReducer(
   return state.copyWith(
     currentSurah: action.surah - 1,
     currentAya: 1,
+  );
+}
+
+ReaderScreenState _particularAyaSelectedReducer(
+  ReaderScreenState state,
+  SelectParticularAyaAction action,
+) {
+  return state.copyWith(
+    currentSurah: action.sura - 1,
+    currentAya: action.aya,
   );
 }
 
