@@ -99,7 +99,7 @@ ReaderScreenState _particularAyaSelectedReducer(
       suraIndex < 114) {
     return state.copyWith(
       currentSurah: suraIndex - 1,
-      currentAya: action.aya,
+      currentAya: ayaIndex,
     );
   }
 

@@ -15,7 +15,7 @@ class ReaderScreenState extends Equatable {
 
   const ReaderScreenState({
     this.surahTitles = const [],
-    this.currentSurah = 1,
+    this.currentSurah = 0,
     this.currentAya = 1,
     this.isAudioContinuousModeEnabled = false,
     this.isLoading = false,

@@ -275,7 +275,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                       store,
                     ),
                     continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled),
+                        store.state.reader.isAudioContinuousModeEnabled,),
                   ),
 
                   /// Tags
@@ -283,7 +283,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                     currentlySelectedSurah: currentSurahDetails,
                     ayaIndex: currentAyah,
                     continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled),
+                        store.state.reader.isAudioContinuousModeEnabled,),
                   ),
 
                   /// Notes
@@ -291,7 +291,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                     currentlySelectedSurah: currentSurahDetails,
                     currentlySelectedAya: currentAyah,
                     continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled),
+                        store.state.reader.isAudioContinuousModeEnabled,),
                   ),
 
                   const SizedBox(height: 30),
