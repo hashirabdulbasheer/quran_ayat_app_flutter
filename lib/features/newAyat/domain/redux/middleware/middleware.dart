@@ -149,7 +149,7 @@ void _randomAyaReaderMiddleware(
         1;
     store.dispatch(
       SelectParticularAyaAction(
-        sura: randomSurahIndex,
+        surah: randomSurahIndex,
         aya: randomAyaIndex,
       ),
     );

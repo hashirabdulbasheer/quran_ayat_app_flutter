@@ -432,4 +432,5 @@ class QuranNewAyatScreen extends StatelessWidget {
 
     return Theme.of(context).primaryColor;
   }
+
 }

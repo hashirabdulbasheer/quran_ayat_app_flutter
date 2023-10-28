@@ -69,8 +69,8 @@ ReaderScreenState _setSurahTitlesReducer(
 ) {
   return state.copyWith(
     surahTitles: action.surahs,
-    currentSurah: state.bookmarkState.suraIndex ?? 0,
-    currentAya: state.bookmarkState.ayaIndex ?? 1,
+    currentSurah: state.bookmarkState.suraIndex ?? state.currentSurah,
+    currentAya: state.bookmarkState.ayaIndex ?? state.currentAya,
   );
 }
 
@@ -78,29 +78,46 @@ ReaderScreenState _surahSelectedReducer(
   ReaderScreenState state,
   SelectSurahAction action,
 ) {
-  return state.copyWith(
-    currentSurah: action.surah - 1,
-    currentAya: 1,
-  );
+  int suraIndex = action.surah;
+  if (suraIndex >= 0 && suraIndex < 114) {
+    return state.copyWith(
+      currentSurah: action.surah - 1,
+      currentAya: 1,
+    );
+  }
+
+  return state;
 }
 
 ReaderScreenState _particularAyaSelectedReducer(
   ReaderScreenState state,
   SelectParticularAyaAction action,
 ) {
-  return state.copyWith(
-    currentSurah: action.sura - 1,
-    currentAya: action.aya,
-  );
+  int suraIndex = action.surah;
+  int ayaIndex = action.aya;
+  if (suraIndex >= 0 &&
+      suraIndex < 114) {
+    return state.copyWith(
+      currentSurah: suraIndex - 1,
+      currentAya: action.aya,
+    );
+  }
+
+  return state;
 }
 
 ReaderScreenState _ayaSelectedReducer(
   ReaderScreenState state,
   SelectAyaAction action,
 ) {
-  return state.copyWith(
-    currentAya: action.aya,
-  );
+  int ayaIndex = action.aya;
+  if (ayaIndex <= state.currentSurahDetails().totalVerses) {
+    return state.copyWith(
+      currentAya: action.aya,
+    );
+  }
+
+  return state;
 }
 
 ReaderScreenState _showLoadingReducer(

@@ -44,17 +44,17 @@ class SelectAyaAction extends AppStateAction {
 }
 
 class SelectParticularAyaAction extends AppStateAction {
-  final int sura;
+  final int surah;
   final int aya;
 
   SelectParticularAyaAction({
-    required this.sura,
+    required this.surah,
     required this.aya,
   });
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, sura: $sura, aya: $aya';
+    return '{action: ${super.toString()}, surah: $surah, aya: $aya';
   }
 }
 
