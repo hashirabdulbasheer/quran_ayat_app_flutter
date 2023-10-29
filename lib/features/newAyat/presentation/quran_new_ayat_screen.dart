@@ -275,24 +275,29 @@ class QuranNewAyatScreen extends StatelessWidget {
                       store,
                     ),
                     continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled,),
+                      store.state.reader.isAudioContinuousModeEnabled,
+                    ),
                   ),
 
                   /// Tags
-                  QuranAyatDisplayTagsWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    ayaIndex: currentAyah,
-                    continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled,),
-                  ),
+                  if (store.state.user != null)
+                    QuranAyatDisplayTagsWidget(
+                      currentlySelectedSurah: currentSurahDetails,
+                      ayaIndex: currentAyah,
+                      continuousMode: ValueNotifier(
+                        store.state.reader.isAudioContinuousModeEnabled,
+                      ),
+                    ),
 
                   /// Notes
-                  QuranAyatDisplayNotesWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                    continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled,),
-                  ),
+                  if (store.state.user != null)
+                    QuranAyatDisplayNotesWidget(
+                      currentlySelectedSurah: currentSurahDetails,
+                      currentlySelectedAya: currentAyah,
+                      continuousMode: ValueNotifier(
+                        store.state.reader.isAudioContinuousModeEnabled,
+                      ),
+                    ),
 
                   const SizedBox(height: 30),
                 ],
@@ -432,5 +437,4 @@ class QuranNewAyatScreen extends StatelessWidget {
 
     return Theme.of(context).primaryColor;
   }
-
 }
