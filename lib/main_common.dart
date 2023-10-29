@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/bookmark/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/middleware/middleware.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/quran_search_screen.dart';
 import 'package:redux/redux.dart';
 
+import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
 import 'features/newAyat/domain/redux/middleware/middleware.dart';
 import 'features/notes/domain/redux/middleware/middleware.dart';
@@ -50,6 +52,7 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
     QuranThemeManager.instance.registerListener(onThemeChangedEvent);
     QuranThemeManager.instance.loadThemeAndNotifyListeners();
     _handleUrlPathsForWeb(
@@ -60,6 +63,7 @@ class MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
+    QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
     QuranThemeManager.instance.removeListeners();
     super.dispose();
   }
@@ -84,6 +88,11 @@ class MyAppState extends State<MyApp> {
   void onThemeChangedEvent(String? _) async {
     // reload to apply the new theme
     setState(() {});
+  }
+
+  void _authChangeListener() async {
+    print("_authChangeListener");
+    store.dispatch(InitBookmarkAction());
   }
 }
 

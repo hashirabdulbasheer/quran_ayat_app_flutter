@@ -30,43 +30,48 @@ void _initBookmarkMiddleware(
   if (user != null) {
     // logged in -> with network -> try remote
     // merge if there is a difference between remote and local
+    // local is given precedence over remote and remote gets overridden by local
     QuranFirebaseBookmarksEngine remote =
         QuranFirebaseBookmarksEngine(userId: user.uid);
     NQBookmark? remoteBookmark = await remote.fetch();
     NQBookmark? localBookmark = await local.fetch();
-    NQBookmark? merged;
     if (remoteBookmark != null && localBookmark != null) {
-      int remoteLastUpdatedTime = remoteBookmark.seconds ?? 0;
-      int localLastUpdatedTime = localBookmark.seconds ?? 0;
-      if (remoteLastUpdatedTime >= localLastUpdatedTime) {
-        // remote was updated later, so thats latest and use that
-        merged = remoteBookmark;
-      } else {
-        // local was latest, so use that, also save it to remote
-        merged = localBookmark;
-      }
-    } else if (remoteBookmark != null) {
-      merged = remoteBookmark;
-    } else if (localBookmark != null) {
-      merged = localBookmark;
-    }
-    if (merged != null) {
-      store.dispatch(SaveBookmarkAction(
-        surahIndex: merged.surah,
-        ayaIndex: merged.ayat,
-      ));
-    }
-    next(action);
-  } else {
-    // user not logged in -> try local
-    NQBookmark? localBookmark = await local.fetch();
-    if (localBookmark != null) {
+      // save local to remote as well
       store.dispatch(SaveBookmarkAction(
         surahIndex: localBookmark.surah,
         ayaIndex: localBookmark.ayat,
       ));
+      store.dispatch(
+        SelectParticularAyaAction(
+          surah: localBookmark.surah,
+          aya: localBookmark.ayat,
+        ),
+      );
+    } else if (remoteBookmark != null) {
+      // save remote to local as well
+      store.dispatch(SaveBookmarkAction(
+        surahIndex: remoteBookmark.surah,
+        ayaIndex: remoteBookmark.ayat,
+      ));
+      store.dispatch(
+        SelectParticularAyaAction(
+          surah: remoteBookmark.surah,
+          aya: remoteBookmark.ayat,
+        ),
+      );
+    } else {
+      // user not logged in -> try local
+      NQBookmark? localBookmark = await local.fetch();
+      if (localBookmark != null) {
+        store.dispatch(SaveBookmarkAction(
+          surahIndex: localBookmark.surah,
+          ayaIndex: localBookmark.ayat,
+        ));
+      }
     }
   }
+
+  next(action);
 }
 
 void _saveBookmarkMiddleware(
