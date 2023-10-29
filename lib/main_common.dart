@@ -95,17 +95,6 @@ class MyAppState extends State<MyApp> {
   }
 }
 
-/// load and save the quran words in memory
-void loadQuranWords() async {
-  QuranSearch.globalQRWords = [];
-  for (var i = 0; i < 114; i++) {
-    List<List<NQWord>> words = await NobleQuran.getSurahWordByWord(i);
-    for (List<NQWord> aya in words) {
-      QuranSearch.globalQRWords.addAll(aya);
-    }
-  }
-}
-
 void _handleUrlPathsForWeb(
   BuildContext context,
   Store<AppState> store,
@@ -121,19 +110,20 @@ void _handleUrlPathsForWeb(
     if (searchString != null && searchString.isNotEmpty) {
       // we have a search url
       // navigate to search screen
-      Future.delayed(
-        const Duration(seconds: 1),
-        () => {
-          Navigator.push<void>(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  QuranSearchScreen(searchString: searchString),
-            ),
-          ),
-        },
-      );
-      QuranLogger.logAnalytics("url-search");
+      // TODO: Implementation search via url params
+      // Future.delayed(
+      //   const Duration(seconds: 1),
+      //   () => {
+      //     Navigator.push<void>(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (context) =>
+      //             QuranSearchScreen(searchString: searchString),
+      //       ),
+      //     ),
+      //   },
+      // );
+      // QuranLogger.logAnalytics("url-search");
     } else {
       // not a search url
       // check for surah/ayat format

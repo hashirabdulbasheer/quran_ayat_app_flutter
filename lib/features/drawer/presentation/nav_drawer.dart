@@ -57,12 +57,13 @@ class QuranNavDrawer extends StatelessWidget {
                 icon: Icons.tag,
                 destination: QuranViewTagsScreen(user: userParam),
               ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Search',
-                icon: Icons.search_rounded,
-                destination: const QuranSearchScreen(),
-              ),
+              // TODO: Search in menu disabled, enable when fixed - Logged IN
+              // QuranNavDrawerRowWidget(
+              //   context: context,
+              //   title: 'Search',
+              //   icon: Icons.search_rounded,
+              //   destination: const QuranSearchScreen(),
+              // ),
               QuranNavDrawerRowWidget(
                 context: context,
                 title: 'Settings',
@@ -96,12 +97,13 @@ class QuranNavDrawer extends StatelessWidget {
               icon: Icons.account_circle_outlined,
               destination: const QuranLoginScreen(),
             ),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Search',
-              icon: Icons.search_rounded,
-              destination: const QuranSearchScreen(),
-            ),
+            // TODO: Search in menu disabled, enable when fixed - Logged OUT
+            // QuranNavDrawerRowWidget(
+            //   context: context,
+            //   title: 'Search',
+            //   icon: Icons.search_rounded,
+            //   destination: const QuranSearchScreen(),
+            // ),
             QuranNavDrawerRowWidget(
               context: context,
               title: 'Settings',

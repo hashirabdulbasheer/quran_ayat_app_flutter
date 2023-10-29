@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 import 'package:flutter/foundation.dart';
+import 'package:noble_quran/models/word.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/material.dart';
 import 'misc/enums/quran_font_family_enum.dart';
@@ -9,6 +10,7 @@ import 'utils/logger_utils.dart';
 import 'utils/nav_utils.dart';
 import 'utils/search_utils.dart';
 
+@Deprecated("Do not use")
 class QuranSearchScreen extends StatefulWidget {
   final String? searchString;
 
@@ -337,7 +339,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
         [
           p.sendPort,
           enteredText,
-          QuranSearch.globalQRWords,
+          List<NQWord>.empty(), // TODO: Init with search words
         ],
       );
       results = await p.first as List<QuranWord>;

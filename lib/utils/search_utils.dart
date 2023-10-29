@@ -4,10 +4,8 @@ import 'package:string_similarity/string_similarity.dart';
 import '../models/qr_word_model.dart';
 import 'utils.dart';
 
+@Deprecated("Removing search - do not use")
 class QuranSearch {
-  /// All quran words
-  static List<NQWord> globalQRWords = [];
-
   ///
   /// Global methods for search
   ///
@@ -35,7 +33,7 @@ class QuranSearch {
     String enteredText, {
     List<NQWord>? allWords,
   }) {
-    List<NQWord> quranWords = allWords ?? QuranSearch.globalQRWords;
+    List<NQWord> quranWords = allWords ?? List<NQWord>.empty();
     List<QuranWord> results = [];
     bool isArabic = QuranUtils.isArabic(enteredText);
     for (NQWord word in quranWords) {

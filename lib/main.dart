@@ -41,6 +41,4 @@ void main() async {
           const QuranNewAyatScreen(),
     ),
   ));
-
-  loadQuranWords();
 }
