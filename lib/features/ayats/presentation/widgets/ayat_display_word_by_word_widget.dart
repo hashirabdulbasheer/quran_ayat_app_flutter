@@ -46,26 +46,27 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                             child: Tooltip(
                               message: '${e.ar} ${e.tr}',
                               child: InkWell(
-                                onTap: () => {
-                                  if (_isInteractionAllowedOnScreen())
-                                    {
-                                      Navigator.push<void>(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              QuranSearchScreen(
-                                            searchString: e.ar,
-                                          ),
-                                        ),
-                                      ),
-                                    }
-                                  else
-                                    {
-                                      _showMessage(
-                                        context,
-                                        QuranStrings.contPlayMessage,
-                                      ),
-                                    },
+                                onTap: ()  {
+                                  // TODO: Fix navigation to search
+                                  // if (_isInteractionAllowedOnScreen())
+                                  //   {
+                                  //     Navigator.push<void>(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             QuranSearchScreen(
+                                  //           searchString: e.ar,
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   }
+                                  // else
+                                  //   {
+                                  //     _showMessage(
+                                  //       context,
+                                  //       QuranStrings.contPlayMessage,
+                                  //     ),
+                                  //   },
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(

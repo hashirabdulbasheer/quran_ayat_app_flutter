@@ -11,7 +11,7 @@ class QuranNavigator {
     int? surahIndex,
     int? ayaIndex,
   }) {
-    // FIXME: Fix navigation to ayat screen
+    // TODO: Fix navigation to ayat screen
     // Navigator.push<void>(
     //   context,
     //   MaterialPageRoute(
