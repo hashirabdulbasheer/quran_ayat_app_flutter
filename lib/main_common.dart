@@ -1,12 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:noble_quran/models/word.dart';
-import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/middleware/middleware.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
-import 'package:quran_ayat/quran_search_screen.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
@@ -16,7 +13,6 @@ import 'features/notes/domain/redux/middleware/middleware.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'features/tags/domain/redux/middleware/middleware.dart';
 import 'utils/logger_utils.dart';
-import 'utils/search_utils.dart';
 
 ///
 /// MAIN COMMON

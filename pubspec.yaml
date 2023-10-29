@@ -30,7 +30,6 @@ dependencies:
   flutter:
     sdk: flutter
   dropdown_search: ^5.0.6
-  string_similarity: ^2.0.0
   shared_preferences: ^2.0.15
   flutter_web_plugins:
     sdk: flutter
