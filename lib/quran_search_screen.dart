@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:isolate';
+
 import 'package:flutter/foundation.dart';
-import 'package:noble_quran/models/word.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter/material.dart';
+import 'package:noble_quran/models/word.dart';
+
 import 'misc/enums/quran_font_family_enum.dart';
 import 'models/qr_word_model.dart';
 import 'utils/logger_utils.dart';
@@ -56,8 +57,6 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     super.dispose();
     _resultsController.close();
     _logController.close();
-    stt.SpeechToText speech = stt.SpeechToText();
-    speech.stop();
   }
 
   @override
@@ -365,6 +364,7 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
 
   /// initialize
   Future<void> _initialize() async {
+    /*
     stt.SpeechToText speech = stt.SpeechToText();
     _isSpeechAvailable = await speech.initialize(
       onStatus: (status) {
@@ -375,10 +375,12 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
       },
     );
     _log("Search a word");
+     */
   }
 
   /// start listening
   Future<void> _startListening() async {
+    /*
     if (_isSpeechAvailable) {
       _log("Listening started");
       stt.SpeechToText speech = stt.SpeechToText();
@@ -407,5 +409,6 @@ class QuranSearchScreenState extends State<QuranSearchScreen> {
     } else {
       _log("The user has denied the use of speech recognition.");
     }
+     */
   }
 }
