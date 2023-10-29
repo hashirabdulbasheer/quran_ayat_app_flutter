@@ -91,7 +91,6 @@ class MyAppState extends State<MyApp> {
   }
 
   void _authChangeListener() async {
-    print("_authChangeListener");
     store.dispatch(InitBookmarkAction());
   }
 }

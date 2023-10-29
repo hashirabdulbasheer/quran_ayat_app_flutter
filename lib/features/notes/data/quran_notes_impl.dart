@@ -99,13 +99,15 @@ class QuranNotesEngine implements QuranNotesDataSource {
   Future<List<QuranNote>> fetchAll(String userId) async {
     List<QuranNote> notes = [];
     dynamic resultListDyn = await dataSource.fetchAll("notes/$userId");
-    final Map<String, dynamic> resultList = Map<String, dynamic>.from(resultListDyn as Map);
+    final Map<String, dynamic> resultList =
+        Map<String, dynamic>.from(resultListDyn as Map);
 
     for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
       for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
         if (resultList != null && resultList.isNotEmpty) {
           try {
-            Map<String, dynamic>? notesList = Map<String, dynamic>.from(resultList["$surahIndex"]["$ayaIndex"] as Map);
+            Map<String, dynamic>? notesList = Map<String, dynamic>.from(
+                resultList["$surahIndex"]["$ayaIndex"] as Map);
             if (notesList != null) {
               for (String notesId in notesList.keys) {
                 // print("$surahIndex:$ayaIndex : ${notesList[notesId]["note"]}");
@@ -124,8 +126,6 @@ class QuranNotesEngine implements QuranNotesDataSource {
                   );
                   notes.add(note);
                 } catch (error) {
-                  QuranLogger.addSentryBreadcrumbs(
-                      "surah=$surahIndex aya=$ayaIndex note=${notesList.toString()}",);
                   QuranLogger.logE(
                     error,
                   );
