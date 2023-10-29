@@ -40,6 +40,7 @@ import 'models/qr_user_model.dart';
 import 'quran_search_screen.dart';
 import 'utils/utils.dart';
 
+@Deprecated('Use QuranNewAyatScreen')
 class QuranAyatScreen extends StatefulWidget {
   final int? surahIndex;
   final int? ayaIndex;
