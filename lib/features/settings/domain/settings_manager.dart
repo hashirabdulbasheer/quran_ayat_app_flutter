@@ -102,7 +102,6 @@ class QuranSettingsManager {
 
   List<QuranSetting> generateSettings() {
     return [
-      _themeSettings,
       _translationSettings,
       _transliterationSettings,
       _audioControlSettings,
