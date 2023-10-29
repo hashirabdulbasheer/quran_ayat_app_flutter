@@ -51,13 +51,12 @@ class QuranTagsEngine implements QuranTagsDataSource {
   Future<List<QuranTag>> fetchAll(String userId) async {
     List<QuranTag> tags = [];
     try {
-      Map<String, dynamic>? resultList = await dataSource
-          .fetchAll("tags-master/$userId") as Map<String, dynamic>?;
+      dynamic resultList = await dataSource.fetchAll("tags-master/$userId");
       if (resultList == null) {
         return [];
       }
       for (String tagKey in resultList.keys) {
-        Map<String, dynamic> tag = resultList[tagKey] as Map<String, dynamic>;
+        Map<String, dynamic>? tag = Map<String, dynamic>.from(resultList[tagKey] as Map);
         QuranTag masterTag = QuranTag(
           id: tagKey,
           name: tag["name"] as String,

@@ -52,7 +52,7 @@ class QuranAyatDisplayAudioControlsWidget extends StatelessWidget {
                     bool isContinuousPlay,
                     Widget? child,
                   ) {
-                    int? surahIndex = currentlySelectedSurah?.number;
+                  int? surahIndex = currentlySelectedSurah?.number;
                     if (surahIndex != null) {
                       return QuranAudioRowWidget(
                         isAudioRecitationContinuousPlayEnabled:

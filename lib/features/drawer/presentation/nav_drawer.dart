@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:quran_ayat/features/settings/domain/constants/setting_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
-import '../../../quran_search_screen.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../auth/presentation/quran_profile_screen.dart';
@@ -15,19 +15,26 @@ import 'widgets/nav_drawer_header.dart';
 import 'widgets/nav_drawer_items_widget.dart';
 import 'widgets/nav_drawer_row.dart';
 
-class QuranNavDrawer extends StatelessWidget {
+class QuranNavDrawer extends StatefulWidget {
   final QuranUser? user;
   final QuranBookmarksManager bookmarksManager;
 
-  const QuranNavDrawer({
+  QuranNavDrawer({
     Key? key,
     required this.user,
     required this.bookmarksManager,
   }) : super(key: key);
 
   @override
+  State<QuranNavDrawer> createState() => _QuranNavDrawerState();
+}
+
+class _QuranNavDrawerState extends State<QuranNavDrawer> {
+  int numOfTaps = 5;
+
+  @override
   Widget build(BuildContext context) {
-    QuranUser? userParam = user;
+    QuranUser? userParam = widget.user;
     if (userParam != null) {
       /// Logged In
       return Theme(
@@ -57,12 +64,13 @@ class QuranNavDrawer extends StatelessWidget {
                 icon: Icons.tag,
                 destination: QuranViewTagsScreen(user: userParam),
               ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Search',
-                icon: Icons.search_rounded,
-                destination: const QuranSearchScreen(),
-              ),
+              // TODO: Search in menu disabled, enable when fixed - Logged IN
+              // QuranNavDrawerRowWidget(
+              //   context: context,
+              //   title: 'Search',
+              //   icon: Icons.search_rounded,
+              //   destination: const QuranSearchScreen(),
+              // ),
               QuranNavDrawerRowWidget(
                 context: context,
                 title: 'Settings',
@@ -89,19 +97,32 @@ class QuranNavDrawer extends StatelessWidget {
       child: Drawer(
         child: QuranNavDrawerItemsWidget(
           items: [
-            const QuranNavDrawerHeaderWidget(),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Login',
-              icon: Icons.account_circle_outlined,
-              destination: const QuranLoginScreen(),
+            GestureDetector(
+              onTap: () => {
+                if (numOfTaps > 0)
+                  {
+                    numOfTaps = numOfTaps - 1,
+                  },
+                setState(() {}),
+              },
+              child: const QuranNavDrawerHeaderWidget(),
             ),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Search',
-              icon: Icons.search_rounded,
-              destination: const QuranSearchScreen(),
-            ),
+
+            if (numOfTaps == 0)
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Login',
+                icon: Icons.account_circle_outlined,
+                destination: const QuranLoginScreen(),
+              ),
+
+            // TODO: Search in menu disabled, enable when fixed - Logged OUT
+            // QuranNavDrawerRowWidget(
+            //   context: context,
+            //   title: 'Search',
+            //   icon: Icons.search_rounded,
+            //   destination: const QuranSearchScreen(),
+            // ),
             QuranNavDrawerRowWidget(
               context: context,
               title: 'Settings',
@@ -125,7 +146,7 @@ class QuranNavDrawer extends StatelessWidget {
   void _onLogout() async {
     QuranResponse _ = await QuranAuthFactory.engine.logout();
     // clear stored data
-    bookmarksManager.localEngine.clear();
+    widget.bookmarksManager.localEngine.clear();
   }
 
   Future<void> _launchUrl(Uri uri) async {

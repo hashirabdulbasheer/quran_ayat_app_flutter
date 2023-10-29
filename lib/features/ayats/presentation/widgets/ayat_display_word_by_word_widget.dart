@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/word.dart';
 
-import '../../../../misc/constants/string_constants.dart';
 import '../../../../misc/enums/quran_font_family_enum.dart';
-import '../../../../quran_search_screen.dart';
 import 'font_scaler_widget.dart';
 
 class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
@@ -21,7 +19,10 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
     return QuranFontScalerWidget(body: _body);
   }
 
-  Widget _body(BuildContext context, double fontScale,) {
+  Widget _body(
+    BuildContext context,
+    double fontScale,
+  ) {
     return Semantics(
       enabled: true,
       excludeSemantics: false,
@@ -46,26 +47,27 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                             child: Tooltip(
                               message: '${e.ar} ${e.tr}',
                               child: InkWell(
-                                onTap: () => {
-                                  if (_isInteractionAllowedOnScreen())
-                                    {
-                                      Navigator.push<void>(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              QuranSearchScreen(
-                                            searchString: e.ar,
-                                          ),
-                                        ),
-                                      ),
-                                    }
-                                  else
-                                    {
-                                      _showMessage(
-                                        context,
-                                        QuranStrings.contPlayMessage,
-                                      ),
-                                    },
+                                onTap: () {
+                                  // TODO: Fix navigation to search
+                                  // if (_isInteractionAllowedOnScreen())
+                                  //   {
+                                  //     Navigator.push<void>(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             QuranSearchScreen(
+                                  //           searchString: e.ar,
+                                  //         ),
+                                  //       ),
+                                  //     ),
+                                  //   }
+                                  // else
+                                  //   {
+                                  //     _showMessage(
+                                  //       context,
+                                  //       QuranStrings.contPlayMessage,
+                                  //     ),
+                                  //   },
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(

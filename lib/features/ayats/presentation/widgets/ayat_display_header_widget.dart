@@ -10,8 +10,8 @@ class QuranAyatHeaderWidget extends StatelessWidget {
   final int currentlySelectedAya;
   final ValueNotifier<bool> continuousMode;
 
-  final Function(NQSurahTitle?) onSurahSelected;
-  final Function(int?) onAyaNumberSelected;
+  final Function(NQSurahTitle) onSurahSelected;
+  final Function(int) onAyaNumberSelected;
 
   const QuranAyatHeaderWidget({
     Key? key,
@@ -53,7 +53,9 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                       ),
                       textAlign: TextAlign.start,
                     ),
-                    onChanged: (value) => onSurahSelected(value),
+                    onChanged: (value) => onSurahSelected(
+                      value ?? surahTitles.first,
+                    ),
                     selectedItem: currentlySelectedSurah,
                   ),
                 ),
@@ -98,7 +100,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                         currentlySelectedSurah?.totalVerses ?? 0,
                         (i) => i + 1,
                       ),
-                      onChanged: (value) => onAyaNumberSelected(value),
+                      onChanged: (value) => onAyaNumberSelected(value ?? 1),
                       selectedItem: currentlySelectedAya,
                     ),
                   ),
