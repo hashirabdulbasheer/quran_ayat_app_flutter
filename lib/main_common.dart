@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/middleware/middleware.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
+import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
@@ -49,8 +50,7 @@ class MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
-    QuranThemeManager.instance.registerListener(onThemeChangedEvent);
-    QuranThemeManager.instance.loadThemeAndNotifyListeners();
+    QuranSettingsManager.instance.registerListener(onSettingsChangedListener);
     _handleUrlPathsForWeb(
       context,
       store,
@@ -60,7 +60,7 @@ class MyAppState extends State<MyApp> {
   @override
   void dispose() {
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
-    QuranThemeManager.instance.removeListeners();
+    QuranSettingsManager.instance.removeListeners();
     super.dispose();
   }
 
@@ -80,10 +80,11 @@ class MyAppState extends State<MyApp> {
     );
   }
 
-  /// callback when theme changes
-  void onThemeChangedEvent(String? _) async {
-    // reload to apply the new theme
-    setState(() {});
+  void onSettingsChangedListener(String settings) {
+    // settings changed
+    // fire actions to update screen
+    store.dispatch(ShowLoadingAction());
+    store.dispatch(HideLoadingAction());
   }
 
   void _authChangeListener() async {
@@ -133,7 +134,7 @@ void _handleUrlPathsForWeb(
           var selectedSurahIndex = int.parse(suraIndex);
           var ayaIndexInt = int.parse(ayaIndex);
           store.dispatch(SelectParticularAyaAction(
-            surah: selectedSurahIndex-1,
+            surah: selectedSurahIndex - 1,
             aya: ayaIndexInt,
           ));
         } catch (_) {}
@@ -144,7 +145,7 @@ void _handleUrlPathsForWeb(
         try {
           var selectedSurahIndex = int.parse(suraIndex);
           store.dispatch(SelectParticularAyaAction(
-            surah: selectedSurahIndex-1,
+            surah: selectedSurahIndex - 1,
             aya: 1,
           ));
         } catch (_) {}

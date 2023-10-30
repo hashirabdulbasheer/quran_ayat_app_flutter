@@ -8,7 +8,7 @@ class QuranThemeManager {
       QuranThemeManager._privateConstructor();
 
   ThemeData lightTheme = ThemeData(
-    primarySwatch: Colors.deepPurple,
+    primarySwatch: Colors.blueGrey,
     dividerColor: Colors.black26,
     appBarTheme:
         const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
@@ -85,7 +85,7 @@ class QuranThemeManager {
     */
 
     // forcing dark theme for now
-    _appTheme = ThemeMode.dark;
+    _appTheme = ThemeMode.light;
 
     // inform all listeners
     _themeStream.add("quran_theme_changed_event");

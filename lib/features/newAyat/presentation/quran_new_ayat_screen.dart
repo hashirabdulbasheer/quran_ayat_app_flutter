@@ -68,14 +68,14 @@ class QuranNewAyatScreen extends StatelessWidget {
                             {
                               _moveToPreviousAyat(
                                 store,
-                              )
+                              ),
                             }
                           else
                             {
                               _showMessage(
                                 context,
                                 QuranStrings.contPlayMessage,
-                              )
+                              ),
                             },
                         },
                         child: Icon(
@@ -97,14 +97,14 @@ class QuranNewAyatScreen extends StatelessWidget {
                             {
                               _moveToNextAyat(
                                 store,
-                              )
+                              ),
                             }
                           else
                             {
                               _showMessage(
                                 context,
                                 QuranStrings.contPlayMessage,
-                              )
+                              ),
                             },
                         },
                         child: Icon(
@@ -174,6 +174,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Text("${currentSurah + 1}:$currentAyah"),
                         IconButton(
                           onPressed: () => _navigateToContextListScreen(
                             store,
@@ -211,46 +212,43 @@ class QuranNewAyatScreen extends StatelessWidget {
                   ),
 
                   /// body
-                  Card(
-                    elevation: 5,
-                    child: FutureBuilder<List<List<NQWord>>>(
-                      future: NobleQuran.getSurahWordByWord(
-                        currentSurah,
-                      ),
-                      // async work
-                      builder: (
-                        BuildContext context,
-                        AsyncSnapshot<List<List<NQWord>>> snapshot,
-                      ) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return SizedBox(
-                              height: 300,
-                              width: MediaQuery.of(context).size.width,
-                              child: const Center(
-                                child: Text('Loading....'),
+                  FutureBuilder<List<List<NQWord>>>(
+                    future: NobleQuran.getSurahWordByWord(
+                      currentSurah,
+                    ),
+                    // async work
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<List<List<NQWord>>> snapshot,
+                    ) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return SizedBox(
+                            height: 300,
+                            width: MediaQuery.of(context).size.width,
+                            child: const Center(
+                              child: Text('Loading....'),
+                            ),
+                          );
+                        default:
+                          if (snapshot.hasError) {
+                            return Center(
+                              child: Text('Error: ${snapshot.error}'),
+                            );
+                          } else {
+                            List<List<NQWord>> surahWords =
+                                snapshot.data as List<List<NQWord>>;
+
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: QuranAyatDisplayWordByWordWidget(
+                                words: surahWords[currentAyah - 1],
+                                continuousMode: ValueNotifier(false),
                               ),
                             );
-                          default:
-                            if (snapshot.hasError) {
-                              return Center(
-                                child: Text('Error: ${snapshot.error}'),
-                              );
-                            } else {
-                              List<List<NQWord>> surahWords =
-                                  snapshot.data as List<List<NQWord>>;
-
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: QuranAyatDisplayWordByWordWidget(
-                                  words: surahWords[currentAyah - 1],
-                                  continuousMode: ValueNotifier(false),
-                                ),
-                              );
-                            }
-                        }
-                      },
-                    ),
+                          }
+                      }
+                    },
                   ),
 
                   /// transliterationWidget if enabled

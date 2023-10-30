@@ -1,5 +1,5 @@
-import 'package:noble_quran/models/surah.dart';
 import 'package:flutter/material.dart';
+import 'package:noble_quran/models/surah.dart';
 
 import '../../../../utils/utils.dart';
 import 'font_scaler_widget.dart';
@@ -21,13 +21,16 @@ class QuranFullAyatRowWidget extends StatelessWidget {
     return QuranFontScalerWidget(body: _body);
   }
 
-  Widget _body(BuildContext context, double fontScale,) {
+  Widget _body(
+    BuildContext context,
+    double fontScale,
+  ) {
     return FutureBuilder<NQSurah>(
       future: futureMethodThatReturnsSelectedSurah,
       builder: (
-          BuildContext context,
-          AsyncSnapshot<NQSurah> snapshot,
-          ) {
+        BuildContext context,
+        AsyncSnapshot<NQSurah> snapshot,
+      ) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return const Padding(
@@ -44,35 +47,32 @@ class QuranFullAyatRowWidget extends StatelessWidget {
               NQSurah surah = snapshot.data as NQSurah;
               List<NQAyat> ayats = surah.aya;
 
-              return Card(
-                elevation: 5,
-                child: Directionality(
-                  textDirection: QuranUtils.isArabic(ayats[ayaIndex - 1].text)
-                      ? TextDirection.rtl
-                      : TextDirection.ltr,
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Text(
-                            _stripHtmlIfNeeded(ayats[ayaIndex - 1].text),
-                            textAlign:
-                            QuranUtils.isArabic(ayats[ayaIndex - 1].text)
-                                ? TextAlign.end
-                                : TextAlign.start,
-                            textScaleFactor: fontScale,
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.5,
-                              fontFamily: fontFamily,
-                              color: Colors.black87,
-                            ),
+              return Directionality(
+                textDirection: QuranUtils.isArabic(ayats[ayaIndex - 1].text)
+                    ? TextDirection.rtl
+                    : TextDirection.ltr,
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          _stripHtmlIfNeeded(ayats[ayaIndex - 1].text),
+                          textAlign:
+                              QuranUtils.isArabic(ayats[ayaIndex - 1].text)
+                                  ? TextAlign.end
+                                  : TextAlign.start,
+                          textScaleFactor: fontScale,
+                          style: TextStyle(
+                            fontSize: 16,
+                            height: 1.5,
+                            fontFamily: fontFamily,
+                            color: Colors.black87,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             }
