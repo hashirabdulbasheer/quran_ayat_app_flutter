@@ -174,6 +174,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Text("${currentSurah + 1}:$currentAyah"),
                         IconButton(
                           onPressed: () => _navigateToContextListScreen(
                             store,
