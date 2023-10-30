@@ -9,9 +9,17 @@ class QuranThemeManager {
 
   ThemeData lightTheme = ThemeData(
     primarySwatch: Colors.blueGrey,
+    primaryColor: Colors.blueGrey,
     dividerColor: Colors.black26,
-    appBarTheme:
-        const AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light),
+    appBarTheme: const AppBarTheme(
+      color: Colors.blueGrey,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.blueGrey,
+        statusBarColor: Colors.blueGrey,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.light,
+      ),
+    ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: Colors.black),
       titleMedium: TextStyle(color: Colors.black87),
