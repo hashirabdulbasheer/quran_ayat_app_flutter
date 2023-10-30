@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/middleware/middleware.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
+import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
@@ -50,6 +51,7 @@ class MyAppState extends State<MyApp> {
     super.initState();
     QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
     QuranThemeManager.instance.registerListener(onThemeChangedEvent);
+    QuranSettingsManager.instance.registerListener(onSettingsChangedListener);
     QuranThemeManager.instance.loadThemeAndNotifyListeners();
     _handleUrlPathsForWeb(
       context,
@@ -61,6 +63,7 @@ class MyAppState extends State<MyApp> {
   void dispose() {
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
     QuranThemeManager.instance.removeListeners();
+    QuranSettingsManager.instance.removeListeners();
     super.dispose();
   }
 
@@ -78,6 +81,10 @@ class MyAppState extends State<MyApp> {
         home: widget.homeScreen,
       ),
     );
+  }
+
+  void onSettingsChangedListener(String settings) {
+    // settings changed
   }
 
   /// callback when theme changes
