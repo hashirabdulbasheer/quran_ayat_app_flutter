@@ -25,52 +25,48 @@ void _initBookmarkMiddleware(
   InitBookmarkAction action,
   NextDispatcher next,
 ) async {
+  if (store.state.reader.currentSurah != 0 ||
+      store.state.reader.currentAya != 1) {
+    // only update bookmark if we are on 1:1
+    // this is so that we don't replace another aya with bookmark
+    return;
+  }
   QuranLocalBookmarksEngine local = QuranLocalBookmarksEngine();
-  QuranUser? user = QuranAuthFactory.engine.getUser();
-  if (user != null) {
-    // logged in -> with network -> try remote
-    // merge if there is a difference between remote and local
-    // local is given precedence over remote and remote gets overridden by local
-    QuranFirebaseBookmarksEngine remote =
-        QuranFirebaseBookmarksEngine(userId: user.uid);
-    NQBookmark? remoteBookmark = await remote.fetch();
-    NQBookmark? localBookmark = await local.fetch();
-    if (remoteBookmark != null && localBookmark != null) {
-      // save local to remote as well
-      store.dispatch(SaveBookmarkAction(
-        surahIndex: localBookmark.surah,
-        ayaIndex: localBookmark.ayat,
-      ));
-      store.dispatch(
-        SelectParticularAyaAction(
-          surah: localBookmark.surah,
-          aya: localBookmark.ayat,
-        ),
-      );
-    } else if (remoteBookmark != null) {
-      // save remote to local as well
-      store.dispatch(SaveBookmarkAction(
-        surahIndex: remoteBookmark.surah,
-        ayaIndex: remoteBookmark.ayat,
-      ));
-      store.dispatch(
-        SelectParticularAyaAction(
-          surah: remoteBookmark.surah,
-          aya: remoteBookmark.ayat,
-        ),
-      );
-    } else {
-      // user not logged in -> try local
-      NQBookmark? localBookmark = await local.fetch();
-      if (localBookmark != null) {
+  NQBookmark? localBookmark = await local.fetch();
+  if (localBookmark != null) {
+    // local bookmark is always given preference
+    store.dispatch(SaveBookmarkAction(
+      surahIndex: localBookmark.surah,
+      ayaIndex: localBookmark.ayat,
+    ));
+    store.dispatch(
+      SelectParticularAyaAction(
+        surah: localBookmark.surah,
+        aya: localBookmark.ayat,
+      ),
+    );
+  } else {
+    // no local available, try remote
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      // logged in -> with network -> try remote
+      QuranFirebaseBookmarksEngine remote =
+          QuranFirebaseBookmarksEngine(userId: user.uid);
+      NQBookmark? remoteBookmark = await remote.fetch();
+      if (remoteBookmark != null) {
         store.dispatch(SaveBookmarkAction(
-          surahIndex: localBookmark.surah,
-          ayaIndex: localBookmark.ayat,
+          surahIndex: remoteBookmark.surah,
+          ayaIndex: remoteBookmark.ayat,
         ));
+        store.dispatch(
+          SelectParticularAyaAction(
+            surah: remoteBookmark.surah,
+            aya: remoteBookmark.ayat,
+          ),
+        );
       }
     }
   }
-
   next(action);
 }
 

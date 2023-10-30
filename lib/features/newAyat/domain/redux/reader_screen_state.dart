@@ -42,7 +42,6 @@ class ReaderScreenState extends Equatable {
   }
 
   NQSurahTitle currentSurahDetails() {
-    print("current surah $currentSurah");
     if (surahTitles.isEmpty) {
       return NQSurahTitle.defaultValue();
     }
