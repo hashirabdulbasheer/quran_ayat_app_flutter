@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 
 class QuranNavDrawerItemsWidget extends StatelessWidget {
   final List<Widget> items;
@@ -13,12 +12,6 @@ class QuranNavDrawerItemsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0,),
-            child: Container(
-                decoration: BoxDecoration(color: Colors.black.withOpacity(0.5),),
-            ),
-        ),
         ListView.separated(
           separatorBuilder: (
             context,

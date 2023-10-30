@@ -19,7 +19,7 @@ class QuranNavDrawer extends StatefulWidget {
   final QuranUser? user;
   final QuranBookmarksManager bookmarksManager;
 
-  QuranNavDrawer({
+  const QuranNavDrawer({
     Key? key,
     required this.user,
     required this.bookmarksManager,
@@ -38,7 +38,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
     if (userParam != null) {
       /// Logged In
       return Theme(
-        data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+        data: Theme.of(context).copyWith(canvasColor: Colors.white),
         child: Drawer(
           child: QuranNavDrawerItemsWidget(
             items: [
@@ -93,7 +93,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
 
     /// Logged out
     return Theme(
-      data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+      data: Theme.of(context).copyWith(canvasColor: Colors.white),
       child: Drawer(
         child: QuranNavDrawerItemsWidget(
           items: [
