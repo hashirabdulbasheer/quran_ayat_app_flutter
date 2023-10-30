@@ -37,7 +37,7 @@ class QuranDropdownValuesFactory {
   static QuranDropdownValue? defaultValue(String typeId) {
     switch (typeId) {
       case QuranSettingsConstants.themeId:
-        return QuranDropdownValue.sameValues(QuranAppTheme.dark.rawString());
+        return QuranDropdownValue.sameValues(QuranAppTheme.light.rawString());
 
       case QuranSettingsConstants.transliterationId:
         return QuranDropdownValue.sameValues(QuranSettingOnOff.off.rawString());
@@ -46,7 +46,7 @@ class QuranDropdownValuesFactory {
         return QuranDropdownValue.sameValues(NQTranslation.wahiduddinkhan.title);
 
       case QuranSettingsConstants.audioControlsId:
-        return QuranDropdownValue.sameValues(QuranSettingOnOff.on.rawString());
+        return QuranDropdownValue.sameValues(QuranSettingOnOff.off.rawString());
 
       case QuranSettingsConstants.audioReciterId:
 

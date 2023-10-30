@@ -2,10 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../misc/enums/quran_theme_enum.dart';
-import 'constants/setting_constants.dart';
 
 class QuranThemeManager {
   static final QuranThemeManager instance =
@@ -89,14 +85,7 @@ class QuranThemeManager {
     */
 
     // forcing dark theme for now
-    final prefs = await SharedPreferences.getInstance();
-    String? themeString = prefs.getString(QuranSettingsConstants.themeId);
-    if (themeString == null ||
-        themeString == QuranAppTheme.light.rawString()) {
-      _appTheme = ThemeMode.light;
-    } else {
-      _appTheme = ThemeMode.dark;
-    }
+    _appTheme = ThemeMode.light;
 
     // inform all listeners
     _themeStream.add("quran_theme_changed_event");
