@@ -61,56 +61,62 @@ class QuranNewAyatScreen extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: ElevatedButton(
-                        style: _elevatedButtonTheme,
-                        onPressed: () => {
-                          if (_isInteractionAllowedOnScreen(store))
-                            {
-                              _moveToPreviousAyat(
-                                store,
-                              ),
-                            }
-                          else
-                            {
-                              _showMessage(
-                                context,
-                                QuranStrings.contPlayMessage,
-                              ),
-                            },
-                        },
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: _elevatedButtonIconColor(
-                            context,
+                      child: Tooltip(
+                        message: "Previous aya",
+                        child: ElevatedButton(
+                          style: _elevatedButtonTheme,
+                          onPressed: () => {
+                            if (_isInteractionAllowedOnScreen(store))
+                              {
+                                _moveToPreviousAyat(
+                                  store,
+                                ),
+                              }
+                            else
+                              {
+                                _showMessage(
+                                  context,
+                                  QuranStrings.contPlayMessage,
+                                ),
+                              },
+                          },
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: _elevatedButtonIconColor(
+                              context,
+                            ),
                           ),
                         ),
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: ElevatedButton(
-                        style: _elevatedButtonTheme,
-                        onPressed: () => {
-                          if (_isInteractionAllowedOnScreen(
-                            store,
-                          ))
-                            {
-                              _moveToNextAyat(
-                                store,
-                              ),
-                            }
-                          else
-                            {
-                              _showMessage(
-                                context,
-                                QuranStrings.contPlayMessage,
-                              ),
-                            },
-                        },
-                        child: Icon(
-                          Icons.arrow_forward,
-                          color: _elevatedButtonIconColor(
-                            context,
+                      child: Tooltip(
+                        message: "Next aya",
+                        child: ElevatedButton(
+                          style: _elevatedButtonTheme,
+                          onPressed: () => {
+                            if (_isInteractionAllowedOnScreen(
+                              store,
+                            ))
+                              {
+                                _moveToNextAyat(
+                                  store,
+                                ),
+                              }
+                            else
+                              {
+                                _showMessage(
+                                  context,
+                                  QuranStrings.contPlayMessage,
+                                ),
+                              },
+                          },
+                          child: Icon(
+                            Icons.arrow_forward,
+                            color: _elevatedButtonIconColor(
+                              context,
+                            ),
                           ),
                         ),
                       ),
@@ -176,6 +182,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                       children: [
                         Text("${currentSurah + 1}:$currentAyah"),
                         IconButton(
+                          tooltip: "Context aya list view",
                           onPressed: () => _navigateToContextListScreen(
                             store,
                             context,
@@ -187,6 +194,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                         ),
                         const Spacer(),
                         IconButton(
+                          tooltip: "Increase font size",
                           onPressed: () => _incrementFontSize(store),
                           icon: const Icon(
                             Icons.add,
@@ -194,6 +202,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                           ),
                         ),
                         IconButton(
+                          tooltip: "Decrease font size",
                           onPressed: () => _decrementFontSize(store),
                           icon: const Icon(
                             Icons.remove,
@@ -201,6 +210,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                           ),
                         ),
                         IconButton(
+                          tooltip: "Reset font size",
                           onPressed: () => _resetFontSize(store),
                           icon: const Icon(
                             Icons.refresh,
