@@ -10,16 +10,12 @@ import 'features/notes/data/hive_notes_impl.dart';
 import 'main_common.dart';
 import 'misc/url/url_strategy.dart';
 
-///
-/// PRODUCTION
-///
 
 // TODO: Update before release
 const String appVersion = "v2.7.2";
 
 void main() async {
   usePathUrlStrategy();
-  WidgetsFlutterBinding.ensureInitialized();
   await QuranHiveNotesEngine.instance.initialize();
   await QuranAuthFactory.engine.initialize();
   FirebaseAnalytics.instance.logAppOpen();
