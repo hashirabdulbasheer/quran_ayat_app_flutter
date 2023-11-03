@@ -38,6 +38,9 @@ List<Middleware<AppState>> createReaderScreenMiddleware() {
     TypedMiddleware<AppState, RandomAyaAction>(
       _randomAyaReaderMiddleware,
     ),
+    TypedMiddleware<AppState, SelectParticularAyaAction>(
+      _selectParticularAyaReaderMiddleware,
+    ),
     TypedMiddleware<AppState, dynamic>(
       _allOtherReaderMiddleware,
     ),
@@ -56,13 +59,12 @@ void _initializeMiddleware(
   Store<AppState> store,
   InitializeReaderScreenAction action,
   NextDispatcher next,
-) {
+) async {
   // Initialize surah titles
-  NobleQuran.getSurahList().then((surahList) {
-    store.dispatch(SetSurahListAction(
-      surahs: surahList,
-    ));
-  });
+  var surahList = await NobleQuran.getSurahList();
+  store.dispatch(SetSurahListAction(
+    surahs: surahList,
+  ));
   next(action);
 }
 
@@ -152,6 +154,24 @@ void _randomAyaReaderMiddleware(
         aya: randomAyaIndex + 1,
       ),
     );
+  } catch (_) {}
+  next(action);
+}
+
+void _selectParticularAyaReaderMiddleware(
+  Store<AppState> store,
+  SelectParticularAyaAction action,
+  NextDispatcher next,
+) async {
+  try {
+    if(store.state.reader.surahTitles.isEmpty) {
+      // not yet initialized
+      var surahList = await NobleQuran.getSurahList();
+      await store.dispatch(SetSurahListAction(
+        surahs: surahList,
+      ));
+      await Future<dynamic>.delayed(const Duration(milliseconds: 300));
+    }
   } catch (_) {}
   next(action);
 }
