@@ -170,7 +170,6 @@ void _selectParticularAyaReaderMiddleware(
       await store.dispatch(SetSurahListAction(
         surahs: surahList,
       ));
-      await Future<dynamic>.delayed(const Duration(milliseconds: 300));
     }
   } catch (_) {}
   next(action);
