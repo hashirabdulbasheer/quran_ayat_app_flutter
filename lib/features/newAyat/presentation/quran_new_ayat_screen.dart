@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
-import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'package:redux/redux.dart';
 
@@ -37,6 +36,7 @@ class QuranNewAyatScreen extends StatelessWidget {
       int currentAyah = store.state.reader.currentAya;
       NQSurahTitle currentSurahDetails =
           store.state.reader.currentSurahDetails();
+      List<List<NQWord>> surahWords = store.state.reader.suraWords;
 
       return Directionality(
         textDirection: TextDirection.rtl,
@@ -221,45 +221,16 @@ class QuranNewAyatScreen extends StatelessWidget {
                     ),
                   ),
 
-                  /// body
-                  FutureBuilder<List<List<NQWord>>>(
-                    future: NobleQuran.getSurahWordByWord(
-                      currentSurah,
-                    ),
-                    // async work
-                    builder: (
-                      BuildContext context,
-                      AsyncSnapshot<List<List<NQWord>>> snapshot,
-                    ) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return SizedBox(
-                            height: 300,
-                            width: MediaQuery.of(context).size.width,
-                            child: const Center(
-                              child: Text('Loading....'),
-                            ),
-                          );
-                        default:
-                          if (snapshot.hasError) {
-                            return Center(
-                              child: Text('Error: ${snapshot.error}'),
-                            );
-                          } else {
-                            List<List<NQWord>> surahWords =
-                                snapshot.data as List<List<NQWord>>;
-
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10),
-                              child: QuranAyatDisplayWordByWordWidget(
-                                words: surahWords[currentAyah - 1],
-                                continuousMode: ValueNotifier(false),
-                              ),
-                            );
-                          }
-                      }
-                    },
-                  ),
+                  /// word by word widget
+                  currentAyah <= surahWords.length
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: QuranAyatDisplayWordByWordWidget(
+                            words: surahWords[currentAyah - 1],
+                            continuousMode: ValueNotifier(false),
+                          ),
+                        )
+                      : Container(),
 
                   /// transliterationWidget if enabled
                   QuranAyatDisplayTransliterationWidget(

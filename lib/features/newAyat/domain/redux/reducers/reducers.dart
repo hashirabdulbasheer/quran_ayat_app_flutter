@@ -1,3 +1,4 @@
+import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/reducers/reducers.dart';
 import 'package:redux/redux.dart';
 
@@ -79,15 +80,18 @@ ReaderScreenState _surahSelectedReducer(
   SelectSurahAction action,
 ) {
   int suraIndex = action.surah.abs();
+  List<List<NQWord>> words = state.suraWords;
   if (suraIndex >= 0 && suraIndex < 115) {
     return state.copyWith(
       currentSurah: suraIndex - 1,
       currentAya: 1,
+      suraWords: action.words ?? words,
     );
   } else {
     return state.copyWith(
       currentSurah: 0,
       currentAya: 1,
+      suraWords: action.words ?? words,
     );
   }
 }

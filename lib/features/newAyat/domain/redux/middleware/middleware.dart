@@ -69,6 +69,14 @@ void _initializeMiddleware(
   store.dispatch(SetSurahListAction(
     surahs: surahList,
   ));
+  // Initialize surah words
+  List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
+    0,
+  );
+  store.dispatch(SelectSurahAction(
+    surah: 1,
+    words: suraWords,
+  ));
   next(action);
 }
 
@@ -174,6 +182,7 @@ void _selectParticularAyaReaderMiddleware(
       await store.dispatch(SetSurahListAction(
         surahs: surahList,
       ));
+      await store.dispatch(SelectSurahAction(surah: action.surah));
     }
   } catch (_) {}
   next(action);
@@ -189,7 +198,7 @@ void _selectSurahReaderMiddleware(
     if (store.state.reader.currentSurah != action.surah) {
       // we have a new surah, reload content
       suraWords = await NobleQuran.getSurahWordByWord(
-        action.surah,
+        action.surah - 1,
       );
     }
     action = action.copyWith(
