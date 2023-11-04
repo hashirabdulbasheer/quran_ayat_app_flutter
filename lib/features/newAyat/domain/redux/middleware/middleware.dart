@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
@@ -40,6 +41,9 @@ List<Middleware<AppState>> createReaderScreenMiddleware() {
     ),
     TypedMiddleware<AppState, SelectParticularAyaAction>(
       _selectParticularAyaReaderMiddleware,
+    ),
+    TypedMiddleware<AppState, SelectSurahAction>(
+      _selectSurahReaderMiddleware,
     ),
     TypedMiddleware<AppState, dynamic>(
       _allOtherReaderMiddleware,
@@ -164,13 +168,33 @@ void _selectParticularAyaReaderMiddleware(
   NextDispatcher next,
 ) async {
   try {
-    if(store.state.reader.surahTitles.isEmpty) {
+    if (store.state.reader.surahTitles.isEmpty) {
       // not yet initialized
       var surahList = await NobleQuran.getSurahList();
       await store.dispatch(SetSurahListAction(
         surahs: surahList,
       ));
     }
+  } catch (_) {}
+  next(action);
+}
+
+void _selectSurahReaderMiddleware(
+  Store<AppState> store,
+  SelectSurahAction action,
+  NextDispatcher next,
+) async {
+  try {
+    List<List<NQWord>>? suraWords;
+    if (store.state.reader.currentSurah != action.surah) {
+      // we have a new surah, reload content
+      suraWords = await NobleQuran.getSurahWordByWord(
+        action.surah,
+      );
+    }
+    action = action.copyWith(
+      words: suraWords,
+    );
   } catch (_) {}
   next(action);
 }

@@ -1,4 +1,5 @@
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:noble_quran/models/word.dart';
 
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
 
@@ -19,14 +20,26 @@ class SetSurahListAction extends AppStateAction {
 
 class SelectSurahAction extends AppStateAction {
   final int surah;
+  final List<List<NQWord>>? words;
 
   SelectSurahAction({
     required this.surah,
+    this.words,
   });
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surah: $surah';
+    return '{action: ${super.toString()}, surah: $surah, words: ${words?.length}}';
+  }
+
+  SelectSurahAction copyWith({
+    int? surah,
+    List<List<NQWord>>? words,
+  }) {
+    return SelectSurahAction(
+      surah: surah ?? this.surah,
+      words: words ?? this.words,
+    );
   }
 }
 

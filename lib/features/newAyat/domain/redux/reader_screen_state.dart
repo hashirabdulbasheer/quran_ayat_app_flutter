@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:noble_quran/models/word.dart';
 
 import '../../../bookmark/domain/redux/bookmark_state.dart';
 
@@ -12,6 +13,7 @@ class ReaderScreenState extends Equatable {
   final bool isAudioContinuousModeEnabled;
   final bool isLoading;
   final BookmarkState bookmarkState;
+  final List<List<NQWord>> suraWords;
 
   const ReaderScreenState({
     this.surahTitles = const [],
@@ -20,6 +22,7 @@ class ReaderScreenState extends Equatable {
     this.isAudioContinuousModeEnabled = false,
     this.isLoading = false,
     this.bookmarkState = const BookmarkState(),
+    this.suraWords = const [],
   });
 
   ReaderScreenState copyWith({
@@ -29,6 +32,7 @@ class ReaderScreenState extends Equatable {
     bool? isAudioContinuousModeEnabled,
     bool? isLoading,
     BookmarkState? bookmarkState,
+    List<List<NQWord>>? suraWords,
   }) {
     return ReaderScreenState(
       surahTitles: surahTitles ?? this.surahTitles,
@@ -38,6 +42,7 @@ class ReaderScreenState extends Equatable {
       isAudioContinuousModeEnabled:
           isAudioContinuousModeEnabled ?? this.isAudioContinuousModeEnabled,
       bookmarkState: bookmarkState ?? this.bookmarkState,
+      suraWords: suraWords ?? this.suraWords,
     );
   }
 
@@ -51,7 +56,9 @@ class ReaderScreenState extends Equatable {
 
   @override
   String toString() {
-    return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading, bookmark: ${bookmarkState.toString()}";
+    return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, "
+        "isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading, "
+        "bookmark: ${bookmarkState.toString()}, suraWords Len: ${suraWords.length}";
   }
 
   @override
@@ -62,5 +69,6 @@ class ReaderScreenState extends Equatable {
         currentAya,
         isAudioContinuousModeEnabled,
         bookmarkState,
+        suraWords,
       ];
 }
