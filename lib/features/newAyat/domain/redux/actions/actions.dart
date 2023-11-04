@@ -59,15 +59,29 @@ class SelectAyaAction extends AppStateAction {
 class SelectParticularAyaAction extends AppStateAction {
   final int surah;
   final int aya;
+  final List<List<NQWord>>? words;
 
   SelectParticularAyaAction({
     required this.surah,
     required this.aya,
+    this.words,
   });
+
+  SelectParticularAyaAction copyWith({
+    int? surah,
+    int? aya,
+    List<List<NQWord>>? words,
+  }) {
+    return SelectParticularAyaAction(
+      surah: surah ?? this.surah,
+      aya: aya ?? this.aya,
+      words: words ?? this.words,
+    );
+  }
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surah: $surah, aya: $aya';
+    return '{action: ${super.toString()}, surah: $surah, aya: $aya, words len: ${words?.length}';
   }
 }
 

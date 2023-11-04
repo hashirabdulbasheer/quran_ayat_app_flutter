@@ -118,6 +118,7 @@ ReaderScreenState _particularAyaSelectedReducer(
 ) {
   int suraIndex = action.surah.abs()-1;
   int ayaIndex = action.aya.abs();
+  List<List<NQWord>> words = state.suraWords;
   if (suraIndex > 114) {
     return state.copyWith(
       currentSurah: 0,
@@ -127,12 +128,14 @@ ReaderScreenState _particularAyaSelectedReducer(
     return state.copyWith(
       currentSurah: suraIndex,
       currentAya: 1,
+      suraWords: action.words ?? words,
     );
   }
 
   return state.copyWith(
     currentSurah: suraIndex,
     currentAya: ayaIndex,
+    suraWords: action.words ?? words,
   );
 }
 

@@ -182,7 +182,18 @@ void _selectParticularAyaReaderMiddleware(
       await store.dispatch(SetSurahListAction(
         surahs: surahList,
       ));
-      await store.dispatch(SelectSurahAction(surah: action.surah));
+
+      // init words list if required
+      List<List<NQWord>>? suraWords;
+      if (store.state.reader.currentSurah != action.surah) {
+        // we have a new surah, reload content
+        suraWords = await NobleQuran.getSurahWordByWord(
+          action.surah - 1,
+        );
+      }
+      action = action.copyWith(
+        words: suraWords,
+      );
     }
   } catch (_) {}
   next(action);
