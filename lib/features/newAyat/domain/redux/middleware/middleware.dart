@@ -185,7 +185,7 @@ void _selectParticularAyaReaderMiddleware(
 
       // init words list if required
       List<List<NQWord>>? suraWords;
-      if (store.state.reader.currentSurah != action.surah) {
+      if (store.state.reader.currentSurah != action.surah - 1) {
         // we have a new surah, reload content
         suraWords = await NobleQuran.getSurahWordByWord(
           action.surah - 1,
@@ -206,7 +206,7 @@ void _selectSurahReaderMiddleware(
 ) async {
   try {
     List<List<NQWord>>? suraWords;
-    if (store.state.reader.currentSurah != action.surah) {
+    if (store.state.reader.currentSurah != action.surah - 1) {
       // we have a new surah, reload content
       suraWords = await NobleQuran.getSurahWordByWord(
         action.surah - 1,
