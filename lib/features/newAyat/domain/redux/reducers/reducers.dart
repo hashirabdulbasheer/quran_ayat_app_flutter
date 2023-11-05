@@ -1,3 +1,4 @@
+import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/reducers/reducers.dart';
 import 'package:redux/redux.dart';
@@ -81,17 +82,20 @@ ReaderScreenState _surahSelectedReducer(
 ) {
   int suraIndex = action.surah.abs();
   List<List<NQWord>> words = state.suraWords;
+  NQSurah? translation = state.translation;
   if (suraIndex >= 0 && suraIndex < 115) {
     return state.copyWith(
       currentSurah: suraIndex - 1,
       currentAya: 1,
       suraWords: action.words ?? words,
+      translation: action.translation ?? translation,
     );
   } else {
     return state.copyWith(
       currentSurah: 0,
       currentAya: 1,
       suraWords: action.words ?? words,
+      translation: action.translation ?? translation,
     );
   }
 }
@@ -119,6 +123,7 @@ ReaderScreenState _particularAyaSelectedReducer(
   int suraIndex = action.surah.abs()-1;
   int ayaIndex = action.aya.abs();
   List<List<NQWord>> words = state.suraWords;
+  NQSurah? translation = state.translation;
   if (suraIndex > 114) {
     return state.copyWith(
       currentSurah: 0,
@@ -129,6 +134,7 @@ ReaderScreenState _particularAyaSelectedReducer(
       currentSurah: suraIndex,
       currentAya: 1,
       suraWords: action.words ?? words,
+      translation: action.translation ?? translation,
     );
   }
 
@@ -136,6 +142,7 @@ ReaderScreenState _particularAyaSelectedReducer(
     currentSurah: suraIndex,
     currentAya: ayaIndex,
     suraWords: action.words ?? words,
+    translation: action.translation ?? translation,
   );
 }
 

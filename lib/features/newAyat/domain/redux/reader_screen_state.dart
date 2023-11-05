@@ -64,7 +64,7 @@ class ReaderScreenState extends Equatable {
     return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, "
         "isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading, "
         "bookmark: ${bookmarkState.toString()}, suraWords Len: ${suraWords.length}, "
-        "translation Len: ${translation?.name}";
+        "translation: ${translation?.name}";
   }
 
   @override

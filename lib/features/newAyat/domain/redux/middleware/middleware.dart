@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:noble_quran/enums/translations.dart';
+import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
@@ -185,14 +187,22 @@ void _selectParticularAyaReaderMiddleware(
 
       // init words list if required
       List<List<NQWord>>? suraWords;
+      NQSurah? translation;
       if (store.state.reader.currentSurah != action.surah - 1) {
-        // we have a new surah, reload content
+        // we have a new surah, reload word by word content
         suraWords = await NobleQuran.getSurahWordByWord(
           action.surah - 1,
+        );
+        // reload translation
+        NQTranslation currentTranslationType = await QuranSettingsManager.instance.getTranslation();
+        translation  = await NobleQuran.getTranslationString(
+          action.surah - 1,
+          currentTranslationType,
         );
       }
       action = action.copyWith(
         words: suraWords,
+        translation: translation,
       );
     }
   } catch (_) {}
@@ -206,14 +216,22 @@ void _selectSurahReaderMiddleware(
 ) async {
   try {
     List<List<NQWord>>? suraWords;
+    NQSurah? translation;
     if (store.state.reader.currentSurah != action.surah - 1) {
-      // we have a new surah, reload content
+      // we have a new surah, word by word reload content
       suraWords = await NobleQuran.getSurahWordByWord(
         action.surah - 1,
+      );
+      // reload translation
+      NQTranslation currentTranslationType = await QuranSettingsManager.instance.getTranslation();
+      translation  = await NobleQuran.getTranslationString(
+        action.surah - 1,
+        currentTranslationType,
       );
     }
     action = action.copyWith(
       words: suraWords,
+      translation: translation,
     );
   } catch (_) {}
   next(action);
