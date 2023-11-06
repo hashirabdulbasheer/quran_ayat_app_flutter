@@ -58,43 +58,43 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                 "Enter your notes for ${widget.suraIndex}:${widget.ayaIndex}",
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                10,
-                10,
-                10,
-                5,
-              ),
-              child: Directionality(
-                textDirection: TextDirection.rtl,
-                child: QuranFullAyatRowWidget(
-                  futureMethodThatReturnsSelectedSurah:
-                      NobleQuran.getSurahArabic(
-                    widget.suraIndex - 1,
-                  ),
-                  ayaIndex: widget.ayaIndex,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                10,
-                0,
-                10,
-                10,
-              ),
-              child: QuranAyatDisplayTranslationWidget(
-                currentlySelectedSurah: NQSurahTitle(
-                  number: widget.suraIndex,
-                  name: '',
-                  transliterationEn: '',
-                  translationEn: '',
-                  totalVerses: 0,
-                  revelationType: RevelationType.MECCAN,
-                ),
-                currentlySelectedAya: widget.ayaIndex,
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(
+            //     10,
+            //     10,
+            //     10,
+            //     5,
+            //   ),
+            //   child: Directionality(
+            //     textDirection: TextDirection.rtl,
+            //     child: QuranFullAyatRowWidget(
+            //       futureMethodThatReturnsSelectedSurah:
+            //           NobleQuran.getSurahArabic(
+            //         widget.suraIndex - 1,
+            //       ),
+            //       ayaIndex: widget.ayaIndex,
+            //     ),
+            //   ),
+            // ),
+            // Paddisng(
+            //   padding: const EdgeInsets.fromLTRB(
+            //     10,
+            //     0,
+            //     10,
+            //     10,
+            //   ),
+            //   child: QuranAyatDisplayTranslationWidget(
+            //     currentlySelectedSurah: NQSurahTitle(
+            //       number: widget.suraIndex,
+            //       name: '',
+            //       transliterationEn: '',
+            //       translationEn: '',
+            //       totalVerses: 0,
+            //       revelationType: RevelationType.MECCAN,
+            //     ),
+            //     currentlySelectedAya: widget.ayaIndex,
+            //   ),
+            // ),
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(

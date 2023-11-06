@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
@@ -37,6 +38,7 @@ class QuranNewAyatScreen extends StatelessWidget {
       NQSurahTitle currentSurahDetails =
           store.state.reader.currentSurahDetails();
       List<List<NQWord>> surahWords = store.state.reader.suraWords;
+      NQSurah? translation = store.state.reader.translation;
 
       return Directionality(
         textDirection: TextDirection.rtl,
@@ -239,10 +241,12 @@ class QuranNewAyatScreen extends StatelessWidget {
                   ),
 
                   /// translation widget
-                  QuranAyatDisplayTranslationWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                  ),
+                  translation != null
+                      ? QuranAyatDisplayTranslationWidget(
+                          translation: translation,
+                          ayaIndex: currentAyah - 1,
+                        )
+                      : Container(),
 
                   /// audio controls
                   QuranAyatDisplayAudioControlsWidget(

@@ -75,9 +75,16 @@ void _initializeMiddleware(
   List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
     0,
   );
+  // Initialize translation
+  NQTranslation currentTranslationType = await QuranSettingsManager.instance.getTranslation();
+  NQSurah translation  = await NobleQuran.getTranslationString(
+    0,
+    currentTranslationType,
+  );
   store.dispatch(SelectSurahAction(
     surah: 1,
     words: suraWords,
+    translation: translation,
   ));
   next(action);
 }
