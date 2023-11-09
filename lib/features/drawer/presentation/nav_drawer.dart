@@ -58,6 +58,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               ),
               QuranNavDrawerRowWidget(
                 context: context,
+                title: 'Bookmark',
+                icon: Icons.bookmark,
+                onSelected: () => _goToBookmark(),
+              ),
+              QuranNavDrawerRowWidget(
+                context: context,
                 title: 'Notes',
                 icon: Icons.edit_note_sharp,
                 destination: QuranViewNotesScreen(user: userParam),
