@@ -13,6 +13,7 @@ import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
 import '../../../../tags/domain/redux/actions/actions.dart';
+import '../../../data/quran_data.dart';
 import '../actions/actions.dart';
 
 List<Middleware<AppState>> createReaderScreenMiddleware() {
@@ -71,20 +72,11 @@ void _initializeMiddleware(
   store.dispatch(SetSurahListAction(
     surahs: surahList,
   ));
-  // Initialize surah words
-  List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
-    0,
-  );
-  // Initialize translation
-  NQTranslation currentTranslationType = await QuranSettingsManager.instance.getTranslation();
-  NQSurah translation  = await NobleQuran.getTranslationString(
-    0,
-    currentTranslationType,
-  );
+  QuranData data = await _loadQuranData(0);
   store.dispatch(SelectSurahAction(
     surah: 1,
-    words: suraWords,
-    translation: translation,
+    words: data.words,
+    translation: data.translation,
   ));
   next(action);
 }
@@ -191,26 +183,13 @@ void _selectParticularAyaReaderMiddleware(
       await store.dispatch(SetSurahListAction(
         surahs: surahList,
       ));
-
-      // init words list if required
-      List<List<NQWord>>? suraWords;
-      NQSurah? translation;
       if (store.state.reader.currentSurah != action.surah - 1) {
-        // we have a new surah, reload word by word content
-        suraWords = await NobleQuran.getSurahWordByWord(
-          action.surah - 1,
-        );
-        // reload translation
-        NQTranslation currentTranslationType = await QuranSettingsManager.instance.getTranslation();
-        translation  = await NobleQuran.getTranslationString(
-          action.surah - 1,
-          currentTranslationType,
+        QuranData date = await _loadQuranData(action.surah - 1);
+        action = action.copyWith(
+          words: date.words,
+          translation: date.translation,
         );
       }
-      action = action.copyWith(
-        words: suraWords,
-        translation: translation,
-      );
     }
   } catch (_) {}
   next(action);
@@ -222,37 +201,32 @@ void _selectSurahReaderMiddleware(
   NextDispatcher next,
 ) async {
   try {
-    List<List<NQWord>>? suraWords;
-    NQSurah? translation;
     if (store.state.reader.currentSurah != action.surah - 1) {
-      // we have a new surah, word by word reload content
-      suraWords = await NobleQuran.getSurahWordByWord(
-        action.surah - 1,
-      );
-      // reload translation
-      NQTranslation currentTranslationType = await QuranSettingsManager.instance.getTranslation();
-      translation  = await NobleQuran.getTranslationString(
-        action.surah - 1,
-        currentTranslationType,
+      QuranData date = await _loadQuranData(action.surah - 1);
+      action = action.copyWith(
+        words: date.words,
+        translation: date.translation,
       );
     }
-    action = action.copyWith(
-      words: suraWords,
-      translation: translation,
-    );
   } catch (_) {}
   next(action);
 }
 
-void _loadQuranData(int surah) async {
+Future<QuranData> _loadQuranData(int surah) async {
   // Initialize surah words
   List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
     surah,
   );
   // Initialize translation
-  NQTranslation currentTranslationType = await QuranSettingsManager.instance.getTranslation();
-  NQSurah translation  = await NobleQuran.getTranslationString(
+  NQTranslation currentTranslationType =
+      await QuranSettingsManager.instance.getTranslation();
+  NQSurah translation = await NobleQuran.getTranslationString(
     surah,
     currentTranslationType,
+  );
+
+  return QuranData(
+    words: suraWords,
+    translation: translation,
   );
 }
