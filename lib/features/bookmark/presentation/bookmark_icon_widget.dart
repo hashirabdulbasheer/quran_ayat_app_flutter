@@ -4,8 +4,8 @@ import 'package:redux/redux.dart';
 
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
+import '../../newAyat/domain/redux/actions/bookmark_actions.dart';
 import '../../newAyat/domain/redux/reader_screen_state.dart';
-import '../domain/redux/actions/actions.dart';
 
 class QuranBookmarkIconWidget extends StatefulWidget {
   final int currentSurah;

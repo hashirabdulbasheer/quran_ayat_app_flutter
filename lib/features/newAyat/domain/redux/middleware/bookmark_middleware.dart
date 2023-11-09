@@ -5,10 +5,10 @@ import 'package:redux/redux.dart';
 import '../../../../../models/qr_user_model.dart';
 import '../../../../auth/domain/auth_factory.dart';
 import '../../../../core/domain/app_state/app_state.dart';
-import '../../../../newAyat/domain/redux/actions/actions.dart';
-import '../../../data/bookmarks_local_impl.dart';
-import '../../../data/firebase_bookmarks_impl.dart';
 import '../actions/actions.dart';
+import '../../../../bookmark/data/bookmarks_local_impl.dart';
+import '../../../../bookmark/data/firebase_bookmarks_impl.dart';
+import '../actions/bookmark_actions.dart';
 
 List<Middleware<AppState>> createBookmarkMiddleware() {
   return [

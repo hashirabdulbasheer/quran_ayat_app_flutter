@@ -9,13 +9,13 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../../../utils/logger_utils.dart';
 import '../../../../../utils/utils.dart';
-import '../../../../bookmark/domain/redux/actions/actions.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
 import '../../../../tags/domain/redux/actions/actions.dart';
 import '../../../data/quran_data.dart';
 import '../actions/actions.dart';
+import '../actions/bookmark_actions.dart';
 
 List<Middleware<AppState>> createReaderScreenMiddleware() {
   return [

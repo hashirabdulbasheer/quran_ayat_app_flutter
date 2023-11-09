@@ -1,5 +1,7 @@
 import 'package:redux/redux.dart';
+
 import '../actions/actions.dart';
+import '../actions/bookmark_actions.dart';
 import '../reader_screen_state.dart';
 
 /// AYAT SCREEN REDUCER
@@ -36,6 +38,12 @@ Reducer<ReaderScreenState> readerScreenReducer =
   ),
   TypedReducer<ReaderScreenState, SelectParticularAyaAction>(
     _particularAyaSelectedReducer,
+  ),
+  TypedReducer<ReaderScreenState, SaveBookmarkAction>(
+    _saveBookmarkReducer,
+  ),
+  TypedReducer<ReaderScreenState, InitBookmarkAction>(
+    _initBookmarkReducer,
   ),
   TypedReducer<ReaderScreenState, dynamic>(
     _allOtherReaderReducer,
@@ -193,5 +201,23 @@ ReaderScreenState _audioContinuousModeReducer(
 ) {
   return state.copyWith(
     isAudioContinuousModeEnabled: action.isEnabled,
+  );
+}
+
+ReaderScreenState _saveBookmarkReducer(
+  ReaderScreenState state,
+  SaveBookmarkAction action,
+) {
+  return state.copyWith(
+    bookmarkState: action.index,
+  );
+}
+
+ReaderScreenState _initBookmarkReducer(
+  ReaderScreenState state,
+  InitBookmarkAction action,
+) {
+  return state.copyWith(
+    bookmarkState: action.index,
   );
 }

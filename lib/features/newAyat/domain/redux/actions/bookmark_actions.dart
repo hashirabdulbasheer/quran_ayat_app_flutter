@@ -1,5 +1,5 @@
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
-import '../../../../newAyat/data/surah_index.dart';
+import '../../../data/surah_index.dart';
 
 // Saves bookmark to local and remote
 class SaveBookmarkAction extends AppStateAction {
