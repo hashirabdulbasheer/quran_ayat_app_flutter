@@ -9,6 +9,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../../../utils/logger_utils.dart';
 import '../../../../../utils/utils.dart';
+import '../../../../bookmark/domain/redux/actions/actions.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
@@ -72,12 +73,17 @@ void _initializeMiddleware(
   store.dispatch(SetSurahListAction(
     surahs: surahList,
   ));
+  // Initialize quran data
   QuranData data = await _loadQuranData(0);
-  store.dispatch(SelectSurahAction(
+  store.dispatch(SelectParticularAyaAction(
     surah: 1,
+    aya: 1,
     words: data.words,
     translation: data.translation,
   ));
+  // Load bookmarks
+  store.dispatch(InitBookmarkAction());
+
   next(action);
 }
 
@@ -183,13 +189,14 @@ void _selectParticularAyaReaderMiddleware(
       await store.dispatch(SetSurahListAction(
         surahs: surahList,
       ));
-      if (store.state.reader.currentSurah != action.surah - 1) {
-        QuranData date = await _loadQuranData(action.surah - 1);
-        action = action.copyWith(
-          words: date.words,
-          translation: date.translation,
-        );
-      }
+    }
+
+    if (store.state.reader.currentSurah != action.surah - 1) {
+      QuranData date = await _loadQuranData(action.surah - 1);
+      action = action.copyWith(
+        words: date.words,
+        translation: date.translation,
+      );
     }
   } catch (_) {}
   next(action);

@@ -26,5 +26,8 @@ BookmarkState _initBookmarkReducer(
   BookmarkState state,
   InitBookmarkAction action,
 ) {
-  return state;
+  return state.copyWith(
+    suraIndex: action.surahIndex,
+    ayaIndex: action.ayaIndex,
+  );
 }

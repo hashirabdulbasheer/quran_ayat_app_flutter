@@ -16,4 +16,27 @@ class SaveBookmarkAction extends AppStateAction {
   }
 }
 
-class InitBookmarkAction extends AppStateAction {}
+class InitBookmarkAction extends AppStateAction {
+  final int? surahIndex;
+  final int? ayaIndex;
+
+  InitBookmarkAction({
+    this.surahIndex,
+    this.ayaIndex,
+  });
+
+  InitBookmarkAction copyWith({
+    int? surahIndex,
+    int? ayaIndex,
+  }) {
+    return InitBookmarkAction(
+      surahIndex: surahIndex ?? this.surahIndex,
+      ayaIndex: ayaIndex ?? this.ayaIndex,
+    );
+  }
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, surahIndex: $surahIndex, ayaIndex: $ayaIndex';
+  }
+}

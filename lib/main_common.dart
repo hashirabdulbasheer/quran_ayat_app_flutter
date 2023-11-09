@@ -89,13 +89,13 @@ class MyAppState extends State<MyApp> {
 
   bool _onKey(KeyEvent event) {
     final key = event.logicalKey.keyLabel;
-    if (event is KeyDownEvent) {
-      if (key == "Arrow Right") {
-        store.dispatch(PreviousAyaAction());
-      } else {
-        store.dispatch(NextAyaAction());
-      }
-    }
+    // if (event is KeyDownEvent) {
+    //   if (key == "Arrow Right") {
+    //     store.dispatch(PreviousAyaAction());
+    //   } else {
+    //     store.dispatch(NextAyaAction());
+    //   }
+    // }
 
     return false;
   }

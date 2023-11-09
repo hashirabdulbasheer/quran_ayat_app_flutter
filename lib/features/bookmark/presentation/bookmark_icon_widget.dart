@@ -25,7 +25,6 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, BookmarkState>(
-      onInit: (Store<AppState> store) => store.dispatch(InitBookmarkAction()),
       converter: (Store<AppState> store) => store.state.reader.bookmarkState,
       builder: (
         BuildContext context,

@@ -1,12 +1,12 @@
 import 'package:noble_quran/models/bookmark.dart';
-import 'package:quran_ayat/features/bookmark/data/bookmarks_local_impl.dart';
-import 'package:quran_ayat/features/bookmark/data/firebase_bookmarks_impl.dart';
-import 'package:quran_ayat/models/qr_user_model.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../../models/qr_user_model.dart';
 import '../../../../auth/domain/auth_factory.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../newAyat/domain/redux/actions/actions.dart';
+import '../../../data/bookmarks_local_impl.dart';
+import '../../../data/firebase_bookmarks_impl.dart';
 import '../actions/actions.dart';
 
 List<Middleware<AppState>> createBookmarkMiddleware() {
@@ -35,10 +35,10 @@ void _initBookmarkMiddleware(
   NQBookmark? localBookmark = await local.fetch();
   if (localBookmark != null) {
     // local bookmark is always given preference
-    store.dispatch(SaveBookmarkAction(
+    action = action.copyWith(
       surahIndex: localBookmark.surah,
       ayaIndex: localBookmark.ayat,
-    ));
+    );
     store.dispatch(
       SelectParticularAyaAction(
         surah: localBookmark.surah,
@@ -54,10 +54,16 @@ void _initBookmarkMiddleware(
           QuranFirebaseBookmarksEngine(userId: user.uid);
       NQBookmark? remoteBookmark = await remote.fetch();
       if (remoteBookmark != null) {
-        store.dispatch(SaveBookmarkAction(
+        // save remote in local, as well, always save in human readable surah
+        // index, hence +1
+        local.save(
+          remoteBookmark.surah + 1,
+          remoteBookmark.ayat,
+        );
+        action = action.copyWith(
           surahIndex: remoteBookmark.surah,
           ayaIndex: remoteBookmark.ayat,
-        ));
+        );
         store.dispatch(
           SelectParticularAyaAction(
             surah: remoteBookmark.surah,
@@ -75,6 +81,7 @@ void _saveBookmarkMiddleware(
   SaveBookmarkAction action,
   NextDispatcher next,
 ) {
+  // Always save bookmarks as human readable indices, 1 for first chapter etc.
   QuranLocalBookmarksEngine local = QuranLocalBookmarksEngine();
   QuranUser? user = QuranAuthFactory.engine.getUser();
   if (user != null) {
