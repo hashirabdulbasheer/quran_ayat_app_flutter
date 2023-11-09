@@ -147,8 +147,8 @@ void _shareAyaReaderMiddleware(
 ) async {
   String shareString = await QuranUtils.shareString(
     store.state.reader.currentSurahDetails().transliterationEn,
-    store.state.reader.currentSurah,
-    store.state.reader.currentAya,
+    store.state.reader.currentIndex.sura,
+    store.state.reader.currentIndex.aya,
   );
   Share.share(
     shareString,
@@ -191,7 +191,7 @@ void _selectParticularAyaReaderMiddleware(
       ));
     }
 
-    if (store.state.reader.currentSurah != action.surah - 1) {
+    if (store.state.reader.currentIndex.sura != action.surah - 1) {
       QuranData date = await _loadQuranData(action.surah - 1);
       action = action.copyWith(
         words: date.words,
@@ -208,7 +208,7 @@ void _selectSurahReaderMiddleware(
   NextDispatcher next,
 ) async {
   try {
-    if (store.state.reader.currentSurah != action.surah - 1) {
+    if (store.state.reader.currentIndex.sura != action.surah - 1) {
       QuranData date = await _loadQuranData(action.surah - 1);
       action = action.copyWith(
         words: date.words,

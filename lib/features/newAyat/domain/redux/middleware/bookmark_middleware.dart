@@ -26,8 +26,8 @@ void _initBookmarkMiddleware(
   InitBookmarkAction action,
   NextDispatcher next,
 ) async {
-  if (store.state.reader.currentSurah != 0 ||
-      store.state.reader.currentAya != 1) {
+  if (store.state.reader.currentIndex.sura != 0 ||
+      store.state.reader.currentIndex.aya != 1) {
     // only update bookmark if we are on 1:1
     // this is so that we don't replace another aya with bookmark
     return;

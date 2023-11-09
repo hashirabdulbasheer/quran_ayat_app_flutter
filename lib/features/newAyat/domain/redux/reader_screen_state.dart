@@ -9,8 +9,7 @@ typedef BookmarkState = SurahIndex;
 @immutable
 class ReaderScreenState extends Equatable {
   final List<NQSurahTitle> surahTitles;
-  final int currentSurah;
-  final int currentAya;
+  final SurahIndex currentIndex;
   final bool isAudioContinuousModeEnabled;
   final bool isLoading;
   final BookmarkState? bookmarkState;
@@ -18,8 +17,7 @@ class ReaderScreenState extends Equatable {
 
   const ReaderScreenState({
     this.surahTitles = const [],
-    this.currentSurah = 0,
-    this.currentAya = 1,
+    this.currentIndex = SurahIndex.defaultIndex,
     this.isAudioContinuousModeEnabled = false,
     this.isLoading = false,
     this.bookmarkState,
@@ -28,8 +26,7 @@ class ReaderScreenState extends Equatable {
 
   ReaderScreenState copyWith({
     List<NQSurahTitle>? surahTitles,
-    int? currentSurah,
-    int? currentAya,
+    SurahIndex? currentIndex,
     bool? isAudioContinuousModeEnabled,
     bool? isLoading,
     BookmarkState? bookmarkState,
@@ -37,8 +34,7 @@ class ReaderScreenState extends Equatable {
   }) {
     return ReaderScreenState(
       surahTitles: surahTitles ?? this.surahTitles,
-      currentSurah: currentSurah ?? this.currentSurah,
-      currentAya: currentAya ?? this.currentAya,
+      currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,
       isAudioContinuousModeEnabled:
           isAudioContinuousModeEnabled ?? this.isAudioContinuousModeEnabled,
@@ -52,23 +48,22 @@ class ReaderScreenState extends Equatable {
       return NQSurahTitle.defaultValue();
     }
 
-    return surahTitles[currentSurah];
+    return surahTitles[currentIndex.sura];
   }
 
   @override
   String toString() {
-    return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, "
+    return "{surah: ${currentIndex.toString()}, titles: ${surahTitles.length}, "
         "isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading, "
         "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words?.length}, "
-        "translation: ${data.translation?.name}";
+        "translation: ${data.translation?.name}}";
   }
 
   @override
   List<Object?> get props => [
         surahTitles,
         isLoading,
-        currentSurah,
-        currentAya,
+        currentIndex,
         isAudioContinuousModeEnabled,
         bookmarkState,
         data,

@@ -33,8 +33,8 @@ class QuranNewAyatScreen extends StatelessWidget {
       BuildContext context,
       Store<AppState> store,
     ) {
-      int currentSurah = store.state.reader.currentSurah;
-      int currentAyah = store.state.reader.currentAya;
+      int currentSurah = store.state.reader.currentIndex.sura;
+      int currentAyah = store.state.reader.currentIndex.aya;
       NQSurahTitle currentSurahDetails =
           store.state.reader.currentSurahDetails();
       List<List<NQWord>> surahWords = store.state.reader.data.words;
@@ -302,7 +302,7 @@ class QuranNewAyatScreen extends StatelessWidget {
         builder: (context) => QuranContextListScreen(
           title: store.state.reader.currentSurahDetails().transliterationEn,
           surahIndex: store.state.reader.currentSurahDetails().number - 1,
-          ayaIndex: store.state.reader.currentAya,
+          ayaIndex: store.state.reader.currentIndex.aya,
         ),
       ),
     );
