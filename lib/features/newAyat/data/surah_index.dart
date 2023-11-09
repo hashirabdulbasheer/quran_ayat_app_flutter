@@ -15,7 +15,7 @@ class SurahIndex extends Equatable {
         aya = bookmark.ayat;
 
   // index exposed to outside world
-  SurahIndex get externalIndex => SurahIndex(
+  SurahIndex get human => SurahIndex(
         sura + 1,
         aya,
       );

@@ -4,17 +4,17 @@ import 'package:flutter/foundation.dart';
 import '../../../newAyat/data/surah_index.dart';
 
 @immutable
-class BookmarkState extends Equatable {
+class BookmarkState1 extends Equatable {
   final SurahIndex? index;
 
-  const BookmarkState({
+  const BookmarkState1({
     this.index,
   });
 
-  BookmarkState copyWith({
+  BookmarkState1 copyWith({
     SurahIndex? index,
   }) {
-    return BookmarkState(
+    return BookmarkState1(
       index: index ?? this.index,
     );
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/data/surah_index.dart';
+import '../../newAyat/domain/redux/reader_screen_state.dart';
 import '../domain/redux/actions/actions.dart';
-import '../domain/redux/bookmark_state.dart';
 
 class QuranBookmarkIconWidget extends StatefulWidget {
   final int currentSurah;
@@ -25,11 +25,11 @@ class QuranBookmarkIconWidget extends StatefulWidget {
 class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, BookmarkState>(
+    return StoreConnector<AppState, BookmarkState?>(
       converter: (Store<AppState> store) => store.state.reader.bookmarkState,
       builder: (
         BuildContext context,
-        BookmarkState state,
+        BookmarkState? state,
       ) {
         return IconButton(
           tooltip: "display bookmark options",
@@ -88,14 +88,12 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
   }
 
   bool _isThisBookmarkedAya(
-    BookmarkState state,
+    BookmarkState? state,
     int currentSurah,
     int currentAya,
   ) {
-    if (state.index != null) {
-      if (currentSurah == state.index?.sura && currentAya == state.index?.aya) {
-        return true;
-      }
+    if (currentSurah == state?.sura && currentAya == state?.aya) {
+      return true;
     }
 
     return false;

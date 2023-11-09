@@ -1,6 +1,4 @@
-import 'package:quran_ayat/features/bookmark/domain/redux/reducers/reducers.dart';
 import 'package:redux/redux.dart';
-
 import '../actions/actions.dart';
 import '../reader_screen_state.dart';
 
@@ -48,12 +46,7 @@ ReaderScreenState _allOtherReaderReducer(
   ReaderScreenState state,
   dynamic action,
 ) {
-  return state.copyWith(
-    bookmarkState: bookmarkReducer(
-      state.bookmarkState,
-      action,
-    ),
-  );
+  return state;
 }
 
 ReaderScreenState _initReaderScreenReducer(
@@ -69,8 +62,8 @@ ReaderScreenState _setSurahTitlesReducer(
 ) {
   return state.copyWith(
     surahTitles: action.surahs,
-    currentSurah: state.bookmarkState.index?.sura ?? state.currentSurah,
-    currentAya: state.bookmarkState.index?.aya ?? state.currentAya,
+    currentSurah: state.bookmarkState?.sura ?? state.currentSurah,
+    currentAya: state.bookmarkState?.aya ?? state.currentAya,
   );
 }
 

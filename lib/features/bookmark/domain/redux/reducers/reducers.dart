@@ -1,6 +1,6 @@
 import 'package:redux/redux.dart';
 
-import '../../redux/bookmark_state.dart';
+import '../../../../newAyat/domain/redux/reader_screen_state.dart';
 import '../actions/actions.dart';
 
 Reducer<BookmarkState> bookmarkReducer = combineReducers<BookmarkState>([
@@ -16,16 +16,12 @@ BookmarkState _saveBookmarkReducer(
   BookmarkState state,
   SaveBookmarkAction action,
 ) {
-  return state.copyWith(
-    index: action.index,
-  );
+  return action.index;
 }
 
 BookmarkState _initBookmarkReducer(
   BookmarkState state,
   InitBookmarkAction action,
 ) {
-  return state.copyWith(
-    index: action.index,
-  );
+  return state;
 }

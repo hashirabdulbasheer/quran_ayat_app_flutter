@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
-import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
-import 'package:quran_ayat/features/settings/domain/constants/setting_constants.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -12,7 +9,10 @@ import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../auth/presentation/quran_profile_screen.dart';
 import '../../bookmark/domain/bookmarks_manager.dart';
+import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/domain/redux/actions/actions.dart';
 import '../../notes/presentation/quran_view_notes_screen.dart';
+import '../../settings/domain/constants/setting_constants.dart';
 import '../../settings/presentation/quran_settings_screen.dart';
 import '../../tags/presentation/quran_view_tags_screen.dart';
 import 'widgets/nav_drawer_header.dart';
@@ -172,18 +172,10 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
   }
 
   void _goToBookmark() {
-    var surah = StoreProvider.of<AppState>(context)
-        .state
-        .reader
-        .bookmarkState
-        .index
-        ?.sura;
-    var aya = StoreProvider.of<AppState>(context)
-        .state
-        .reader
-        .bookmarkState
-        .index
-        ?.aya;
+    var surah =
+        StoreProvider.of<AppState>(context).state.reader.bookmarkState?.sura;
+    var aya =
+        StoreProvider.of<AppState>(context).state.reader.bookmarkState?.aya;
     if (surah != null && aya != null) {
       StoreProvider.of<AppState>(context).dispatch(
         SelectParticularAyaAction(

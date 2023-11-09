@@ -2,8 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
-import '../../../bookmark/domain/redux/bookmark_state.dart';
+typedef BookmarkState = SurahIndex;
 
 @immutable
 class ReaderScreenState extends Equatable {
@@ -12,7 +13,7 @@ class ReaderScreenState extends Equatable {
   final int currentAya;
   final bool isAudioContinuousModeEnabled;
   final bool isLoading;
-  final BookmarkState bookmarkState;
+  final BookmarkState? bookmarkState;
   final QuranData data;
 
   const ReaderScreenState({
@@ -21,7 +22,7 @@ class ReaderScreenState extends Equatable {
     this.currentAya = 1,
     this.isAudioContinuousModeEnabled = false,
     this.isLoading = false,
-    this.bookmarkState = const BookmarkState(),
+    this.bookmarkState,
     this.data = const QuranData(),
   });
 
