@@ -4,6 +4,7 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import '../../../misc/constants/string_constants.dart';
@@ -162,8 +163,11 @@ class QuranNewAyatScreen extends StatelessWidget {
                   /// header
                   QuranAyatHeaderWidget(
                     surahTitles: store.state.reader.surahTitles,
-                    onSurahSelected: (surah) =>
-                        store.dispatch(SelectSurahAction(surah: surah.number)),
+                    onSurahSelected: (surah) => store.dispatch(
+                      SelectSurahAction(
+                        index: SurahIndex.fromHuman(surah.number),
+                      ),
+                    ),
                     onAyaNumberSelected: (aya) =>
                         store.dispatch(SelectAyaAction(aya: aya)),
                     continuousMode: ValueNotifier(false),

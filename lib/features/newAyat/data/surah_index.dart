@@ -16,6 +16,11 @@ class SurahIndex extends Equatable {
       : sura = bookmark.surah - 1,
         aya = bookmark.ayat;
 
+  // construct a surah index from a human sura index that starts with 1
+  const SurahIndex.fromHuman(int sura)
+      : sura = sura - 1,
+        aya = 1;
+
   // index exposed to outside world
   SurahIndex get human => SurahIndex(
         sura + 1,

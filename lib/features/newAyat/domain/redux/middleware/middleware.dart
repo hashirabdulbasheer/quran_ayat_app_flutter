@@ -14,6 +14,7 @@ import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
 import '../../../../tags/domain/redux/actions/actions.dart';
 import '../../../data/quran_data.dart';
+import '../../../data/surah_index.dart';
 import '../actions/actions.dart';
 import '../actions/bookmark_actions.dart';
 
@@ -74,10 +75,9 @@ void _initializeMiddleware(
     surahs: surahList,
   ));
   // Initialize quran data
-  QuranData data = await _loadQuranData(0);
+  QuranData data = await _loadQuranData(SurahIndex.defaultIndex);
   store.dispatch(SelectParticularAyaAction(
-    surah: 1,
-    aya: 1,
+    index: SurahIndex.defaultIndex,
     words: data.words,
     translation: data.translation,
   ));
@@ -165,12 +165,15 @@ void _randomAyaReaderMiddleware(
   try {
     int randomSurahIndex = Random().nextInt(114);
     int randomAyaIndex = Random().nextInt(
-      store.state.reader.surahTitles[randomSurahIndex].totalVerses,
-    );
+          store.state.reader.surahTitles[randomSurahIndex].totalVerses,
+        ) +
+        1;
     store.dispatch(
       SelectParticularAyaAction(
-        surah: randomSurahIndex,
-        aya: randomAyaIndex + 1,
+        index: SurahIndex(
+          randomSurahIndex,
+          randomAyaIndex,
+        ),
       ),
     );
   } catch (_) {}
@@ -191,8 +194,8 @@ void _selectParticularAyaReaderMiddleware(
       ));
     }
 
-    if (store.state.reader.currentIndex.sura != action.surah - 1) {
-      QuranData date = await _loadQuranData(action.surah - 1);
+    if (store.state.reader.currentIndex != action.index) {
+      QuranData date = await _loadQuranData(action.index);
       action = action.copyWith(
         words: date.words,
         translation: date.translation,
@@ -208,8 +211,8 @@ void _selectSurahReaderMiddleware(
   NextDispatcher next,
 ) async {
   try {
-    if (store.state.reader.currentIndex.sura != action.surah - 1) {
-      QuranData date = await _loadQuranData(action.surah - 1);
+    if (store.state.reader.currentIndex != action.index) {
+      QuranData date = await _loadQuranData(action.index);
       action = action.copyWith(
         words: date.words,
         translation: date.translation,
@@ -219,16 +222,16 @@ void _selectSurahReaderMiddleware(
   next(action);
 }
 
-Future<QuranData> _loadQuranData(int surah) async {
+Future<QuranData> _loadQuranData(SurahIndex surahIndex) async {
   // Initialize surah words
   List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
-    surah,
+    surahIndex.sura,
   );
   // Initialize translation
   NQTranslation currentTranslationType =
       await QuranSettingsManager.instance.getTranslation();
   NQSurah translation = await NobleQuran.getTranslationString(
-    surah,
+    surahIndex.sura,
     currentTranslationType,
   );
 

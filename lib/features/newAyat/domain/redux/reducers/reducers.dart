@@ -1,6 +1,6 @@
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
+import '../../../data/surah_index.dart';
 import '../actions/actions.dart';
 import '../actions/bookmark_actions.dart';
 import '../reader_screen_state.dart';
@@ -79,7 +79,7 @@ ReaderScreenState _surahSelectedReducer(
   ReaderScreenState state,
   SelectSurahAction action,
 ) {
-  int suraIndex = action.surah.abs();
+  int suraIndex = action.index.sura.abs();
   ReaderScreenState newState = state.copyWith(
     data: state.data.copyWith(
       words: action.words,
@@ -120,8 +120,8 @@ ReaderScreenState _particularAyaSelectedReducer(
   ReaderScreenState state,
   SelectParticularAyaAction action,
 ) {
-  int suraIndex = action.surah.abs();
-  int ayaIndex = action.aya.abs();
+  int suraIndex = action.index.sura.abs();
+  int ayaIndex = action.index.aya.abs();
   ReaderScreenState newState = state.copyWith(
     data: state.data.copyWith(
       words: action.words,
@@ -142,10 +142,7 @@ ReaderScreenState _particularAyaSelectedReducer(
   }
 
   return newState.copyWith(
-    currentIndex: SurahIndex(
-      suraIndex,
-      ayaIndex,
-    ),
+    currentIndex: action.index,
   );
 }
 

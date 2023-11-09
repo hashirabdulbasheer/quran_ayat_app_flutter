@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -179,8 +180,10 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
     if (surah != null && aya != null) {
       StoreProvider.of<AppState>(context).dispatch(
         SelectParticularAyaAction(
-          surah: surah + 1,
-          aya: aya,
+          index: SurahIndex(
+            surah,
+            aya,
+          ),
         ),
       );
     } else {

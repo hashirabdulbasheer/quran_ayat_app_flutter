@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
@@ -154,8 +155,10 @@ void _handleUrlPathsForWeb(
           var selectedSurahIndex = int.parse(suraIndex);
           var ayaIndexInt = int.parse(ayaIndex);
           store.dispatch(SelectParticularAyaAction(
-            surah: selectedSurahIndex,
-            aya: ayaIndexInt,
+            index: SurahIndex(
+              selectedSurahIndex,
+              ayaIndexInt,
+            ),
           ));
         } catch (_) {}
         QuranLogger.logAnalytics("url-sura-aya");
@@ -165,8 +168,10 @@ void _handleUrlPathsForWeb(
         try {
           var selectedSurahIndex = int.parse(suraIndex);
           store.dispatch(SelectParticularAyaAction(
-            surah: selectedSurahIndex,
-            aya: 1,
+            index: SurahIndex(
+              selectedSurahIndex,
+              1,
+            ),
           ));
         } catch (_) {}
         QuranLogger.logAnalytics("url-aya");

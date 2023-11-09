@@ -1,6 +1,7 @@
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
 
@@ -20,29 +21,29 @@ class SetSurahListAction extends AppStateAction {
 }
 
 class SelectSurahAction extends AppStateAction {
-  final int surah;
+  final SurahIndex index;
   final List<List<NQWord>>? words;
   final NQSurah? translation;
 
   SelectSurahAction({
-    required this.surah,
+    required this.index,
     this.words,
     this.translation,
   });
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surah: $surah, words: ${words?.length}, '
+    return '{action: ${super.toString()}, surah: $index, words: ${words?.length}, '
         'translation: ${translation?.name}}';
   }
 
   SelectSurahAction copyWith({
-    int? surah,
+    SurahIndex? index,
     List<List<NQWord>>? words,
     NQSurah? translation,
   }) {
     return SelectSurahAction(
-      surah: surah ?? this.surah,
+      index: index ?? this.index,
       words: words ?? this.words,
       translation: translation ?? this.translation,
     );
@@ -63,27 +64,23 @@ class SelectAyaAction extends AppStateAction {
 }
 
 class SelectParticularAyaAction extends AppStateAction {
-  final int surah;
-  final int aya;
+  final SurahIndex index;
   final List<List<NQWord>>? words;
   final NQSurah? translation;
 
   SelectParticularAyaAction({
-    required this.surah,
-    required this.aya,
+    required this.index,
     this.words,
     this.translation,
   });
 
   SelectParticularAyaAction copyWith({
-    int? surah,
-    int? aya,
+    SurahIndex? index,
     List<List<NQWord>>? words,
     NQSurah? translation,
   }) {
     return SelectParticularAyaAction(
-      surah: surah ?? this.surah,
-      aya: aya ?? this.aya,
+      index: index ?? this.index,
       words: words ?? this.words,
       translation: translation ?? this.translation,
     );
@@ -91,7 +88,7 @@ class SelectParticularAyaAction extends AppStateAction {
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surah: $surah, aya: $aya, words len: ${words?.length}, '
+    return '{action: ${super.toString()}, surah: $index, words len: ${words?.length}, '
         'translation: ${translation?.name}';
   }
 }

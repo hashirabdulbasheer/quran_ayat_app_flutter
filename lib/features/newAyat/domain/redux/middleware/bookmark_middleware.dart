@@ -4,10 +4,10 @@ import 'package:redux/redux.dart';
 
 import '../../../../../models/qr_user_model.dart';
 import '../../../../auth/domain/auth_factory.dart';
-import '../../../../core/domain/app_state/app_state.dart';
-import '../actions/actions.dart';
 import '../../../../bookmark/data/bookmarks_local_impl.dart';
 import '../../../../bookmark/data/firebase_bookmarks_impl.dart';
+import '../../../../core/domain/app_state/app_state.dart';
+import '../actions/actions.dart';
 import '../actions/bookmark_actions.dart';
 
 List<Middleware<AppState>> createBookmarkMiddleware() {
@@ -41,8 +41,10 @@ void _initBookmarkMiddleware(
     );
     store.dispatch(
       SelectParticularAyaAction(
-        surah: localBookmark.surah,
-        aya: localBookmark.ayat,
+        index: SurahIndex(
+          localBookmark.surah,
+          localBookmark.ayat,
+        ),
       ),
     );
   } else {
@@ -65,8 +67,10 @@ void _initBookmarkMiddleware(
         );
         store.dispatch(
           SelectParticularAyaAction(
-            surah: remoteBookmark.surah,
-            aya: remoteBookmark.ayat,
+            index: SurahIndex(
+              remoteBookmark.surah,
+              remoteBookmark.ayat,
+            ),
           ),
         );
       }
