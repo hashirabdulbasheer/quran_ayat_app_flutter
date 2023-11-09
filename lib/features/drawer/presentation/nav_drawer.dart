@@ -176,9 +176,14 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
         .state
         .reader
         .bookmarkState
-        .suraIndex;
-    var aya =
-        StoreProvider.of<AppState>(context).state.reader.bookmarkState.ayaIndex;
+        .index
+        ?.sura;
+    var aya = StoreProvider.of<AppState>(context)
+        .state
+        .reader
+        .bookmarkState
+        .index
+        ?.aya;
     if (surah != null && aya != null) {
       StoreProvider.of<AppState>(context).dispatch(
         SelectParticularAyaAction(

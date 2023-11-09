@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import '../../core/domain/app_state/app_state.dart';
@@ -53,8 +54,10 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
       child: const Text("Save"),
       onPressed: () => {
         StoreProvider.of<AppState>(context).dispatch(SaveBookmarkAction(
-          surahIndex: widget.currentSurah,
-          ayaIndex: widget.currentAya,
+          index: SurahIndex(
+            widget.currentSurah,
+            widget.currentAya,
+          ),
         )),
         Navigator.of(context).pop(),
       },
@@ -89,8 +92,8 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
     int currentSurah,
     int currentAya,
   ) {
-    if (state.suraIndex != null && state.ayaIndex != null) {
-      if (currentSurah == state.suraIndex && currentAya == state.ayaIndex) {
+    if (state.index != null) {
+      if (currentSurah == state.index?.sura && currentAya == state.index?.aya) {
         return true;
       }
     }

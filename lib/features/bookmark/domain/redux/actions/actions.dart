@@ -1,42 +1,37 @@
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
+import '../../../../newAyat/data/surah_index.dart';
 
 // Saves bookmark to local and remote
 class SaveBookmarkAction extends AppStateAction {
-  final int surahIndex;
-  final int ayaIndex;
+  final SurahIndex index;
 
   SaveBookmarkAction({
-    required this.surahIndex,
-    required this.ayaIndex,
+    required this.index,
   });
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surahIndex: $surahIndex, ayaIndex: $ayaIndex';
+    return '{action: ${super.toString()}, surahIndex: ${index.toString()}}';
   }
 }
 
 class InitBookmarkAction extends AppStateAction {
-  final int? surahIndex;
-  final int? ayaIndex;
+  final SurahIndex? index;
 
   InitBookmarkAction({
-    this.surahIndex,
-    this.ayaIndex,
+    this.index,
   });
 
   InitBookmarkAction copyWith({
-    int? surahIndex,
-    int? ayaIndex,
+    SurahIndex? index,
   }) {
     return InitBookmarkAction(
-      surahIndex: surahIndex ?? this.surahIndex,
-      ayaIndex: ayaIndex ?? this.ayaIndex,
+      index: index ?? this.index,
     );
   }
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surahIndex: $surahIndex, ayaIndex: $ayaIndex';
+    return '{action: ${super.toString()}, surahIndex: ${index.toString()}}';
   }
 }

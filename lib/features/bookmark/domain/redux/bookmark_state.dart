@@ -1,29 +1,26 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../../newAyat/data/surah_index.dart';
+
 @immutable
 class BookmarkState extends Equatable {
-  final int? suraIndex;
-  final int? ayaIndex;
+  final SurahIndex? index;
 
   const BookmarkState({
-    this.suraIndex,
-    this.ayaIndex,
+    this.index,
   });
 
   BookmarkState copyWith({
-    int? suraIndex,
-    int? ayaIndex,
+    SurahIndex? index,
   }) {
     return BookmarkState(
-      suraIndex: suraIndex ?? this.suraIndex,
-      ayaIndex: ayaIndex ?? this.ayaIndex,
+      index: index ?? this.index,
     );
   }
 
   @override
   List<Object?> get props => [
-        suraIndex,
-        ayaIndex,
+        index,
       ];
 }

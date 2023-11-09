@@ -1,33 +1,33 @@
 import 'package:equatable/equatable.dart';
+import 'package:noble_quran/models/bookmark.dart';
 
 class SurahIndex extends Equatable {
-  final int _sura;
-  final int _aya;
+  final int sura;
+  final int aya;
 
   const SurahIndex(
-    this._sura,
-    this._aya,
+    this.sura,
+    this.aya,
   );
 
-  // index used inside the app
-  SurahIndex internalIndex() {
-    return SurahIndex(
-      _sura - 1,
-      _aya,
-    );
-  }
+  SurahIndex.fromBookmark(NQBookmark bookmark)
+      : sura = bookmark.surah - 1,
+        aya = bookmark.ayat;
 
   // index exposed to outside world
-  SurahIndex externalIndex() {
-    return SurahIndex(
-      _sura,
-      _aya,
-    );
+  SurahIndex get externalIndex => SurahIndex(
+        sura + 1,
+        aya,
+      );
+
+  @override
+  String toString() {
+    return '{SurahIndex: surahIndex: $sura, ayaIndex: $aya}';
   }
 
   @override
   List<Object?> get props => [
-        _sura,
-        _aya,
+        sura,
+        aya,
       ];
 }

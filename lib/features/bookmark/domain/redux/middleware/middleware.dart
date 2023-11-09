@@ -1,4 +1,5 @@
 import 'package:noble_quran/models/bookmark.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../models/qr_user_model.dart';
@@ -36,8 +37,7 @@ void _initBookmarkMiddleware(
   if (localBookmark != null) {
     // local bookmark is always given preference
     action = action.copyWith(
-      surahIndex: localBookmark.surah,
-      ayaIndex: localBookmark.ayat,
+      index: SurahIndex.fromBookmark(localBookmark),
     );
     store.dispatch(
       SelectParticularAyaAction(
@@ -61,8 +61,7 @@ void _initBookmarkMiddleware(
           remoteBookmark.ayat,
         );
         action = action.copyWith(
-          surahIndex: remoteBookmark.surah,
-          ayaIndex: remoteBookmark.ayat,
+          index: SurahIndex.fromBookmark(remoteBookmark),
         );
         store.dispatch(
           SelectParticularAyaAction(
@@ -89,13 +88,13 @@ void _saveBookmarkMiddleware(
     QuranFirebaseBookmarksEngine remote =
         QuranFirebaseBookmarksEngine(userId: user.uid);
     remote.save(
-      action.surahIndex + 1,
-      action.ayaIndex,
+      action.index.externalIndex.sura + 1,
+      action.index.externalIndex.aya,
     );
   }
   local.save(
-    action.surahIndex + 1,
-    action.ayaIndex,
+    action.index.externalIndex.sura + 1,
+    action.index.externalIndex.aya,
   );
   next(action);
 }

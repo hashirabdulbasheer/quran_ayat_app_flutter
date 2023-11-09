@@ -69,8 +69,8 @@ ReaderScreenState _setSurahTitlesReducer(
 ) {
   return state.copyWith(
     surahTitles: action.surahs,
-    currentSurah: state.bookmarkState.suraIndex ?? state.currentSurah,
-    currentAya: state.bookmarkState.ayaIndex ?? state.currentAya,
+    currentSurah: state.bookmarkState.index?.sura ?? state.currentSurah,
+    currentAya: state.bookmarkState.index?.aya ?? state.currentAya,
   );
 }
 

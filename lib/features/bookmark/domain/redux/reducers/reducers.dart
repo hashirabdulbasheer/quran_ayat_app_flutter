@@ -17,8 +17,7 @@ BookmarkState _saveBookmarkReducer(
   SaveBookmarkAction action,
 ) {
   return state.copyWith(
-    suraIndex: action.surahIndex,
-    ayaIndex: action.ayaIndex,
+    index: action.index,
   );
 }
 
@@ -27,7 +26,6 @@ BookmarkState _initBookmarkReducer(
   InitBookmarkAction action,
 ) {
   return state.copyWith(
-    suraIndex: action.surahIndex,
-    ayaIndex: action.ayaIndex,
+    index: action.index,
   );
 }
