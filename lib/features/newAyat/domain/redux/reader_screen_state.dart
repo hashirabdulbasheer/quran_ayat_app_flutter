@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
 
 import '../../../bookmark/domain/redux/bookmark_state.dart';
 
@@ -12,6 +13,7 @@ class ReaderScreenState extends Equatable {
   final bool isAudioContinuousModeEnabled;
   final bool isLoading;
   final BookmarkState bookmarkState;
+  final QuranData data;
 
   const ReaderScreenState({
     this.surahTitles = const [],
@@ -20,6 +22,7 @@ class ReaderScreenState extends Equatable {
     this.isAudioContinuousModeEnabled = false,
     this.isLoading = false,
     this.bookmarkState = const BookmarkState(),
+    this.data = const QuranData(),
   });
 
   ReaderScreenState copyWith({
@@ -29,6 +32,7 @@ class ReaderScreenState extends Equatable {
     bool? isAudioContinuousModeEnabled,
     bool? isLoading,
     BookmarkState? bookmarkState,
+    QuranData? data,
   }) {
     return ReaderScreenState(
       surahTitles: surahTitles ?? this.surahTitles,
@@ -38,6 +42,7 @@ class ReaderScreenState extends Equatable {
       isAudioContinuousModeEnabled:
           isAudioContinuousModeEnabled ?? this.isAudioContinuousModeEnabled,
       bookmarkState: bookmarkState ?? this.bookmarkState,
+      data: data ?? this.data,
     );
   }
 
@@ -51,16 +56,20 @@ class ReaderScreenState extends Equatable {
 
   @override
   String toString() {
-    return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading, bookmark: ${bookmarkState.toString()}";
+    return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, "
+        "isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading, "
+        "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words?.length}, "
+        "translation: ${data.translation?.name}";
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         surahTitles,
         isLoading,
         currentSurah,
         currentAya,
         isAudioContinuousModeEnabled,
         bookmarkState,
+        data,
       ];
 }

@@ -1,4 +1,6 @@
+import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:noble_quran/models/word.dart';
 
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
 
@@ -19,14 +21,31 @@ class SetSurahListAction extends AppStateAction {
 
 class SelectSurahAction extends AppStateAction {
   final int surah;
+  final List<List<NQWord>>? words;
+  final NQSurah? translation;
 
   SelectSurahAction({
     required this.surah,
+    this.words,
+    this.translation,
   });
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surah: $surah';
+    return '{action: ${super.toString()}, surah: $surah, words: ${words?.length}, '
+        'translation: ${translation?.name}}';
+  }
+
+  SelectSurahAction copyWith({
+    int? surah,
+    List<List<NQWord>>? words,
+    NQSurah? translation,
+  }) {
+    return SelectSurahAction(
+      surah: surah ?? this.surah,
+      words: words ?? this.words,
+      translation: translation ?? this.translation,
+    );
   }
 }
 
@@ -46,15 +65,34 @@ class SelectAyaAction extends AppStateAction {
 class SelectParticularAyaAction extends AppStateAction {
   final int surah;
   final int aya;
+  final List<List<NQWord>>? words;
+  final NQSurah? translation;
 
   SelectParticularAyaAction({
     required this.surah,
     required this.aya,
+    this.words,
+    this.translation,
   });
+
+  SelectParticularAyaAction copyWith({
+    int? surah,
+    int? aya,
+    List<List<NQWord>>? words,
+    NQSurah? translation,
+  }) {
+    return SelectParticularAyaAction(
+      surah: surah ?? this.surah,
+      aya: aya ?? this.aya,
+      words: words ?? this.words,
+      translation: translation ?? this.translation,
+    );
+  }
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surah: $surah, aya: $aya';
+    return '{action: ${super.toString()}, surah: $surah, aya: $aya, words len: ${words?.length}, '
+        'translation: ${translation?.name}';
   }
 }
 

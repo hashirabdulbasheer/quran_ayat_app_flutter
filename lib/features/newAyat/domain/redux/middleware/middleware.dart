@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:noble_quran/enums/translations.dart';
+import 'package:noble_quran/models/surah.dart';
+import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
@@ -10,6 +13,7 @@ import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
 import '../../../../tags/domain/redux/actions/actions.dart';
+import '../../../data/quran_data.dart';
 import '../actions/actions.dart';
 
 List<Middleware<AppState>> createReaderScreenMiddleware() {
@@ -38,6 +42,12 @@ List<Middleware<AppState>> createReaderScreenMiddleware() {
     TypedMiddleware<AppState, RandomAyaAction>(
       _randomAyaReaderMiddleware,
     ),
+    TypedMiddleware<AppState, SelectParticularAyaAction>(
+      _selectParticularAyaReaderMiddleware,
+    ),
+    TypedMiddleware<AppState, SelectSurahAction>(
+      _selectSurahReaderMiddleware,
+    ),
     TypedMiddleware<AppState, dynamic>(
       _allOtherReaderMiddleware,
     ),
@@ -56,13 +66,18 @@ void _initializeMiddleware(
   Store<AppState> store,
   InitializeReaderScreenAction action,
   NextDispatcher next,
-) {
+) async {
   // Initialize surah titles
-  NobleQuran.getSurahList().then((surahList) {
-    store.dispatch(SetSurahListAction(
-      surahs: surahList,
-    ));
-  });
+  var surahList = await NobleQuran.getSurahList();
+  store.dispatch(SetSurahListAction(
+    surahs: surahList,
+  ));
+  QuranData data = await _loadQuranData(0);
+  store.dispatch(SelectSurahAction(
+    surah: 1,
+    words: data.words,
+    translation: data.translation,
+  ));
   next(action);
 }
 
@@ -154,4 +169,64 @@ void _randomAyaReaderMiddleware(
     );
   } catch (_) {}
   next(action);
+}
+
+void _selectParticularAyaReaderMiddleware(
+  Store<AppState> store,
+  SelectParticularAyaAction action,
+  NextDispatcher next,
+) async {
+  try {
+    if (store.state.reader.surahTitles.isEmpty) {
+      // not yet initialized
+      var surahList = await NobleQuran.getSurahList();
+      await store.dispatch(SetSurahListAction(
+        surahs: surahList,
+      ));
+      if (store.state.reader.currentSurah != action.surah - 1) {
+        QuranData date = await _loadQuranData(action.surah - 1);
+        action = action.copyWith(
+          words: date.words,
+          translation: date.translation,
+        );
+      }
+    }
+  } catch (_) {}
+  next(action);
+}
+
+void _selectSurahReaderMiddleware(
+  Store<AppState> store,
+  SelectSurahAction action,
+  NextDispatcher next,
+) async {
+  try {
+    if (store.state.reader.currentSurah != action.surah - 1) {
+      QuranData date = await _loadQuranData(action.surah - 1);
+      action = action.copyWith(
+        words: date.words,
+        translation: date.translation,
+      );
+    }
+  } catch (_) {}
+  next(action);
+}
+
+Future<QuranData> _loadQuranData(int surah) async {
+  // Initialize surah words
+  List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
+    surah,
+  );
+  // Initialize translation
+  NQTranslation currentTranslationType =
+      await QuranSettingsManager.instance.getTranslation();
+  NQSurah translation = await NobleQuran.getTranslationString(
+    surah,
+    currentTranslationType,
+  );
+
+  return QuranData(
+    words: suraWords,
+    translation: translation,
+  );
 }

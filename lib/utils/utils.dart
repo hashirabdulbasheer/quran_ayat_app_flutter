@@ -65,11 +65,11 @@ class QuranUtils {
       translation,
     );
     StringBuffer response = StringBuffer();
-    response.write("Sura $surahName - $surah:$aya\n\n");
+    response.write("Sura $surahName - ${surah+1}:$aya\n\n");
     response.write("${arabicSurah.aya[actualAyaIndex].text}\n\n");
     response.write("${translationSurah.aya[actualAyaIndex].text}\n\n");
     response.write(
-      "More details:\nhttp://uxquran.com/apps/quran-ayat/?sura=$surah&aya=$aya\n",
+      "More details:\nhttp://uxquran.com/apps/quran-ayat/?sura=${surah+1}&aya=$aya\n",
     );
 
     return response.toString();

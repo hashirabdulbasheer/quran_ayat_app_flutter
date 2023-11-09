@@ -47,13 +47,13 @@ class QuranAyatDisplayTransliterationWidget extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      QuranFullAyatRowWidget(
-                        futureMethodThatReturnsSelectedSurah:
-                            NobleQuran.getSurahTransliteration(
-                          surahIndex,
-                        ),
-                        ayaIndex: currentlySelectedAya,
-                      ),
+                      // QuranFullAyatRowWidget(
+                      //   futureMethodThatReturnsSelectedSurah:
+                      //       NobleQuran.getSurahTransliteration(
+                      //     surahIndex,
+                      //   ),
+                      //   ayaIndex: currentlySelectedAya,
+                      // ),
                     ],
                   );
                 }

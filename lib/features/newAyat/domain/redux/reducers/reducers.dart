@@ -78,46 +78,70 @@ ReaderScreenState _surahSelectedReducer(
   ReaderScreenState state,
   SelectSurahAction action,
 ) {
-  int suraIndex = action.surah;
-  if (suraIndex >= 0 && suraIndex < 114) {
-    return state.copyWith(
-      currentSurah: action.surah - 1,
+  int suraIndex = action.surah.abs();
+  ReaderScreenState newState = state.copyWith(
+    data: state.data.copyWith(
+      words: action.words,
+      translation: action.translation,
+    ),
+  );
+  if (suraIndex >= 0 && suraIndex < 115) {
+    return newState.copyWith(
+      currentSurah: suraIndex - 1,
+      currentAya: 1,
+    );
+  } else {
+    return newState.copyWith(
+      currentSurah: 0,
       currentAya: 1,
     );
   }
-
-  return state;
-}
-
-ReaderScreenState _particularAyaSelectedReducer(
-  ReaderScreenState state,
-  SelectParticularAyaAction action,
-) {
-  int suraIndex = action.surah;
-  int ayaIndex = action.aya;
-  if (suraIndex >= 0 &&
-      suraIndex < 114) {
-    return state.copyWith(
-      currentSurah: suraIndex,
-      currentAya: ayaIndex,
-    );
-  }
-
-  return state;
 }
 
 ReaderScreenState _ayaSelectedReducer(
   ReaderScreenState state,
   SelectAyaAction action,
 ) {
-  int ayaIndex = action.aya;
-  if (ayaIndex <= state.currentSurahDetails().totalVerses) {
+  int ayaIndex = action.aya.abs();
+  if (ayaIndex < state.currentSurahDetails().totalVerses) {
     return state.copyWith(
-      currentAya: action.aya,
+      currentAya: ayaIndex,
+    );
+  } else {
+    return state.copyWith(
+      currentAya: 1,
+    );
+  }
+}
+
+ReaderScreenState _particularAyaSelectedReducer(
+  ReaderScreenState state,
+  SelectParticularAyaAction action,
+) {
+  int suraIndex = action.surah.abs() - 1;
+  int ayaIndex = action.aya.abs();
+  ReaderScreenState newState = state.copyWith(
+    data: state.data.copyWith(
+      words: action.words,
+      translation: action.translation,
+    ),
+  );
+  if (suraIndex > 114) {
+    return newState.copyWith(
+      currentSurah: 0,
+      currentAya: 1,
+    );
+  } else if (ayaIndex > state.surahTitles[suraIndex].totalVerses) {
+    return newState.copyWith(
+      currentSurah: suraIndex,
+      currentAya: 1,
     );
   }
 
-  return state;
+  return newState.copyWith(
+    currentSurah: suraIndex,
+    currentAya: ayaIndex,
+  );
 }
 
 ReaderScreenState _showLoadingReducer(

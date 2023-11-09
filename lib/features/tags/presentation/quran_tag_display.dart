@@ -135,7 +135,7 @@ class _QuranAyatDisplayTagsWidgetState
           message: "Remove tag",
           child: TextButton.icon(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.white60),
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black12),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0)),

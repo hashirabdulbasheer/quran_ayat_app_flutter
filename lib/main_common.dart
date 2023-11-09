@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/middleware/middleware.dart';
@@ -55,12 +56,18 @@ class MyAppState extends State<MyApp> {
       context,
       store,
     );
+    if (kIsWeb) {
+      ServicesBinding.instance.keyboard.addHandler(_onKey);
+    }
   }
 
   @override
   void dispose() {
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.removeListeners();
+    if (kIsWeb) {
+      ServicesBinding.instance.keyboard.removeHandler(_onKey);
+    }
     super.dispose();
   }
 
@@ -78,6 +85,19 @@ class MyAppState extends State<MyApp> {
         home: widget.homeScreen,
       ),
     );
+  }
+
+  bool _onKey(KeyEvent event) {
+    final key = event.logicalKey.keyLabel;
+    if (event is KeyDownEvent) {
+      if (key == "Arrow Right") {
+        store.dispatch(PreviousAyaAction());
+      } else {
+        store.dispatch(NextAyaAction());
+      }
+    }
+
+    return false;
   }
 
   void onSettingsChangedListener(String settings) {
@@ -134,7 +154,7 @@ void _handleUrlPathsForWeb(
           var selectedSurahIndex = int.parse(suraIndex);
           var ayaIndexInt = int.parse(ayaIndex);
           store.dispatch(SelectParticularAyaAction(
-            surah: selectedSurahIndex - 1,
+            surah: selectedSurahIndex,
             aya: ayaIndexInt,
           ));
         } catch (_) {}
@@ -145,7 +165,7 @@ void _handleUrlPathsForWeb(
         try {
           var selectedSurahIndex = int.parse(suraIndex);
           store.dispatch(SelectParticularAyaAction(
-            surah: selectedSurahIndex - 1,
+            surah: selectedSurahIndex,
             aya: 1,
           ));
         } catch (_) {}

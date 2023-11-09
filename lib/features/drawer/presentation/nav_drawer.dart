@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
+import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/settings/domain/constants/setting_constants.dart';
+import 'package:quran_ayat/utils/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/qr_response_model.dart';
@@ -125,6 +129,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
             // ),
             QuranNavDrawerRowWidget(
               context: context,
+              title: 'Bookmark',
+              icon: Icons.bookmark,
+              onSelected: () => _goToBookmark(),
+            ),
+            QuranNavDrawerRowWidget(
+              context: context,
               title: 'Settings',
               icon: Icons.settings,
               destination: const QuranSettingsScreen(),
@@ -152,6 +162,29 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
   Future<void> _launchUrl(Uri uri) async {
     if (!await launchUrl(uri)) {
       print('Could not launch $uri');
+    }
+  }
+
+  void _goToBookmark() {
+    var surah = StoreProvider.of<AppState>(context)
+        .state
+        .reader
+        .bookmarkState
+        .suraIndex;
+    var aya =
+        StoreProvider.of<AppState>(context).state.reader.bookmarkState.ayaIndex;
+    if (surah != null && aya != null) {
+      StoreProvider.of<AppState>(context).dispatch(
+        SelectParticularAyaAction(
+          surah: surah + 1,
+          aya: aya,
+        ),
+      );
+    } else {
+      QuranUtils.showMessage(
+        context,
+        "No Bookmarks found!",
+      );
     }
   }
 }
