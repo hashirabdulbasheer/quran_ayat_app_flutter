@@ -82,12 +82,12 @@ void _saveBookmarkMiddleware(
     QuranFirebaseBookmarksEngine remote =
         QuranFirebaseBookmarksEngine(userId: user.uid);
     remote.save(
-      action.surahIndex,
+      action.surahIndex + 1,
       action.ayaIndex,
     );
   }
   local.save(
-    action.surahIndex,
+    action.surahIndex + 1,
     action.ayaIndex,
   );
   next(action);
