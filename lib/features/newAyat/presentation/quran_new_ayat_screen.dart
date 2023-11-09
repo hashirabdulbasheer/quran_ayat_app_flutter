@@ -37,8 +37,8 @@ class QuranNewAyatScreen extends StatelessWidget {
       int currentAyah = store.state.reader.currentAya;
       NQSurahTitle currentSurahDetails =
           store.state.reader.currentSurahDetails();
-      List<List<NQWord>> surahWords = store.state.reader.suraWords;
-      NQSurah? translation = store.state.reader.translation;
+      List<List<NQWord>> surahWords = store.state.reader.data.words;
+      NQSurah? translation = store.state.reader.data.translation;
 
       return Directionality(
         textDirection: TextDirection.rtl,

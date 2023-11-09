@@ -243,3 +243,16 @@ void _selectSurahReaderMiddleware(
   } catch (_) {}
   next(action);
 }
+
+void _loadQuranData(int surah) async {
+  // Initialize surah words
+  List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
+    surah,
+  );
+  // Initialize translation
+  NQTranslation currentTranslationType = await QuranSettingsManager.instance.getTranslation();
+  NQSurah translation  = await NobleQuran.getTranslationString(
+    surah,
+    currentTranslationType,
+  );
+}

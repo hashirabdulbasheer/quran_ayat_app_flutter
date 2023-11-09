@@ -1,5 +1,3 @@
-import 'package:noble_quran/models/surah.dart';
-import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/bookmark/domain/redux/reducers/reducers.dart';
 import 'package:redux/redux.dart';
 
@@ -81,21 +79,21 @@ ReaderScreenState _surahSelectedReducer(
   SelectSurahAction action,
 ) {
   int suraIndex = action.surah.abs();
-  List<List<NQWord>> words = state.suraWords;
-  NQSurah? translation = state.translation;
+  ReaderScreenState newState = state.copyWith(
+    data: state.data.copyWith(
+      words: action.words,
+      translation: action.translation,
+    ),
+  );
   if (suraIndex >= 0 && suraIndex < 115) {
-    return state.copyWith(
+    return newState.copyWith(
       currentSurah: suraIndex - 1,
       currentAya: 1,
-      suraWords: action.words ?? words,
-      translation: action.translation ?? translation,
     );
   } else {
-    return state.copyWith(
+    return newState.copyWith(
       currentSurah: 0,
       currentAya: 1,
-      suraWords: action.words ?? words,
-      translation: action.translation ?? translation,
     );
   }
 }
@@ -120,29 +118,29 @@ ReaderScreenState _particularAyaSelectedReducer(
   ReaderScreenState state,
   SelectParticularAyaAction action,
 ) {
-  int suraIndex = action.surah.abs()-1;
+  int suraIndex = action.surah.abs() - 1;
   int ayaIndex = action.aya.abs();
-  List<List<NQWord>> words = state.suraWords;
-  NQSurah? translation = state.translation;
+  ReaderScreenState newState = state.copyWith(
+    data: state.data.copyWith(
+      words: action.words,
+      translation: action.translation,
+    ),
+  );
   if (suraIndex > 114) {
-    return state.copyWith(
+    return newState.copyWith(
       currentSurah: 0,
       currentAya: 1,
     );
   } else if (ayaIndex > state.surahTitles[suraIndex].totalVerses) {
-    return state.copyWith(
+    return newState.copyWith(
       currentSurah: suraIndex,
       currentAya: 1,
-      suraWords: action.words ?? words,
-      translation: action.translation ?? translation,
     );
   }
 
-  return state.copyWith(
+  return newState.copyWith(
     currentSurah: suraIndex,
     currentAya: ayaIndex,
-    suraWords: action.words ?? words,
-    translation: action.translation ?? translation,
   );
 }
 
