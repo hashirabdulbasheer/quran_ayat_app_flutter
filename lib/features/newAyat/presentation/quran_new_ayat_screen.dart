@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
@@ -25,8 +27,54 @@ import '../../settings/domain/theme_manager.dart';
 import '../../tags/presentation/quran_tag_display.dart';
 import '../domain/redux/actions/actions.dart';
 
-class QuranNewAyatScreen extends StatelessWidget {
+class QuranNewAyatScreen extends StatefulWidget {
   const QuranNewAyatScreen({Key? key}) : super(key: key);
+
+  @override
+  State<QuranNewAyatScreen> createState() => _QuranNewAyatScreenState();
+}
+
+class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) {
+      ServicesBinding.instance.keyboard.addHandler(_onKey);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (kIsWeb) {
+      ServicesBinding.instance.keyboard.removeHandler(_onKey);
+    }
+    super.dispose();
+  }
+
+  // Handle hardware keyboard events, for web only, to use hardware keyboard
+  // to move between ayats on a desktop
+  bool _onKey(KeyEvent event) {
+    if (ModalRoute.of(context)?.isCurrent == false) {
+      // do not handle key press if not this screen
+      return false;
+    }
+
+    // right arrow key - back
+    // left arrow key - next
+    // space bar key - next
+    // others ignore
+    final key = event.logicalKey.keyLabel;
+    var store = StoreProvider.of<AppState>(context);
+    if (event is KeyDownEvent) {
+      if (key == "Arrow Right") {
+        store.dispatch(PreviousAyaAction());
+      } else if (key == "Arrow Left" || key == " ") {
+        store.dispatch(NextAyaAction());
+      }
+    }
+
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
