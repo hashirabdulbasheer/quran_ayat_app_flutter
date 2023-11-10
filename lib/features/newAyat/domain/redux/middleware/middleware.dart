@@ -163,20 +163,23 @@ void _randomAyaReaderMiddleware(
   NextDispatcher next,
 ) {
   try {
-    int randomSurahIndex = Random().nextInt(114);
-    int randomAyaIndex = Random().nextInt(
-          store.state.reader.surahTitles[randomSurahIndex].totalVerses,
-        ) +
-        1;
-    store.dispatch(
-      SelectParticularAyaAction(
-        index: SurahIndex(
-          randomSurahIndex,
-          randomAyaIndex,
+    if (store.state.reader.surahTitles.isNotEmpty) {
+      int randomSurahIndex = Random().nextInt(114);
+      int randomAyaIndex = Random().nextInt(
+        store.state.reader.surahTitles[randomSurahIndex].totalVerses - 1,
+      );
+      QuranLogger.logE("Random: $randomSurahIndex:$randomAyaIndex");
+      store.dispatch(
+        SelectParticularAyaAction(
+          index: SurahIndex(
+            randomSurahIndex,
+            randomAyaIndex,
+          ),
         ),
-      ),
-    );
+      );
+    }
   } catch (_) {}
+
   next(action);
 }
 
