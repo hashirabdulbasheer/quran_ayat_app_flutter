@@ -17,7 +17,7 @@ class QuranAyatDisplaySurahProgressWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     NQSurahTitle? surah = currentlySelectedSurah;
     if (surah != null) {
-      int totalAyas = surah.totalVerses;
+      int totalAyas = surah.totalVerses - 1;
       double progress = currentIndex.aya / totalAyas;
 
       return Padding(
