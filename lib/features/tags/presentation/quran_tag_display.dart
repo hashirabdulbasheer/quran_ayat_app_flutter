@@ -1,24 +1,23 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:noble_quran/models/surah_title.dart';
+
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../core/presentation/shimmer.dart';
+import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_tag.dart';
 import '../domain/redux/actions/actions.dart';
 import 'quran_view_tags_screen.dart';
 
 class QuranAyatDisplayTagsWidget extends StatefulWidget {
-  final NQSurahTitle? currentlySelectedSurah;
-  final int ayaIndex;
+  final SurahIndex currentIndex;
 
   const QuranAyatDisplayTagsWidget({
     Key? key,
-    required this.currentlySelectedSurah,
-    required this.ayaIndex,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -32,20 +31,10 @@ class _QuranAyatDisplayTagsWidgetState
 
   @override
   Widget build(BuildContext context) {
-    // logged in
-    if (widget.currentlySelectedSurah == null) {
-      return Container();
-    }
-
     QuranUser? user = QuranAuthFactory.engine.getUser();
-    int? surahIndex = widget.currentlySelectedSurah?.number;
-    List<String>? tag;
-    if (surahIndex != null) {
-      tag = _fetchTag(
-        surahIndex,
-        widget.ayaIndex,
-      );
-    }
+    List<String>? tag = _fetchTag(
+      widget.currentIndex,
+    );
 
     return Column(
       children: [
@@ -86,7 +75,6 @@ class _QuranAyatDisplayTagsWidgetState
         QuranShimmer(
           isLoading: StoreProvider.of<AppState>(context).state.tags.isLoading,
           child: _body(
-            surahIndex,
             user,
             tag,
           ),
@@ -96,11 +84,10 @@ class _QuranAyatDisplayTagsWidgetState
   }
 
   Widget _body(
-    int? surahIndex,
     QuranUser? user,
     List<String>? tag,
   ) {
-    if (surahIndex != null && user != null && tag != null && tag.isNotEmpty) {
+    if (user != null && tag != null && tag.isNotEmpty) {
       return SizedBox(
         width: MediaQuery.of(context).size.width,
         child: _tagsWidget(
@@ -278,20 +265,17 @@ class _QuranAyatDisplayTagsWidgetState
   }
 
   List<QuranTag> _fetchAllTags() {
-    int? surahIndex = widget.currentlySelectedSurah?.number;
     List<QuranTag> tags =
         List.from(StoreProvider.of<AppState>(context).state.tags.originalTags);
-    if (surahIndex != null) {
-      // remove already added tags from the list
-      List<String>? currentTagsForAya =
-          StoreProvider.of<AppState>(context).state.tags.getTags(
-                surahIndex,
-                widget.ayaIndex,
-              );
-      if (currentTagsForAya != null && currentTagsForAya.isNotEmpty) {
-        for (String alreadyAddedTag in currentTagsForAya) {
-          tags.removeWhere((element) => element.name == alreadyAddedTag);
-        }
+    // remove already added tags from the list
+    List<String>? currentTagsForAya =
+        StoreProvider.of<AppState>(context).state.tags.getTags(
+              widget.currentIndex.sura,
+              widget.currentIndex.aya,
+            );
+    if (currentTagsForAya != null && currentTagsForAya.isNotEmpty) {
+      for (String alreadyAddedTag in currentTagsForAya) {
+        tags.removeWhere((element) => element.name == alreadyAddedTag);
       }
     }
 
@@ -346,15 +330,14 @@ class _QuranAyatDisplayTagsWidgetState
   void _onSaveButtonTapped() {
     if (_selectedTag == null) return;
     String? newTagString = _selectedTag?.name.trim();
-    int? surahIndex = widget.currentlySelectedSurah?.number;
     // validation
-    if (newTagString == null || newTagString.isEmpty || surahIndex == null) {
+    if (newTagString == null || newTagString.isEmpty) {
       // invalid
       return;
     }
     StoreProvider.of<AppState>(context).dispatch(AddTagAction(
-      surahIndex: surahIndex,
-      ayaIndex: widget.ayaIndex,
+      surahIndex: widget.currentIndex.sura,
+      ayaIndex: widget.currentIndex.aya,
       tag: newTagString,
     ));
   }
@@ -365,16 +348,9 @@ class _QuranAyatDisplayTagsWidgetState
   bool _onRemoveButtonTapped(
     String selectedTag,
   ) {
-    int? surahIndex = widget.currentlySelectedSurah?.number;
-    // validation
-    if (surahIndex == null) {
-      // invalid
-      return false;
-    }
-
     StoreProvider.of<AppState>(context).dispatch(RemoveTagAction(
-      surahIndex: surahIndex,
-      ayaIndex: widget.ayaIndex,
+      surahIndex: widget.currentIndex.sura,
+      ayaIndex: widget.currentIndex.aya,
       tag: selectedTag,
     ));
 
@@ -412,10 +388,9 @@ class _QuranAyatDisplayTagsWidgetState
   }
 
   List<String>? _fetchTag(
-    int surahIndex,
-    int ayaIndex,
+    SurahIndex currentIndex,
   ) {
-    String key = "${surahIndex}_$ayaIndex";
+    String key = "${currentIndex.sura}_${currentIndex.aya}";
 
     return StoreProvider.of<AppState>(context).state.tags.tags[key];
   }

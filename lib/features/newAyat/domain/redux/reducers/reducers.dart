@@ -88,10 +88,7 @@ ReaderScreenState _surahSelectedReducer(
   );
   if (suraIndex >= 0 && suraIndex < 115) {
     return newState.copyWith(
-      currentIndex: newState.currentIndex.copyWith(
-        sura: suraIndex,
-        aya: 1,
-      ),
+      currentIndex: action.index,
     );
   } else {
     return newState.copyWith(
@@ -134,10 +131,7 @@ ReaderScreenState _particularAyaSelectedReducer(
     );
   } else if (ayaIndex > state.surahTitles[suraIndex].totalVerses) {
     return newState.copyWith(
-      currentIndex: SurahIndex(
-        suraIndex,
-        1,
-      ),
+      currentIndex: action.index,
     );
   }
 
@@ -168,8 +162,8 @@ ReaderScreenState _nextAyaReducer(
   ReaderScreenState state,
   NextAyaAction _,
 ) {
-  int totalVerses = state.currentSurahDetails().totalVerses;
-  int nextAyat = state.currentIndex.sura + 1;
+  int totalVerses = state.currentSurahDetails().totalVerses - 1;
+  int nextAyat = state.currentIndex.aya + 1;
   if (nextAyat <= totalVerses) {
     return state.copyWith(
       currentIndex: state.currentIndex.next(),

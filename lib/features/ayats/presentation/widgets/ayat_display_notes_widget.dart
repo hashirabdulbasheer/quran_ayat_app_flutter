@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:noble_quran/models/surah_title.dart';
 
 import '../../../../models/qr_user_model.dart';
 import '../../../../utils/logger_utils.dart';
@@ -9,6 +8,7 @@ import '../../../auth/domain/auth_factory.dart';
 import '../../../auth/presentation/quran_login_screen.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../core/presentation/shimmer.dart';
+import '../../../newAyat/data/surah_index.dart';
 import '../../../notes/domain/entities/quran_note.dart';
 import '../../../notes/domain/notes_manager.dart';
 import '../../../notes/presentation/quran_create_notes_screen.dart';
@@ -16,13 +16,11 @@ import '../../../notes/presentation/widgets/offline_header_widget.dart';
 import 'font_scaler_widget.dart';
 
 class QuranAyatDisplayNotesWidget extends StatefulWidget {
-  final NQSurahTitle? currentlySelectedSurah;
-  final int currentlySelectedAya;
+  final SurahIndex currentIndex;
 
   const QuranAyatDisplayNotesWidget({
     Key? key,
-    required this.currentlySelectedSurah,
-    required this.currentlySelectedAya,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -42,19 +40,10 @@ class _QuranAyatDisplayNotesWidgetState
     double fontScale,
   ) {
     QuranUser? user = QuranAuthFactory.engine.getUser();
-    // logged in
-    if (widget.currentlySelectedSurah == null) {
-      return Container();
-    }
 
-    int? surahIndex = widget.currentlySelectedSurah?.number;
-    List<QuranNote> notes = [];
-    if (surahIndex != null) {
-      notes = _fetchNotes(
-        surahIndex,
-        widget.currentlySelectedAya,
-      );
-    }
+    List<QuranNote> notes = _fetchNotes(
+      widget.currentIndex,
+    );
 
     return Column(
       children: [
@@ -99,7 +88,7 @@ class _QuranAyatDisplayNotesWidgetState
         QuranShimmer(
           isLoading: StoreProvider.of<AppState>(context).state.notes.isLoading,
           child: _bodyContent(
-            surahIndex,
+            widget.currentIndex,
             user,
             notes,
             fontScale,
@@ -110,15 +99,12 @@ class _QuranAyatDisplayNotesWidgetState
   }
 
   Widget _bodyContent(
-    int? surahIndex,
+    SurahIndex currentIndex,
     QuranUser? user,
     List<QuranNote>? notes,
     double fontScale,
   ) {
-    if (surahIndex != null &&
-        user != null &&
-        notes != null &&
-        notes.isNotEmpty) {
+    if (user != null && notes != null && notes.isNotEmpty) {
       return ListView.separated(
         physics: const NeverScrollableScrollPhysics(),
         itemCount: notes.length,
@@ -205,34 +191,28 @@ class _QuranAyatDisplayNotesWidgetState
     if (user == null) {
       _goToLoginScreen();
     } else {
-      if (widget.currentlySelectedSurah != null) {
-        int? surahIndex = widget.currentlySelectedSurah?.number;
-        if (surahIndex != null) {
-          Navigator.push<void>(
-            context,
-            MaterialPageRoute(
-              builder: (context) => QuranCreateNotesScreen(
-                note: note,
-                suraIndex: surahIndex,
-                ayaIndex: widget.currentlySelectedAya,
-              ),
-            ),
-          ).then((value) {
-            setState(() {});
-          });
-          QuranLogger.logAnalytics("add_note");
-        }
-      }
+      Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuranCreateNotesScreen(
+            note: note,
+            suraIndex: widget.currentIndex.sura,
+            ayaIndex: widget.currentIndex.aya,
+          ),
+        ),
+      ).then((value) {
+        setState(() {});
+      });
+      QuranLogger.logAnalytics("add_note");
     }
   }
 
   List<QuranNote> _fetchNotes(
-    int surahIndex,
-    int ayaIndex,
+    SurahIndex currentIndex,
   ) {
     return StoreProvider.of<AppState>(context).state.notes.getNotes(
-              surahIndex,
-              ayaIndex,
+              currentIndex.sura,
+              currentIndex.aya,
             ) ??
         [];
   }

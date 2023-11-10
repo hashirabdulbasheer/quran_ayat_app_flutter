@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:noble_quran/models/surah_title.dart';
 
+import '../../../newAyat/data/surah_index.dart';
 import '../../../settings/domain/settings_manager.dart';
 
 class QuranAyatDisplayTransliterationWidget extends StatelessWidget {
-  final NQSurahTitle? currentlySelectedSurah;
-  final int currentlySelectedAya;
+  final SurahIndex currentIndex;
 
   const QuranAyatDisplayTransliterationWidget({
     Key? key,
-    required this.currentlySelectedSurah,
-    required this.currentlySelectedAya,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -31,9 +29,8 @@ class QuranAyatDisplayTransliterationWidget extends StatelessWidget {
               ),
             );
           default:
-            int? surahIndex = currentlySelectedSurah?.number;
             bool isEnabled = snapshot.data ?? false;
-            if (snapshot.hasError || !isEnabled || surahIndex == null) {
+            if (snapshot.hasError || !isEnabled) {
               return Container();
             } else {
               return Column(

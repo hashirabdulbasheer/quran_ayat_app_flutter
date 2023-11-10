@@ -6,12 +6,10 @@ import 'font_scaler_widget.dart';
 
 class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
   final List<NQWord> words;
-  final ValueNotifier<bool> continuousMode;
 
   const QuranAyatDisplayWordByWordWidget({
     Key? key,
     required this.words,
-    required this.continuousMode,
   }) : super(key: key);
 
   @override
@@ -73,8 +71,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                   right: 8,
                                 ),
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     FittedBox(
@@ -87,8 +84,8 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                         style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 30,
-                                          fontFamily: QuranFontFamily
-                                              .arabic.rawString,
+                                          fontFamily:
+                                              QuranFontFamily.arabic.rawString,
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -127,18 +124,5 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  bool _isInteractionAllowedOnScreen() {
-    // disable all interactions if continuous play mode is on
-    return !continuousMode.value;
-  }
-
-  void _showMessage(
-    BuildContext context,
-    String message,
-  ) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 }

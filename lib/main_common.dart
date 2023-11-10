@@ -136,7 +136,7 @@ void _handleUrlPathsForWeb(
           var ayaIndexInt = int.parse(ayaIndex);
           store.dispatch(SelectParticularAyaAction(
             index: SurahIndex.fromHuman(
-              selectedSurahIndex,
+              sura: selectedSurahIndex,
               aya: ayaIndexInt,
             ),
           ));
@@ -149,7 +149,8 @@ void _handleUrlPathsForWeb(
           var selectedSurahIndex = int.parse(suraIndex);
           store.dispatch(SelectParticularAyaAction(
             index: SurahIndex.fromHuman(
-              selectedSurahIndex,
+              sura: selectedSurahIndex,
+              aya: 1,
             ),
           ));
         } catch (_) {}

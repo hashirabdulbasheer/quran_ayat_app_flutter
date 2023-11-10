@@ -17,15 +17,16 @@ class SurahIndex extends Equatable {
         aya = bookmark.ayat;
 
   // construct a surah index from a human sura index that starts with 1
-  const SurahIndex.fromHuman(
-    int sura, {
-    this.aya = 1,
-  }) : sura = sura - 1;
+  const SurahIndex.fromHuman({
+    required int sura,
+    required int aya,
+  })  : sura = sura - 1,
+        aya = aya - 1;
 
   // index exposed to outside world
   SurahIndex get human => SurahIndex(
         sura + 1,
-        aya,
+        aya + 1,
       );
 
   SurahIndex copyWith({
@@ -40,14 +41,14 @@ class SurahIndex extends Equatable {
 
   static const SurahIndex defaultIndex = SurahIndex(
     0,
-    1,
+    0,
   );
 
   SurahIndex previous() => SurahIndex(
         sura,
         max(
           aya - 1,
-          1,
+          0,
         ),
       );
 

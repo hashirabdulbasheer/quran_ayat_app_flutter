@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
 
+import '../../../newAyat/data/surah_index.dart';
+
 class QuranAyatDisplaySurahProgressWidget extends StatelessWidget {
   final NQSurahTitle? currentlySelectedSurah;
-  final int? currentlySelectedAya;
+  final SurahIndex currentIndex;
 
   const QuranAyatDisplaySurahProgressWidget({
     Key? key,
     required this.currentlySelectedSurah,
-    required this.currentlySelectedAya,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -16,8 +18,7 @@ class QuranAyatDisplaySurahProgressWidget extends StatelessWidget {
     NQSurahTitle? surah = currentlySelectedSurah;
     if (surah != null) {
       int totalAyas = surah.totalVerses;
-      int currentAya = currentlySelectedAya ?? 1;
-      double progress = currentAya / totalAyas;
+      double progress = currentIndex.aya / totalAyas;
 
       return Padding(
         padding: const EdgeInsets.only(

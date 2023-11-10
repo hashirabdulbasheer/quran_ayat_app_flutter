@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:noble_quran/models/surah_title.dart';
 
+import '../../../newAyat/data/surah_index.dart';
 import '../../../settings/domain/settings_manager.dart';
 import '../../domain/enums/audio_events_enum.dart';
 import 'audio_row_widget.dart';
 
 class QuranAyatDisplayAudioControlsWidget extends StatelessWidget {
-  final NQSurahTitle? currentlySelectedSurah;
-  final int currentlySelectedAya;
+  final SurahIndex currentIndex;
   final Function(QuranAudioEventsEnum) onAudioPlayStatusChanged;
 
   const QuranAyatDisplayAudioControlsWidget({
     Key? key,
-    required this.currentlySelectedSurah,
-    required this.currentlySelectedAya,
+    required this.currentIndex,
     required this.onAudioPlayStatusChanged,
   }) : super(key: key);
 
@@ -35,18 +33,13 @@ class QuranAyatDisplayAudioControlsWidget extends StatelessWidget {
               ),
             );
           default:
-            int? surahIndex = currentlySelectedSurah?.number;
             bool isEnabled = snapshot.data ?? false;
-            if (snapshot.hasError ||
-                currentlySelectedSurah == null ||
-                surahIndex == null ||
-                !isEnabled) {
+            if (snapshot.hasError || !isEnabled) {
               return Container();
             } else {
               return QuranAudioRowWidget(
-                surahIndex: surahIndex,
+                currentIndex: currentIndex,
                 onAudioEventsListener: onAudioPlayStatusChanged,
-                ayaIndex: currentlySelectedAya,
               );
             }
         }

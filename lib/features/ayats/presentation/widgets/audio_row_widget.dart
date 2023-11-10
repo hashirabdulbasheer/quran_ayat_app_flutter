@@ -5,18 +5,17 @@ import 'package:just_audio/just_audio.dart';
 import 'package:quran_ayat/utils/logger_utils.dart';
 
 import '../../../../utils/utils.dart';
+import '../../../newAyat/data/surah_index.dart';
 import '../../domain/audio/audio_cache_manager.dart';
 import '../../domain/enums/audio_events_enum.dart';
 
 class QuranAudioRowWidget extends StatefulWidget {
-  final int surahIndex;
-  final int ayaIndex;
+  final SurahIndex currentIndex;
   final void Function(QuranAudioEventsEnum)? onAudioEventsListener;
 
   const QuranAudioRowWidget({
     Key? key,
-    required this.surahIndex,
-    required this.ayaIndex,
+    required this.currentIndex,
     this.onAudioEventsListener,
   }) : super(key: key);
 
@@ -104,8 +103,8 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
 
   void _play() async {
     AudioSource source = await QuranAudioCacheManager.instance.getSource(
-      widget.surahIndex,
-      widget.ayaIndex,
+      widget.currentIndex.sura,
+      widget.currentIndex.aya,
     );
     if (source is UriAudioSource) {
       bool offline = await QuranUtils.isOffline();

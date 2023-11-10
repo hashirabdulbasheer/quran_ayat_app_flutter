@@ -5,13 +5,11 @@ import 'font_scaler_widget.dart';
 
 class QuranFullAyatRowWidget extends StatelessWidget {
   final String translationString;
-  final int ayaIndex;
   final String? fontFamily;
 
   const QuranFullAyatRowWidget({
     Key? key,
     required this.translationString,
-    required this.ayaIndex,
     this.fontFamily,
   }) : super(key: key);
 

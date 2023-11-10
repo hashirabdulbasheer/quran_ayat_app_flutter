@@ -8,13 +8,11 @@ import '../../newAyat/domain/redux/actions/bookmark_actions.dart';
 import '../../newAyat/domain/redux/reader_screen_state.dart';
 
 class QuranBookmarkIconWidget extends StatefulWidget {
-  final int currentSurah;
-  final int currentAya;
+  final SurahIndex currentIndex;
 
   const QuranBookmarkIconWidget({
     Key? key,
-    required this.currentSurah,
-    required this.currentAya,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -36,8 +34,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
           onPressed: () => _showBookmarkConfirmationAlertDialog(),
           icon: _isThisBookmarkedAya(
             state,
-            widget.currentSurah,
-            widget.currentAya,
+            widget.currentIndex,
           )
               ? const Icon(Icons.bookmark)
               : const Icon(Icons.bookmark_border_outlined),
@@ -54,10 +51,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
       child: const Text("Save"),
       onPressed: () => {
         StoreProvider.of<AppState>(context).dispatch(SaveBookmarkAction(
-          index: SurahIndex(
-            widget.currentSurah,
-            widget.currentAya,
-          ),
+          index: widget.currentIndex,
         )),
         Navigator.of(context).pop(),
       },
@@ -89,10 +83,9 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
 
   bool _isThisBookmarkedAya(
     BookmarkState? state,
-    int currentSurah,
-    int currentAya,
+    SurahIndex currentIndex,
   ) {
-    if (currentSurah == state?.sura && currentAya == state?.aya) {
+    if (currentIndex == state) {
       return true;
     }
 

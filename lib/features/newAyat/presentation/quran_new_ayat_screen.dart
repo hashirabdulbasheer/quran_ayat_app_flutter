@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
@@ -81,8 +82,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       BuildContext context,
       Store<AppState> store,
     ) {
-      int currentSurah = store.state.reader.currentIndex.sura;
-      int currentAyah = store.state.reader.currentIndex.aya;
+      SurahIndex currentIndex = store.state.reader.currentIndex;
       NQSurahTitle currentSurahDetails =
           store.state.reader.currentSurahDetails();
       List<List<NQWord>> surahWords = store.state.reader.data.words;
@@ -165,8 +165,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                 icon: const Icon(Icons.auto_awesome_outlined),
               ),
               QuranBookmarkIconWidget(
-                currentSurah: currentSurah,
-                currentAya: currentAyah,
+                currentIndex: currentIndex,
               ),
             ],
           ),
@@ -186,20 +185,22 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                     surahTitles: store.state.reader.surahTitles,
                     onSurahSelected: (surah) => store.dispatch(
                       SelectSurahAction(
-                        index: SurahIndex.fromHuman(surah.number),
+                        index: SurahIndex.fromHuman(
+                          sura: surah.number,
+                          aya: 1,
+                        ),
                       ),
                     ),
                     onAyaNumberSelected: (aya) =>
                         store.dispatch(SelectAyaAction(aya: aya)),
-                    continuousMode: ValueNotifier(false),
                     currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
+                    currentIndex: currentIndex,
                   ),
 
                   /// surah progress
                   QuranAyatDisplaySurahProgressWidget(
                     currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
+                    currentIndex: currentIndex,
                   ),
 
                   Padding(
@@ -207,7 +208,8 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text("${currentSurah + 1}:$currentAyah"),
+                        Text(
+                            "${currentIndex.human.sura}:${currentIndex.human.aya}",),
                         IconButton(
                           tooltip: "Context aya list view",
                           onPressed: () => _navigateToContextListScreen(
@@ -249,34 +251,31 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                   ),
 
                   /// word by word widget
-                  currentAyah <= surahWords.length
-                      ? Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: QuranAyatDisplayWordByWordWidget(
-                            words: surahWords[currentAyah - 1],
-                            continuousMode: ValueNotifier(false),
-                          ),
-                        )
-                      : Container(),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: QuranAyatDisplayWordByWordWidget(
+                      words: surahWords[currentIndex.aya],
+                    ),
+                  ),
 
                   /// transliterationWidget if enabled
                   QuranAyatDisplayTransliterationWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
+                    currentIndex: currentIndex,
                   ),
 
                   /// translation widget
+                  // TODO: Select correct translation type
                   translation != null
                       ? QuranAyatDisplayTranslationWidget(
                           translation: translation,
-                          ayaIndex: currentAyah - 1,
+                          currentIndex: currentIndex,
+                          translationType: NQTranslation.wahiduddinkhan,
                         )
                       : Container(),
 
                   /// audio controls
                   QuranAyatDisplayAudioControlsWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
+                    currentIndex: currentIndex,
                     onAudioPlayStatusChanged: (event) =>
                         _onAudioPlayStatusChanged(
                       event,
@@ -287,15 +286,13 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                   /// Tags
                   if (store.state.user != null)
                     QuranAyatDisplayTagsWidget(
-                      currentlySelectedSurah: currentSurahDetails,
-                      ayaIndex: currentAyah,
+                      currentIndex: currentIndex,
                     ),
 
                   /// Notes
                   if (store.state.user != null)
                     QuranAyatDisplayNotesWidget(
-                      currentlySelectedSurah: currentSurahDetails,
-                      currentlySelectedAya: currentAyah,
+                      currentIndex: currentIndex,
                     ),
 
                   const SizedBox(height: 80),
@@ -386,14 +383,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     Store<AppState> store,
   ) {
     store.dispatch(PreviousAyaAction());
-  }
-
-  void _showMessage(
-    BuildContext context,
-    String message,
-  ) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   ///
