@@ -13,7 +13,7 @@ class SurahIndex extends Equatable {
   );
 
   SurahIndex.fromBookmark(NQBookmark bookmark)
-      : sura = bookmark.surah - 1,
+      : sura = bookmark.surah,
         aya = bookmark.ayat;
 
   // construct a surah index from a human sura index that starts with 1
