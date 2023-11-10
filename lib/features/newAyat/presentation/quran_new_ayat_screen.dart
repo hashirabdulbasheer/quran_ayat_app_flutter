@@ -209,7 +209,8 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                            "${currentIndex.human.sura}:${currentIndex.human.aya}",),
+                          "${currentIndex.human.sura}:${currentIndex.human.aya}",
+                        ),
                         IconButton(
                           tooltip: "Context aya list view",
                           onPressed: () => _navigateToContextListScreen(
@@ -251,12 +252,14 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                   ),
 
                   /// word by word widget
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: QuranAyatDisplayWordByWordWidget(
-                      words: surahWords[currentIndex.aya],
-                    ),
-                  ),
+                  surahWords.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: QuranAyatDisplayWordByWordWidget(
+                            words: surahWords[currentIndex.aya],
+                          ),
+                        )
+                      : Container(),
 
                   /// transliterationWidget if enabled
                   QuranAyatDisplayTransliterationWidget(
