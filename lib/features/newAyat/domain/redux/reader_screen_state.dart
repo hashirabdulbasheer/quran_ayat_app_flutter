@@ -10,7 +10,6 @@ typedef BookmarkState = SurahIndex;
 class ReaderScreenState extends Equatable {
   final List<NQSurahTitle> surahTitles;
   final SurahIndex currentIndex;
-  final bool isAudioContinuousModeEnabled;
   final bool isLoading;
   final BookmarkState? bookmarkState;
   final QuranData data;
@@ -18,7 +17,6 @@ class ReaderScreenState extends Equatable {
   const ReaderScreenState({
     this.surahTitles = const [],
     this.currentIndex = SurahIndex.defaultIndex,
-    this.isAudioContinuousModeEnabled = false,
     this.isLoading = false,
     this.bookmarkState,
     this.data = const QuranData(),
@@ -36,8 +34,6 @@ class ReaderScreenState extends Equatable {
       surahTitles: surahTitles ?? this.surahTitles,
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,
-      isAudioContinuousModeEnabled:
-          isAudioContinuousModeEnabled ?? this.isAudioContinuousModeEnabled,
       bookmarkState: bookmarkState ?? this.bookmarkState,
       data: data ?? this.data,
     );
@@ -54,7 +50,7 @@ class ReaderScreenState extends Equatable {
   @override
   String toString() {
     return "{surah: ${currentIndex.toString()}, titles: ${surahTitles.length}, "
-        "isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading, "
+        "isLoading: $isLoading,"
         "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words?.length}, "
         "translation: ${data.translation?.name}}";
   }
@@ -64,7 +60,6 @@ class ReaderScreenState extends Equatable {
         surahTitles,
         isLoading,
         currentIndex,
-        isAudioContinuousModeEnabled,
         bookmarkState,
         data,
       ];

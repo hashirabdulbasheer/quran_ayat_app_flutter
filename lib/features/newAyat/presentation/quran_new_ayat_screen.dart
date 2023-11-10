@@ -9,7 +9,6 @@ import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
-import '../../../misc/constants/string_constants.dart';
 import '../../ayats/domain/enums/audio_events_enum.dart';
 import '../../ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
@@ -116,21 +115,9 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                         message: "Previous aya",
                         child: ElevatedButton(
                           style: _elevatedButtonTheme,
-                          onPressed: () => {
-                            if (_isInteractionAllowedOnScreen(store))
-                              {
-                                _moveToPreviousAyat(
-                                  store,
-                                ),
-                              }
-                            else
-                              {
-                                _showMessage(
-                                  context,
-                                  QuranStrings.contPlayMessage,
-                                ),
-                              },
-                          },
+                          onPressed: () => _moveToPreviousAyat(
+                            store,
+                          ),
                           child: Icon(
                             Icons.arrow_back,
                             color: _elevatedButtonIconColor(
@@ -146,23 +133,9 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                         message: "Next aya",
                         child: ElevatedButton(
                           style: _elevatedButtonTheme,
-                          onPressed: () => {
-                            if (_isInteractionAllowedOnScreen(
-                              store,
-                            ))
-                              {
-                                _moveToNextAyat(
-                                  store,
-                                ),
-                              }
-                            else
-                              {
-                                _showMessage(
-                                  context,
-                                  QuranStrings.contPlayMessage,
-                                ),
-                              },
-                          },
+                          onPressed: () => _moveToNextAyat(
+                            store,
+                          ),
                           child: Icon(
                             Icons.arrow_forward,
                             color: _elevatedButtonIconColor(
@@ -309,9 +282,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                       event,
                       store,
                     ),
-                    continuousMode: ValueNotifier(
-                      store.state.reader.isAudioContinuousModeEnabled,
-                    ),
                   ),
 
                   /// Tags
@@ -319,9 +289,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                     QuranAyatDisplayTagsWidget(
                       currentlySelectedSurah: currentSurahDetails,
                       ayaIndex: currentAyah,
-                      continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled,
-                      ),
                     ),
 
                   /// Notes
@@ -329,9 +296,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                     QuranAyatDisplayNotesWidget(
                       currentlySelectedSurah: currentSurahDetails,
                       currentlySelectedAya: currentAyah,
-                      continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled,
-                      ),
                     ),
 
                   const SizedBox(height: 80),
@@ -399,10 +363,10 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
         break;
 
       case QuranAudioEventsEnum.contPlayStatusChanged:
-        bool currentContinuousAudioPlayingStatus =
-            store.state.reader.isAudioContinuousModeEnabled;
+        // TODO: Cont. mode temporarily disabled
         store.dispatch(SetAudioContinuousPlayMode(
-            isEnabled: !currentContinuousAudioPlayingStatus));
+          isEnabled: false,
+        ));
         break;
 
       default:
@@ -422,13 +386,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     Store<AppState> store,
   ) {
     store.dispatch(PreviousAyaAction());
-  }
-
-  bool _isInteractionAllowedOnScreen(
-    Store<AppState> store,
-  ) {
-    // disable all interactions if continuous play mode is on
-    return !store.state.reader.isAudioContinuousModeEnabled;
   }
 
   void _showMessage(

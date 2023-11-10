@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
 
-import '../../../../misc/constants/string_constants.dart';
 import '../../../../models/qr_user_model.dart';
 import '../../../../utils/logger_utils.dart';
 import '../../../../utils/utils.dart';
@@ -19,13 +18,11 @@ import 'font_scaler_widget.dart';
 class QuranAyatDisplayNotesWidget extends StatefulWidget {
   final NQSurahTitle? currentlySelectedSurah;
   final int currentlySelectedAya;
-  final ValueNotifier<bool> continuousMode;
 
   const QuranAyatDisplayNotesWidget({
     Key? key,
     required this.currentlySelectedSurah,
     required this.currentlySelectedAya,
-    required this.continuousMode,
   }) : super(key: key);
 
   @override
@@ -89,10 +86,7 @@ class _QuranAyatDisplayNotesWidgetState
               const Text("Notes"),
               ElevatedButton(
                 onPressed: () => {
-                  if (_isInteractionAllowedOnScreen())
-                    {_goToCreateNoteScreen()}
-                  else
-                    {_showMessage(QuranStrings.contPlayMessage)},
+                  _goToCreateNoteScreen(),
                 },
                 child: const Text("Add"),
               ),
@@ -150,18 +144,9 @@ class _QuranAyatDisplayNotesWidgetState
             textDirection: textDirection,
             child: ListTile(
               onTap: () => {
-                if (_isInteractionAllowedOnScreen())
-                  {
-                    _goToCreateNoteScreen(
-                      note: notes[index],
-                    ),
-                  }
-                else
-                  {
-                    _showMessage(
-                      QuranStrings.contPlayMessage,
-                    ),
-                  },
+                _goToCreateNoteScreen(
+                  note: notes[index],
+                ),
               },
               title: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -199,11 +184,6 @@ class _QuranAyatDisplayNotesWidgetState
         child: Center(child: Text("Add Note")),
       ),
     );
-  }
-
-  bool _isInteractionAllowedOnScreen() {
-    // disable all interactions if continuous play mode is on
-    return !widget.continuousMode.value;
   }
 
   void _showMessage(String message) {

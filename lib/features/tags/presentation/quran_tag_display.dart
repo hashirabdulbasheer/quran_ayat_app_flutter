@@ -14,13 +14,11 @@ import 'quran_view_tags_screen.dart';
 class QuranAyatDisplayTagsWidget extends StatefulWidget {
   final NQSurahTitle? currentlySelectedSurah;
   final int ayaIndex;
-  final ValueNotifier<bool> continuousMode;
 
   const QuranAyatDisplayTagsWidget({
     Key? key,
     required this.currentlySelectedSurah,
     required this.ayaIndex,
-    required this.continuousMode,
   }) : super(key: key);
 
   @override
