@@ -176,7 +176,7 @@ class QuranSettingsManager {
 
   Future<bool> isAudioControlsEnabled() async {
     String isEnabledStr = await getValue(_audioControlSettings);
-    if (isEnabledStr == "Off") {
+    if (isEnabledStr == "false") {
       return false;
     }
 
