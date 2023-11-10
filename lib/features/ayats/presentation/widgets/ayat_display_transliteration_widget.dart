@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:noble_quran/noble_quran.dart';
+
 import '../../../settings/domain/settings_manager.dart';
-import 'full_ayat_row_widget.dart';
 
 class QuranAyatDisplayTransliterationWidget extends StatelessWidget {
   final NQSurahTitle? currentlySelectedSurah;
@@ -32,34 +31,25 @@ class QuranAyatDisplayTransliterationWidget extends StatelessWidget {
               ),
             );
           default:
-            if (snapshot.hasError) {
+            int? surahIndex = currentlySelectedSurah?.number;
+            bool isEnabled = snapshot.data ?? false;
+            if (snapshot.hasError || !isEnabled || surahIndex == null) {
               return Container();
             } else {
-              bool isEnabled = snapshot.data as bool;
-              if (isEnabled) {
-                int? surahIndex = currentlySelectedSurah?.number;
-                if (surahIndex != null) {
-                  // actual index
-                  surahIndex = surahIndex - 1;
-
-                  return Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      // QuranFullAyatRowWidget(
-                      //   futureMethodThatReturnsSelectedSurah:
-                      //       NobleQuran.getSurahTransliteration(
-                      //     surahIndex,
-                      //   ),
-                      //   ayaIndex: currentlySelectedAya,
-                      // ),
-                    ],
-                  );
-                }
-              }
-
-              return Container();
+              return Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  // QuranFullAyatRowWidget(
+                  //   futureMethodThatReturnsSelectedSurah:
+                  //       NobleQuran.getSurahTransliteration(
+                  //     surahIndex,
+                  //   ),
+                  //   ayaIndex: currentlySelectedAya,
+                  // ),
+                ],
+              );
             }
         }
       },
