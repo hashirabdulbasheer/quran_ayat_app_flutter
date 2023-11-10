@@ -30,13 +30,16 @@ class QuranSettingsRowWidget extends StatelessWidget {
         );
 
       case QuranSettingType.onOff:
-      return QuranOnOffSettingsTileWidget(
+        return QuranOnOffSettingsTileWidget(
           setting: setting,
-          defaultValue: setting.defaultValue?.title == QuranSettingOnOff.on.rawString(),
+          defaultValue:
+              setting.defaultValue?.title == QuranSettingOnOff.on.rawString(),
           onChanged: (value) => {
             QuranSettingsManager.instance.save(
               setting,
-              "$value",
+              value
+                  ? QuranSettingOnOff.on.rawString()
+                  : QuranSettingOnOff.off.rawString(),
             ),
           },
         );

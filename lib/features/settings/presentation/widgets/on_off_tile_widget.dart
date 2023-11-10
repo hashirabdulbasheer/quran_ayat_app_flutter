@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/settings/domain/enum/settings_type_enum.dart';
 
 import '../../domain/entities/quran_setting.dart';
 import '../../domain/settings_manager.dart';
@@ -39,9 +40,9 @@ class _QuranOnOffSettingsTileWidgetState
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
               bool isSwitched = false;
-              if (snapshot.data == "true") {
+              if (snapshot.data == QuranSettingOnOff.on.rawString()) {
                   isSwitched = true;
-              } else if (snapshot.data == "false") {
+              } else if (snapshot.data == QuranSettingOnOff.off.rawString()) {
                   isSwitched = false;
               } else {
                 isSwitched = widget.defaultValue;
