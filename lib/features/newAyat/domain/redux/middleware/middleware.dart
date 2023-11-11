@@ -237,9 +237,13 @@ Future<QuranData> _loadQuranData(SurahIndex surahIndex) async {
     surahIndex.sura,
     currentTranslationType,
   );
+  NQSurah transliteration = await NobleQuran.getSurahTransliteration(
+    surahIndex.sura,
+  );
 
   return QuranData(
     words: suraWords,
     translation: translation,
+    transliteration: transliteration,
   );
 }

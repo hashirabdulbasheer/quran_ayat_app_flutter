@@ -84,6 +84,7 @@ class MyAppState extends State<MyApp> {
   void onSettingsChangedListener(String settings) {
     // settings changed
     // fire actions to update screen
+    store.dispatch(InitializeReaderScreenAction());
     store.dispatch(ShowLoadingAction());
     store.dispatch(HideLoadingAction());
   }
