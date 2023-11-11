@@ -50,10 +50,8 @@ void _initBookmarkMiddleware(
           QuranFirebaseBookmarksEngine(userId: user.uid);
       NQBookmark? remoteBookmark = await remote.fetch();
       if (remoteBookmark != null) {
-        // save remote in local, as well, always save in human readable surah
-        // index, hence +1
         local.save(
-          remoteBookmark.surah + 1,
+          remoteBookmark.surah,
           remoteBookmark.ayat,
         );
         action = action.copyWith(
