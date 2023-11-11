@@ -38,6 +38,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
               child: DropdownSearch<NQSurahTitle>(
                 items: surahTitles,
                 enabled: true,
+                itemAsString: (NQSurahTitle title) => "${title.transliterationEn} (${title.translationEn})",
                 popupProps: const PopupPropsMultiSelection.menu(),
                 dropdownDecoratorProps: const DropDownDecoratorProps(
                   dropdownSearchDecoration: InputDecoration(
