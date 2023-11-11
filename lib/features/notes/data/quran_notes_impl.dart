@@ -21,7 +21,7 @@ class QuranNotesEngine implements QuranNotesDataSource {
     QuranNote note,
   ) async {
     await dataSource.create(
-      "notes/$userId/${note.suraIndex}/${note.ayaIndex}",
+      "notes/$userId/${note.suraIndex + 1}/${note.ayaIndex + 1}",
       note.toMap(),
     );
 
@@ -72,7 +72,7 @@ class QuranNotesEngine implements QuranNotesDataSource {
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
       return await dataSource.update(
-        "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}",
+        "notes/$userId/${note.suraIndex + 1}/${note.ayaIndex + 1}/${note.id}",
         note.toMap(),
       );
     }
@@ -87,7 +87,7 @@ class QuranNotesEngine implements QuranNotesDataSource {
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
       return await dataSource.delete(
-        "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}",
+        "notes/$userId/${note.suraIndex + 1}/${note.ayaIndex + 1}/${note.id}",
       );
     }
 
