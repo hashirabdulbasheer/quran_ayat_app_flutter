@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:noble_quran/models/surah_title.dart';
-import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
+
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
-import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
-import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_note.dart';
 import '../domain/redux/actions/actions.dart';
 import 'widgets/notes_create_controls_widget.dart';
@@ -17,14 +15,12 @@ import 'widgets/notes_update_controls_widget.dart';
 import 'widgets/offline_header_widget.dart';
 
 class QuranCreateNotesScreen extends StatefulWidget {
-  final int suraIndex;
-  final int ayaIndex;
+  final SurahIndex index;
   final QuranNote? note;
 
   const QuranCreateNotesScreen({
     Key? key,
-    required this.suraIndex,
-    required this.ayaIndex,
+    required this.index,
     this.note,
   }) : super(key: key);
 
@@ -55,7 +51,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                 5,
               ),
               child: Text(
-                "Enter your notes for ${widget.suraIndex}:${widget.ayaIndex}",
+                "Enter your notes for ${widget.index.human.sura}:${widget.index.human.aya}",
               ),
             ),
             // Padding(
@@ -159,8 +155,8 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
       QuranUser? user = QuranAuthFactory.engine.getUser();
       if (user != null) {
         QuranNote note = QuranNote(
-          suraIndex: widget.suraIndex,
-          ayaIndex: widget.ayaIndex,
+          suraIndex: widget.index.sura,
+          ayaIndex: widget.index.aya,
           note: _notesController.text,
           createdOn: DateTime.now().millisecondsSinceEpoch,
           localId: QuranUtils.uniqueId(),

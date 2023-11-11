@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:noble_quran/models/surah_title.dart';
 
+import '../../../newAyat/data/surah_index.dart';
 import '../../../settings/domain/settings_manager.dart';
 import '../../domain/enums/audio_events_enum.dart';
 import 'audio_row_widget.dart';
 
 class QuranAyatDisplayAudioControlsWidget extends StatelessWidget {
-  final NQSurahTitle? currentlySelectedSurah;
-  final int currentlySelectedAya;
+  final SurahIndex currentIndex;
   final Function(QuranAudioEventsEnum) onAudioPlayStatusChanged;
-  final ValueNotifier<bool> continuousMode;
 
   const QuranAyatDisplayAudioControlsWidget({
     Key? key,
-    required this.currentlySelectedSurah,
-    required this.currentlySelectedAya,
+    required this.currentIndex,
     required this.onAudioPlayStatusChanged,
-    required this.continuousMode,
   }) : super(key: key);
 
   @override
@@ -37,39 +33,14 @@ class QuranAyatDisplayAudioControlsWidget extends StatelessWidget {
               ),
             );
           default:
-            if (snapshot.hasError) {
+            bool isEnabled = snapshot.data ?? false;
+            if (snapshot.hasError || !isEnabled) {
               return Container();
             } else {
-              bool isEnabled = snapshot.data as bool;
-              if (isEnabled) {
-                if (currentlySelectedSurah == null) {
-                  return Container();
-                }
-
-                return ValueListenableBuilder<bool>(
-                  builder: (
-                    BuildContext context,
-                    bool isContinuousPlay,
-                    Widget? child,
-                  ) {
-                  int? surahIndex = currentlySelectedSurah?.number;
-                    if (surahIndex != null) {
-                      return QuranAudioRowWidget(
-                        isAudioRecitationContinuousPlayEnabled:
-                            isContinuousPlay,
-                        surahIndex: surahIndex,
-                        onAudioEventsListener: onAudioPlayStatusChanged,
-                        ayaIndex: currentlySelectedAya,
-                      );
-                    }
-
-                    return Container();
-                  },
-                  valueListenable: continuousMode,
-                );
-              } else {
-                return Container();
-              }
+              return QuranAudioRowWidget(
+                currentIndex: currentIndex,
+                onAudioEventsListener: onAudioPlayStatusChanged,
+              );
             }
         }
       },

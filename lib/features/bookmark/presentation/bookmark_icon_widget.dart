@@ -3,17 +3,16 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import '../../core/domain/app_state/app_state.dart';
-import '../domain/redux/actions/actions.dart';
-import '../domain/redux/bookmark_state.dart';
+import '../../newAyat/data/surah_index.dart';
+import '../../newAyat/domain/redux/actions/bookmark_actions.dart';
+import '../../newAyat/domain/redux/reader_screen_state.dart';
 
 class QuranBookmarkIconWidget extends StatefulWidget {
-  final int currentSurah;
-  final int currentAya;
+  final SurahIndex currentIndex;
 
   const QuranBookmarkIconWidget({
     Key? key,
-    required this.currentSurah,
-    required this.currentAya,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
@@ -24,20 +23,18 @@ class QuranBookmarkIconWidget extends StatefulWidget {
 class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, BookmarkState>(
-      onInit: (Store<AppState> store) => store.dispatch(InitBookmarkAction()),
+    return StoreConnector<AppState, BookmarkState?>(
       converter: (Store<AppState> store) => store.state.reader.bookmarkState,
       builder: (
         BuildContext context,
-        BookmarkState state,
+        BookmarkState? state,
       ) {
         return IconButton(
           tooltip: "display bookmark options",
           onPressed: () => _showBookmarkConfirmationAlertDialog(),
           icon: _isThisBookmarkedAya(
             state,
-            widget.currentSurah,
-            widget.currentAya,
+            widget.currentIndex,
           )
               ? const Icon(Icons.bookmark)
               : const Icon(Icons.bookmark_border_outlined),
@@ -54,8 +51,7 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
       child: const Text("Save"),
       onPressed: () => {
         StoreProvider.of<AppState>(context).dispatch(SaveBookmarkAction(
-          surahIndex: widget.currentSurah,
-          ayaIndex: widget.currentAya,
+          index: widget.currentIndex,
         )),
         Navigator.of(context).pop(),
       },
@@ -86,14 +82,11 @@ class _QuranBookmarkIconWidgetState extends State<QuranBookmarkIconWidget> {
   }
 
   bool _isThisBookmarkedAya(
-    BookmarkState state,
-    int currentSurah,
-    int currentAya,
+    BookmarkState? state,
+    SurahIndex currentIndex,
   ) {
-    if (state.suraIndex != null && state.ayaIndex != null) {
-      if (currentSurah == state.suraIndex && currentAya == state.ayaIndex) {
-        return true;
-      }
+    if (currentIndex == state) {
+      return true;
     }
 
     return false;

@@ -167,7 +167,7 @@ class QuranSettingsManager {
 
   Future<bool> isTransliterationEnabled() async {
     String isEnabledStr = await getValue(_transliterationSettings);
-    if (isEnabledStr == "true") {
+    if (isEnabledStr == "On") {
       return true;
     }
 

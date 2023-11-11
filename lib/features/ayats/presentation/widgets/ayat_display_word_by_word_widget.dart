@@ -6,12 +6,10 @@ import 'font_scaler_widget.dart';
 
 class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
   final List<NQWord> words;
-  final ValueNotifier<bool> continuousMode;
 
   const QuranAyatDisplayWordByWordWidget({
     Key? key,
     required this.words,
-    required this.continuousMode,
   }) : super(key: key);
 
   @override
@@ -44,80 +42,76 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                             enabled: true,
                             excludeSemantics: true,
                             container: true,
-                            child: Tooltip(
-                              message: '${e.ar} ${e.tr}',
-                              child: InkWell(
-                                onTap: () {
-                                  // TODO: Fix navigation to search
-                                  // if (_isInteractionAllowedOnScreen())
-                                  //   {
-                                  //     Navigator.push<void>(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             QuranSearchScreen(
-                                  //           searchString: e.ar,
-                                  //         ),
-                                  //       ),
-                                  //     ),
-                                  //   }
-                                  // else
-                                  //   {
-                                  //     _showMessage(
-                                  //       context,
-                                  //       QuranStrings.contPlayMessage,
-                                  //     ),
-                                  //   },
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 8,
-                                    right: 8,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      FittedBox(
-                                        fit: BoxFit.cover,
-                                        child: Text(
-                                          e.ar,
-                                          softWrap: false,
-                                          maxLines: 1,
-                                          textScaleFactor: fontScale,
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 30,
-                                            fontFamily: QuranFontFamily
-                                                .arabic.rawString,
-                                          ),
-                                          textAlign: TextAlign.center,
+                            child: InkWell(
+                              onTap: () {
+                                // TODO: Fix navigation to search
+                                // if (_isInteractionAllowedOnScreen())
+                                //   {
+                                //     Navigator.push<void>(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             QuranSearchScreen(
+                                //           searchString: e.ar,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   }
+                                // else
+                                //   {
+                                //     _showMessage(
+                                //       context,
+                                //       QuranStrings.contPlayMessage,
+                                //     ),
+                                //   },
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    FittedBox(
+                                      fit: BoxFit.cover,
+                                      child: Text(
+                                        e.ar,
+                                        softWrap: false,
+                                        maxLines: 1,
+                                        textScaleFactor: fontScale,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 30,
+                                          fontFamily:
+                                              QuranFontFamily.arabic.rawString,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Container(
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: const BoxDecoration(
+                                        border: Border.fromBorderSide(
+                                          BorderSide(color: Colors.black26),
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(1),
                                         ),
                                       ),
-                                      const SizedBox(height: 2),
-                                      Container(
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: const BoxDecoration(
-                                          border: Border.fromBorderSide(
-                                            BorderSide(color: Colors.black26),
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(1),
-                                          ),
+                                      child: Text(
+                                        e.tr,
+                                        textScaleFactor: fontScale,
+                                        style: const TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 14,
                                         ),
-                                        child: Text(
-                                          e.tr,
-                                          textScaleFactor: fontScale,
-                                          style: const TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 14,
-                                          ),
-                                          textDirection: TextDirection.ltr,
-                                        ),
+                                        textDirection: TextDirection.ltr,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -130,18 +124,5 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  bool _isInteractionAllowedOnScreen() {
-    // disable all interactions if continuous play mode is on
-    return !continuousMode.value;
-  }
-
-  void _showMessage(
-    BuildContext context,
-    String message,
-  ) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 }

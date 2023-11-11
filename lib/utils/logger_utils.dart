@@ -33,6 +33,6 @@ class LoggerMiddleware<State> implements MiddlewareClass<State> {
   ) {
     next(action);
 
-    QuranLogger.log("Logger: Action: $action, State: {${store.state}}");
+    QuranLogger.log("\n\nLogger: Action: $action, State: {${store.state}}");
   }
 }

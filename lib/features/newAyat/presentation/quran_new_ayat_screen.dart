@@ -1,12 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:noble_quran/models/surah.dart';
+import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
-import '../../../misc/constants/string_constants.dart';
 import '../../ayats/domain/enums/audio_events_enum.dart';
 import '../../ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
@@ -24,8 +26,56 @@ import '../../settings/domain/theme_manager.dart';
 import '../../tags/presentation/quran_tag_display.dart';
 import '../domain/redux/actions/actions.dart';
 
-class QuranNewAyatScreen extends StatelessWidget {
+class QuranNewAyatScreen extends StatefulWidget {
   const QuranNewAyatScreen({Key? key}) : super(key: key);
+
+  @override
+  State<QuranNewAyatScreen> createState() => _QuranNewAyatScreenState();
+}
+
+class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
+  bool _isHeaderVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) {
+      ServicesBinding.instance.keyboard.addHandler(_onKey);
+    }
+  }
+
+  @override
+  void dispose() {
+    if (kIsWeb) {
+      ServicesBinding.instance.keyboard.removeHandler(_onKey);
+    }
+    super.dispose();
+  }
+
+  // Handle hardware keyboard events, for web only, to use hardware keyboard
+  // to move between ayats on a desktop
+  bool _onKey(KeyEvent event) {
+    if (ModalRoute.of(context)?.isCurrent == false) {
+      // do not handle key press if not this screen
+      return false;
+    }
+
+    // right arrow key - back
+    // left arrow key - next
+    // space bar key - next
+    // others ignore
+    final key = event.logicalKey.keyLabel;
+    var store = StoreProvider.of<AppState>(context);
+    if (event is KeyDownEvent) {
+      if (key == "Arrow Right") {
+        store.dispatch(PreviousAyaAction());
+      } else if (key == "Arrow Left" || key == " ") {
+        store.dispatch(NextAyaAction());
+      }
+    }
+
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +83,13 @@ class QuranNewAyatScreen extends StatelessWidget {
       BuildContext context,
       Store<AppState> store,
     ) {
-      int currentSurah = store.state.reader.currentSurah;
-      int currentAyah = store.state.reader.currentAya;
+      SurahIndex currentIndex = store.state.reader.currentIndex;
       NQSurahTitle currentSurahDetails =
           store.state.reader.currentSurahDetails();
-      List<List<NQWord>> surahWords = store.state.reader.data.words;
-      NQSurah? translation = store.state.reader.data.translation;
+      List<NQWord> ayaWords = store.state.reader.currentAyaWords();
+      String? translation = store.state.reader.currentTranslation();
+      String? transliteration = store.state.reader.currentTransliteration();
+      NQTranslation translationType = store.state.reader.translationType();
 
       return Directionality(
         textDirection: TextDirection.rtl,
@@ -67,21 +118,9 @@ class QuranNewAyatScreen extends StatelessWidget {
                         message: "Previous aya",
                         child: ElevatedButton(
                           style: _elevatedButtonTheme,
-                          onPressed: () => {
-                            if (_isInteractionAllowedOnScreen(store))
-                              {
-                                _moveToPreviousAyat(
-                                  store,
-                                ),
-                              }
-                            else
-                              {
-                                _showMessage(
-                                  context,
-                                  QuranStrings.contPlayMessage,
-                                ),
-                              },
-                          },
+                          onPressed: () => _moveToPreviousAyat(
+                            store,
+                          ),
                           child: Icon(
                             Icons.arrow_back,
                             color: _elevatedButtonIconColor(
@@ -97,23 +136,9 @@ class QuranNewAyatScreen extends StatelessWidget {
                         message: "Next aya",
                         child: ElevatedButton(
                           style: _elevatedButtonTheme,
-                          onPressed: () => {
-                            if (_isInteractionAllowedOnScreen(
-                              store,
-                            ))
-                              {
-                                _moveToNextAyat(
-                                  store,
-                                ),
-                              }
-                            else
-                              {
-                                _showMessage(
-                                  context,
-                                  QuranStrings.contPlayMessage,
-                                ),
-                              },
-                          },
+                          onPressed: () => _moveToNextAyat(
+                            store,
+                          ),
                           child: Icon(
                             Icons.arrow_forward,
                             color: _elevatedButtonIconColor(
@@ -143,8 +168,7 @@ class QuranNewAyatScreen extends StatelessWidget {
                 icon: const Icon(Icons.auto_awesome_outlined),
               ),
               QuranBookmarkIconWidget(
-                currentSurah: currentSurah,
-                currentAya: currentAyah,
+                currentIndex: currentIndex,
               ),
             ],
           ),
@@ -160,21 +184,28 @@ class QuranNewAyatScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   /// header
-                  QuranAyatHeaderWidget(
-                    surahTitles: store.state.reader.surahTitles,
-                    onSurahSelected: (surah) =>
-                        store.dispatch(SelectSurahAction(surah: surah.number)),
-                    onAyaNumberSelected: (aya) =>
-                        store.dispatch(SelectAyaAction(aya: aya)),
-                    continuousMode: ValueNotifier(false),
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                  ),
+                  _isHeaderVisible
+                      ? QuranAyatHeaderWidget(
+                          surahTitles: store.state.reader.surahTitles,
+                          onSurahSelected: (surah) => store.dispatch(
+                            SelectSurahAction(
+                              index: SurahIndex.fromHuman(
+                                sura: surah.number,
+                                aya: 1,
+                              ),
+                            ),
+                          ),
+                          onAyaNumberSelected: (aya) =>
+                              store.dispatch(SelectAyaAction(aya: aya)),
+                          currentlySelectedSurah: currentSurahDetails,
+                          currentIndex: currentIndex,
+                        )
+                      : Container(),
 
                   /// surah progress
                   QuranAyatDisplaySurahProgressWidget(
                     currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
+                    currentIndex: currentIndex,
                   ),
 
                   Padding(
@@ -182,7 +213,16 @@ class QuranNewAyatScreen extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text("${currentSurah + 1}:$currentAyah"),
+                        TextButton(
+                          onPressed: () => {
+                            _isHeaderVisible = !_isHeaderVisible,
+                            setState(() {}),
+                          },
+                          child: Text(
+                            "${currentIndex.human.sura}:${currentIndex.human.aya}",
+                          ),
+                        ),
+                        const Spacer(),
                         IconButton(
                           tooltip: "Context aya list view",
                           onPressed: () => _navigateToContextListScreen(
@@ -194,7 +234,19 @@ class QuranNewAyatScreen extends StatelessWidget {
                             size: 15,
                           ),
                         ),
-                        const Spacer(),
+                        IconButton(
+                          tooltip: "Open/Close surah/aya selector",
+                          onPressed: () => {
+                            _isHeaderVisible = !_isHeaderVisible,
+                            setState(() {}),
+                          },
+                          icon: Icon(
+                            _isHeaderVisible
+                                ? Icons.settings
+                                : Icons.settings_outlined,
+                            size: 15,
+                          ),
+                        ),
                         IconButton(
                           tooltip: "Increase font size",
                           onPressed: () => _incrementFontSize(store),
@@ -224,65 +276,53 @@ class QuranNewAyatScreen extends StatelessWidget {
                   ),
 
                   /// word by word widget
-                  currentAyah <= surahWords.length
+                  ayaWords.isNotEmpty
                       ? Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: QuranAyatDisplayWordByWordWidget(
-                            words: surahWords[currentAyah - 1],
-                            continuousMode: ValueNotifier(false),
+                            words: ayaWords,
                           ),
                         )
                       : Container(),
 
                   /// transliterationWidget if enabled
-                  QuranAyatDisplayTransliterationWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
-                  ),
+                  transliteration != null
+                      ? QuranAyatDisplayTransliterationWidget(
+                          transliteration: transliteration,
+                        )
+                      : Container(),
 
                   /// translation widget
                   translation != null
                       ? QuranAyatDisplayTranslationWidget(
                           translation: translation,
-                          ayaIndex: currentAyah - 1,
+                          translationType: translationType,
                         )
                       : Container(),
 
                   /// audio controls
                   QuranAyatDisplayAudioControlsWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentlySelectedAya: currentAyah,
+                    currentIndex: currentIndex,
                     onAudioPlayStatusChanged: (event) =>
                         _onAudioPlayStatusChanged(
                       event,
                       store,
-                    ),
-                    continuousMode: ValueNotifier(
-                      store.state.reader.isAudioContinuousModeEnabled,
                     ),
                   ),
 
                   /// Tags
                   if (store.state.user != null)
                     QuranAyatDisplayTagsWidget(
-                      currentlySelectedSurah: currentSurahDetails,
-                      ayaIndex: currentAyah,
-                      continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled,
-                      ),
+                      currentIndex: currentIndex,
                     ),
 
                   /// Notes
                   if (store.state.user != null)
                     QuranAyatDisplayNotesWidget(
-                      currentlySelectedSurah: currentSurahDetails,
-                      currentlySelectedAya: currentAyah,
-                      continuousMode: ValueNotifier(
-                        store.state.reader.isAudioContinuousModeEnabled,
-                      ),
+                      currentIndex: currentIndex,
                     ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 80),
                 ],
               ),
             ),
@@ -301,8 +341,7 @@ class QuranNewAyatScreen extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => QuranContextListScreen(
           title: store.state.reader.currentSurahDetails().transliterationEn,
-          surahIndex: store.state.reader.currentSurahDetails().number - 1,
-          ayaIndex: store.state.reader.currentAya,
+          index: store.state.reader.currentIndex,
         ),
       ),
     );
@@ -347,10 +386,10 @@ class QuranNewAyatScreen extends StatelessWidget {
         break;
 
       case QuranAudioEventsEnum.contPlayStatusChanged:
-        bool currentContinuousAudioPlayingStatus =
-            store.state.reader.isAudioContinuousModeEnabled;
+        // TODO: Cont. mode temporarily disabled
         store.dispatch(SetAudioContinuousPlayMode(
-            isEnabled: !currentContinuousAudioPlayingStatus));
+          isEnabled: false,
+        ));
         break;
 
       default:
@@ -370,21 +409,6 @@ class QuranNewAyatScreen extends StatelessWidget {
     Store<AppState> store,
   ) {
     store.dispatch(PreviousAyaAction());
-  }
-
-  bool _isInteractionAllowedOnScreen(
-    Store<AppState> store,
-  ) {
-    // disable all interactions if continuous play mode is on
-    return !store.state.reader.isAudioContinuousModeEnabled;
-  }
-
-  void _showMessage(
-    BuildContext context,
-    String message,
-  ) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   ///

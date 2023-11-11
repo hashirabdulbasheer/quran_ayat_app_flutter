@@ -21,7 +21,7 @@ class QuranNotesEngine implements QuranNotesDataSource {
     QuranNote note,
   ) async {
     await dataSource.create(
-      "notes/$userId/${note.suraIndex}/${note.ayaIndex}",
+      "notes/$userId/${note.suraIndex + 1}/${note.ayaIndex + 1}",
       note.toMap(),
     );
 
@@ -72,7 +72,7 @@ class QuranNotesEngine implements QuranNotesDataSource {
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
       return await dataSource.update(
-        "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}",
+        "notes/$userId/${note.suraIndex + 1}/${note.ayaIndex + 1}/${note.id}",
         note.toMap(),
       );
     }
@@ -87,16 +87,66 @@ class QuranNotesEngine implements QuranNotesDataSource {
   ) async {
     if (note.id != null && note.id?.isNotEmpty == true) {
       return await dataSource.delete(
-        "notes/$userId/${note.suraIndex}/${note.ayaIndex}/${note.id}",
+        "notes/$userId/${note.suraIndex + 1}/${note.ayaIndex + 1}/${note.id}",
       );
     }
 
     return false;
   }
 
-  // TODO: Improve this logic later on
   @override
   Future<List<QuranNote>> fetchAll(String userId) async {
+    List<QuranNote> resultNotes = [];
+    try {
+      dynamic resultList = await dataSource.fetchAll("notes/$userId");
+      if (resultList == null) {
+        return [];
+      }
+      for (int surah = 1; surah <= 114; surah++) {
+        dynamic notesList = resultList[surah];
+        if (notesList == null) continue;
+        Map<String, dynamic>? notesListMap = Map<String, dynamic>.from(
+          notesList as Map,
+        );
+        // an aya can have multiple notes
+        notesListMap.forEach((aya, dynamic notes) {
+          Map<String, dynamic> ayaNotes =
+              Map<String, dynamic>.from(notes as Map);
+          ayaNotes.forEach((k, dynamic note) {
+            Map<String, dynamic> noteMap =
+                Map<String, dynamic>.from(note as Map);
+            try {
+              QuranNote quranNote = QuranNote(
+                suraIndex: surah - 1,
+                ayaIndex: int.parse(aya) - 1,
+                note: "${noteMap["note"] ?? ""}",
+                id: k,
+                localId: "${noteMap["localId"] ?? ""}",
+                createdOn: noteMap["createdOn"] as int,
+                status: QuranUtils.statusFromString(
+                  "${noteMap["status"] ?? ""}",
+                ),
+              );
+              resultNotes.add(quranNote);
+            } catch (error) {
+              QuranLogger.logE(
+                error,
+              );
+            }
+          });
+        });
+      }
+    } catch (error) {
+      QuranLogger.logE(
+        error,
+      );
+    }
+
+    return resultNotes;
+  }
+
+  @Deprecated("a different method to parse all results")
+  Future<List<QuranNote>> fetchAllMethod1(String userId) async {
     List<QuranNote> notes = [];
     dynamic resultListDyn = await dataSource.fetchAll("notes/$userId");
     final Map<String, dynamic> resultList =

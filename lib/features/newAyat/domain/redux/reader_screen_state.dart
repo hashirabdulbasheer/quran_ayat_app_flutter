@@ -1,34 +1,32 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
-import '../../../bookmark/domain/redux/bookmark_state.dart';
+typedef BookmarkState = SurahIndex;
 
 @immutable
 class ReaderScreenState extends Equatable {
   final List<NQSurahTitle> surahTitles;
-  final int currentSurah;
-  final int currentAya;
-  final bool isAudioContinuousModeEnabled;
+  final SurahIndex currentIndex;
   final bool isLoading;
-  final BookmarkState bookmarkState;
+  final BookmarkState? bookmarkState;
   final QuranData data;
 
   const ReaderScreenState({
     this.surahTitles = const [],
-    this.currentSurah = 0,
-    this.currentAya = 1,
-    this.isAudioContinuousModeEnabled = false,
+    this.currentIndex = SurahIndex.defaultIndex,
     this.isLoading = false,
-    this.bookmarkState = const BookmarkState(),
+    this.bookmarkState,
     this.data = const QuranData(),
   });
 
   ReaderScreenState copyWith({
     List<NQSurahTitle>? surahTitles,
-    int? currentSurah,
-    int? currentAya,
+    SurahIndex? currentIndex,
     bool? isAudioContinuousModeEnabled,
     bool? isLoading,
     BookmarkState? bookmarkState,
@@ -36,11 +34,8 @@ class ReaderScreenState extends Equatable {
   }) {
     return ReaderScreenState(
       surahTitles: surahTitles ?? this.surahTitles,
-      currentSurah: currentSurah ?? this.currentSurah,
-      currentAya: currentAya ?? this.currentAya,
+      currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,
-      isAudioContinuousModeEnabled:
-          isAudioContinuousModeEnabled ?? this.isAudioContinuousModeEnabled,
       bookmarkState: bookmarkState ?? this.bookmarkState,
       data: data ?? this.data,
     );
@@ -51,24 +46,32 @@ class ReaderScreenState extends Equatable {
       return NQSurahTitle.defaultValue();
     }
 
-    return surahTitles[currentSurah];
+    return surahTitles[currentIndex.sura];
   }
+
+  String? currentTranslation() => data.translation?.aya[currentIndex.aya]?.text;
+
+  String? currentTransliteration() =>
+      data.transliteration?.aya[currentIndex.aya]?.text;
+
+  List<NQWord> currentAyaWords() =>
+      data.words.isNotEmpty ? data.words[currentIndex.aya] : [];
+
+  NQTranslation translationType() => data.translationType;
 
   @override
   String toString() {
-    return "surah: $currentSurah, aya: $currentAya, titles: ${surahTitles.length}, "
-        "isLoading: $isAudioContinuousModeEnabled, isAudioContinuousModeEnabled: $isLoading, "
+    return "{surah: ${currentIndex.toString()}, titles: ${surahTitles.length}, "
+        "isLoading: $isLoading,"
         "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words?.length}, "
-        "translation: ${data.translation?.name}";
+        "translation: ${data.translation?.name}, transliteration: ${data.transliteration?.name}}";
   }
 
   @override
   List<Object?> get props => [
         surahTitles,
         isLoading,
-        currentSurah,
-        currentAya,
-        isAudioContinuousModeEnabled,
+        currentIndex,
         bookmarkState,
         data,
       ];

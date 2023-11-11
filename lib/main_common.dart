@@ -1,17 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/bookmark/domain/redux/actions/actions.dart';
-import 'package:quran_ayat/features/bookmark/domain/redux/middleware/middleware.dart';
-import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
-import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
+import 'features/newAyat/domain/redux/actions/actions.dart';
+import 'features/newAyat/domain/redux/actions/bookmark_actions.dart';
+import 'features/newAyat/domain/redux/middleware/bookmark_middleware.dart';
 import 'features/newAyat/domain/redux/middleware/middleware.dart';
 import 'features/notes/domain/redux/middleware/middleware.dart';
+import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'features/tags/domain/redux/middleware/middleware.dart';
 import 'utils/logger_utils.dart';
@@ -56,18 +56,12 @@ class MyAppState extends State<MyApp> {
       context,
       store,
     );
-    if (kIsWeb) {
-      ServicesBinding.instance.keyboard.addHandler(_onKey);
-    }
   }
 
   @override
   void dispose() {
     QuranAuthFactory.engine.unregisterAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.removeListeners();
-    if (kIsWeb) {
-      ServicesBinding.instance.keyboard.removeHandler(_onKey);
-    }
     super.dispose();
   }
 
@@ -87,22 +81,10 @@ class MyAppState extends State<MyApp> {
     );
   }
 
-  bool _onKey(KeyEvent event) {
-    final key = event.logicalKey.keyLabel;
-    if (event is KeyDownEvent) {
-      if (key == "Arrow Right") {
-        store.dispatch(PreviousAyaAction());
-      } else {
-        store.dispatch(NextAyaAction());
-      }
-    }
-
-    return false;
-  }
-
   void onSettingsChangedListener(String settings) {
     // settings changed
     // fire actions to update screen
+    store.dispatch(InitializeReaderScreenAction());
     store.dispatch(ShowLoadingAction());
     store.dispatch(HideLoadingAction());
   }
@@ -154,8 +136,10 @@ void _handleUrlPathsForWeb(
           var selectedSurahIndex = int.parse(suraIndex);
           var ayaIndexInt = int.parse(ayaIndex);
           store.dispatch(SelectParticularAyaAction(
-            surah: selectedSurahIndex,
-            aya: ayaIndexInt,
+            index: SurahIndex.fromHuman(
+              sura: selectedSurahIndex,
+              aya: ayaIndexInt,
+            ),
           ));
         } catch (_) {}
         QuranLogger.logAnalytics("url-sura-aya");
@@ -165,8 +149,10 @@ void _handleUrlPathsForWeb(
         try {
           var selectedSurahIndex = int.parse(suraIndex);
           store.dispatch(SelectParticularAyaAction(
-            surah: selectedSurahIndex,
-            aya: 1,
+            index: SurahIndex.fromHuman(
+              sura: selectedSurahIndex,
+              aya: 1,
+            ),
           ));
         } catch (_) {}
         QuranLogger.logAnalytics("url-aya");

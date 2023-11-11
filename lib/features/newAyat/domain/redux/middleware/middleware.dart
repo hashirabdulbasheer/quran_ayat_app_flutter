@@ -14,7 +14,9 @@ import '../../../../notes/domain/redux/actions/actions.dart';
 import '../../../../settings/domain/settings_manager.dart';
 import '../../../../tags/domain/redux/actions/actions.dart';
 import '../../../data/quran_data.dart';
+import '../../../data/surah_index.dart';
 import '../actions/actions.dart';
+import '../actions/bookmark_actions.dart';
 
 List<Middleware<AppState>> createReaderScreenMiddleware() {
   return [
@@ -72,12 +74,15 @@ void _initializeMiddleware(
   store.dispatch(SetSurahListAction(
     surahs: surahList,
   ));
-  QuranData data = await _loadQuranData(0);
-  store.dispatch(SelectSurahAction(
-    surah: 1,
-    words: data.words,
-    translation: data.translation,
+  // Initialize quran data
+  QuranData data = await _loadQuranData(SurahIndex.defaultIndex);
+  store.dispatch(SelectParticularAyaAction(
+    index: SurahIndex.defaultIndex,
+    data: data,
   ));
+  // Load bookmarks
+  store.dispatch(InitBookmarkAction());
+
   next(action);
 }
 
@@ -141,8 +146,8 @@ void _shareAyaReaderMiddleware(
 ) async {
   String shareString = await QuranUtils.shareString(
     store.state.reader.currentSurahDetails().transliterationEn,
-    store.state.reader.currentSurah,
-    store.state.reader.currentAya,
+    store.state.reader.currentIndex.sura,
+    store.state.reader.currentIndex.aya,
   );
   Share.share(
     shareString,
@@ -157,17 +162,23 @@ void _randomAyaReaderMiddleware(
   NextDispatcher next,
 ) {
   try {
-    int randomSurahIndex = Random().nextInt(114);
-    int randomAyaIndex = Random().nextInt(
-      store.state.reader.surahTitles[randomSurahIndex].totalVerses,
-    );
-    store.dispatch(
-      SelectParticularAyaAction(
-        surah: randomSurahIndex,
-        aya: randomAyaIndex + 1,
-      ),
-    );
+    if (store.state.reader.surahTitles.isNotEmpty) {
+      int randomSurahIndex = Random().nextInt(114);
+      int randomAyaIndex = Random().nextInt(
+        store.state.reader.surahTitles[randomSurahIndex].totalVerses - 1,
+      );
+      QuranLogger.logE("Random: $randomSurahIndex:$randomAyaIndex");
+      store.dispatch(
+        SelectParticularAyaAction(
+          index: SurahIndex(
+            randomSurahIndex,
+            randomAyaIndex,
+          ),
+        ),
+      );
+    }
   } catch (_) {}
+
   next(action);
 }
 
@@ -183,13 +194,13 @@ void _selectParticularAyaReaderMiddleware(
       await store.dispatch(SetSurahListAction(
         surahs: surahList,
       ));
-      if (store.state.reader.currentSurah != action.surah - 1) {
-        QuranData date = await _loadQuranData(action.surah - 1);
-        action = action.copyWith(
-          words: date.words,
-          translation: date.translation,
-        );
-      }
+    }
+
+    if (store.state.reader.currentIndex != action.index) {
+      QuranData data = await _loadQuranData(action.index);
+      action = action.copyWith(
+        data: data,
+      );
     }
   } catch (_) {}
   next(action);
@@ -201,32 +212,44 @@ void _selectSurahReaderMiddleware(
   NextDispatcher next,
 ) async {
   try {
-    if (store.state.reader.currentSurah != action.surah - 1) {
-      QuranData date = await _loadQuranData(action.surah - 1);
+    if (store.state.reader.currentIndex != action.index) {
+      QuranData data = await _loadQuranData(action.index);
       action = action.copyWith(
-        words: date.words,
-        translation: date.translation,
+        data: data,
       );
     }
   } catch (_) {}
   next(action);
 }
 
-Future<QuranData> _loadQuranData(int surah) async {
+Future<QuranData> _loadQuranData(SurahIndex surahIndex) async {
   // Initialize surah words
   List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
-    surah,
+    surahIndex.sura,
   );
+
   // Initialize translation
   NQTranslation currentTranslationType =
       await QuranSettingsManager.instance.getTranslation();
   NQSurah translation = await NobleQuran.getTranslationString(
-    surah,
+    surahIndex.sura,
     currentTranslationType,
   );
+
+  // Initialize transliteration
+  NQSurah? transliteration;
+  bool isTransliteration =
+      await QuranSettingsManager.instance.isTransliterationEnabled();
+  if (isTransliteration) {
+    transliteration = await NobleQuran.getSurahTransliteration(
+      surahIndex.sura,
+    );
+  }
 
   return QuranData(
     words: suraWords,
     translation: translation,
+    translationType: currentTranslationType,
+    transliteration: transliteration,
   );
 }

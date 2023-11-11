@@ -1,13 +1,14 @@
 import 'package:noble_quran/models/bookmark.dart';
-import 'package:quran_ayat/features/bookmark/data/bookmarks_local_impl.dart';
-import 'package:quran_ayat/features/bookmark/data/firebase_bookmarks_impl.dart';
-import 'package:quran_ayat/models/qr_user_model.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../../models/qr_user_model.dart';
 import '../../../../auth/domain/auth_factory.dart';
+import '../../../../bookmark/data/bookmarks_local_impl.dart';
+import '../../../../bookmark/data/firebase_bookmarks_impl.dart';
 import '../../../../core/domain/app_state/app_state.dart';
-import '../../../../newAyat/domain/redux/actions/actions.dart';
 import '../actions/actions.dart';
+import '../actions/bookmark_actions.dart';
 
 List<Middleware<AppState>> createBookmarkMiddleware() {
   return [
@@ -25,24 +26,19 @@ void _initBookmarkMiddleware(
   InitBookmarkAction action,
   NextDispatcher next,
 ) async {
-  if (store.state.reader.currentSurah != 0 ||
-      store.state.reader.currentAya != 1) {
-    // only update bookmark if we are on 1:1
-    // this is so that we don't replace another aya with bookmark
-    return;
-  }
   QuranLocalBookmarksEngine local = QuranLocalBookmarksEngine();
   NQBookmark? localBookmark = await local.fetch();
   if (localBookmark != null) {
     // local bookmark is always given preference
-    store.dispatch(SaveBookmarkAction(
-      surahIndex: localBookmark.surah,
-      ayaIndex: localBookmark.ayat,
-    ));
+    action = action.copyWith(
+      index: SurahIndex.fromBookmark(localBookmark),
+    );
     store.dispatch(
       SelectParticularAyaAction(
-        surah: localBookmark.surah,
-        aya: localBookmark.ayat,
+        index: SurahIndex(
+          localBookmark.surah,
+          localBookmark.ayat,
+        ),
       ),
     );
   } else {
@@ -54,14 +50,19 @@ void _initBookmarkMiddleware(
           QuranFirebaseBookmarksEngine(userId: user.uid);
       NQBookmark? remoteBookmark = await remote.fetch();
       if (remoteBookmark != null) {
-        store.dispatch(SaveBookmarkAction(
-          surahIndex: remoteBookmark.surah,
-          ayaIndex: remoteBookmark.ayat,
-        ));
+        local.save(
+          remoteBookmark.surah,
+          remoteBookmark.ayat,
+        );
+        action = action.copyWith(
+          index: SurahIndex.fromBookmark(remoteBookmark),
+        );
         store.dispatch(
           SelectParticularAyaAction(
-            surah: remoteBookmark.surah,
-            aya: remoteBookmark.ayat,
+            index: SurahIndex(
+              remoteBookmark.surah,
+              remoteBookmark.ayat,
+            ),
           ),
         );
       }
@@ -75,6 +76,7 @@ void _saveBookmarkMiddleware(
   SaveBookmarkAction action,
   NextDispatcher next,
 ) {
+  // Always save bookmarks as human readable indices, 1 for first chapter etc.
   QuranLocalBookmarksEngine local = QuranLocalBookmarksEngine();
   QuranUser? user = QuranAuthFactory.engine.getUser();
   if (user != null) {
@@ -82,13 +84,13 @@ void _saveBookmarkMiddleware(
     QuranFirebaseBookmarksEngine remote =
         QuranFirebaseBookmarksEngine(userId: user.uid);
     remote.save(
-      action.surahIndex,
-      action.ayaIndex,
+      action.index.sura,
+      action.index.aya,
     );
   }
   local.save(
-    action.surahIndex,
-    action.ayaIndex,
+    action.index.sura,
+    action.index.aya,
   );
   next(action);
 }

@@ -28,7 +28,7 @@ class QuranViewNoteItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "${note.suraIndex}:${note.ayaIndex}",
+              "${note.suraIndex+1}:${note.ayaIndex+1}",
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 5),
