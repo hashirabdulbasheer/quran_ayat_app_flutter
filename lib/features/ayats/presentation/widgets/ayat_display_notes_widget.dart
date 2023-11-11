@@ -196,8 +196,10 @@ class _QuranAyatDisplayNotesWidgetState
         MaterialPageRoute(
           builder: (context) => QuranCreateNotesScreen(
             note: note,
-            suraIndex: widget.currentIndex.sura,
-            ayaIndex: widget.currentIndex.aya,
+            index: SurahIndex(
+              widget.currentIndex.sura,
+              widget.currentIndex.aya,
+            ),
           ),
         ),
       ).then((value) {

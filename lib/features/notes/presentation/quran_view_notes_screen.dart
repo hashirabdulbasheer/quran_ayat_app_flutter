@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../models/qr_user_model.dart';
@@ -62,8 +63,10 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
                               MaterialPageRoute(
                                 builder: (context) => QuranCreateNotesScreen(
                                   note: notes[index],
-                                  suraIndex: notes[index].suraIndex,
-                                  ayaIndex: notes[index].ayaIndex,
+                                  index: SurahIndex(
+                                    notes[index].suraIndex,
+                                    notes[index].ayaIndex,
+                                  ),
                                 ),
                               ),
                             ).then((value) {
