@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:noble_quran/enums/translations.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/word.dart';
-import 'package:noble_quran/noble_quran.dart';
 
 import '../../../misc/enums/quran_font_family_enum.dart';
 import '../../ayats/presentation/widgets/font_scaler_widget.dart';
-import '../../settings/domain/settings_manager.dart';
+import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/data/surah_index.dart';
 import 'widgets/list_widget.dart';
 
 class QuranContextListScreen extends StatefulWidget {
   final String title;
-  final int surahIndex;
-  final int ayaIndex;
+  final SurahIndex index;
 
   const QuranContextListScreen({
     Key? key,
     required this.title,
-    required this.surahIndex,
-    required this.ayaIndex,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -37,42 +35,29 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: FutureBuilder<bool>(
-          future: _fetchSurah(),
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<bool> snapshot,
-          ) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return SizedBox(
-                height: 300,
-                width: MediaQuery.of(context).size.width,
-                child: const Center(
-                  child: Text('Loading....'),
-                ),
-              );
-            } else {
-              return _list();
-            }
-          },
-        ),
+        body: _list(),
       ),
     );
   }
 
   Widget _list() {
+    _translation =
+        StoreProvider.of<AppState>(context).state.reader.data.translation;
+    _wordsList = StoreProvider.of<AppState>(context).state.reader.data.words;
+
     return ListWidget(
-      initialIndex: widget.ayaIndex - 1,
+      initialIndex: widget.index.aya,
       itemsCount: _translation?.aya.length ?? 0,
       itemContent: (index) => QuranFontScalerWidget(
-          body: (
-        context,
-        fontScale,
-      ) =>
-              _listItemBody(
-                index,
-                fontScale,
-              )),
+        body: (
+          context,
+          fontScale,
+        ) =>
+            _listItemBody(
+          index,
+          fontScale,
+        ),
+      ),
     );
   }
 
@@ -155,19 +140,5 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
       context,
       index + 1,
     );
-  }
-
-  Future<bool> _fetchSurah() async {
-    NQTranslation currentTranslation =
-        await QuranSettingsManager.instance.getTranslation();
-
-    _translation = await NobleQuran.getTranslationString(
-      widget.surahIndex,
-      currentTranslation,
-    );
-
-    _wordsList = await NobleQuran.getSurahWordByWord(widget.surahIndex);
-
-    return true;
   }
 }

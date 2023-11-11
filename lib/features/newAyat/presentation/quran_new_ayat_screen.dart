@@ -318,8 +318,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       MaterialPageRoute(
         builder: (context) => QuranContextListScreen(
           title: store.state.reader.currentSurahDetails().transliterationEn,
-          surahIndex: store.state.reader.currentSurahDetails().number - 1,
-          ayaIndex: store.state.reader.currentIndex.aya,
+          index: store.state.reader.currentIndex,
         ),
       ),
     );
