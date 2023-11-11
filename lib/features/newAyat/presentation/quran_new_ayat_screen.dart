@@ -84,7 +84,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       SurahIndex currentIndex = store.state.reader.currentIndex;
       NQSurahTitle currentSurahDetails =
           store.state.reader.currentSurahDetails();
-      List<List<NQWord>> surahWords = store.state.reader.data.words;
+      List<NQWord> ayaWords = store.state.reader.currentAyaWords();
       String? translation = store.state.reader.currentTranslation();
       String? transliteration = store.state.reader.currentTransliteration();
       NQTranslation translationType = store.state.reader.translationType();
@@ -253,11 +253,11 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                   ),
 
                   /// word by word widget
-                  surahWords.isNotEmpty
+                  ayaWords.isNotEmpty
                       ? Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: QuranAyatDisplayWordByWordWidget(
-                            words: surahWords[currentIndex.aya],
+                            words: ayaWords,
                           ),
                         )
                       : Container(),
@@ -270,7 +270,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                       : Container(),
 
                   /// translation widget
-                  // TODO: Select correct translation type
                   translation != null
                       ? QuranAyatDisplayTranslationWidget(
                           translation: translation,
