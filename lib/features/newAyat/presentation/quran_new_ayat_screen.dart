@@ -34,6 +34,8 @@ class QuranNewAyatScreen extends StatefulWidget {
 }
 
 class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
+  bool _isHeaderVisible = false;
+
   @override
   void initState() {
     super.initState();
@@ -182,21 +184,23 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   /// header
-                  QuranAyatHeaderWidget(
-                    surahTitles: store.state.reader.surahTitles,
-                    onSurahSelected: (surah) => store.dispatch(
-                      SelectSurahAction(
-                        index: SurahIndex.fromHuman(
-                          sura: surah.number,
-                          aya: 1,
-                        ),
-                      ),
-                    ),
-                    onAyaNumberSelected: (aya) =>
-                        store.dispatch(SelectAyaAction(aya: aya)),
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentIndex: currentIndex,
-                  ),
+                  _isHeaderVisible
+                      ? QuranAyatHeaderWidget(
+                          surahTitles: store.state.reader.surahTitles,
+                          onSurahSelected: (surah) => store.dispatch(
+                            SelectSurahAction(
+                              index: SurahIndex.fromHuman(
+                                sura: surah.number,
+                                aya: 1,
+                              ),
+                            ),
+                          ),
+                          onAyaNumberSelected: (aya) =>
+                              store.dispatch(SelectAyaAction(aya: aya)),
+                          currentlySelectedSurah: currentSurahDetails,
+                          currentIndex: currentIndex,
+                        )
+                      : Container(),
 
                   /// surah progress
                   QuranAyatDisplaySurahProgressWidget(
@@ -209,9 +213,16 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          "${currentIndex.human.sura}:${currentIndex.human.aya}",
+                        TextButton(
+                          onPressed: () => {
+                            _isHeaderVisible = !_isHeaderVisible,
+                            setState(() {}),
+                          },
+                          child: Text(
+                            "${currentIndex.human.sura}:${currentIndex.human.aya}",
+                          ),
                         ),
+                        const Spacer(),
                         IconButton(
                           tooltip: "Context aya list view",
                           onPressed: () => _navigateToContextListScreen(
@@ -223,7 +234,19 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                             size: 15,
                           ),
                         ),
-                        const Spacer(),
+                        IconButton(
+                          tooltip: "Open/Close surah/aya selector",
+                          onPressed: () => {
+                            _isHeaderVisible = !_isHeaderVisible,
+                            setState(() {}),
+                          },
+                          icon: Icon(
+                            _isHeaderVisible
+                                ? Icons.settings
+                                : Icons.settings_outlined,
+                            size: 15,
+                          ),
+                        ),
                         IconButton(
                           tooltip: "Increase font size",
                           onPressed: () => _incrementFontSize(store),
