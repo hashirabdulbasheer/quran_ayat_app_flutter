@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
@@ -47,12 +48,19 @@ class ReaderScreenState extends Equatable {
     return surahTitles[currentIndex.sura];
   }
 
+  String? currentTranslation() => data.translation?.aya[currentIndex.aya]?.text;
+
+  String? currentTransliteration() =>
+      data.transliteration?.aya[currentIndex.aya]?.text;
+
+  List<NQWord>? currentAyaWords() => data.words[currentIndex.aya];
+
   @override
   String toString() {
     return "{surah: ${currentIndex.toString()}, titles: ${surahTitles.length}, "
         "isLoading: $isLoading,"
         "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words?.length}, "
-        "translation: ${data.translation?.name}}";
+        "translation: ${data.translation?.name}, transliteration: ${data.transliteration?.name}}";
   }
 
   @override

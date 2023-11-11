@@ -78,8 +78,7 @@ void _initializeMiddleware(
   QuranData data = await _loadQuranData(SurahIndex.defaultIndex);
   store.dispatch(SelectParticularAyaAction(
     index: SurahIndex.defaultIndex,
-    words: data.words,
-    translation: data.translation,
+    data: data,
   ));
   // Load bookmarks
   store.dispatch(InitBookmarkAction());
@@ -198,10 +197,9 @@ void _selectParticularAyaReaderMiddleware(
     }
 
     if (store.state.reader.currentIndex != action.index) {
-      QuranData date = await _loadQuranData(action.index);
+      QuranData data = await _loadQuranData(action.index);
       action = action.copyWith(
-        words: date.words,
-        translation: date.translation,
+        data: data,
       );
     }
   } catch (_) {}
@@ -215,10 +213,9 @@ void _selectSurahReaderMiddleware(
 ) async {
   try {
     if (store.state.reader.currentIndex != action.index) {
-      QuranData date = await _loadQuranData(action.index);
+      QuranData data = await _loadQuranData(action.index);
       action = action.copyWith(
-        words: date.words,
-        translation: date.translation,
+        data: data,
       );
     }
   } catch (_) {}
@@ -230,6 +227,7 @@ Future<QuranData> _loadQuranData(SurahIndex surahIndex) async {
   List<List<NQWord>>? suraWords = await NobleQuran.getSurahWordByWord(
     surahIndex.sura,
   );
+
   // Initialize translation
   NQTranslation currentTranslationType =
       await QuranSettingsManager.instance.getTranslation();
@@ -237,13 +235,21 @@ Future<QuranData> _loadQuranData(SurahIndex surahIndex) async {
     surahIndex.sura,
     currentTranslationType,
   );
-  NQSurah transliteration = await NobleQuran.getSurahTransliteration(
-    surahIndex.sura,
-  );
+
+  // Initialize transliteration
+  NQSurah? transliteration;
+  bool isTransliteration =
+      await QuranSettingsManager.instance.isTransliterationEnabled();
+  if (isTransliteration) {
+    transliteration = await NobleQuran.getSurahTransliteration(
+      surahIndex.sura,
+    );
+  }
 
   return QuranData(
     words: suraWords,
     translation: translation,
+    translationType: currentTranslationType,
     transliteration: transliteration,
   );
 }

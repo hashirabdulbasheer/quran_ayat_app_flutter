@@ -81,10 +81,7 @@ ReaderScreenState _surahSelectedReducer(
 ) {
   int suraIndex = action.index.sura.abs();
   ReaderScreenState newState = state.copyWith(
-    data: state.data.copyWith(
-      words: action.words,
-      translation: action.translation,
-    ),
+    data: action.data,
   );
   if (suraIndex >= 0 && suraIndex < 115) {
     return newState.copyWith(
@@ -120,10 +117,7 @@ ReaderScreenState _particularAyaSelectedReducer(
   int suraIndex = action.index.sura.abs();
   int ayaIndex = action.index.aya.abs();
   ReaderScreenState newState = state.copyWith(
-    data: state.data.copyWith(
-      words: action.words,
-      translation: action.translation,
-    ),
+    data: action.data,
   );
   if (suraIndex > 114) {
     return newState.copyWith(

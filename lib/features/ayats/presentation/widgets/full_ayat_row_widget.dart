@@ -4,12 +4,12 @@ import '../../../../utils/utils.dart';
 import 'font_scaler_widget.dart';
 
 class QuranFullAyatRowWidget extends StatelessWidget {
-  final String translationString;
+  final String text;
   final String? fontFamily;
 
   const QuranFullAyatRowWidget({
     Key? key,
-    required this.translationString,
+    required this.text,
     this.fontFamily,
   }) : super(key: key);
 
@@ -23,7 +23,7 @@ class QuranFullAyatRowWidget extends StatelessWidget {
     double fontScale,
   ) {
     return Directionality(
-      textDirection: QuranUtils.isArabic(translationString)
+      textDirection: QuranUtils.isArabic(text)
           ? TextDirection.rtl
           : TextDirection.ltr,
       child: Row(
@@ -32,8 +32,8 @@ class QuranFullAyatRowWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(
-                _stripHtmlIfNeeded(translationString),
-                textAlign: QuranUtils.isArabic(translationString)
+                _stripHtmlIfNeeded(text),
+                textAlign: QuranUtils.isArabic(text)
                     ? TextAlign.end
                     : TextAlign.start,
                 textScaleFactor: fontScale,

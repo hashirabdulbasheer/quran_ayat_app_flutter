@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/enums/translations.dart';
-import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
@@ -86,7 +85,8 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       NQSurahTitle currentSurahDetails =
           store.state.reader.currentSurahDetails();
       List<List<NQWord>> surahWords = store.state.reader.data.words;
-      NQSurah? translation = store.state.reader.data.translation;
+      String? translation = store.state.reader.currentTranslation();
+      String? transliteration = store.state.reader.currentTransliteration();
 
       return Directionality(
         textDirection: TextDirection.rtl,
@@ -262,16 +262,17 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                       : Container(),
 
                   /// transliterationWidget if enabled
-                  QuranAyatDisplayTransliterationWidget(
-                    currentIndex: currentIndex,
-                  ),
+                  transliteration != null
+                      ? QuranAyatDisplayTransliterationWidget(
+                          transliteration: transliteration,
+                        )
+                      : Container(),
 
                   /// translation widget
                   // TODO: Select correct translation type
                   translation != null
                       ? QuranAyatDisplayTranslationWidget(
                           translation: translation,
-                          currentIndex: currentIndex,
                           translationType: NQTranslation.wahiduddinkhan,
                         )
                       : Container(),

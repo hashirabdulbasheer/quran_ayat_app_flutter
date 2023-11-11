@@ -1,6 +1,5 @@
-import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:noble_quran/models/word.dart';
+import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
@@ -22,30 +21,25 @@ class SetSurahListAction extends AppStateAction {
 
 class SelectSurahAction extends AppStateAction {
   final SurahIndex index;
-  final List<List<NQWord>>? words;
-  final NQSurah? translation;
+  final QuranData? data;
 
   SelectSurahAction({
     required this.index,
-    this.words,
-    this.translation,
+    this.data,
   });
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surah: $index, words: ${words?.length}, '
-        'translation: ${translation?.name}}';
+    return '{action: ${super.toString()}, surah: $index, data: ${data?.toString()}';
   }
 
   SelectSurahAction copyWith({
     SurahIndex? index,
-    List<List<NQWord>>? words,
-    NQSurah? translation,
+    QuranData? data,
   }) {
     return SelectSurahAction(
       index: index ?? this.index,
-      words: words ?? this.words,
-      translation: translation ?? this.translation,
+      data: data ?? this.data,
     );
   }
 }
@@ -65,31 +59,26 @@ class SelectAyaAction extends AppStateAction {
 
 class SelectParticularAyaAction extends AppStateAction {
   final SurahIndex index;
-  final List<List<NQWord>>? words;
-  final NQSurah? translation;
+  final QuranData? data;
 
   SelectParticularAyaAction({
     required this.index,
-    this.words,
-    this.translation,
+    this.data,
   });
 
   SelectParticularAyaAction copyWith({
     SurahIndex? index,
-    List<List<NQWord>>? words,
-    NQSurah? translation,
+    QuranData? data,
   }) {
     return SelectParticularAyaAction(
       index: index ?? this.index,
-      words: words ?? this.words,
-      translation: translation ?? this.translation,
+      data: data ?? this.data,
     );
   }
 
   @override
   String toString() {
-    return '{action: ${super.toString()}, surah: $index, words len: ${words?.length}, '
-        'translation: ${translation?.name}';
+    return '{action: ${super.toString()}, surah: $index, data: ${data?.toString()}';
   }
 }
 
