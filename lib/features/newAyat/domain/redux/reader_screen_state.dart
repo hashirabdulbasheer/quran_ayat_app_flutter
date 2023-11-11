@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
@@ -54,6 +55,8 @@ class ReaderScreenState extends Equatable {
       data.transliteration?.aya[currentIndex.aya]?.text;
 
   List<NQWord>? currentAyaWords() => data.words[currentIndex.aya];
+
+  NQTranslation translationType() => data.translationType;
 
   @override
   String toString() {

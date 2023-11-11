@@ -87,6 +87,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       List<List<NQWord>> surahWords = store.state.reader.data.words;
       String? translation = store.state.reader.currentTranslation();
       String? transliteration = store.state.reader.currentTransliteration();
+      NQTranslation translationType = store.state.reader.translationType();
 
       return Directionality(
         textDirection: TextDirection.rtl,
@@ -273,7 +274,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                   translation != null
                       ? QuranAyatDisplayTranslationWidget(
                           translation: translation,
-                          translationType: NQTranslation.wahiduddinkhan,
+                          translationType: translationType,
                         )
                       : Container(),
 
