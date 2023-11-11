@@ -110,17 +110,29 @@ class QuranNotesEngine implements QuranNotesDataSource {
         );
         // an aya can have multiple notes
         notesListMap.forEach((aya, dynamic notes) {
-          Map<String, dynamic> ayaNotes = Map<String, dynamic>.from(notes as Map);
+          Map<String, dynamic> ayaNotes =
+              Map<String, dynamic>.from(notes as Map);
           ayaNotes.forEach((k, dynamic note) {
-            Map<String, dynamic> noteMap = Map<String, dynamic>.from(note as Map);
-            QuranNote quranNote = QuranNote(suraIndex: surah-1,
-                ayaIndex: int.parse(aya)-1,
-                note: noteMap["note"] as String,
+            Map<String, dynamic> noteMap =
+                Map<String, dynamic>.from(note as Map);
+            try {
+              QuranNote quranNote = QuranNote(
+                suraIndex: surah - 1,
+                ayaIndex: int.parse(aya) - 1,
+                note: "${noteMap["note"] ?? ""}",
                 id: k,
-                localId:  noteMap["localId"] as String,
+                localId: "${noteMap["localId"] ?? ""}",
                 createdOn: noteMap["createdOn"] as int,
-                status: QuranUtils.statusFromString(noteMap["status"] as String));
-            resultNotes.add(quranNote);
+                status: QuranUtils.statusFromString(
+                  "${noteMap["status"] ?? ""}",
+                ),
+              );
+              resultNotes.add(quranNote);
+            } catch (error) {
+              QuranLogger.logE(
+                error,
+              );
+            }
           });
         });
       }
