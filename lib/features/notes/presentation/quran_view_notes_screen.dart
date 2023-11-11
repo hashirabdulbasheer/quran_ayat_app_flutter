@@ -33,7 +33,7 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
           title: const Text("Notes"),
           actions: [
             IconButton(
-              onPressed: () => _exportTags(),
+              onPressed: () => _exportNotes(),
               icon: const Icon(
                 Icons.share,
               ),
@@ -87,7 +87,7 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     );
   }
 
-  Future<void> _exportTags() async {
+  Future<void> _exportNotes() async {
     String exported = "";
     List<QuranNote> allNotes = _notes();
     for (QuranNote note in allNotes) {
