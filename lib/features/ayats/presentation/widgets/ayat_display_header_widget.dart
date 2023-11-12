@@ -34,7 +34,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
             excludeSemantics: true,
             label: 'dropdown to select surah',
             child: SizedBox(
-              height: 80,
+              height: 50,
               child: DropdownSearch<NQSurahTitle>(
                 items: surahTitles,
                 enabled: true,
@@ -70,7 +70,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
               ),
               child: SizedBox(
                 width: 100,
-                height: 80,
+                height:50,
                 child: DropdownSearch<int>(
                   popupProps: const PopupPropsMultiSelection.menu(
                     showSearchBox: true,
