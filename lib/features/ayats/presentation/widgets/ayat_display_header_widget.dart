@@ -34,11 +34,11 @@ class QuranAyatHeaderWidget extends StatelessWidget {
             excludeSemantics: true,
             label: 'dropdown to select surah',
             child: SizedBox(
-              height: 80,
+              height: 50,
               child: DropdownSearch<NQSurahTitle>(
                 items: surahTitles,
                 enabled: true,
-                itemAsString: (NQSurahTitle title) => "${title.transliterationEn} (${title.translationEn})",
+                itemAsString: (NQSurahTitle title) => "(${title.number}) ${title.transliterationEn} [${title.translationEn}]",
                 popupProps: const PopupPropsMultiSelection.menu(),
                 dropdownDecoratorProps: const DropDownDecoratorProps(
                   dropdownSearchDecoration: InputDecoration(
@@ -70,7 +70,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
               ),
               child: SizedBox(
                 width: 100,
-                height: 80,
+                height:50,
                 child: DropdownSearch<int>(
                   popupProps: const PopupPropsMultiSelection.menu(
                     showSearchBox: true,

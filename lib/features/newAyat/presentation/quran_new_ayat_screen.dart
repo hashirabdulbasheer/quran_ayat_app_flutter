@@ -202,6 +202,38 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                         )
                       : Container(),
 
+                  // Surah title
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      !_isHeaderVisible
+                          ? Expanded(
+                            child: TextButton(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "${currentSurahDetails.transliterationEn} [${currentSurahDetails.translationEn}]",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ),
+                                onPressed: () => _toggleHeader(),
+                              ),
+                          )
+                          : IconButton(
+                              tooltip: "Close header",
+                              onPressed: () => _toggleHeader(),
+                              icon: const Icon(
+                                Icons.close,
+                                size: 12,
+                              ),
+                            ),
+                    ],
+                  ),
+
                   /// surah progress
                   QuranAyatDisplaySurahProgressWidget(
                     currentlySelectedSurah: currentSurahDetails,
@@ -214,15 +246,11 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
-                          onPressed: () => {
-                            _isHeaderVisible = !_isHeaderVisible,
-                            setState(() {}),
-                          },
+                          onPressed: () => _toggleHeader(),
                           child: Text(
                             "${currentIndex.human.sura}:${currentIndex.human.aya}",
                           ),
                         ),
-                        const Spacer(),
                         IconButton(
                           tooltip: "Context aya list view",
                           onPressed: () => _navigateToContextListScreen(
@@ -232,27 +260,17 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                           icon: const Icon(
                             Icons.list_alt,
                             size: 15,
+                            color: Colors.black54,
                           ),
                         ),
-                        IconButton(
-                          tooltip: "Open/Close surah/aya selector",
-                          onPressed: () => {
-                            _isHeaderVisible = !_isHeaderVisible,
-                            setState(() {}),
-                          },
-                          icon: Icon(
-                            _isHeaderVisible
-                                ? Icons.settings
-                                : Icons.settings_outlined,
-                            size: 15,
-                          ),
-                        ),
+                        const Spacer(),
                         IconButton(
                           tooltip: "Increase font size",
                           onPressed: () => _incrementFontSize(store),
                           icon: const Icon(
                             Icons.add,
                             size: 15,
+                            color: Colors.black54,
                           ),
                         ),
                         IconButton(
@@ -261,6 +279,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                           icon: const Icon(
                             Icons.remove,
                             size: 15,
+                            color: Colors.black54,
                           ),
                         ),
                         IconButton(
@@ -269,6 +288,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                           icon: const Icon(
                             Icons.refresh,
                             size: 15,
+                            color: Colors.black54,
                           ),
                         ),
                       ],
@@ -402,6 +422,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     Store<AppState> store,
   ) {
     store.dispatch(NextAyaAction());
+    _closeHeader();
   }
 
   /// display previous aya
@@ -409,6 +430,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     Store<AppState> store,
   ) {
     store.dispatch(PreviousAyaAction());
+    _closeHeader();
   }
 
   ///
@@ -443,5 +465,15 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     }
 
     return Theme.of(context).primaryColor;
+  }
+
+  void _toggleHeader() {
+    _isHeaderVisible = !_isHeaderVisible;
+    setState(() {});
+  }
+
+  void _closeHeader() {
+    _isHeaderVisible = false;
+    setState(() {});
   }
 }
