@@ -204,19 +204,25 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
 
                   // Surah title
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       !_isHeaderVisible
-                          ? TextButton(
-                              child: Text(
-                                "${currentSurahDetails.transliterationEn} [${currentSurahDetails.translationEn}]",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black54,
+                          ? Expanded(
+                            child: TextButton(
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "${currentSurahDetails.transliterationEn} [${currentSurahDetails.translationEn}]",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
                                 ),
+                                onPressed: () => _toggleHeader(),
                               ),
-                              onPressed: () => _toggleHeader(),
-                            )
+                          )
                           : IconButton(
                               tooltip: "Close header",
                               onPressed: () => _toggleHeader(),
@@ -225,7 +231,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                                 size: 12,
                               ),
                             ),
-                      const Spacer(),
                     ],
                   ),
 
@@ -417,6 +422,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     Store<AppState> store,
   ) {
     store.dispatch(NextAyaAction());
+    _closeHeader();
   }
 
   /// display previous aya
@@ -424,6 +430,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     Store<AppState> store,
   ) {
     store.dispatch(PreviousAyaAction());
+    _closeHeader();
   }
 
   ///
@@ -462,6 +469,11 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
 
   void _toggleHeader() {
     _isHeaderVisible = !_isHeaderVisible;
+    setState(() {});
+  }
+
+  void _closeHeader() {
+    _isHeaderVisible = false;
     setState(() {});
   }
 }
