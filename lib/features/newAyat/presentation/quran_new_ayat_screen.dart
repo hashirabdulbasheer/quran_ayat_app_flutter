@@ -208,20 +208,23 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                     children: [
                       !_isHeaderVisible
                           ? Expanded(
-                            child: TextButton(
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    "${currentSurahDetails.transliterationEn} [${currentSurahDetails.translationEn}]",
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.black54,
+                            child: SizedBox(
+                              height: 30,
+                              child: TextButton(
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.black54,
+                                      ),
+                                      textAlign: TextAlign.start,
                                     ),
-                                    textAlign: TextAlign.start,
                                   ),
+                                  onPressed: () => _toggleHeader(),
                                 ),
-                                onPressed: () => _toggleHeader(),
-                              ),
+                            ),
                           )
                           : IconButton(
                               tooltip: "Close header",

@@ -33,25 +33,32 @@ class QuranAyatHeaderWidget extends StatelessWidget {
             enabled: true,
             excludeSemantics: true,
             label: 'dropdown to select surah',
-            child: SizedBox(
-              height: 50,
-              child: DropdownSearch<NQSurahTitle>(
-                items: surahTitles,
-                enabled: true,
-                itemAsString: (NQSurahTitle title) => "(${title.number}) ${title.transliterationEn} [${title.translationEn}]",
-                popupProps: const PopupPropsMultiSelection.menu(),
-                dropdownDecoratorProps: const DropDownDecoratorProps(
-                  dropdownSearchDecoration: InputDecoration(
-                    labelText: "Surah",
-                    hintText: "select surah",
+            child: DropdownSearch<NQSurahTitle>(
+              items: surahTitles,
+              enabled: true,
+              itemAsString: (NQSurahTitle title) =>
+                  "(${title.number}) ${title.transliterationEn}",
+              popupProps: PopupPropsMultiSelection.dialog(
+                showSearchBox: true,
+                itemBuilder: _customItem,
+                searchFieldProps: const TextFieldProps(
+                  style: TextStyle(
+                    fontSize: 12,
                   ),
-                  textAlign: TextAlign.start,
                 ),
-                onChanged: (value) => onSurahSelected(
-                  value ?? surahTitles.first,
-                ),
-                selectedItem: currentlySelectedSurah,
               ),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                baseStyle: TextStyle(fontSize: 12),
+                dropdownSearchDecoration: InputDecoration(
+                  labelText: "Surah",
+                  hintText: "select surah",
+                ),
+                textAlign: TextAlign.start,
+              ),
+              onChanged: (value) => onSurahSelected(
+                value ?? surahTitles.first,
+              ),
+              selectedItem: currentlySelectedSurah,
             ),
           ),
         ),
@@ -70,10 +77,15 @@ class QuranAyatHeaderWidget extends StatelessWidget {
               ),
               child: SizedBox(
                 width: 100,
-                height:50,
                 child: DropdownSearch<int>(
-                  popupProps: const PopupPropsMultiSelection.menu(
+                  popupProps: PopupPropsMultiSelection.dialog(
                     showSearchBox: true,
+                    itemBuilder: _customAyaItem,
+                    searchFieldProps: const TextFieldProps(
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                   filterFn: (
                     item,
@@ -85,6 +97,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                   ),
                   enabled: true,
                   dropdownDecoratorProps: const DropDownDecoratorProps(
+                    baseStyle: TextStyle(fontSize: 12),
                     dropdownSearchDecoration: InputDecoration(
                       labelText: "Ayat",
                       hintText: "ayat index",
@@ -94,7 +107,8 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                     currentlySelectedSurah?.totalVerses ?? 0,
                     (i) => i + 1,
                   ),
-                  onChanged: (value) => onAyaNumberSelected(value != null ? value - 1 : 0),
+                  onChanged: (value) =>
+                      onAyaNumberSelected(value != null ? value - 1 : 0),
                   selectedItem: currentIndex.human.aya,
                 ),
               ),
@@ -117,5 +131,28 @@ class QuranAyatHeaderWidget extends StatelessWidget {
     }
 
     return false;
+  }
+
+  Widget _customItem(
+    BuildContext context,
+    NQSurahTitle title,
+    bool isSelected,
+  ) {
+    return ListTile(
+      selected: isSelected,
+      title: Text("${title.number}. ${title.transliterationEn}"),
+      subtitle: Text(title.translationEn),
+    );
+  }
+
+  Widget _customAyaItem(
+    BuildContext context,
+    int ayaIndex,
+    bool isSelected,
+  ) {
+    return ListTile(
+      selected: isSelected,
+      title: Text("$ayaIndex"),
+    );
   }
 }
