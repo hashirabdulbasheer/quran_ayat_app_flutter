@@ -33,35 +33,32 @@ class QuranAyatHeaderWidget extends StatelessWidget {
             enabled: true,
             excludeSemantics: true,
             label: 'dropdown to select surah',
-            child: SizedBox(
-              height: 80,
-              child: DropdownSearch<NQSurahTitle>(
-                items: surahTitles,
-                enabled: true,
-                itemAsString: (NQSurahTitle title) =>
-                    "(${title.number}) ${title.transliterationEn}",
-                popupProps: PopupPropsMultiSelection.dialog(
-                  showSearchBox: true,
-                  itemBuilder: _customItem,
-                  searchFieldProps: const TextFieldProps(
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
+            child: DropdownSearch<NQSurahTitle>(
+              items: surahTitles,
+              enabled: true,
+              itemAsString: (NQSurahTitle title) =>
+                  "(${title.number}) ${title.transliterationEn}",
+              popupProps: PopupPropsMultiSelection.dialog(
+                showSearchBox: true,
+                itemBuilder: _customItem,
+                searchFieldProps: const TextFieldProps(
+                  style: TextStyle(
+                    fontSize: 12,
                   ),
                 ),
-                dropdownDecoratorProps: const DropDownDecoratorProps(
-                  baseStyle: TextStyle(fontSize: 12),
-                  dropdownSearchDecoration: InputDecoration(
-                    labelText: "Surah",
-                    hintText: "select surah",
-                  ),
-                  textAlign: TextAlign.start,
-                ),
-                onChanged: (value) => onSurahSelected(
-                  value ?? surahTitles.first,
-                ),
-                selectedItem: currentlySelectedSurah,
               ),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                baseStyle: TextStyle(fontSize: 12),
+                dropdownSearchDecoration: InputDecoration(
+                  labelText: "Surah",
+                  hintText: "select surah",
+                ),
+                textAlign: TextAlign.start,
+              ),
+              onChanged: (value) => onSurahSelected(
+                value ?? surahTitles.first,
+              ),
+              selectedItem: currentlySelectedSurah,
             ),
           ),
         ),
@@ -80,7 +77,6 @@ class QuranAyatHeaderWidget extends StatelessWidget {
               ),
               child: SizedBox(
                 width: 100,
-                height: 80,
                 child: DropdownSearch<int>(
                   popupProps: PopupPropsMultiSelection.dialog(
                     showSearchBox: true,
