@@ -138,7 +138,7 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
   void _onListTileTap(int index) {
     Navigator.pop(
       context,
-      index + 1,
+      index,
     );
   }
 }
