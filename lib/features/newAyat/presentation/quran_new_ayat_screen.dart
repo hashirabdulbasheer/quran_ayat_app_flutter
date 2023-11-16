@@ -214,7 +214,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                                   child: Align(
                                     alignment: Alignment.centerRight,
                                     child: Text(
-                                      "${currentSurahDetails.transliterationEn} / \${currentSurahDetails.translationEn}",
+                                      "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
                                       style: const TextStyle(
                                         fontSize: 12,
                                         color: Colors.black54,
