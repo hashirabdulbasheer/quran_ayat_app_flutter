@@ -25,13 +25,7 @@ class QuranAyatDisplayAudioControlsWidget extends StatelessWidget {
       ) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
-            return const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: 80,
-                child: Center(child: Text('Loading audio ....')),
-              ),
-            );
+            return Container();
           default:
             bool isEnabled = snapshot.data ?? false;
             if (snapshot.hasError || !isEnabled) {
