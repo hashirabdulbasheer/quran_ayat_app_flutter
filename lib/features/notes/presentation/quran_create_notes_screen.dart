@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:noble_quran/models/surah.dart';
+import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
 
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
+import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
+import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_note.dart';
@@ -54,43 +58,56 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                 "Enter your notes for ${widget.index.human.sura}:${widget.index.human.aya}",
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.fromLTRB(
-            //     10,
-            //     10,
-            //     10,
-            //     5,
-            //   ),
-            //   child: Directionality(
-            //     textDirection: TextDirection.rtl,
-            //     child: QuranFullAyatRowWidget(
-            //       futureMethodThatReturnsSelectedSurah:
-            //           NobleQuran.getSurahArabic(
-            //         widget.suraIndex - 1,
-            //       ),
-            //       ayaIndex: widget.ayaIndex,
-            //     ),
-            //   ),
-            // ),
-            // Paddisng(
-            //   padding: const EdgeInsets.fromLTRB(
-            //     10,
-            //     0,
-            //     10,
-            //     10,
-            //   ),
-            //   child: QuranAyatDisplayTranslationWidget(
-            //     currentlySelectedSurah: NQSurahTitle(
-            //       number: widget.suraIndex,
-            //       name: '',
-            //       transliterationEn: '',
-            //       translationEn: '',
-            //       totalVerses: 0,
-            //       revelationType: RevelationType.MECCAN,
-            //     ),
-            //     currentlySelectedAya: widget.ayaIndex,
-            //   ),
-            // ),
+            FutureBuilder<NQSurah>(
+              future: NobleQuran.getSurahArabic(
+                widget.index.sura,
+              ),
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<NQSurah> snapshot,
+              ) {
+                final surah = snapshot.data;
+                if (surah == null) return const SizedBox();
+
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    10,
+                    10,
+                    10,
+                    5,
+                  ),
+                  child: Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: QuranFullAyatRowWidget(
+                      text: surah.aya[widget.index.aya].text,
+                    ),
+                  ),
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                0,
+                10,
+                10,
+              ),
+              child: QuranAyatDisplayTranslationWidget(
+                translation: StoreProvider.of<AppState>(context)
+                        .state
+                        .reader
+                        .data
+                        .translation
+                        ?.aya[widget.index.aya]
+                        .text ??
+                    "",
+                translationType: StoreProvider.of<AppState>(context)
+                    .state
+                    .reader
+                    .data
+                    .translationType,
+              ),
+            ),
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(

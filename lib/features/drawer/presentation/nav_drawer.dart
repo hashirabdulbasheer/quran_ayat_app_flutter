@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/utils/utils.dart';
+import 'package:redux/redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/qr_response_model.dart';
@@ -39,6 +40,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    Store<AppState> store = StoreProvider.of<AppState>(context);
     QuranUser? userParam = widget.user;
     if (userParam != null) {
       /// Logged In
@@ -54,14 +56,14 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                 icon: Icons.account_circle,
                 destination: QuranProfileScreen(
                   user: userParam,
-                  onLogOutTapped: () => {_onLogout()},
+                  onLogOutTapped: () => {_onLogout(store)},
                 ),
               ),
               QuranNavDrawerRowWidget(
                 context: context,
                 title: 'Bookmark',
                 icon: Icons.bookmark,
-                onSelected: () => _goToBookmark(),
+                onSelected: () => _goToBookmark(store),
               ),
               QuranNavDrawerRowWidget(
                 context: context,
@@ -138,7 +140,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               context: context,
               title: 'Bookmark',
               icon: Icons.bookmark,
-              onSelected: () => _goToBookmark(),
+              onSelected: () => _goToBookmark(store),
             ),
             QuranNavDrawerRowWidget(
               context: context,
@@ -160,10 +162,11 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
     );
   }
 
-  void _onLogout() async {
+  void _onLogout(Store<AppState> store) async {
     QuranResponse _ = await QuranAuthFactory.engine.logout();
     // clear stored data
     widget.bookmarksManager.localEngine.clear();
+    store.dispatch(InitializeReaderScreenAction());
   }
 
   Future<void> _launchUrl(Uri uri) async {
@@ -172,11 +175,9 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
     }
   }
 
-  void _goToBookmark() {
-    var surah =
-        StoreProvider.of<AppState>(context).state.reader.bookmarkState?.sura;
-    var aya =
-        StoreProvider.of<AppState>(context).state.reader.bookmarkState?.aya;
+  void _goToBookmark(Store<AppState> store) {
+    int? surah = store.state.reader.bookmarkState?.sura;
+    int? aya = store.state.reader.bookmarkState?.aya;
     if (surah != null && aya != null) {
       StoreProvider.of<AppState>(context).dispatch(
         SelectParticularAyaAction(

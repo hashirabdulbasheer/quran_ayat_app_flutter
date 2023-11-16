@@ -103,8 +103,8 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
 
   void _play() async {
     AudioSource source = await QuranAudioCacheManager.instance.getSource(
-      widget.currentIndex.sura,
-      widget.currentIndex.aya,
+      widget.currentIndex.human.sura,
+      widget.currentIndex.human.aya,
     );
     if (source is UriAudioSource) {
       bool offline = await QuranUtils.isOffline();

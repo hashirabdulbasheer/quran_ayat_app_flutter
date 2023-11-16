@@ -12,7 +12,7 @@ import 'misc/url/url_strategy.dart';
 
 
 // TODO: Update before release
-const String appVersion = "v2.7.9";
+const String appVersion = "v2.8.0";
 
 void main() async {
   usePathUrlStrategy();
