@@ -146,8 +146,7 @@ void _shareAyaReaderMiddleware(
 ) async {
   String shareString = await QuranUtils.shareString(
     store.state.reader.currentSurahDetails().transliterationEn,
-    store.state.reader.currentIndex.sura,
-    store.state.reader.currentIndex.aya,
+    store.state.reader.currentIndex,
   );
   Share.share(
     shareString,

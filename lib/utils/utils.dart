@@ -6,6 +6,7 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:uuid/uuid.dart';
 
+import '../features/newAyat/data/surah_index.dart';
 import '../features/settings/domain/settings_manager.dart';
 import '../misc/enums/quran_status_enum.dart';
 import '../models/qr_word_model.dart';
@@ -52,24 +53,21 @@ class QuranUtils {
 
   static Future<String> shareString(
     String surahName,
-    int surah,
-    int aya,
+    SurahIndex index,
   ) async {
-    int actualSuraIndex = surah;
-    int actualAyaIndex = aya - 1;
-    NQSurah arabicSurah = await NobleQuran.getSurahArabic(actualSuraIndex);
+    // NQSurah arabicSurah = await NobleQuran.getSurahArabic(index.sura);
     NQTranslation translation =
         await QuranSettingsManager.instance.getTranslation();
     NQSurah translationSurah = await NobleQuran.getTranslationString(
-      actualSuraIndex,
+      index.sura,
       translation,
     );
     StringBuffer response = StringBuffer();
-    response.write("Sura $surahName - ${surah+1}:$aya\n\n");
-    response.write("${arabicSurah.aya[actualAyaIndex].text}\n\n");
-    response.write("${translationSurah.aya[actualAyaIndex].text}\n\n");
+    response.write("Sura $surahName - ${index.human.sura}:${index.human.aya}\n");
+    // response.write("${arabicSurah.aya[index.aya].text}\n\n");
+    response.write("${translationSurah.aya[index.aya].text}\n");
     response.write(
-      "More details:\nhttp://uxquran.com/apps/quran-ayat/?sura=${surah+1}&aya=$aya\n",
+      "http://uxquran.com/apps/quran-ayat/?sura=${index.human.sura}&aya=${index.human.aya}\n",
     );
 
     return response.toString();
