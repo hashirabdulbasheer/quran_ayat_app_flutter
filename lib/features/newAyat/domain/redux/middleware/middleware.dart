@@ -124,6 +124,18 @@ void _nextAyaMiddleware(
   NextAyaAction action,
   NextDispatcher next,
 ) {
+  if (store.state.reader.currentIndex.aya ==
+      store.state.reader.currentSurahDetails().totalVerses - 1) {
+    // move to next verse
+    if (store.state.reader.currentIndex.sura + 1 < 114) {
+      store.dispatch(SelectParticularAyaAction(
+        index: SurahIndex(
+          store.state.reader.currentIndex.sura + 1,
+          0,
+        ),
+      ));
+    }
+  }
   store.dispatch(ResetTagsStatusAction());
   store.dispatch(ResetNotesStatusAction());
   next(action);
