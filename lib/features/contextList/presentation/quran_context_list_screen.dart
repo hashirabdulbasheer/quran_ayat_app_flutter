@@ -45,17 +45,21 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
         StoreProvider.of<AppState>(context).state.reader.data.translation;
     _wordsList = StoreProvider.of<AppState>(context).state.reader.data.words;
 
-    return ListWidget(
-      initialIndex: widget.index.aya,
-      itemsCount: _translation?.aya.length ?? 0,
-      itemContent: (index) => QuranFontScalerWidget(
-        body: (
-          context,
-          fontScale,
-        ) =>
-            _listItemBody(
-          index,
-          fontScale,
+    return SafeArea(
+      maintainBottomViewPadding: true,
+      minimum: const EdgeInsets.fromLTRB(0, 10, 0, 20,),
+      child: ListWidget(
+        initialIndex: widget.index.aya,
+        itemsCount: _translation?.aya.length ?? 0,
+        itemContent: (index) => QuranFontScalerWidget(
+          body: (
+            context,
+            fontScale,
+          ) =>
+              _listItemBody(
+            index,
+            fontScale,
+          ),
         ),
       ),
     );
@@ -68,58 +72,55 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
     return ListTile(
       onTap: () => _onListTileTap(index),
       style: null,
-      title: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${index + 1} ",
-              textScaleFactor: fontScale,
-              style: TextStyle(
-                fontSize: 12,
-                color: Theme.of(context)
-                    .textTheme
-                    .titleSmall
-                    ?.color
-                    ?.withOpacity(0.5),
-              ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${index + 1} ",
+            textScaleFactor: fontScale,
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context)
+                  .textTheme
+                  .titleSmall
+                  ?.color
+                  ?.withOpacity(0.5),
             ),
-            const SizedBox(
-              width: 5,
-            ),
-            Directionality(
-              textDirection: TextDirection.rtl,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    child: Text(
-                      _ayaText(index),
-                      textScaleFactor: fontScale,
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontFamily: QuranFontFamily.arabic.rawString,
-                      ),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    _ayaText(index),
+                    textScaleFactor: fontScale,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontFamily: QuranFontFamily.arabic.rawString,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 10,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            _translation?.aya[index].text ?? "",
+            textScaleFactor: fontScale,
+            style: const TextStyle(
+              fontSize: 16,
+              height: 1.5,
             ),
-            Text(
-              _translation?.aya[index].text ?? "",
-              textScaleFactor: fontScale,
-              style: const TextStyle(
-                fontSize: 16,
-                height: 1.5,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
