@@ -55,7 +55,7 @@ class QuranUtils {
     String surahName,
     SurahIndex index,
   ) async {
-    NQSurah arabicSurah = await NobleQuran.getSurahArabic(index.sura);
+    // NQSurah arabicSurah = await NobleQuran.getSurahArabic(index.sura);
     NQTranslation translation =
         await QuranSettingsManager.instance.getTranslation();
     NQSurah translationSurah = await NobleQuran.getTranslationString(
@@ -63,11 +63,11 @@ class QuranUtils {
       translation,
     );
     StringBuffer response = StringBuffer();
-    response.write("Sura $surahName - ${index.human.sura}:${index.human.aya}\n\n");
-    response.write("${arabicSurah.aya[index.aya].text}\n\n");
-    response.write("${translationSurah.aya[index.aya].text}\n\n");
+    response.write("Sura $surahName - ${index.human.sura}:${index.human.aya}\n");
+    // response.write("${arabicSurah.aya[index.aya].text}\n\n");
+    response.write("${translationSurah.aya[index.aya].text}\n");
     response.write(
-      "More details:\nhttp://uxquran.com/apps/quran-ayat/?sura=${index.human.sura}&aya=${index.human.aya}\n",
+      "http://uxquran.com/apps/quran-ayat/?sura=${index.human.sura}&aya=${index.human.aya}\n",
     );
 
     return response.toString();
