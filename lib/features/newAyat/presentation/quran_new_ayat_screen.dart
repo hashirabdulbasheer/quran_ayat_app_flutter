@@ -94,8 +94,9 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       Color subHeaderTextColor =
           store.state.reader.isBeginning() ? Colors.black : Colors.black54;
 
-      FontWeight subHeaderFontWeight =
-          store.state.reader.isBeginning() ? FontWeight.bold : FontWeight.normal;
+      FontWeight subHeaderFontWeight = store.state.reader.isBeginning()
+          ? FontWeight.bold
+          : FontWeight.normal;
 
       return Directionality(
         textDirection: TextDirection.rtl,
@@ -308,6 +309,15 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                       ],
                     ),
                   ),
+
+                  store.state.reader.isBismillahDisplayed()
+                      ? const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                            "In the name of Allah, the Most Gracious, the Most Merciful",
+                          ),
+                      )
+                      : Container(),
 
                   /// word by word widget
                   ayaWords.isNotEmpty

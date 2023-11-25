@@ -59,9 +59,14 @@ class ReaderScreenState extends Equatable {
 
   NQTranslation translationType() => data.translationType;
 
-  // is current index end or start of surah
   bool isBeginning() {
     return currentIndex.aya == 0;
+  }
+
+  bool isBismillahDisplayed() {
+    return currentIndex.aya == 0 &&
+        currentIndex.sura != 0 &&
+        currentIndex.sura != 8;
   }
 
   @override
