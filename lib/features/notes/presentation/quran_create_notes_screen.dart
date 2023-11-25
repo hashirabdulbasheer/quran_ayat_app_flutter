@@ -37,128 +37,131 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Notes"),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const QuranOfflineHeaderWidget(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                10,
-                10,
-                10,
-                5,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Notes"),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const QuranOfflineHeaderWidget(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  10,
+                  10,
+                  10,
+                  5,
+                ),
+                child: Text(
+                  "Enter your notes for ${widget.index.human.sura}:${widget.index.human.aya}",
+                ),
               ),
-              child: Text(
-                "Enter your notes for ${widget.index.human.sura}:${widget.index.human.aya}",
-              ),
-            ),
-            FutureBuilder<NQSurah>(
-              future: NobleQuran.getSurahArabic(
-                widget.index.sura,
-              ),
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<NQSurah> snapshot,
-              ) {
-                final surah = snapshot.data;
-                if (surah == null) return const SizedBox();
+              FutureBuilder<NQSurah>(
+                future: NobleQuran.getSurahArabic(
+                  widget.index.sura,
+                ),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<NQSurah> snapshot,
+                ) {
+                  final surah = snapshot.data;
+                  if (surah == null) return const SizedBox();
 
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    10,
-                    10,
-                    10,
-                    5,
-                  ),
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: QuranFullAyatRowWidget(
-                      text: surah.aya[widget.index.aya].text,
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      10,
+                      10,
+                      10,
+                      5,
                     ),
-                  ),
-                );
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                10,
-                0,
-                10,
-                10,
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: QuranFullAyatRowWidget(
+                        text: surah.aya[widget.index.aya].text,
+                      ),
+                    ),
+                  );
+                },
               ),
-              child: QuranAyatDisplayTranslationWidget(
-                translation: StoreProvider.of<AppState>(context)
-                        .state
-                        .reader
-                        .data
-                        .translation
-                        ?.aya[widget.index.aya]
-                        .text ??
-                    "",
-                translationType: StoreProvider.of<AppState>(context)
-                    .state
-                    .reader
-                    .data
-                    .translationType,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  10,
+                  0,
+                  10,
+                  10,
+                ),
+                child: QuranAyatDisplayTranslationWidget(
+                  translation: StoreProvider.of<AppState>(context)
+                          .state
+                          .reader
+                          .data
+                          .translation
+                          ?.aya[widget.index.aya]
+                          .text ??
+                      "",
+                  translationType: StoreProvider.of<AppState>(context)
+                      .state
+                      .reader
+                      .data
+                      .translationType,
+                ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                controller: _notesController..text = widget.note?.note ?? "",
-                maxLines: 10,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                      width: 0.0,
+              Container(
+                padding: const EdgeInsets.all(10),
+                child: TextField(
+                  controller: _notesController..text = widget.note?.note ?? "",
+                  maxLines: 10,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 0.0,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            widget.note == null
-                ? QuranNotesCreateControlsWidget(
-                    onConfirmation: () => {
-                      _createButtonPressed(),
-                    },
-                  )
-                : QuranUpdateControlsWidget(
-                    onDelete: () => {
-                      _deleteButtonPressed(),
-                    },
-                    onUpdate: () => _updateButtonPressed(),
-                  ),
-            const SizedBox(
-              height: 20,
-            ),
-            StoreBuilder<AppState>(
-              onDidChange: (
-                old,
-                updated,
-              ) =>
-                  _onStoreDidChange(),
-              builder: (
-                BuildContext context,
-                Store<AppState> store,
-              ) {
-                if (store.state.notes.isLoading || store.state.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+              const SizedBox(
+                height: 20,
+              ),
+              widget.note == null
+                  ? QuranNotesCreateControlsWidget(
+                      onConfirmation: () => {
+                        _createButtonPressed(),
+                      },
+                    )
+                  : QuranUpdateControlsWidget(
+                      onDelete: () => {
+                        _deleteButtonPressed(),
+                      },
+                      onUpdate: () => _updateButtonPressed(),
+                    ),
+              const SizedBox(
+                height: 20,
+              ),
+              StoreBuilder<AppState>(
+                onDidChange: (
+                  old,
+                  updated,
+                ) =>
+                    _onStoreDidChange(),
+                builder: (
+                  BuildContext context,
+                  Store<AppState> store,
+                ) {
+                  if (store.state.notes.isLoading || store.state.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                return Container();
-              },
-            ),
-          ],
+                  return Container();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
