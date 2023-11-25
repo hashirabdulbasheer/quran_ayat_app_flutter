@@ -158,9 +158,10 @@ void _previousAyaMiddleware(
         0,
       );
       // load previous sura data
-      QuranData data = await _loadQuranData(previousSurah);
+      int previousSurahTotalVerses =
+          store.state.reader.surahTitles[previousSuraIndex].totalVerses;
       // figure out its last aya index
-      int lastAya = data.words.length - 1;
+      int lastAya = previousSurahTotalVerses - 1;
       // load the last aya of the previous surah
       store.dispatch(SelectParticularAyaAction(
         index: SurahIndex(
