@@ -91,13 +91,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       String? transliteration = store.state.reader.currentTransliteration();
       NQTranslation translationType = store.state.reader.translationType();
 
-      Color subHeaderTextColor =
-          store.state.reader.isBeginning() ? Colors.black : Colors.black54;
-
-      FontWeight subHeaderFontWeight = store.state.reader.isBeginning()
-          ? FontWeight.bold
-          : FontWeight.normal;
-
       return Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
@@ -222,10 +215,9 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 12,
-                                        color: subHeaderTextColor,
-                                        fontWeight: subHeaderFontWeight,
+                                        color: Colors.black54,
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
@@ -260,9 +252,8 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                           onPressed: () => _toggleHeader(),
                           child: Text(
                             "${currentIndex.human.sura}:${currentIndex.human.aya}",
-                            style: TextStyle(
-                              color: subHeaderTextColor,
-                              fontWeight: subHeaderFontWeight,
+                            style: const TextStyle(
+                              color: Colors.black54,
                             ),
                           ),
                         ),
@@ -272,51 +263,52 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                             store,
                             context,
                           ),
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.list_alt,
                             size: 15,
-                            color: subHeaderTextColor,
+                            color: Colors.black54,
                           ),
                         ),
                         const Spacer(),
                         IconButton(
                           tooltip: "Increase font size",
                           onPressed: () => _incrementFontSize(store),
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.add,
                             size: 15,
-                            color: subHeaderTextColor,
+                            color: Colors.black54,
                           ),
                         ),
                         IconButton(
                           tooltip: "Decrease font size",
                           onPressed: () => _decrementFontSize(store),
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.remove,
                             size: 15,
-                            color: subHeaderTextColor,
+                            color: Colors.black54,
                           ),
                         ),
                         IconButton(
                           tooltip: "Reset font size",
                           onPressed: () => _resetFontSize(store),
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.refresh,
                             size: 15,
-                            color: subHeaderTextColor,
+                            color: Colors.black54,
                           ),
                         ),
                       ],
                     ),
                   ),
 
+                  /// Bismillah
                   store.state.reader.isBismillahDisplayed()
                       ? const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
                             "In the name of Allah, the Most Gracious, the Most Merciful",
                           ),
-                      )
+                        )
                       : Container(),
 
                   /// word by word widget
