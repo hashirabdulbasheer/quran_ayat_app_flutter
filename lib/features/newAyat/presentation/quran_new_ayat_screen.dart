@@ -91,6 +91,12 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       String? transliteration = store.state.reader.currentTransliteration();
       NQTranslation translationType = store.state.reader.translationType();
 
+      Color subHeaderTextColor =
+          store.state.reader.isBeginning() ? Colors.black : Colors.black54;
+
+      FontWeight subHeaderFontWeight =
+          store.state.reader.isBeginning() ? FontWeight.bold : FontWeight.normal;
+
       return Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
@@ -208,24 +214,25 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                     children: [
                       !_isHeaderVisible
                           ? Expanded(
-                            child: SizedBox(
-                              height: 30,
-                              child: TextButton(
+                              child: SizedBox(
+                                height: 30,
+                                child: TextButton(
                                   child: Align(
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 12,
-                                        color: Colors.black54,
+                                        color: subHeaderTextColor,
+                                        fontWeight: subHeaderFontWeight,
                                       ),
                                       textAlign: TextAlign.start,
                                     ),
                                   ),
                                   onPressed: () => _toggleHeader(),
                                 ),
-                            ),
-                          )
+                              ),
+                            )
                           : IconButton(
                               tooltip: "Close header",
                               onPressed: () => _toggleHeader(),
@@ -252,6 +259,10 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                           onPressed: () => _toggleHeader(),
                           child: Text(
                             "${currentIndex.human.sura}:${currentIndex.human.aya}",
+                            style: TextStyle(
+                              color: subHeaderTextColor,
+                              fontWeight: subHeaderFontWeight,
+                            ),
                           ),
                         ),
                         IconButton(
@@ -260,38 +271,38 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                             store,
                             context,
                           ),
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.list_alt,
                             size: 15,
-                            color: Colors.black54,
+                            color: subHeaderTextColor,
                           ),
                         ),
                         const Spacer(),
                         IconButton(
                           tooltip: "Increase font size",
                           onPressed: () => _incrementFontSize(store),
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.add,
                             size: 15,
-                            color: Colors.black54,
+                            color: subHeaderTextColor,
                           ),
                         ),
                         IconButton(
                           tooltip: "Decrease font size",
                           onPressed: () => _decrementFontSize(store),
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.remove,
                             size: 15,
-                            color: Colors.black54,
+                            color: subHeaderTextColor,
                           ),
                         ),
                         IconButton(
                           tooltip: "Reset font size",
                           onPressed: () => _resetFontSize(store),
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.refresh,
                             size: 15,
-                            color: Colors.black54,
+                            color: subHeaderTextColor,
                           ),
                         ),
                       ],
