@@ -59,6 +59,12 @@ class ReaderScreenState extends Equatable {
 
   NQTranslation translationType() => data.translationType;
 
+  bool isBismillahDisplayed() {
+    return currentIndex.aya == 0 &&
+        currentIndex.sura != 0 &&
+        currentIndex.sura != 8;
+  }
+
   @override
   String toString() {
     return "{surah: ${currentIndex.toString()}, titles: ${surahTitles.length}, "

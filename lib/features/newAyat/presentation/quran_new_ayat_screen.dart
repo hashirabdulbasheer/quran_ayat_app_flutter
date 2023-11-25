@@ -208,9 +208,9 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                     children: [
                       !_isHeaderVisible
                           ? Expanded(
-                            child: SizedBox(
-                              height: 30,
-                              child: TextButton(
+                              child: SizedBox(
+                                height: 30,
+                                child: TextButton(
                                   child: Align(
                                     alignment: Alignment.centerRight,
                                     child: Text(
@@ -224,8 +224,8 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                                   ),
                                   onPressed: () => _toggleHeader(),
                                 ),
-                            ),
-                          )
+                              ),
+                            )
                           : IconButton(
                               tooltip: "Close header",
                               onPressed: () => _toggleHeader(),
@@ -252,6 +252,9 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                           onPressed: () => _toggleHeader(),
                           child: Text(
                             "${currentIndex.human.sura}:${currentIndex.human.aya}",
+                            style: const TextStyle(
+                              color: Colors.black54,
+                            ),
                           ),
                         ),
                         IconButton(
@@ -297,6 +300,16 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                       ],
                     ),
                   ),
+
+                  /// Bismillah
+                  store.state.reader.isBismillahDisplayed()
+                      ? const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "In the name of Allah, the Most Gracious, the Most Merciful",
+                          ),
+                        )
+                      : Container(),
 
                   /// word by word widget
                   ayaWords.isNotEmpty

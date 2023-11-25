@@ -124,6 +124,18 @@ void _nextAyaMiddleware(
   NextAyaAction action,
   NextDispatcher next,
 ) {
+  if (store.state.reader.currentIndex.aya ==
+      store.state.reader.currentSurahDetails().totalVerses - 1) {
+    // move to next verse
+    if (store.state.reader.currentIndex.sura + 1 < 114) {
+      store.dispatch(SelectParticularAyaAction(
+        index: SurahIndex(
+          store.state.reader.currentIndex.sura + 1,
+          0,
+        ),
+      ));
+    }
+  }
   store.dispatch(ResetTagsStatusAction());
   store.dispatch(ResetNotesStatusAction());
   next(action);
@@ -133,7 +145,32 @@ void _previousAyaMiddleware(
   Store<AppState> store,
   PreviousAyaAction action,
   NextDispatcher next,
-) {
+) async {
+  // moving to the previous sura is a bit trickier, when we are the first aya of
+  // a sura and previous aya action is received then, we load the previous quran data
+  // to find out the number of verses that the previous sura has, the move to the
+  // last aya of the previous sura
+  if (store.state.reader.currentIndex.aya == 0) {
+    int previousSuraIndex = store.state.reader.currentIndex.sura - 1;
+    if (previousSuraIndex >= 0) {
+      SurahIndex previousSurah = SurahIndex(
+        previousSuraIndex,
+        0,
+      );
+      // load previous sura data
+      int previousSurahTotalVerses =
+          store.state.reader.surahTitles[previousSuraIndex].totalVerses;
+      // figure out its last aya index
+      int lastAya = previousSurahTotalVerses - 1;
+      // load the last aya of the previous surah
+      store.dispatch(SelectParticularAyaAction(
+        index: SurahIndex(
+          previousSuraIndex,
+          lastAya,
+        ),
+      ));
+    }
+  }
   store.dispatch(ResetTagsStatusAction());
   store.dispatch(ResetNotesStatusAction());
   next(action);
