@@ -303,10 +303,11 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
 
                   /// Bismillah
                   store.state.reader.isBismillahDisplayed()
-                      ? const Padding(
-                          padding: EdgeInsets.all(8.0),
+                      ? const Center(
                           child: Text(
                             "In the name of Allah, the Most Gracious, the Most Merciful",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 12),
                           ),
                         )
                       : Container(),
