@@ -39,8 +39,10 @@ class _QuranDropdownSettingsTileWidgetState
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
+              List<String> values = snapshot.data?.split(",") ?? [];
+
               return _tile(
-                currentValue: _dropdownValueFromKey(snapshot.data),
+                currentValue: _dropdownValueFromKey(values),
               );
             }
         }
@@ -49,13 +51,6 @@ class _QuranDropdownSettingsTileWidgetState
   }
 
   Widget _tile({List<QuranDropdownValue>? currentValue}) {
-    if (currentValue == null || currentValue.isEmpty) {
-      QuranDropdownValue? defaultDropdown = widget.setting.defaultValue;
-      if (defaultDropdown != null) {
-        currentValue = [defaultDropdown];
-      }
-    }
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -94,7 +89,7 @@ class _QuranDropdownSettingsTileWidgetState
   }
 
   void _onDropDownValueChanged(List<QuranDropdownValue>? values) {
-    if (values != null) {
+    if (values != null && values.isNotEmpty) {
       setState(() {});
       Function(List<QuranDropdownValue>)? onChangedParam = widget.onChanged;
       if (onChangedParam != null && values.isNotEmpty) {
@@ -103,13 +98,14 @@ class _QuranDropdownSettingsTileWidgetState
     }
   }
 
-  List<QuranDropdownValue>? _dropdownValueFromKey(String? key) {
-    if (key != null) {
+  List<QuranDropdownValue>? _dropdownValueFromKey(List<String>? values) {
+    if (values != null && values.isNotEmpty) {
       List<QuranDropdownValue> possibleValues = widget.setting.possibleValues;
-      List<QuranDropdownValue> filtered =
-          possibleValues.where((element) => element.key == key).toList();
+      List<QuranDropdownValue> filtered = possibleValues
+          .where((element) => values?.contains(element.key) ?? false)
+          .toList();
       if (filtered.isNotEmpty) {
-        return [filtered.first];
+        return filtered;
       }
     }
 

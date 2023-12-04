@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/settings/presentation/widgets/multiselect_dropdown_title_widget.dart';
 
 import '../../domain/entities/quran_setting.dart';
 import '../../domain/enum/settings_type_enum.dart';
 import '../../domain/settings_manager.dart';
 import 'dropdown_title_widget.dart';
+import 'multiselect_dropdown_title_widget.dart';
 import 'on_off_tile_widget.dart';
 
 class QuranSettingsRowWidget extends StatelessWidget {
@@ -52,7 +52,7 @@ class QuranSettingsRowWidget extends StatelessWidget {
           onChanged: (values) => {
             QuranSettingsManager.instance.save(
               setting,
-              values.join(', '),
+              values.map((e) => e.key).toList().join(","),
             ),
           },
         );
