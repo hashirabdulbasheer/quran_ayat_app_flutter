@@ -33,9 +33,7 @@ class QuranFullAyatRowWidget extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: Text(
                 _stripHtmlIfNeeded(text),
-                textAlign: QuranUtils.isArabic(text)
-                    ? TextAlign.end
-                    : TextAlign.start,
+                textAlign: TextAlign.start,
                 textScaleFactor: fontScale,
                 style: TextStyle(
                   fontSize: 16,
