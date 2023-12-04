@@ -44,6 +44,18 @@ class QuranSettingsRowWidget extends StatelessWidget {
           },
         );
 
+      case QuranSettingType.multiselect:
+        return QuranDropdownSettingsTileWidget(
+          setting: setting,
+          showSearchBox: setting.showSearchBoxInDropdown,
+          onChanged: (value) => {
+            QuranSettingsManager.instance.save(
+              setting,
+              value.key,
+            ),
+          },
+        );
+
       default:
         return Container();
     }

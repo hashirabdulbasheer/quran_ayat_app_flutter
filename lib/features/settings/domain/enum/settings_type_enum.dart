@@ -1,6 +1,6 @@
 /// dropdown - a dropdown with various options to select
 /// onOff - on/off toggle switch
-enum QuranSettingType { dropdown, onOff }
+enum QuranSettingType { dropdown, onOff, multiselect }
 
 enum QuranSettingOnOff { on, off }
 
