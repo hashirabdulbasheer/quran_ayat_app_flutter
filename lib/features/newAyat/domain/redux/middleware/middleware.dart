@@ -282,9 +282,13 @@ Future<QuranData> _loadQuranData(SurahIndex surahIndex) async {
     );
   }
 
+  Map<NQTranslation, NQSurah> translationMap = const {};
+  translationMap[currentTranslationType] = translation;
+
   return QuranData(
     words: suraWords,
     translation: translation,
+    translationMap: translationMap,
     translationType: currentTranslationType,
     transliteration: transliteration,
   );

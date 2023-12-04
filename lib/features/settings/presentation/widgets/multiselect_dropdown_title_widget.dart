@@ -77,7 +77,7 @@ class _QuranDropdownSettingsTileWidgetState
                 dropdownDecoratorProps: const DropDownDecoratorProps(
                   dropdownSearchDecoration: InputDecoration(hintText: "select"),
                 ),
-                onChanged: (value) => _onDropDownValueChanged(value),
+                onChanged: _onDropDownValueChanged,
                 selectedItems: currentValue ?? [],
               ),
             ),
