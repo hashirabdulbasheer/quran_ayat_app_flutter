@@ -52,7 +52,7 @@ class QuranSettingsManager {
     defaultValue: QuranDropdownValuesFactory.defaultValue(
       QuranSettingsConstants.translationId,
     ),
-    type: QuranSettingType.dropdown,
+    type: QuranSettingType.multiselect,
   );
 
   final QuranSetting _audioControlSettings = QuranSetting(

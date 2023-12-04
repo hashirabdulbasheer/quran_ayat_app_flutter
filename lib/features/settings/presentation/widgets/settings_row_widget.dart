@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/settings/presentation/widgets/multiselect_dropdown_title_widget.dart';
 
 import '../../domain/entities/quran_setting.dart';
 import '../../domain/enum/settings_type_enum.dart';
@@ -45,13 +46,13 @@ class QuranSettingsRowWidget extends StatelessWidget {
         );
 
       case QuranSettingType.multiselect:
-        return QuranDropdownSettingsTileWidget(
+        return QuranMultiselectSettingsTileWidget(
           setting: setting,
           showSearchBox: setting.showSearchBoxInDropdown,
           onChanged: (value) => {
             QuranSettingsManager.instance.save(
               setting,
-              value.key,
+              value.first.key,
             ),
           },
         );
