@@ -49,10 +49,10 @@ class QuranSettingsRowWidget extends StatelessWidget {
         return QuranMultiselectSettingsTileWidget(
           setting: setting,
           showSearchBox: setting.showSearchBoxInDropdown,
-          onChanged: (value) => {
+          onChanged: (values) => {
             QuranSettingsManager.instance.save(
               setting,
-              value.first.key,
+              values.join(', '),
             ),
           },
         );

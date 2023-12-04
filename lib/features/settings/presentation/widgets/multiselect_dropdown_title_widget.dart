@@ -49,6 +49,13 @@ class _QuranDropdownSettingsTileWidgetState
   }
 
   Widget _tile({List<QuranDropdownValue>? currentValue}) {
+    if (currentValue == null || currentValue.isEmpty) {
+      QuranDropdownValue? defaultDropdown = widget.setting.defaultValue;
+      if (defaultDropdown != null) {
+        currentValue = [defaultDropdown];
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -68,7 +75,7 @@ class _QuranDropdownSettingsTileWidgetState
               child: DropdownSearch<QuranDropdownValue>.multiSelection(
                 items: widget.setting.possibleValues,
                 itemAsString: (item) => item.title,
-                popupProps: PopupPropsMultiSelection.menu(
+                popupProps: PopupPropsMultiSelection.dialog(
                   fit: FlexFit.loose,
                   showSearchBox: widget.showSearchBox ?? false,
                 ),
@@ -90,7 +97,7 @@ class _QuranDropdownSettingsTileWidgetState
     if (values != null) {
       setState(() {});
       Function(List<QuranDropdownValue>)? onChangedParam = widget.onChanged;
-      if (onChangedParam != null) {
+      if (onChangedParam != null && values.isNotEmpty) {
         onChangedParam(values);
       }
     }
