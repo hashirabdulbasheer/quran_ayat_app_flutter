@@ -4,6 +4,7 @@ import '../../domain/entities/quran_setting.dart';
 import '../../domain/enum/settings_type_enum.dart';
 import '../../domain/settings_manager.dart';
 import 'dropdown_title_widget.dart';
+import 'multiselect_dropdown_title_widget.dart';
 import 'on_off_tile_widget.dart';
 
 class QuranSettingsRowWidget extends StatelessWidget {
@@ -40,6 +41,18 @@ class QuranSettingsRowWidget extends StatelessWidget {
               value
                   ? QuranSettingOnOff.on.rawString()
                   : QuranSettingOnOff.off.rawString(),
+            ),
+          },
+        );
+
+      case QuranSettingType.multiselect:
+        return QuranMultiselectSettingsTileWidget(
+          setting: setting,
+          showSearchBox: setting.showSearchBoxInDropdown,
+          onChanged: (values) => {
+            QuranSettingsManager.instance.save(
+              setting,
+              values.map((e) => e.key).toList().join(","),
             ),
           },
         );

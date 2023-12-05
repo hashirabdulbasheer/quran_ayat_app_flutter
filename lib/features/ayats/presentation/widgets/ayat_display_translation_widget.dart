@@ -17,11 +17,25 @@ class QuranAyatDisplayTranslationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      const SizedBox(height: 20),
+      Row(
+        children: [
+          Expanded(
+            child: Text(
+              translationType.title,
+              textAlign: TextAlign.end,
+              style: const TextStyle(
+                fontSize: 10,
+                color: Colors.black54,
+              ),
+            ),
+          ),
+        ],
+      ),
       QuranFullAyatRowWidget(
         text: translation,
         fontFamily: _translationFontFamily(translationType),
       ),
+      const Divider(color: Colors.black12,),
     ]);
   }
 

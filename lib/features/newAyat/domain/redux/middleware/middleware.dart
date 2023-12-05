@@ -265,12 +265,16 @@ Future<QuranData> _loadQuranData(SurahIndex surahIndex) async {
   );
 
   // Initialize translation
-  NQTranslation currentTranslationType =
-      await QuranSettingsManager.instance.getTranslation();
-  NQSurah translation = await NobleQuran.getTranslationString(
-    surahIndex.sura,
-    currentTranslationType,
-  );
+  List<NQTranslation> currentTranslationTypes =
+      await QuranSettingsManager.instance.getTranslations();
+  Map<NQTranslation, NQSurah> translationMap = {};
+  for (NQTranslation type in currentTranslationTypes) {
+    NQSurah translation = await NobleQuran.getTranslationString(
+      surahIndex.sura,
+      type,
+    );
+    translationMap[type] = translation;
+  }
 
   // Initialize transliteration
   NQSurah? transliteration;
@@ -284,8 +288,7 @@ Future<QuranData> _loadQuranData(SurahIndex surahIndex) async {
 
   return QuranData(
     words: suraWords,
-    translation: translation,
-    translationType: currentTranslationType,
+    translationMap: translationMap,
     transliteration: transliteration,
   );
 }

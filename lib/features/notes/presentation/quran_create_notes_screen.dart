@@ -78,48 +78,48 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                       10,
                       5,
                     ),
-                    child: Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: QuranFullAyatRowWidget(
-                        text: surah.aya[widget.index.aya].text,
-                      ),
+                    child: QuranFullAyatRowWidget(
+                      text: surah.aya[widget.index.aya].text,
                     ),
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  10,
-                  0,
-                  10,
-                  10,
-                ),
-                child: QuranAyatDisplayTranslationWidget(
-                  translation: StoreProvider.of<AppState>(context)
-                          .state
-                          .reader
-                          .data
-                          .translation
-                          ?.aya[widget.index.aya]
-                          .text ??
-                      "",
-                  translationType: StoreProvider.of<AppState>(context)
-                      .state
-                      .reader
-                      .data
-                      .translationType,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: TextField(
-                  controller: _notesController..text = widget.note?.note ?? "",
-                  maxLines: 10,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.grey,
-                        width: 0.0,
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(
+              //     10,
+              //     0,
+              //     10,
+              //     10,
+              //   ),
+              //   child: QuranAyatDisplayTranslationWidget(
+              //     translation: StoreProvider.of<AppState>(context)
+              //             .state
+              //             .reader
+              //             .data
+              //             .translationMap[translationMap.]
+              //             ?.aya[widget.index.aya]
+              //             .text ??
+              //         "",
+              //     translationType: StoreProvider.of<AppState>(context)
+              //         .state
+              //         .reader
+              //         .data
+              //         .translationType,
+              //   ),
+              // ),
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  child: TextField(
+                    controller: _notesController..text = widget.note?.note ?? "",
+                    maxLines: 10,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                          width: 0.0,
+                        ),
                       ),
                     ),
                   ),

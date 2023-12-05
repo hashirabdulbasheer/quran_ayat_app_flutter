@@ -49,15 +49,20 @@ class ReaderScreenState extends Equatable {
     return surahTitles[currentIndex.sura];
   }
 
-  String? currentTranslation() => data.translation?.aya[currentIndex.aya]?.text;
+  Map<NQTranslation, String> currentTranslations() {
+    Map<NQTranslation, String> translations = {};
+    data.translationMap.forEach((key, value) {
+      translations[key] = value?.aya[currentIndex.aya]?.text ?? "";
+    });
+
+    return translations;
+  }
 
   String? currentTransliteration() =>
       data.transliteration?.aya[currentIndex.aya]?.text;
 
   List<NQWord> currentAyaWords() =>
       data.words.isNotEmpty ? data.words[currentIndex.aya] : [];
-
-  NQTranslation translationType() => data.translationType;
 
   bool isBismillahDisplayed() {
     return currentIndex.aya == 0 &&
@@ -70,7 +75,7 @@ class ReaderScreenState extends Equatable {
     return "{surah: ${currentIndex.toString()}, titles: ${surahTitles.length}, "
         "isLoading: $isLoading,"
         "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words?.length}, "
-        "translation: ${data.translation?.name}, transliteration: ${data.transliteration?.name}}";
+        "translation len: ${data.translationMap.keys.length}, transliteration: ${data.transliteration?.name}}";
   }
 
   @override

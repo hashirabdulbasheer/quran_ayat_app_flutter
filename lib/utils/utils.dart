@@ -56,11 +56,11 @@ class QuranUtils {
     SurahIndex index,
   ) async {
     // NQSurah arabicSurah = await NobleQuran.getSurahArabic(index.sura);
-    NQTranslation translation =
-        await QuranSettingsManager.instance.getTranslation();
+    List<NQTranslation> translation =
+        await QuranSettingsManager.instance.getTranslations();
     NQSurah translationSurah = await NobleQuran.getTranslationString(
       index.sura,
-      translation,
+      translation.first, // while sharing, use first translation
     );
     StringBuffer response = StringBuffer();
     response.write("Sura $surahName - ${index.human.sura}:${index.human.aya}\n");
