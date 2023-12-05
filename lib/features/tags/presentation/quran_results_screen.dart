@@ -117,11 +117,11 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
   Future<List<QuranIndex>> _fetchDetails() async {
     List<QuranIndex> updatedIndices = [];
     for (QuranTagAya aya in widget.tag.ayas) {
-      NQTranslation translation =
-          await QuranSettingsManager.instance.getTranslation();
+      List<NQTranslation> translations =
+          await QuranSettingsManager.instance.getTranslations();
       NQSurah translationSurah = await NobleQuran.getTranslationString(
         aya.suraIndex - 1,
-        translation,
+        translations.first, // TODO: fix later to handle multiple translations
       );
       updatedIndices.add(QuranIndex(
         surahIndex: aya.suraIndex,

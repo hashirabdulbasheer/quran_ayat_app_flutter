@@ -30,7 +30,7 @@ class QuranFullAyatRowWidget extends StatelessWidget {
         children: [
           Flexible(
             child: Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
               child: Text(
                 _stripHtmlIfNeeded(text),
                 textAlign: TextAlign.start,

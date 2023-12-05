@@ -5,16 +5,12 @@ import 'package:noble_quran/models/word.dart';
 
 class QuranData extends Equatable {
   final List<List<NQWord>> words;
-  final Map<NQTranslation, NQSurah> translationMap;
-  final NQSurah? translation;
-  final NQTranslation translationType;
+  final Map<NQTranslation, NQSurah?> translationMap;
   final NQSurah? transliteration;
 
   const QuranData({
     this.words = const [],
-    this.translation,
-    this.translationType = NQTranslation.wahiduddinkhan,
-    this.translationMap = const {},
+    this.translationMap = const {NQTranslation.wahiduddinkhan: null},
     this.transliteration,
   });
 
@@ -27,8 +23,6 @@ class QuranData extends Equatable {
   }) {
     return QuranData(
       words: words ?? this.words,
-      translation: translation ?? this.translation,
-      translationType: translationType ?? this.translationType,
       translationMap: translationMap ?? this.translationMap,
       transliteration: transliteration ?? this.transliteration,
     );
@@ -37,9 +31,7 @@ class QuranData extends Equatable {
   @override
   List<Object?> get props => [
         words,
-        translation,
         transliteration,
         translationMap,
-        translationType,
       ];
 }

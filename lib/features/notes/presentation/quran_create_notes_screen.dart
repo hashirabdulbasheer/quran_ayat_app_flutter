@@ -84,29 +84,29 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  10,
-                  0,
-                  10,
-                  10,
-                ),
-                child: QuranAyatDisplayTranslationWidget(
-                  translation: StoreProvider.of<AppState>(context)
-                          .state
-                          .reader
-                          .data
-                          .translation
-                          ?.aya[widget.index.aya]
-                          .text ??
-                      "",
-                  translationType: StoreProvider.of<AppState>(context)
-                      .state
-                      .reader
-                      .data
-                      .translationType,
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(
+              //     10,
+              //     0,
+              //     10,
+              //     10,
+              //   ),
+              //   child: QuranAyatDisplayTranslationWidget(
+              //     translation: StoreProvider.of<AppState>(context)
+              //             .state
+              //             .reader
+              //             .data
+              //             .translationMap[translationMap.]
+              //             ?.aya[widget.index.aya]
+              //             .text ??
+              //         "",
+              //     translationType: StoreProvider.of<AppState>(context)
+              //         .state
+              //         .reader
+              //         .data
+              //         .translationType,
+              //   ),
+              // ),
               Directionality(
                 textDirection: TextDirection.ltr,
                 child: Container(

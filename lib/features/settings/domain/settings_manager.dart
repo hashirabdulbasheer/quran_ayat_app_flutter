@@ -2,15 +2,16 @@ import 'dart:async';
 
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/noble_quran.dart';
+
 import '../../../misc/configs/app_config.dart';
+import '../data/repository/settings_repository_impl.dart';
 import 'constants/setting_constants.dart';
 import 'entities/quran_dropdown_values_factory.dart';
-import 'enum/settings_event_enum.dart';
-import 'theme_manager.dart';
-import '../data/repository/settings_repository_impl.dart';
 import 'entities/quran_setting.dart';
+import 'enum/settings_event_enum.dart';
 import 'enum/settings_type_enum.dart';
 import 'repository/settings_repository.dart';
+import 'theme_manager.dart';
 
 class QuranSettingsManager {
   static final QuranSettingsManager instance =
@@ -140,27 +141,36 @@ class QuranSettingsManager {
 
   Future<void> resetFontSize() async {
     double fontSize = 1;
-    save(_fontSizeSetting, "$fontSize",);
+    save(
+      _fontSizeSetting,
+      "$fontSize",
+    );
 
     return;
   }
 
   Future<void> incrementFontSize() async {
     double fontSize = await getFontScale();
-    if (fontSize < _fontScaleFactor*10) {
+    if (fontSize < _fontScaleFactor * 10) {
       fontSize = fontSize + _fontScaleFactor;
     }
-    save(_fontSizeSetting, "$fontSize",);
+    save(
+      _fontSizeSetting,
+      "$fontSize",
+    );
 
     return;
   }
 
   Future<void> decrementFontSize() async {
     double fontSize = await getFontScale();
-    if (fontSize > _fontScaleFactor*2) {
+    if (fontSize > _fontScaleFactor * 2) {
       fontSize = fontSize - _fontScaleFactor;
     }
-    save(_fontSizeSetting, "$fontSize",);
+    save(
+      _fontSizeSetting,
+      "$fontSize",
+    );
 
     return;
   }
@@ -183,10 +193,13 @@ class QuranSettingsManager {
     return true;
   }
 
-  Future<NQTranslation> getTranslation() async {
+  Future<List<NQTranslation>> getTranslations() async {
     String translation = await getValue(_translationSettings);
+    List<String> translationStringList = translation.split(",");
 
-    return NobleQuran.getTranslationFromTitle(translation);
+    return translationStringList
+        .map((e) => NobleQuran.getTranslationFromTitle(e))
+        .toList();
   }
 
   Future<String> getReciterKey() async {
