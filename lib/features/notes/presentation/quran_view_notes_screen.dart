@@ -1,10 +1,13 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+import 'package:noble_quran/models/surah_title.dart';
+import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_note.dart';
 import 'quran_create_notes_screen.dart';
 import 'widgets/notes_view_note_item_widget.dart';
@@ -23,9 +26,33 @@ class QuranViewNotesScreen extends StatefulWidget {
 }
 
 class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
+  NQSurahTitle? _selectedSurah;
+  final List<NQSurahTitle> _suraTitles = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _suraTitles.add(NQSurahTitle(
+      number: 0,
+      name: "All",
+      transliterationEn: "All notes",
+      translationEn: "All notes",
+      totalVerses: 0,
+      revelationType: RevelationType.MECCAN,
+    ));
+    _suraTitles
+        .addAll(StoreProvider.of<AppState>(context).state.reader.surahTitles);
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<QuranNote> notes = _notes();
+    List<QuranNote> notes = _notes(
+      _selectedSurah,
+    );
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -44,6 +71,56 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
         body: Column(
           children: [
             const QuranOfflineHeaderWidget(),
+            _suraTitles.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                      10,
+                      5,
+                      10,
+                      5,
+                    ),
+                    child: StoreBuilder<AppState>(builder: (
+                      BuildContext context,
+                      Store<AppState> store,
+                    ) {
+                      return DropdownSearch<NQSurahTitle>(
+                        items: _suraTitles,
+                        enabled: true,
+                        itemAsString: (NQSurahTitle title) =>
+                            "(${title.number}) ${title.transliterationEn}",
+                        popupProps: PopupPropsMultiSelection.dialog(
+                          showSearchBox: true,
+                          itemBuilder: _customItem,
+                          searchFieldProps: const TextFieldProps(
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          baseStyle: TextStyle(fontSize: 12),
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: "Surah",
+                            hintText: "select surah",
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                        onChanged: (value) => {
+                          setState(() {
+                            if (value != null) {
+                              if (value.number > 0) {
+                                _selectedSurah = value;
+                              } else {
+                                _selectedSurah = null;
+                              }
+                            }
+                          }),
+                        },
+                        selectedItem: _selectedSurah,
+                      );
+                    }),
+                  )
+                : Container(),
             Expanded(
               child: notes.isEmpty
                   ? const Center(child: Text('No notes'))
@@ -90,9 +167,22 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     );
   }
 
+  Widget _customItem(
+    BuildContext context,
+    NQSurahTitle title,
+    bool isSelected,
+  ) {
+    return ListTile(
+      selected: isSelected,
+      title: title.number > 0 ? Text("${title.number}. ${title.transliterationEn}") : Text(title.transliterationEn),
+      subtitle: title.number > 0 ? Text(title.translationEn) : const Text(""),
+    );
+  }
+
   Future<void> _exportNotes() async {
     String exported = "";
-    List<QuranNote> allNotes = _notes();
+    List<QuranNote> allNotes =
+        StoreProvider.of<AppState>(context).state.notes.originalNotes;
     for (QuranNote note in allNotes) {
       String noteString =
           "${note.suraIndex}:${note.ayaIndex}, ${note.note}, ${note.createdOn} ";
@@ -104,6 +194,15 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     );
   }
 
-  List<QuranNote> _notes() =>
-      StoreProvider.of<AppState>(context).state.notes.originalNotes;
+  List<QuranNote> _notes(
+    NQSurahTitle? sura,
+  ) =>
+      StoreProvider.of<AppState>(context)
+          .state
+          .notes
+          .originalNotes
+          .where(
+            (note) => sura != null ? note.suraIndex == sura.number - 1 : true,
+          )
+          .toList();
 }
