@@ -5,7 +5,6 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
-import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 
 typedef BookmarkState = SurahIndex;
 
