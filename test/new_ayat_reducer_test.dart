@@ -194,4 +194,30 @@ void main() {
       );
     },
   );
+
+  test(
+    'Set select surah action sets index to default surah index if invalid',
+        () async {
+      final store = Store<AppState>(
+        appStateReducer,
+        initialState: const AppState(),
+      );
+
+      await store.dispatch(SelectSurahAction(
+        index: const SurahIndex(900, 1,),
+        data: null,
+      ));
+
+      expect(
+        store.state.reader.data,
+        const QuranData(),
+      );
+
+      expect(
+        store.state.reader.currentIndex,
+        SurahIndex.defaultIndex,
+      );
+    },
+  );
+
 }
