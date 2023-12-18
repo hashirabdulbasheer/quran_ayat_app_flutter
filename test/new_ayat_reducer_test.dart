@@ -306,4 +306,44 @@ void main() {
       );
     },
   );
+
+  test(
+    'Select negative aya action sets aya index as 1 in state',
+        () async {
+      NQSurahTitle surahTitle = NQSurahTitle(
+        number: 0,
+        name: "hashir1",
+        translationEn: "Test1",
+        transliterationEn: "Test1",
+        totalVerses: 200,
+        revelationType: RevelationType.MECCAN,
+      );
+
+      final store = Store<AppState>(
+        appStateReducer,
+        initialState: AppState(
+          reader: ReaderScreenState(
+            surahTitles: [surahTitle],
+            currentIndex: const SurahIndex(
+              0,
+              1,
+            ),
+          ),
+        ),
+      );
+
+      await store.dispatch(SelectAyaAction(
+        aya: -1,
+      ));
+
+      expect(
+        store.state.reader.currentIndex,
+        const SurahIndex(
+          0,
+          1,
+        ),
+      );
+    },
+  );
+
 }
