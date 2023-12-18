@@ -41,8 +41,7 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
   }
 
   Widget _list() {
-    _translation = null;
-        // StoreProvider.of<AppState>(context).state.reader.data.translation;
+    _translation = StoreProvider.of<AppState>(context).state.reader.data.firstTranslation();
     _wordsList = StoreProvider.of<AppState>(context).state.reader.data.words;
 
     return SafeArea(
