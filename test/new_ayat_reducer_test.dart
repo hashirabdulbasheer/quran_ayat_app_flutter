@@ -1,6 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:noble_quran/enums/translations.dart';
+import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
+import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/reader_screen_state.dart';
@@ -122,6 +126,71 @@ void main() {
       expect(
         store.state.reader.currentIndex,
         store.state.reader.currentIndex,
+      );
+    },
+  );
+
+  test(
+    'Set select surah action sets data and index for the surah in state',
+    () async {
+      final store = Store<AppState>(
+        appStateReducer,
+        initialState: const AppState(),
+      );
+
+      List<List<NQWord>> words = [
+        [
+          NQWord(
+            word: 1,
+            tr: "tr1",
+            aya: 1,
+            sura: 1,
+            ar: "ar1",
+          ),
+          NQWord(
+            word: 2,
+            tr: "tr2",
+            aya: 2,
+            sura: 2,
+            ar: "ar2",
+          ),
+        ],
+      ];
+
+      Map<NQTranslation, NQSurah?> translationMap = {};
+      translationMap[NQTranslation.wahiduddinkhan] = NQSurah(
+        aya: [],
+        index: "1",
+        name: "test1",
+      );
+
+      NQSurah transliteration = NQSurah(
+        aya: [],
+        index: "2",
+        name: "test2",
+      );
+
+      // final Map<NQTranslation, NQSurah?> translationMap;
+      // final NQSurah? transliteration
+      QuranData data = QuranData(
+        words: words,
+        translationMap: translationMap,
+        transliteration: transliteration,
+      );
+
+      await store.dispatch(SelectSurahAction(
+        index: const SurahIndex(1, 1,),
+        data: data,
+      ));
+
+      expect(
+        store.state.reader.data,
+        data,
+      );
+
+      expect(
+        store.state.reader.currentIndex,
+        const SurahIndex(1, 1,),
       );
     },
   );
