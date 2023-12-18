@@ -33,6 +33,7 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
   void initState() {
     super.initState();
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -174,7 +175,9 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
   ) {
     return ListTile(
       selected: isSelected,
-      title: title.number > 0 ? Text("${title.number}. ${title.transliterationEn}") : Text(title.transliterationEn),
+      title: title.number > 0
+          ? Text("${title.number}. ${title.transliterationEn}")
+          : Text(title.transliterationEn),
       subtitle: title.number > 0 ? Text(title.translationEn) : const Text(""),
     );
   }
@@ -196,13 +199,23 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
 
   List<QuranNote> _notes(
     NQSurahTitle? sura,
-  ) =>
-      StoreProvider.of<AppState>(context)
-          .state
-          .notes
-          .originalNotes
-          .where(
-            (note) => sura != null ? note.suraIndex == sura.number - 1 : true,
-          )
-          .toList();
+  ) {
+    List<QuranNote> notes = StoreProvider.of<AppState>(context)
+        .state
+        .notes
+        .originalNotes
+        .where(
+          (note) => sura != null ? note.suraIndex == sura.number - 1 : true,
+        )
+        .toList();
+
+    // sort descending by time to show latest on top
+    notes.sort((
+      a,
+      b,
+    ) =>
+        b.createdOn - a.createdOn);
+
+    return notes;
+  }
 }

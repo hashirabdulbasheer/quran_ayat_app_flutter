@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
@@ -84,35 +85,37 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                   );
                 },
               ),
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(
-              //     10,
-              //     0,
-              //     10,
-              //     10,
-              //   ),
-              //   child: QuranAyatDisplayTranslationWidget(
-              //     translation: StoreProvider.of<AppState>(context)
-              //             .state
-              //             .reader
-              //             .data
-              //             .translationMap[translationMap.]
-              //             ?.aya[widget.index.aya]
-              //             .text ??
-              //         "",
-              //     translationType: StoreProvider.of<AppState>(context)
-              //         .state
-              //         .reader
-              //         .data
-              //         .translationType,
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  10,
+                  0,
+                  10,
+                  10,
+                ),
+                child: QuranAyatDisplayTranslationWidget(
+                  translation: StoreProvider.of<AppState>(context)
+                          .state
+                          .reader
+                          .data
+                          .firstTranslation()
+                          ?.aya[widget.index.aya]
+                          .text ??
+                      "",
+                  translationType: StoreProvider.of<AppState>(context)
+                          .state
+                          .reader
+                          .data
+                          .firstTranslationType() ??
+                      NQTranslation.wahiduddinkhan,
+                ),
+              ),
               Directionality(
                 textDirection: TextDirection.ltr,
                 child: Container(
                   padding: const EdgeInsets.all(10),
                   child: TextField(
-                    controller: _notesController..text = widget.note?.note ?? "",
+                    controller: _notesController
+                      ..text = widget.note?.note ?? "",
                     maxLines: 10,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(

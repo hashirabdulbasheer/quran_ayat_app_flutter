@@ -2,6 +2,7 @@ import 'package:redux/redux.dart';
 import '../../../../../../models/qr_user_model.dart';
 import '../../../../auth/domain/auth_factory.dart';
 import '../../../../core/domain/app_state/app_state.dart';
+import '../../entities/quran_note.dart';
 import '../../notes_manager.dart';
 import '../actions/actions.dart';
 
@@ -39,8 +40,15 @@ void _fetchNotesMiddleware(
       user.uid,
     )
         .then((notes) {
+      List<QuranNote> fetchedNotes = notes;
+      // sort descending by time to show latest on top
+      fetchedNotes.sort((
+          a,
+          b,
+          ) =>
+      b.createdOn - a.createdOn);
       store.dispatch(NotesLoadingAction(isLoading: false));
-      store.dispatch(FetchNotesSucceededAction(notes));
+      store.dispatch(FetchNotesSucceededAction(fetchedNotes));
     });
   }
   next(action);

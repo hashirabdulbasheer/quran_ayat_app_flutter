@@ -28,6 +28,24 @@ class QuranData extends Equatable {
     );
   }
 
+  NQSurah? firstTranslation() {
+    if (translationMap.values.isNotEmpty) {
+      return translationMap.values.first;
+    }
+
+    // default
+    return null;
+  }
+
+  NQTranslation? firstTranslationType() {
+    if (translationMap.keys.isNotEmpty) {
+      return translationMap.keys.first;
+    }
+
+    // default
+    return null;
+  }
+
   @override
   List<Object?> get props => [
         words,
