@@ -37,6 +37,15 @@ class QuranData extends Equatable {
     return null;
   }
 
+  NQTranslation? firstTranslationType() {
+    if (translationMap.keys.isNotEmpty) {
+      return translationMap.keys.first;
+    }
+
+    // default
+    return null;
+  }
+
   @override
   List<Object?> get props => [
         words,
