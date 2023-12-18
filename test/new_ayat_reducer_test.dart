@@ -179,7 +179,10 @@ void main() {
       );
 
       await store.dispatch(SelectSurahAction(
-        index: const SurahIndex(1, 1,),
+        index: const SurahIndex(
+          1,
+          1,
+        ),
         data: data,
       ));
 
@@ -190,21 +193,27 @@ void main() {
 
       expect(
         store.state.reader.currentIndex,
-        const SurahIndex(1, 1,),
+        const SurahIndex(
+          1,
+          1,
+        ),
       );
     },
   );
 
   test(
     'Set select surah action sets index to default surah index if invalid',
-        () async {
+    () async {
       final store = Store<AppState>(
         appStateReducer,
         initialState: const AppState(),
       );
 
       await store.dispatch(SelectSurahAction(
-        index: const SurahIndex(900, 1,),
+        index: const SurahIndex(
+          900,
+          1,
+        ),
         data: null,
       ));
 
@@ -220,4 +229,50 @@ void main() {
     },
   );
 
+  test(
+    'Set select aya action sets aya index in state',
+    () async {
+      NQSurahTitle surahTitle = NQSurahTitle(
+        number: 0,
+        name: "hashir1",
+        translationEn: "Test1",
+        transliterationEn: "Test1",
+        totalVerses: 200,
+        revelationType: RevelationType.MECCAN,
+      );
+
+      final store = Store<AppState>(
+        appStateReducer,
+        initialState: AppState(
+          reader: ReaderScreenState(
+            surahTitles: [surahTitle],
+            currentIndex: const SurahIndex(
+              0,
+              1,
+            ),
+          ),
+        ),
+      );
+
+      await store.dispatch(SelectAyaAction(
+        aya: 100,
+      ));
+
+      expect(
+        store.state.reader.currentIndex,
+        const SurahIndex(
+          0,
+          100,
+        ),
+      );
+
+      expect(
+        store.state.reader.currentIndex,
+        const SurahIndex(
+          0,
+          100,
+        ),
+      );
+    },
+  );
 }
