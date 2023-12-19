@@ -7,6 +7,7 @@ import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
 import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
+import 'package:quran_ayat/features/newAyat/domain/redux/actions/bookmark_actions.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/reader_screen_state.dart';
 import 'package:redux/redux.dart';
 
@@ -641,24 +642,146 @@ void main() {
     },
   );
 
-  group('SetAudioContinuousPlayMode', () {
-    test(
-      'Continuous play mode setting has no effect',
-          () async {
-        final store = _mockStore(
-          sura: 0,
-          aya: 0,
-        );
+  group(
+    'SetAudioContinuousPlayMode',
+    () {
+      test(
+        'Continuous play mode setting has no effect',
+        () async {
+          final store = _mockStore(
+            sura: 0,
+            aya: 0,
+          );
 
-        await store.dispatch(SetAudioContinuousPlayMode(isEnabled: true));
+          await store.dispatch(SetAudioContinuousPlayMode(isEnabled: true));
 
-        expect(
-          store.state.reader,
-          store.state.reader,
-        );
-      },
-    );
-  },);
+          expect(
+            store.state.reader,
+            store.state.reader,
+          );
+        },
+      );
+    },
+  );
+
+  group(
+    'InitBookmarkAction',
+    () {
+      test(
+        'Init bookmark without index doesnt change bookmark state',
+        () async {
+          final store = _mockStore();
+
+          expect(
+            store.state.reader.bookmarkState,
+            const SurahIndex(
+              1,
+              1,
+            ),
+          );
+
+          await store.dispatch(InitBookmarkAction());
+
+          expect(
+            store.state.reader.bookmarkState,
+            const SurahIndex(
+              1,
+              1,
+            ),
+          );
+        },
+      );
+
+      test(
+        'Init bookmark with index updates bookmark state',
+        () async {
+          final store = _mockStore();
+
+          expect(
+            store.state.reader.bookmarkState,
+            const SurahIndex(
+              1,
+              1,
+            ),
+          );
+
+          await store.dispatch(InitBookmarkAction(
+            index: const SurahIndex(
+              2,
+              2,
+            ),
+          ));
+
+          expect(
+            store.state.reader.bookmarkState,
+            const SurahIndex(
+              2,
+              2,
+            ),
+          );
+        },
+      );
+    },
+  );
+
+  group(
+    'SaveBookmarkAction',
+    () {
+      test(
+        'Sace bookmark updates bookmark state',
+        () async {
+          final store = _mockStore();
+
+          await store.dispatch(
+            SaveBookmarkAction(
+              index: const SurahIndex(
+                3,
+                3,
+              ),
+            ),
+          );
+
+          expect(
+            store.state.reader.bookmarkState,
+            const SurahIndex(
+              3,
+              3,
+            ),
+          );
+        },
+      );
+
+      test(
+        'Init bookmark with index updates bookmark state',
+        () async {
+          final store = _mockStore();
+
+          expect(
+            store.state.reader.bookmarkState,
+            const SurahIndex(
+              1,
+              1,
+            ),
+          );
+
+          await store.dispatch(InitBookmarkAction(
+            index: const SurahIndex(
+              2,
+              2,
+            ),
+          ));
+
+          expect(
+            store.state.reader.bookmarkState,
+            const SurahIndex(
+              2,
+              2,
+            ),
+          );
+        },
+      );
+    },
+  );
 }
 
 Store<AppState> _mockStore({
