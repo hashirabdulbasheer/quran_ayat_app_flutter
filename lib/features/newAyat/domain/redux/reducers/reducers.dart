@@ -123,7 +123,7 @@ ReaderScreenState _particularAyaSelectedReducer(
     return newState.copyWith(
       currentIndex: SurahIndex.defaultIndex,
     );
-  } else if (ayaIndex > state.surahTitles[suraIndex].totalVerses) {
+  } else if (ayaIndex >= state.surahTitles[suraIndex].totalVerses) {
     return newState;
   }
 

@@ -395,10 +395,11 @@ void main() {
           );
 
           await store.dispatch(SelectParticularAyaAction(
-              index: const SurahIndex(
-            1,
-            1,
-          ),));
+            index: const SurahIndex(
+              1,
+              1,
+            ),
+          ));
 
           expect(
             store.state.reader.currentIndex,
@@ -412,7 +413,7 @@ void main() {
 
       test(
         'Select Particular aya action with invalid surah index sets default sura index',
-            () async {
+        () async {
           NQSurahTitle surahTitle = NQSurahTitle(
             number: 0,
             name: "hashir1",
@@ -439,7 +440,8 @@ void main() {
             index: const SurahIndex(
               999,
               1,
-            ),));
+            ),
+          ));
 
           expect(
             store.state.reader.currentIndex,
@@ -449,8 +451,50 @@ void main() {
       );
 
       test(
+        'Select Particular aya action with surah index as last sura updates index',
+        () async {
+          NQSurahTitle surahTitle = NQSurahTitle(
+            number: 0,
+            name: "hashir1",
+            translationEn: "Test1",
+            transliterationEn: "Test1",
+            totalVerses: 200,
+            revelationType: RevelationType.MECCAN,
+          );
+
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: AppState(
+              reader: ReaderScreenState(
+                surahTitles: [
+                  surahTitle,
+                  surahTitle,
+                ],
+                currentIndex: const SurahIndex(
+                  0,
+                  1,
+                ),
+              ),
+            ),
+          );
+
+          await store.dispatch(SelectParticularAyaAction(
+            index: const SurahIndex(
+              1,
+              1,
+            ),
+          ));
+
+          expect(
+            store.state.reader.currentIndex.sura,
+            1,
+          );
+        },
+      );
+
+      test(
         'Select Particular aya action with invalid aya index doesnt change aya index',
-            () async {
+        () async {
           NQSurahTitle surahTitle = NQSurahTitle(
             number: 0,
             name: "hashir1",
@@ -477,7 +521,8 @@ void main() {
             index: const SurahIndex(
               0,
               999999,
-            ),));
+            ),
+          ));
 
           expect(
             store.state.reader.currentIndex.aya,
@@ -486,6 +531,122 @@ void main() {
         },
       );
 
+      test(
+        'Select Particular aya action with aya index as last aya updates current index',
+        () async {
+          NQSurahTitle surahTitle = NQSurahTitle(
+            number: 0,
+            name: "hashir1",
+            translationEn: "Test1",
+            transliterationEn: "Test1",
+            totalVerses: 200,
+            revelationType: RevelationType.MECCAN,
+          );
+
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: AppState(
+              reader: ReaderScreenState(
+                surahTitles: [surahTitle],
+                currentIndex: const SurahIndex(
+                  0,
+                  1,
+                ),
+              ),
+            ),
+          );
+
+          await store.dispatch(SelectParticularAyaAction(
+            index: const SurahIndex(
+              0,
+              199,
+            ),
+          ));
+
+          expect(
+            store.state.reader.currentIndex.aya,
+            199,
+          );
+        },
+      );
+
+      test(
+        'Select Particular aya action with aya index as one more than last aya doesnt updates current index',
+        () async {
+          NQSurahTitle surahTitle = NQSurahTitle(
+            number: 0,
+            name: "hashir1",
+            translationEn: "Test1",
+            transliterationEn: "Test1",
+            totalVerses: 200,
+            revelationType: RevelationType.MECCAN,
+          );
+
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: AppState(
+              reader: ReaderScreenState(
+                surahTitles: [surahTitle],
+                currentIndex: const SurahIndex(
+                  0,
+                  1,
+                ),
+              ),
+            ),
+          );
+
+          await store.dispatch(SelectParticularAyaAction(
+            index: const SurahIndex(
+              0,
+              200,
+            ),
+          ));
+
+          expect(
+            store.state.reader.currentIndex.aya,
+            1,
+          );
+        },
+      );
+
+      test(
+        'Select Particular aya action with invalid sura and invalid aya defaults',
+        () async {
+          NQSurahTitle surahTitle = NQSurahTitle(
+            number: 0,
+            name: "hashir1",
+            translationEn: "Test1",
+            transliterationEn: "Test1",
+            totalVerses: 200,
+            revelationType: RevelationType.MECCAN,
+          );
+
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: AppState(
+              reader: ReaderScreenState(
+                surahTitles: [surahTitle],
+                currentIndex: const SurahIndex(
+                  0,
+                  1,
+                ),
+              ),
+            ),
+          );
+
+          await store.dispatch(SelectParticularAyaAction(
+            index: const SurahIndex(
+              999,
+              999,
+            ),
+          ));
+
+          expect(
+            store.state.reader.currentIndex,
+            SurahIndex.defaultIndex,
+          );
+        },
+      );
     },
   );
 }
