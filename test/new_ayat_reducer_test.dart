@@ -17,10 +17,7 @@ void main() {
       test(
         'Init returns same state',
         () async {
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: const AppState(),
-          );
+          final store = _mockStore();
 
           await store.dispatch(InitializeReaderScreenAction());
 
@@ -39,10 +36,7 @@ void main() {
       test(
         'Set surah titles action sets surah titles in state',
         () async {
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: const AppState(),
-          );
+          final store = _mockStore();
 
           NQSurahTitle surahTitle1 = NQSurahTitle(
             number: 1,
@@ -80,17 +74,7 @@ void main() {
       test(
         'Set surah titles action sets current index to bookmarks if its already set',
         () async {
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: const AppState(
-              reader: ReaderScreenState(
-                bookmarkState: SurahIndex(
-                  1,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SetSurahListAction(surahs: const []));
 
@@ -112,16 +96,9 @@ void main() {
       test(
         'Set surah titles action doesnt affect current index if no bookmark is set',
         () async {
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: const AppState(
-              reader: ReaderScreenState(
-                currentIndex: SurahIndex(
-                  1,
-                  2,
-                ),
-              ),
-            ),
+          final store = _mockStore(
+            sura: 1,
+            aya: 2,
           );
 
           await store.dispatch(SetSurahListAction(surahs: const []));
@@ -146,10 +123,7 @@ void main() {
       test(
         'Set select surah action sets data and index for the surah in state',
         () async {
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: const AppState(),
-          );
+          final store = _mockStore();
 
           List<List<NQWord>> words = [
             [
@@ -217,10 +191,7 @@ void main() {
       test(
         'Set select surah action sets index to default surah index if invalid',
         () async {
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: const AppState(),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectSurahAction(
             index: const SurahIndex(
@@ -244,11 +215,8 @@ void main() {
 
       test(
         'Set select surah action sets index to the last surah updates state',
-            () async {
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: const AppState(),
-          );
+        () async {
+          final store = _mockStore();
 
           await store.dispatch(SelectSurahAction(
             index: const SurahIndex(
@@ -264,19 +232,19 @@ void main() {
           );
 
           expect(
-            store.state.reader.currentIndex.sura,
-            113,
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              113,
+              1,
+            ),
           );
         },
       );
 
       test(
         'Set select surah action sets index to one more than sura counts defaults',
-            () async {
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: const AppState(),
-          );
+        () async {
+          final store = _mockStore();
 
           await store.dispatch(SelectSurahAction(
             index: const SurahIndex(
@@ -297,7 +265,6 @@ void main() {
           );
         },
       );
-
     },
   );
 
@@ -307,27 +274,7 @@ void main() {
       test(
         'Select aya action sets aya index in state',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectAyaAction(
             aya: 100,
@@ -346,27 +293,7 @@ void main() {
       test(
         'Select invalid aya action sets aya index as 1 in state',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectAyaAction(
             aya: 500,
@@ -385,27 +312,7 @@ void main() {
       test(
         'Select negative aya action sets aya index as 1 in state',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectAyaAction(
             aya: -1,
@@ -423,28 +330,8 @@ void main() {
 
       test(
         'Select last aya action updates state',
-            () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+        () async {
+          final store = _mockStore();
 
           await store.dispatch(SelectAyaAction(
             aya: 199,
@@ -462,28 +349,8 @@ void main() {
 
       test(
         'Select one more than last aya action doesnt updates state',
-            () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+        () async {
+          final store = _mockStore();
 
           await store.dispatch(SelectAyaAction(
             aya: 200,
@@ -498,7 +365,6 @@ void main() {
           );
         },
       );
-
     },
   );
 
@@ -508,27 +374,7 @@ void main() {
       test(
         'Select Particular aya action sets sura and aya index in state',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectParticularAyaAction(
             index: const SurahIndex(
@@ -540,7 +386,7 @@ void main() {
           expect(
             store.state.reader.currentIndex,
             const SurahIndex(
-              0,
+              1,
               1,
             ),
           );
@@ -550,27 +396,7 @@ void main() {
       test(
         'Select Particular aya action with invalid surah index sets default sura index',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectParticularAyaAction(
             index: const SurahIndex(
@@ -589,30 +415,7 @@ void main() {
       test(
         'Select Particular aya action with surah index as last sura updates index',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [
-                  surahTitle,
-                  surahTitle,
-                ],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectParticularAyaAction(
             index: const SurahIndex(
@@ -622,8 +425,11 @@ void main() {
           ));
 
           expect(
-            store.state.reader.currentIndex.sura,
-            1,
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              1,
+              1,
+            ),
           );
         },
       );
@@ -631,27 +437,7 @@ void main() {
       test(
         'Select Particular aya action with invalid aya index doesnt change aya index',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectParticularAyaAction(
             index: const SurahIndex(
@@ -661,8 +447,11 @@ void main() {
           ));
 
           expect(
-            store.state.reader.currentIndex.aya,
-            1,
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              0,
+              1,
+            ),
           );
         },
       );
@@ -670,27 +459,7 @@ void main() {
       test(
         'Select Particular aya action with aya index as last aya updates current index',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectParticularAyaAction(
             index: const SurahIndex(
@@ -700,8 +469,11 @@ void main() {
           ));
 
           expect(
-            store.state.reader.currentIndex.aya,
-            199,
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              0,
+              199,
+            ),
           );
         },
       );
@@ -709,27 +481,7 @@ void main() {
       test(
         'Select Particular aya action with aya index as one more than last aya doesnt updates current index',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectParticularAyaAction(
             index: const SurahIndex(
@@ -739,8 +491,11 @@ void main() {
           ));
 
           expect(
-            store.state.reader.currentIndex.aya,
-            1,
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              0,
+              1,
+            ),
           );
         },
       );
@@ -748,27 +503,7 @@ void main() {
       test(
         'Select Particular aya action with invalid sura and invalid aya defaults',
         () async {
-          NQSurahTitle surahTitle = NQSurahTitle(
-            number: 0,
-            name: "hashir1",
-            translationEn: "Test1",
-            transliterationEn: "Test1",
-            totalVerses: 200,
-            revelationType: RevelationType.MECCAN,
-          );
-
-          final store = Store<AppState>(
-            appStateReducer,
-            initialState: AppState(
-              reader: ReaderScreenState(
-                surahTitles: [surahTitle],
-                currentIndex: const SurahIndex(
-                  0,
-                  1,
-                ),
-              ),
-            ),
-          );
+          final store = _mockStore();
 
           await store.dispatch(SelectParticularAyaAction(
             index: const SurahIndex(
@@ -784,5 +519,39 @@ void main() {
         },
       );
     },
+  );
+}
+
+Store<AppState> _mockStore({
+  int sura = 0,
+  int aya = 1,
+}) {
+  NQSurahTitle surahTitle = NQSurahTitle(
+    number: 0,
+    name: "hashir1",
+    translationEn: "Test1",
+    transliterationEn: "Test1",
+    totalVerses: 200,
+    revelationType: RevelationType.MECCAN,
+  );
+
+  return Store<AppState>(
+    appStateReducer,
+    initialState: AppState(
+      reader: ReaderScreenState(
+        surahTitles: [
+          surahTitle,
+          surahTitle,
+        ],
+        bookmarkState: const SurahIndex(
+          1,
+          1,
+        ),
+        currentIndex: SurahIndex(
+          sura,
+          aya,
+        ),
+      ),
+    ),
   );
 }
