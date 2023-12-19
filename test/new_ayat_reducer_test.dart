@@ -520,6 +520,46 @@ void main() {
       );
     },
   );
+
+  group(
+    'ShowLoadingAction',
+    () {
+      test(
+        'Show loading action sets isLoading state',
+            () async {
+          final store = _mockStore();
+
+          await store.dispatch(ShowLoadingAction());
+
+          expect(
+            store.state.reader.isLoading,
+            true,
+          );
+        },
+      );
+    },
+  );
+
+
+  group(
+    'HideLoadingAction',
+        () {
+      test(
+        'Hide loading action resets isLoading state',
+            () async {
+          final store = _mockStore();
+
+          await store.dispatch(HideLoadingAction());
+
+          expect(
+            store.state.reader.isLoading,
+            false,
+          );
+        },
+      );
+    },
+  );
+
 }
 
 Store<AppState> _mockStore({
