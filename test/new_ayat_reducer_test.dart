@@ -241,6 +241,63 @@ void main() {
           );
         },
       );
+
+      test(
+        'Set select surah action sets index to the last surah updates state',
+            () async {
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: const AppState(),
+          );
+
+          await store.dispatch(SelectSurahAction(
+            index: const SurahIndex(
+              113,
+              1,
+            ),
+            data: null,
+          ));
+
+          expect(
+            store.state.reader.data,
+            const QuranData(),
+          );
+
+          expect(
+            store.state.reader.currentIndex.sura,
+            113,
+          );
+        },
+      );
+
+      test(
+        'Set select surah action sets index to one more than sura counts defaults',
+            () async {
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: const AppState(),
+          );
+
+          await store.dispatch(SelectSurahAction(
+            index: const SurahIndex(
+              114,
+              1,
+            ),
+            data: null,
+          ));
+
+          expect(
+            store.state.reader.data,
+            const QuranData(),
+          );
+
+          expect(
+            store.state.reader.currentIndex,
+            SurahIndex.defaultIndex,
+          );
+        },
+      );
+
     },
   );
 

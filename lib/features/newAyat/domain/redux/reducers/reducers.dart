@@ -83,7 +83,7 @@ ReaderScreenState _surahSelectedReducer(
   ReaderScreenState newState = state.copyWith(
     data: action.data,
   );
-  if (suraIndex >= 0 && suraIndex < 115) {
+  if (suraIndex >= 0 && suraIndex < 114) {
     return newState.copyWith(
       currentIndex: action.index,
     );
