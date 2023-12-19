@@ -596,6 +596,50 @@ void main() {
       );
     },
   );
+
+  group(
+    'PreviousAyaAction',
+    () {
+      test(
+        'Get previous aya',
+        () async {
+          final store = _mockStore(
+            sura: 0,
+            aya: 2,
+          );
+
+          await store.dispatch(PreviousAyaAction());
+
+          expect(
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              0,
+              1,
+            ),
+          );
+        },
+      );
+      test(
+        'Returns same index if at start of sura',
+        () async {
+          final store = _mockStore(
+            sura: 0,
+            aya: 0,
+          );
+
+          await store.dispatch(PreviousAyaAction());
+
+          expect(
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              0,
+              0,
+            ),
+          );
+        },
+      );
+    },
+  );
 }
 
 Store<AppState> _mockStore({
