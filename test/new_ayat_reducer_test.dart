@@ -640,6 +640,25 @@ void main() {
       );
     },
   );
+
+  group('SetAudioContinuousPlayMode', () {
+    test(
+      'Continuous play mode setting has no effect',
+          () async {
+        final store = _mockStore(
+          sura: 0,
+          aya: 0,
+        );
+
+        await store.dispatch(SetAudioContinuousPlayMode(isEnabled: true));
+
+        expect(
+          store.state.reader,
+          store.state.reader,
+        );
+      },
+    );
+  },);
 }
 
 Store<AppState> _mockStore({

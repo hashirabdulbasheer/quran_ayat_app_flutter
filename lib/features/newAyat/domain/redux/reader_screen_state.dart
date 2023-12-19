@@ -27,7 +27,6 @@ class ReaderScreenState extends Equatable {
   ReaderScreenState copyWith({
     List<NQSurahTitle>? surahTitles,
     SurahIndex? currentIndex,
-    bool? isAudioContinuousModeEnabled,
     bool? isLoading,
     BookmarkState? bookmarkState,
     QuranData? data,

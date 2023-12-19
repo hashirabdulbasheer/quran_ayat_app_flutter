@@ -163,9 +163,7 @@ ReaderScreenState _nextAyaReducer(
   }
 
   // sura completed - stop continuous play
-  return state.copyWith(
-    isAudioContinuousModeEnabled: false,
-  );
+  return state;
 }
 
 ReaderScreenState _previousAyaReducer(
@@ -181,9 +179,7 @@ ReaderScreenState _audioContinuousModeReducer(
   ReaderScreenState state,
   SetAudioContinuousPlayMode action,
 ) {
-  return state.copyWith(
-    isAudioContinuousModeEnabled: action.isEnabled,
-  );
+  return state;
 }
 
 ReaderScreenState _saveBookmarkReducer(
