@@ -420,6 +420,85 @@ void main() {
           );
         },
       );
+
+      test(
+        'Select last aya action updates state',
+            () async {
+          NQSurahTitle surahTitle = NQSurahTitle(
+            number: 0,
+            name: "hashir1",
+            translationEn: "Test1",
+            transliterationEn: "Test1",
+            totalVerses: 200,
+            revelationType: RevelationType.MECCAN,
+          );
+
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: AppState(
+              reader: ReaderScreenState(
+                surahTitles: [surahTitle],
+                currentIndex: const SurahIndex(
+                  0,
+                  1,
+                ),
+              ),
+            ),
+          );
+
+          await store.dispatch(SelectAyaAction(
+            aya: 199,
+          ));
+
+          expect(
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              0,
+              199,
+            ),
+          );
+        },
+      );
+
+      test(
+        'Select one more than last aya action doesnt updates state',
+            () async {
+          NQSurahTitle surahTitle = NQSurahTitle(
+            number: 0,
+            name: "hashir1",
+            translationEn: "Test1",
+            transliterationEn: "Test1",
+            totalVerses: 200,
+            revelationType: RevelationType.MECCAN,
+          );
+
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: AppState(
+              reader: ReaderScreenState(
+                surahTitles: [surahTitle],
+                currentIndex: const SurahIndex(
+                  0,
+                  1,
+                ),
+              ),
+            ),
+          );
+
+          await store.dispatch(SelectAyaAction(
+            aya: 200,
+          ));
+
+          expect(
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              0,
+              1,
+            ),
+          );
+        },
+      );
+
     },
   );
 
