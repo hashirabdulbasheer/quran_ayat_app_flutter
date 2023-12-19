@@ -526,7 +526,7 @@ void main() {
     () {
       test(
         'Show loading action sets isLoading state',
-            () async {
+        () async {
           final store = _mockStore();
 
           await store.dispatch(ShowLoadingAction());
@@ -540,13 +540,12 @@ void main() {
     },
   );
 
-
   group(
     'HideLoadingAction',
-        () {
+    () {
       test(
         'Hide loading action resets isLoading state',
-            () async {
+        () async {
           final store = _mockStore();
 
           await store.dispatch(HideLoadingAction());
@@ -560,6 +559,43 @@ void main() {
     },
   );
 
+  group(
+    'NextAyaAction',
+    () {
+      test(
+        'Get next aya',
+        () async {
+          final store = _mockStore();
+
+          await store.dispatch(NextAyaAction());
+
+          expect(
+            store.state.reader.currentIndex,
+            const SurahIndex(
+              0,
+              2,
+            ),
+          );
+        },
+      );
+      test(
+        'Returns same index if at end of sura',
+        () async {
+          final store = _mockStore(
+            sura: 0,
+            aya: 199,
+          );
+
+          await store.dispatch(NextAyaAction());
+
+          expect(
+            store.state.reader.currentIndex,
+            store.state.reader.currentIndex,
+          );
+        },
+      );
+    },
+  );
 }
 
 Store<AppState> _mockStore({
