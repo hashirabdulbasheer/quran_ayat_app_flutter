@@ -448,6 +448,44 @@ void main() {
         },
       );
 
+      test(
+        'Select Particular aya action with invalid aya index doesnt change aya index',
+            () async {
+          NQSurahTitle surahTitle = NQSurahTitle(
+            number: 0,
+            name: "hashir1",
+            translationEn: "Test1",
+            transliterationEn: "Test1",
+            totalVerses: 200,
+            revelationType: RevelationType.MECCAN,
+          );
+
+          final store = Store<AppState>(
+            appStateReducer,
+            initialState: AppState(
+              reader: ReaderScreenState(
+                surahTitles: [surahTitle],
+                currentIndex: const SurahIndex(
+                  0,
+                  1,
+                ),
+              ),
+            ),
+          );
+
+          await store.dispatch(SelectParticularAyaAction(
+            index: const SurahIndex(
+              0,
+              999999,
+            ),));
+
+          expect(
+            store.state.reader.currentIndex.aya,
+            1,
+          );
+        },
+      );
+
     },
   );
 }
