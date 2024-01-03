@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
+
 import '../../../models/qr_user_model.dart';
 import '../../../utils/nav_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/domain/redux/actions/actions.dart';
 import '../domain/entities/quran_tag.dart';
 import '../domain/redux/actions/actions.dart';
-import '../domain/redux/tag_state.dart';
 
 class QuranViewTagsScreen extends StatefulWidget {
   final QuranUser user;
@@ -171,12 +173,14 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     }
 
     if (tag.ayas.length == 1) {
-      // there is only one aya, go directly to the aya
-      QuranNavigator.navigateToAyatScreen(
-        context,
-        surahIndex: tag.ayas.first.suraIndex - 1,
-        ayaIndex: tag.ayas.first.ayaIndex,
-      );
+      StoreProvider.of<AppState>(context).dispatch(SelectParticularAyaAction(
+        index: SurahIndex(
+          tag.ayas.first.suraIndex,
+          tag.ayas.first.ayaIndex,
+        ),
+      ));
+
+      Navigator.of(context).pop();
 
       return;
     }
