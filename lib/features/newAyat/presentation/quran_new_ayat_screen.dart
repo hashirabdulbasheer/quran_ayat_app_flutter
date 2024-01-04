@@ -9,6 +9,7 @@ import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/enums/quran_app_mode_enum.dart';
 import '../../ayats/domain/enums/audio_events_enum.dart';
 import '../../ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
@@ -22,6 +23,7 @@ import '../../bookmark/presentation/bookmark_icon_widget.dart';
 import '../../contextList/presentation/quran_context_list_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../drawer/presentation/nav_drawer.dart';
+import '../../settings/domain/settings_manager.dart';
 import '../../settings/domain/theme_manager.dart';
 import '../../tags/presentation/quran_tag_display.dart';
 import '../domain/redux/actions/actions.dart';
@@ -79,6 +81,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return StoreBuilder<AppState>(builder: (
       BuildContext context,
       Store<AppState> store,
@@ -352,16 +355,44 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                   ),
 
                   /// Tags
-                  if (store.state.user != null)
-                    QuranAyatDisplayTagsWidget(
-                      currentIndex: currentIndex,
-                    ),
+                  FutureBuilder<QuranAppMode>(
+                    future: QuranSettingsManager.instance.getAppMode(),
+                    builder: (
+                      context,
+                      snapshot,
+                    ) {
+                      if (snapshot.hasData) {
+                        QuranAppMode mode = snapshot.data as QuranAppMode;
+                        if (mode == QuranAppMode.advanced) {
+                          return QuranAyatDisplayTagsWidget(
+                            currentIndex: currentIndex,
+                          );
+                        }
+                      }
+
+                      return Container();
+                    },
+                  ),
 
                   /// Notes
-                  if (store.state.user != null)
-                    QuranAyatDisplayNotesWidget(
-                      currentIndex: currentIndex,
-                    ),
+                  FutureBuilder<QuranAppMode>(
+                    future: QuranSettingsManager.instance.getAppMode(),
+                    builder: (
+                      context,
+                      snapshot,
+                    ) {
+                      if (snapshot.hasData) {
+                        QuranAppMode mode = snapshot.data as QuranAppMode;
+                        if (mode == QuranAppMode.advanced) {
+                          return QuranAyatDisplayNotesWidget(
+                            currentIndex: currentIndex,
+                          );
+                        }
+                      }
+
+                      return Container();
+                    },
+                  ),
 
                   const SizedBox(height: 80),
                 ],

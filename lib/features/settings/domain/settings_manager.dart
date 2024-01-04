@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/misc/enums/quran_app_mode_enum.dart';
 
 import '../../../misc/configs/app_config.dart';
 import '../data/repository/settings_repository_impl.dart';
@@ -97,6 +98,20 @@ class QuranSettingsManager {
     type: QuranSettingType.dropdown,
   );
 
+  final QuranSetting _appModeSetting = QuranSetting(
+    name: "Select Mode",
+    description: "select a mode for the app",
+    id: QuranSettingsConstants.appModeId,
+    showSearchBoxInDropdown: false,
+    possibleValues: QuranDropdownValuesFactory.createValues(
+      QuranSettingsConstants.appModeId,
+    ),
+    defaultValue: QuranDropdownValuesFactory.defaultValue(
+      QuranSettingsConstants.appModeId,
+    ),
+    type: QuranSettingType.dropdown,
+  );
+
   QuranSettingsManager._privateConstructor();
 
   final double _fontScaleFactor = 0.2;
@@ -104,6 +119,7 @@ class QuranSettingsManager {
   List<QuranSetting> generateSettings() {
     return [
       // _themeSettings,
+      _appModeSetting,
       _translationSettings,
       _transliterationSettings,
       _audioControlSettings,
@@ -206,6 +222,15 @@ class QuranSettingsManager {
     String reciter = await getValue(_audioReciterSetting);
 
     return reciter != "" ? reciter : QuranAppConfig.audioReciter;
+  }
+
+  Future<QuranAppMode> getAppMode() async {
+    String modeString = await getValue(_appModeSetting);
+    if (modeString.isEmpty) {
+      return QuranAppMode.basic;
+    }
+
+    return QuranAppMode.values.firstWhere((e) => e.rawString() == modeString);
   }
 
   /// register a listener to get theme update events

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
+
+import '../../core/domain/app_state/app_state.dart';
 import '../domain/entities/quran_setting.dart';
 import '../domain/settings_manager.dart';
 import 'widgets/settings_row_widget.dart';
@@ -40,7 +44,11 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
                       color: Colors.black26,
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    child: QuranSettingsRowWidget(setting: _settings[index]),
+                    child: QuranSettingsRowWidget(
+                      setting: _settings[index],
+                      onChanged: () => StoreProvider.of<AppState>(context)
+                          .dispatch(InitializeReaderScreenAction()),
+                    ),
                   ),
                 ),
               );

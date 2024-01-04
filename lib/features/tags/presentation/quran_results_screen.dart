@@ -54,6 +54,7 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
                   return ListTile(
                     title: _listRow(indices[index]),
                     onTap: () => {
+                      // TODO: Fix navigation to ayat screen
                       QuranNavigator.navigateToAyatScreen(
                         context,
                         surahIndex: indices[index].surahIndex - 1,
@@ -91,7 +92,7 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
               Text(
                 "${index.surahIndex}: ${index.ayaIndex}",
                 style: const TextStyle(
-                  color: Colors.white60,
+                  color: Colors.black54,
                 ),
               ),
               Text(

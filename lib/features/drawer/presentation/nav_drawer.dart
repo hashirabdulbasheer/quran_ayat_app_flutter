@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+import 'package:quran_ayat/misc/enums/quran_app_mode_enum.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,6 +16,7 @@ import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/domain/redux/actions/actions.dart';
 import '../../notes/presentation/quran_view_notes_screen.dart';
 import '../../settings/domain/constants/setting_constants.dart';
+import '../../settings/domain/settings_manager.dart';
 import '../../settings/presentation/quran_settings_screen.dart';
 import '../../tags/presentation/quran_view_tags_screen.dart';
 import 'widgets/nav_drawer_header.dart';
@@ -36,7 +38,6 @@ class QuranNavDrawer extends StatefulWidget {
 }
 
 class _QuranNavDrawerState extends State<QuranNavDrawer> {
-  int numOfTaps = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -110,24 +111,29 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
       child: Drawer(
         child: QuranNavDrawerItemsWidget(
           items: [
-            GestureDetector(
-              onTap: () => {
-                if (numOfTaps > 0)
-                  {
-                    numOfTaps = numOfTaps - 1,
-                  },
-                setState(() {}),
-              },
-              child: const QuranNavDrawerHeaderWidget(),
-            ),
+            const QuranNavDrawerHeaderWidget(),
 
-            if (numOfTaps == 0)
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Login',
-                icon: Icons.account_circle_outlined,
-                destination: const QuranLoginScreen(),
-              ),
+            FutureBuilder<QuranAppMode>(
+              future: QuranSettingsManager.instance.getAppMode(),
+              builder: (
+                context,
+                snapshot,
+              ) {
+                if (snapshot.hasData) {
+                  QuranAppMode mode = snapshot.data as QuranAppMode;
+                  if (mode == QuranAppMode.advanced) {
+                    return QuranNavDrawerRowWidget(
+                      context: context,
+                      title: 'Login',
+                      icon: Icons.account_circle_outlined,
+                      destination: const QuranLoginScreen(),
+                    );
+                  }
+                }
+
+                return Container();
+              },
+            ),
 
             // TODO: Search in menu disabled, enable when fixed - Logged OUT
             // QuranNavDrawerRowWidget(

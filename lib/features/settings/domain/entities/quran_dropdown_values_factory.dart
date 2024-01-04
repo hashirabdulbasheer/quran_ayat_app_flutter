@@ -2,6 +2,7 @@ import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/reciter.dart';
 import 'package:noble_quran/noble_quran.dart';
 
+import '../../../../misc/enums/quran_app_mode_enum.dart';
 import '../../../../misc/enums/quran_theme_enum.dart';
 import '../constants/setting_constants.dart';
 import '../enum/settings_type_enum.dart';
@@ -29,6 +30,12 @@ class QuranDropdownValuesFactory {
                   key: e.subfolder,
                 ))
             .toList();
+
+      case QuranSettingsConstants.appModeId:
+        return [
+          QuranDropdownValue.sameValues(QuranAppMode.basic.rawString()),
+          QuranDropdownValue.sameValues(QuranAppMode.advanced.rawString()),
+        ];
     }
 
     return [];
@@ -43,10 +50,14 @@ class QuranDropdownValuesFactory {
         return QuranDropdownValue.sameValues(QuranSettingOnOff.off.rawString());
 
       case QuranSettingsConstants.translationId:
-        return QuranDropdownValue.sameValues(NQTranslation.wahiduddinkhan.title);
+        return QuranDropdownValue.sameValues(
+            NQTranslation.wahiduddinkhan.title,);
 
       case QuranSettingsConstants.audioControlsId:
         return QuranDropdownValue.sameValues(QuranSettingOnOff.off.rawString());
+
+      case QuranSettingsConstants.appModeId:
+        return QuranDropdownValue.sameValues(QuranAppMode.basic.rawString());
 
       case QuranSettingsConstants.audioReciterId:
 

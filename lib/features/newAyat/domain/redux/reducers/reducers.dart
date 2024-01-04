@@ -83,7 +83,7 @@ ReaderScreenState _surahSelectedReducer(
   ReaderScreenState newState = state.copyWith(
     data: action.data,
   );
-  if (suraIndex >= 0 && suraIndex < 115) {
+  if (suraIndex >= 0 && suraIndex < 114) {
     return newState.copyWith(
       currentIndex: action.index,
     );
@@ -123,10 +123,8 @@ ReaderScreenState _particularAyaSelectedReducer(
     return newState.copyWith(
       currentIndex: SurahIndex.defaultIndex,
     );
-  } else if (ayaIndex > state.surahTitles[suraIndex].totalVerses) {
-    return newState.copyWith(
-      currentIndex: action.index,
-    );
+  } else if (ayaIndex >= state.surahTitles[suraIndex].totalVerses) {
+    return newState;
   }
 
   return newState.copyWith(
@@ -138,6 +136,7 @@ ReaderScreenState _showLoadingReducer(
   ReaderScreenState state,
   ShowLoadingAction _,
 ) {
+
   return state.copyWith(
     isLoading: true,
   );
@@ -165,9 +164,7 @@ ReaderScreenState _nextAyaReducer(
   }
 
   // sura completed - stop continuous play
-  return state.copyWith(
-    isAudioContinuousModeEnabled: false,
-  );
+  return state;
 }
 
 ReaderScreenState _previousAyaReducer(
@@ -183,9 +180,7 @@ ReaderScreenState _audioContinuousModeReducer(
   ReaderScreenState state,
   SetAudioContinuousPlayMode action,
 ) {
-  return state.copyWith(
-    isAudioContinuousModeEnabled: action.isEnabled,
-  );
+  return state;
 }
 
 ReaderScreenState _saveBookmarkReducer(
