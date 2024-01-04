@@ -21,6 +21,9 @@ Reducer<AppState> appStateReducer = combineReducers<AppState>([
   TypedReducer<AppState, AppStateResetStatusAction>(
     _resetAppStateStatusReducer,
   ),
+  TypedReducer<AppState, AppStateSelectAppModeAction>(
+    _selectAppModeReducer,
+  ),
   TypedReducer<AppState, dynamic>(
     _allOtherReducer,
   ),
@@ -87,5 +90,14 @@ AppState _resetAppStateStatusReducer(
       action: "",
       message: "",
     ),
+  );
+}
+
+AppState _selectAppModeReducer(
+  AppState state,
+  AppStateSelectAppModeAction action,
+) {
+  return state.copyWith(
+    appMode: action.appMode,
   );
 }
