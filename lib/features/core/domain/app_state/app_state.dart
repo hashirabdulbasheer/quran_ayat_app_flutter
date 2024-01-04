@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/reader_screen_state.dart';
+import 'package:quran_ayat/misc/enums/quran_app_mode_enum.dart';
 import 'package:quran_ayat/models/qr_user_model.dart';
 
 import '../../../notes/domain/redux/notes_state.dart';
@@ -20,6 +21,7 @@ class AppState extends Equatable {
   final NotesState notes;
   final ReaderScreenState reader;
   final AppStateActionStatus lastActionStatus;
+  final QuranAppMode appMode;
   final bool isLoading;
 
   const AppState({
@@ -31,6 +33,7 @@ class AppState extends Equatable {
       action: "",
       message: "",
     ),
+    this.appMode = QuranAppMode.basic,
     this.isLoading = false,
   });
 
@@ -40,6 +43,7 @@ class AppState extends Equatable {
     NotesState? notes,
     ReaderScreenState? reader,
     AppStateActionStatus? lastActionStatus,
+    QuranAppMode? appMode,
     bool? isLoading,
   }) {
     return AppState(
@@ -48,13 +52,14 @@ class AppState extends Equatable {
       notes: notes ?? this.notes,
       reader: reader ?? this.reader,
       lastActionStatus: lastActionStatus ?? this.lastActionStatus,
+      appMode: appMode ?? this.appMode,
       isLoading: isLoading ?? this.isLoading,
     );
   }
 
   @override
   String toString() {
-    return "User: ${user?.uid}, Tags: ${tags.toString()}, Notes: ${notes.toString()}, Reader: ${reader.toString()}, Status: $lastActionStatus, isLoading: $isLoading";
+    return "User: ${user?.uid}, Tags: ${tags.toString()}, Notes: ${notes.toString()}, Reader: ${reader.toString()}, Status: $lastActionStatus, appMode: ${appMode.rawString()}, isLoading: $isLoading";
   }
 
   @override
@@ -64,6 +69,7 @@ class AppState extends Equatable {
         notes,
         reader,
         lastActionStatus,
+        appMode,
         isLoading,
       ];
 }
