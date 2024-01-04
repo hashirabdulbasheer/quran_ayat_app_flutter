@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../../../misc/enums/quran_app_mode_enum.dart';
+
 /// ACTIONS
 ///
 
@@ -53,5 +55,15 @@ class AppStateLoadingAction extends AppStateAction {
 
 class AppStateResetStatusAction extends AppStateAction {}
 
+class AppStateSelectAppModeAction extends AppStateAction {
+  final QuranAppMode appMode;
 
+  AppStateSelectAppModeAction({
+    required this.appMode,
+  });
 
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, appMode: ${appMode.rawString()}';
+  }
+}
