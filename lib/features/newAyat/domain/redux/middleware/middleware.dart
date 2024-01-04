@@ -4,6 +4,7 @@ import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/misc/enums/quran_app_mode_enum.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -82,6 +83,10 @@ void _initializeMiddleware(
   ));
   // Load bookmarks
   store.dispatch(InitBookmarkAction());
+
+  // Refresh app state mode
+  QuranAppMode appMode = await QuranSettingsManager.instance.getAppMode();
+  store.dispatch(AppStateSelectAppModeAction(appMode: appMode));
 
   next(action);
 }
