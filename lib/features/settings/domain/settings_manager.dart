@@ -97,6 +97,20 @@ class QuranSettingsManager {
     type: QuranSettingType.dropdown,
   );
 
+  final QuranSetting _appModeSetting = QuranSetting(
+    name: "Select Mode",
+    description: "select a mode for the app",
+    id: QuranSettingsConstants.appModeId,
+    showSearchBoxInDropdown: false,
+    possibleValues: QuranDropdownValuesFactory.createValues(
+      QuranSettingsConstants.appModeId,
+    ),
+    defaultValue: QuranDropdownValuesFactory.defaultValue(
+      QuranSettingsConstants.appModeId,
+    ),
+    type: QuranSettingType.dropdown,
+  );
+
   QuranSettingsManager._privateConstructor();
 
   final double _fontScaleFactor = 0.2;
@@ -104,6 +118,7 @@ class QuranSettingsManager {
   List<QuranSetting> generateSettings() {
     return [
       // _themeSettings,
+      _appModeSetting,
       _translationSettings,
       _transliterationSettings,
       _audioControlSettings,

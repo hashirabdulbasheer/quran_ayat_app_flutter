@@ -64,20 +64,18 @@ class _QuranDropdownSettingsTileWidgetState
               widget.setting.description,
               textAlign: TextAlign.end,
             ),
-            IntrinsicWidth(
-              child: DropdownSearch<QuranDropdownValue>(
-                items: widget.setting.possibleValues,
-                itemAsString: (item) => item.title,
-                popupProps: PopupPropsMultiSelection.menu(
-                  fit: FlexFit.loose,
-                  showSearchBox: widget.showSearchBox ?? false,
-                ),
-                dropdownDecoratorProps: const DropDownDecoratorProps(
-                  dropdownSearchDecoration: InputDecoration(hintText: "select"),
-                ),
-                onChanged: (value) => _onDropDownValueChanged(value),
-                selectedItem: currentValue,
+            DropdownSearch<QuranDropdownValue>(
+              items: widget.setting.possibleValues,
+              itemAsString: (item) => item.title,
+              popupProps: PopupPropsMultiSelection.menu(
+                fit: FlexFit.loose,
+                showSearchBox: widget.showSearchBox ?? false,
               ),
+              dropdownDecoratorProps: const DropDownDecoratorProps(
+                dropdownSearchDecoration: InputDecoration(hintText: "select"),
+              ),
+              onChanged: (value) => _onDropDownValueChanged(value),
+              selectedItem: currentValue,
             ),
             const SizedBox(height: 10),
           ],

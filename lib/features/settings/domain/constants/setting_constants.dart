@@ -7,6 +7,7 @@ class QuranSettingsConstants {
   static const String audioControlsId = "quran_app_audio_controls";
   static const String audioReciterId = "quran_app_audio_reciter";
   static const String fontSizeId = "quran_app_font_size";
+  static const String appModeId = "quran_app_mode_id";
 
   static const String feedbackEmailUrl =
       "mailto:support@uxquran.com?subject=Feedback QuranAyat App $appVersion";
