@@ -104,7 +104,6 @@ class _QuranDropdownSettingsTileWidgetState
       List<QuranDropdownValue> filtered = possibleValues
           .where((element) => values?.contains(element.key) ?? false)
           .toList();
-      print("_dropdownValueFromKey ${filtered.length}");
       if (filtered.isNotEmpty) {
         return filtered;
       }

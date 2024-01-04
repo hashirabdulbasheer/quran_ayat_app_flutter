@@ -51,7 +51,7 @@ class QuranDropdownValuesFactory {
 
       case QuranSettingsConstants.translationId:
         return QuranDropdownValue.sameValues(
-            NQTranslation.wahiduddinkhan.title);
+            NQTranslation.wahiduddinkhan.title,);
 
       case QuranSettingsConstants.audioControlsId:
         return QuranDropdownValue.sameValues(QuranSettingOnOff.off.rawString());
