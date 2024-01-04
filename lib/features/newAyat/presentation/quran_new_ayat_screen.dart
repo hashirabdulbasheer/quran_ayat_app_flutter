@@ -81,6 +81,7 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return StoreBuilder<AppState>(builder: (
       BuildContext context,
       Store<AppState> store,
@@ -357,9 +358,9 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                   FutureBuilder<QuranAppMode>(
                     future: QuranSettingsManager.instance.getAppMode(),
                     builder: (
-                        context,
-                        snapshot,
-                        ) {
+                      context,
+                      snapshot,
+                    ) {
                       if (snapshot.hasData) {
                         QuranAppMode mode = snapshot.data as QuranAppMode;
                         if (mode == QuranAppMode.advanced) {
@@ -377,9 +378,9 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
                   FutureBuilder<QuranAppMode>(
                     future: QuranSettingsManager.instance.getAppMode(),
                     builder: (
-                        context,
-                        snapshot,
-                        ) {
+                      context,
+                      snapshot,
+                    ) {
                       if (snapshot.hasData) {
                         QuranAppMode mode = snapshot.data as QuranAppMode;
                         if (mode == QuranAppMode.advanced) {

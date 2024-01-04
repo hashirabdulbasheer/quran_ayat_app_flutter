@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 
+import '../../../core/domain/app_state/app_state.dart';
 import '../../domain/entities/quran_setting.dart';
 import '../../domain/enum/settings_type_enum.dart';
 import '../../domain/settings_manager.dart';
@@ -9,10 +12,12 @@ import 'on_off_tile_widget.dart';
 
 class QuranSettingsRowWidget extends StatelessWidget {
   final QuranSetting setting;
+  final Function onChanged;
 
   const QuranSettingsRowWidget({
     Key? key,
     required this.setting,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -27,6 +32,7 @@ class QuranSettingsRowWidget extends StatelessWidget {
               setting,
               value.key,
             ),
+            onChanged(),
           },
         );
 
@@ -42,6 +48,7 @@ class QuranSettingsRowWidget extends StatelessWidget {
                   ? QuranSettingOnOff.on.rawString()
                   : QuranSettingOnOff.off.rawString(),
             ),
+            onChanged(),
           },
         );
 
@@ -54,6 +61,7 @@ class QuranSettingsRowWidget extends StatelessWidget {
               setting,
               values.map((e) => e.key).toList().join(","),
             ),
+            onChanged(),
           },
         );
 

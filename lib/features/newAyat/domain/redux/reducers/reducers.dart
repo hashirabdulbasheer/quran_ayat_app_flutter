@@ -136,6 +136,7 @@ ReaderScreenState _showLoadingReducer(
   ReaderScreenState state,
   ShowLoadingAction _,
 ) {
+
   return state.copyWith(
     isLoading: true,
   );
