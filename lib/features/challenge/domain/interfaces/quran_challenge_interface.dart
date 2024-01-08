@@ -5,9 +5,7 @@ import '../models/quran_question.dart';
 abstract class QuranChallengesDataSource {
   Future<void> initialize();
 
-  Future<List<QuranQuestion>> fetchQuestions(
-    String userId,
-  );
+  Future<List<QuranQuestion>> fetchQuestions();
 
   Future<bool> submitAnswer(
     String userId,
