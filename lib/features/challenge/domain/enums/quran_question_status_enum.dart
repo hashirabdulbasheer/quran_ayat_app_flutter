@@ -1,0 +1,1 @@
+enum QuranQuestionStatusEnum { open, close }

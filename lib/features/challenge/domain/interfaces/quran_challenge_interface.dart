@@ -1,4 +1,5 @@
-class QuranQuestion {}
+
+
 
 class QuranAnswer {}
 
