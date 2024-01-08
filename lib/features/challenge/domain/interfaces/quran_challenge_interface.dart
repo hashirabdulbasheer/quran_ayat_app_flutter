@@ -1,7 +1,6 @@
 
-
-
-class QuranAnswer {}
+import '../models/quran_answer.dart';
+import '../models/quran_question.dart';
 
 abstract class QuranChallengesDataSource {
   Future<void> initialize();
