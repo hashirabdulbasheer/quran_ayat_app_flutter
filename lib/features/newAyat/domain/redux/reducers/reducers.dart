@@ -46,6 +46,9 @@ Reducer<ReaderScreenState> readerScreenReducer =
   TypedReducer<ReaderScreenState, InitBookmarkAction>(
     _initBookmarkReducer,
   ),
+  TypedReducer<ReaderScreenState, ToggleHeaderVisibilityAction>(
+    _toggleHeaderVisibilityReducer,
+  ),
   TypedReducer<ReaderScreenState, dynamic>(
     _allOtherReaderReducer,
   ),
@@ -136,7 +139,6 @@ ReaderScreenState _showLoadingReducer(
   ReaderScreenState state,
   ShowLoadingAction _,
 ) {
-
   return state.copyWith(
     isLoading: true,
   );
@@ -198,5 +200,14 @@ ReaderScreenState _initBookmarkReducer(
 ) {
   return state.copyWith(
     bookmarkState: action.index,
+  );
+}
+
+ReaderScreenState _toggleHeaderVisibilityReducer(
+  ReaderScreenState state,
+  ToggleHeaderVisibilityAction action,
+) {
+  return state.copyWith(
+    isHeaderVisible: !state.isHeaderVisible,
   );
 }

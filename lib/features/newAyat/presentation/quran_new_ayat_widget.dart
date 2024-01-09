@@ -31,7 +31,6 @@ class QuranNewAyatReaderWidget extends StatefulWidget {
 }
 
 class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
-  bool _isHeaderVisible = false;
 
   @override
   void initState() {
@@ -105,7 +104,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               /// header
-              _isHeaderVisible
+              store.state.reader.isHeaderVisible
                   ? QuranAyatHeaderWidget(
                       surahTitles: store.state.reader.surahTitles,
                       onSurahSelected: (surah) => store.dispatch(
@@ -127,7 +126,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  !_isHeaderVisible
+                  !store.state.reader.isHeaderVisible
                       ? Expanded(
                           child: SizedBox(
                             height: 30,
@@ -143,13 +142,13 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                                   textAlign: TextAlign.start,
                                 ),
                               ),
-                              onPressed: () => _toggleHeader(),
+                              onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
                             ),
                           ),
                         )
                       : IconButton(
                           tooltip: "Close header",
-                          onPressed: () => _toggleHeader(),
+                          onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
                           icon: const Icon(
                             Icons.close,
                             size: 12,
@@ -170,7 +169,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: () => _toggleHeader(),
+                      onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
                       child: Text(
                         "${currentIndex.human.sura}:${currentIndex.human.aya}",
                         style: const TextStyle(
@@ -349,10 +348,5 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
       default:
         break;
     }
-  }
-
-  void _toggleHeader() {
-    _isHeaderVisible = !_isHeaderVisible;
-    setState(() {});
   }
 }

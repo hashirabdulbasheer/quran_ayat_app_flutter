@@ -115,7 +115,9 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
     Store<AppState> store,
   ) {
     store.dispatch(NextAyaAction());
-    // _closeHeader();
+    if(store.state.reader.isHeaderVisible) {
+      store.dispatch(ToggleHeaderVisibilityAction());
+    }
   }
 
   /// display previous aya
@@ -123,6 +125,8 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
     Store<AppState> store,
   ) {
     store.dispatch(PreviousAyaAction());
-    // _closeHeader();
+    if(store.state.reader.isHeaderVisible) {
+      store.dispatch(ToggleHeaderVisibilityAction());
+    }
   }
 }
