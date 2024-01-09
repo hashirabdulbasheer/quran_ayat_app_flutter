@@ -6,6 +6,8 @@ abstract class QuranChallengesDataSource {
 
   Future<List<QuranQuestion>> fetchQuestions();
 
+  Future<QuranQuestion?> fetchQuestion(int questionId);
+
   Future<bool> submitAnswer(
     String userId,
     int questionId,

@@ -62,6 +62,49 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
   }
 
   @override
+  Future<QuranQuestion?> fetchQuestion(int questionId) async {
+    try {
+      dynamic resultList = await dataSource.fetch("questions/$questionId");
+      if (resultList == null) {
+        return null;
+      }
+      Map<String, dynamic>? questionMap = Map<String, dynamic>.from(resultList as Map);
+
+      return QuranQuestion(
+        id: questionMap['id'] as int,
+        title: questionMap['title'] as String,
+        question: questionMap['question'] as String,
+        answers: questionMap["answers"] != null
+            ? (questionMap["answers"] as List<dynamic>)
+            .map((dynamic e) => QuranAnswer(
+          id: e['id'] as String,
+          surah: e['surah'] as int,
+          aya: e['aya'] as int,
+          userId: e['userId'] as String,
+          username: e['username'] as String,
+          note: e['note'] as String,
+          createdOn: e['createdOn'] as int,
+          status: QuranUtils.answerStatusFromString(
+            e['status'] as String,
+          ),
+        ))
+            .toList()
+            : [],
+        status: QuranUtils.questionStatusFromString(
+          questionMap['status'] as String,
+        ),
+        createdOn: questionMap['createdOn'] as int,
+      );
+    } catch (error) {
+      QuranLogger.logE(
+        error,
+      );
+    }
+
+    return null;
+  }
+
+  @override
   Future<bool> deleteAnswer(
     String userId,
     int questionId,
@@ -77,15 +120,16 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     int questionId,
     QuranAnswer answer,
   ) async {
-    List<QuranQuestion> allQuestions = await fetchQuestions();
-    if (allQuestions.isEmpty || answer.id.isEmpty) {
+    QuranQuestion? question = await fetchQuestion(questionId);
+    if (question == null || answer.id.isEmpty) {
       return false;
     }
 
     try {
-      // the index of the question will be question id
-      int questionIndex = questionId;
-      QuranQuestion question = allQuestions[questionIndex];
+      // validate that answer id already exists
+      // if answer not found then this will throw error
+      question.answers.firstWhere((element) => element.id == answer.id);
+
       if (question.id == questionId) {
         if (question.answers == null || question.answers.isEmpty) {
           question.answers = [answer];
@@ -93,7 +137,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
           question.answers.add(answer);
         }
         dataSource.update(
-          "questions/$questionIndex/answers/${answer.id}",
+          "questions/$questionId/answers/${answer.id}",
           answer.toMap(),
         );
 
@@ -112,15 +156,13 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     int questionId,
     QuranAnswer answer,
   ) async {
-    List<QuranQuestion> allQuestions = await fetchQuestions();
-    if (allQuestions.isEmpty) {
+    QuranQuestion? question = await fetchQuestion(questionId);
+    if (question == null) {
       return false;
     }
 
     try {
       // the index of the question will be question id
-      int questionIndex = questionId;
-      QuranQuestion question = allQuestions[questionIndex];
       if (question.id == questionId) {
         if (question.answers == null || question.answers.isEmpty) {
           question.answers = [answer];
@@ -128,7 +170,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
           question.answers.add(answer);
         }
         dataSource.update(
-          "questions/$questionIndex",
+          "questions/$questionId",
           question.toMap(),
         );
 
