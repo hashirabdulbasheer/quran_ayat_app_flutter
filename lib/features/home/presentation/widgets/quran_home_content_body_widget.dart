@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
+import '../../../challenge/presentation/quran_challenge_display_widget.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../newAyat/presentation/quran_new_ayat_widget.dart';
 import '../quran_home_screen.dart';
@@ -22,7 +23,7 @@ class QuranHomeBodyContentWidget extends StatelessWidget {
       return const QuranNewAyatReaderWidget();
     } else if (selectedTab == QuranHomeScreenBottomTabsEnum.challenge) {
       /// challenge screen
-      return Container();
+      return const QuranChallengeDisplayWidget();
     }
 
     return Container();
