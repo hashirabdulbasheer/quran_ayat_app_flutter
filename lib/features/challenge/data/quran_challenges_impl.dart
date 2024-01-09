@@ -68,28 +68,41 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
       if (resultList == null) {
         return null;
       }
-      Map<String, dynamic>? questionMap = Map<String, dynamic>.from(resultList as Map);
+
+      Map<String, dynamic>? questionMap =
+          Map<String, dynamic>.from(resultList as Map);
+
+      /// preprocess to remove nulls from firebase
+      List<dynamic> answersDyn =
+          questionMap["answers"] as List<dynamic>? ?? List<dynamic>.empty();
+      for (dynamic item in answersDyn) {
+        if (item == null) {
+          answersDyn.remove(item);
+        }
+      }
+
+      // map answers
+      List<QuranAnswer> answers = List<QuranAnswer>.empty();
+      answers = answersDyn
+          .map((dynamic e) => QuranAnswer(
+                id: e['id'] as String,
+                surah: e['surah'] as int,
+                aya: e['aya'] as int,
+                userId: e['userId'] as String,
+                username: e['username'] as String,
+                note: e['note'] as String,
+                createdOn: e['createdOn'] as int,
+                status: QuranUtils.answerStatusFromString(
+                  e['status'] as String,
+                ),
+              ))
+          .toList();
 
       return QuranQuestion(
         id: questionMap['id'] as int,
         title: questionMap['title'] as String,
         question: questionMap['question'] as String,
-        answers: questionMap["answers"] != null
-            ? (questionMap["answers"] as List<dynamic>)
-            .map((dynamic e) => QuranAnswer(
-          id: e['id'] as String,
-          surah: e['surah'] as int,
-          aya: e['aya'] as int,
-          userId: e['userId'] as String,
-          username: e['username'] as String,
-          note: e['note'] as String,
-          createdOn: e['createdOn'] as int,
-          status: QuranUtils.answerStatusFromString(
-            e['status'] as String,
-          ),
-        ))
-            .toList()
-            : [],
+        answers: answers,
         status: QuranUtils.questionStatusFromString(
           questionMap['status'] as String,
         ),
@@ -109,9 +122,25 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     String userId,
     int questionId,
     QuranAnswer answer,
-  ) {
-    // TODO: implement deleteAnswer
-    throw UnimplementedError();
+  ) async {
+    QuranQuestion? question = await fetchQuestion(questionId);
+    if (question == null || answer.id.isEmpty) {
+      return false;
+    }
+
+    try {
+      question.answers.removeWhere((element) => element.id == answer.id);
+      dataSource.update(
+        "questions/$questionId",
+        question.toMap(),
+      );
+
+      return true;
+    } catch (e) {
+      QuranLogger.logE(e);
+    }
+
+    return false;
   }
 
   @override
@@ -130,19 +159,12 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
       // if answer not found then this will throw error
       question.answers.firstWhere((element) => element.id == answer.id);
 
-      if (question.id == questionId) {
-        if (question.answers == null || question.answers.isEmpty) {
-          question.answers = [answer];
-        } else {
-          question.answers.add(answer);
-        }
-        dataSource.update(
-          "questions/$questionId/answers/${answer.id}",
-          answer.toMap(),
-        );
+      dataSource.update(
+        "questions/$questionId/answers/${answer.id}",
+        answer.toMap(),
+      );
 
-        return true;
-      }
+      return true;
     } catch (e) {
       QuranLogger.logE(e);
     }
@@ -162,20 +184,17 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     }
 
     try {
-      // the index of the question will be question id
-      if (question.id == questionId) {
-        if (question.answers == null || question.answers.isEmpty) {
-          question.answers = [answer];
-        } else {
-          question.answers.add(answer);
-        }
-        dataSource.update(
-          "questions/$questionId",
-          question.toMap(),
-        );
-
-        return true;
+      if (question.answers == null || question.answers.isEmpty) {
+        question.answers = [answer];
+      } else {
+        question.answers.add(answer);
       }
+      dataSource.update(
+        "questions/$questionId",
+        question.toMap(),
+      );
+
+      return true;
     } catch (e) {
       QuranLogger.logE(e);
     }
