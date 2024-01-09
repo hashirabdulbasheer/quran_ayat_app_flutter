@@ -9,7 +9,7 @@ abstract class QuranChallengesDataSource {
 
   Future<bool> submitAnswer(
     String userId,
-    String questionId,
+    int questionId,
     QuranAnswer answer,
   );
 

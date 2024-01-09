@@ -4,7 +4,7 @@ import '../enums/quran_question_status_enum.dart';
 import 'quran_answer.dart';
 
 class QuranQuestion extends Equatable {
-  String id;
+  int id;
   String title;
   String question;
   List<QuranAnswer> answers;

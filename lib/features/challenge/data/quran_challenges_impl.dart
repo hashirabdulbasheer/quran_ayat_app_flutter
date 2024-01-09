@@ -26,7 +26,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
       }
       for (Map<String, dynamic> questionMap in resultList) {
         QuranQuestion question = QuranQuestion(
-          id: questionMap['id'] as String,
+          id: questionMap['id'] as int,
           title: questionMap['title'] as String,
           question: questionMap['question'] as String,
           answers: questionMap["answers"] != null
@@ -84,7 +84,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
   @override
   Future<bool> submitAnswer(
     String userId,
-    String questionId,
+    int questionId,
     QuranAnswer answer,
   ) async {
     List<QuranQuestion> allQuestions = await fetchQuestions();
@@ -94,7 +94,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
 
     try {
       // the index of the question will be question id
-      int questionIndex = int.parse(questionId);
+      int questionIndex = questionId;
       QuranQuestion question = allQuestions[questionIndex];
       if (question.id == questionId) {
         if (question.answers == null || question.answers.isEmpty) {
