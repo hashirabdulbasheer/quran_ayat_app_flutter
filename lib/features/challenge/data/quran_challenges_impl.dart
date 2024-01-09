@@ -64,7 +64,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
   @override
   Future<bool> deleteAnswer(
     String userId,
-    String questionId,
+    int questionId,
     QuranAnswer answer,
   ) {
     // TODO: implement deleteAnswer
@@ -74,11 +74,36 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
   @override
   Future<bool> editAnswer(
     String userId,
-    String questionId,
+    int questionId,
     QuranAnswer answer,
-  ) {
-    // TODO: implement editAnswer
-    throw UnimplementedError();
+  ) async {
+    List<QuranQuestion> allQuestions = await fetchQuestions();
+    if (allQuestions.isEmpty || answer.id.isEmpty) {
+      return false;
+    }
+
+    try {
+      // the index of the question will be question id
+      int questionIndex = questionId;
+      QuranQuestion question = allQuestions[questionIndex];
+      if (question.id == questionId) {
+        if (question.answers == null || question.answers.isEmpty) {
+          question.answers = [answer];
+        } else {
+          question.answers.add(answer);
+        }
+        dataSource.update(
+          "questions/$questionIndex/answers/${answer.id}",
+          answer.toMap(),
+        );
+
+        return true;
+      }
+    } catch (e) {
+      QuranLogger.logE(e);
+    }
+
+    return false;
   }
 
   @override
