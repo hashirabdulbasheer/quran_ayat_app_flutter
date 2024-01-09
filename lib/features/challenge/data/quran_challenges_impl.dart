@@ -91,8 +91,11 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     if (allQuestions.isEmpty) {
       return false;
     }
-    for (var i = 0; i < allQuestions.length; i++) {
-      QuranQuestion question = allQuestions[i];
+
+    try {
+      // the index of the question will be question id
+      int questionIndex = int.parse(questionId);
+      QuranQuestion question = allQuestions[questionIndex];
       if (question.id == questionId) {
         if (question.answers == null || question.answers.isEmpty) {
           question.answers = [answer];
@@ -100,12 +103,14 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
           question.answers.add(answer);
         }
         dataSource.update(
-          "questions/$i",
+          "questions/$questionIndex",
           question.toMap(),
         );
 
         return true;
       }
+    } catch (e) {
+      QuranLogger.logE(e);
     }
 
     return false;
