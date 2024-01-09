@@ -5,6 +5,7 @@ import 'quran_answer.dart';
 
 class QuranQuestion extends Equatable {
   String id;
+  String title;
   String question;
   List<QuranAnswer> answers;
   QuranQuestionStatusEnum status;
@@ -12,6 +13,7 @@ class QuranQuestion extends Equatable {
 
   QuranQuestion({
     required this.id,
+    required this.title,
     required this.question,
     required this.answers,
     required this.status,
@@ -20,13 +22,14 @@ class QuranQuestion extends Equatable {
 
   @override
   String toString() {
-    return 'QuranQuestion{id: $id, question: $question, answers: ${answers
+    return 'QuranQuestion{id: $id, title: $title, question: $question, answers: ${answers
         .length}, status: $status, createdOn: $createdOn}';
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       "id": id,
+      "title": title,
       "question": question,
       "answers": answers.map((e) => e.toMap()).toList(),
       "createdOn": createdOn,
@@ -38,6 +41,7 @@ class QuranQuestion extends Equatable {
   List<Object?> get props =>
       [
         id,
+        title,
         question,
         answers,
         status,
