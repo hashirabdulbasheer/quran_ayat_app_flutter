@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/challenge/domain/redux/middleware/middleware.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
@@ -43,6 +44,7 @@ class MyAppState extends State<MyApp> {
       ...createTagOperationsMiddleware(),
       ...createNotesMiddleware(),
       ...createReaderScreenMiddleware(),
+      ...createChallengeScreenMiddleware(),
       ...createBookmarkMiddleware(),
     ],
   );

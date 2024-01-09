@@ -20,7 +20,7 @@ ChallengeScreenState _initializeChallengeScreenReducer(
   ChallengeScreenState state,
   InitializeChallengeScreenAction action,
 ) {
-  return state;
+  return state.copyWith(questions: action.questions);
 }
 
 ChallengeScreenState _nextChallengeScreenReducer(
