@@ -30,6 +30,19 @@ class QuranAnswer extends Equatable {
         'status: $status}';
   }
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "id": id,
+      "surah": surah,
+      "aya": aya,
+      "userId": userId,
+      "username": username,
+      "note": note,
+      "createdOn": createdOn,
+      "status": status.rawString(),
+    };
+  }
+
   @override
   List<Object?> get props => [
         id,

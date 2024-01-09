@@ -85,8 +85,28 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     String userId,
     String questionId,
     QuranAnswer answer,
-  ) {
-    // TODO: implement submitAnswer
-    throw UnimplementedError();
+  ) async {
+    List<QuranQuestion> allQuestions = await fetchQuestions();
+    if (allQuestions.isEmpty) {
+      return false;
+    }
+    for (var i = 0; i < allQuestions.length; i++) {
+      QuranQuestion question = allQuestions[i];
+      if (question.id == questionId) {
+        if (question.answers == null || question.answers.isEmpty) {
+          question.answers = [answer];
+        } else {
+          question.answers.add(answer);
+        }
+        dataSource.update(
+          "questions/$i",
+          question.toMap(),
+        );
+
+        return true;
+      }
+    }
+
+    return false;
   }
 }

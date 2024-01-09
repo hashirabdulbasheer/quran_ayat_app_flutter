@@ -24,6 +24,16 @@ class QuranQuestion extends Equatable {
         .length}, status: $status, createdOn: $createdOn}';
   }
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "id": id,
+      "question": question,
+      "answers": answers.map((e) => e.toMap()).toList(),
+      "createdOn": createdOn,
+      "status": status.rawString(),
+    };
+  }
+
   @override
   List<Object?> get props =>
       [
