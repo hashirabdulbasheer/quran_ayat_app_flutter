@@ -58,14 +58,14 @@ class ReaderScreenState extends Equatable {
       key,
       value,
     ) {
-      translations[key] = value?.aya[currentIndex.aya]?.text ?? "";
+      translations[key] = value?.aya[currentIndex.aya].text ?? "";
     });
 
     return translations;
   }
 
   String? currentTransliteration() =>
-      data.transliteration?.aya[currentIndex.aya]?.text;
+      data.transliteration?.aya[currentIndex.aya].text;
 
   List<NQWord> currentAyaWords() =>
       data.words.isNotEmpty ? data.words[currentIndex.aya] : [];
