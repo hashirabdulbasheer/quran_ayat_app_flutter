@@ -4,6 +4,7 @@ import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart'
 import 'package:redux/redux.dart';
 
 import '../../core/domain/app_state/app_state.dart';
+import 'answers/quran_answers_widget.dart';
 
 class QuranChallengeDisplayWidget extends StatelessWidget {
   const QuranChallengeDisplayWidget({Key? key}) : super(key: key);
@@ -58,6 +59,12 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                QuranAnswersWidget(
+                  answers: store.state.challenge.currentQuestionAnswers,
                 ),
               ],
             ),
