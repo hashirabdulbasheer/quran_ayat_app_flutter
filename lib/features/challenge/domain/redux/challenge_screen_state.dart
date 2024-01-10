@@ -28,9 +28,11 @@ class ChallengeScreenState extends Equatable {
     );
   }
 
-  List<QuranAnswer> currentQuestionAnswers() {
-    return questions[currentIndex].answers;
-  }
+  List<QuranAnswer> get currentQuestionAnswers =>
+      questions.length > currentIndex ? questions[currentIndex].answers : [];
+
+  QuranQuestion? get currentQuestion =>
+      questions.length > currentIndex ? questions[currentIndex] : null;
 
   @override
   List<Object?> get props => [

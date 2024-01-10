@@ -73,7 +73,9 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
       );
     }
 
-    return Container();
+    return Container(
+      height: 0,
+    );
   }
 
   ///
@@ -115,7 +117,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
     Store<AppState> store,
   ) {
     store.dispatch(NextAyaAction());
-    if(store.state.reader.isHeaderVisible) {
+    if (store.state.reader.isHeaderVisible) {
       store.dispatch(ToggleHeaderVisibilityAction());
     }
   }
@@ -125,7 +127,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
     Store<AppState> store,
   ) {
     store.dispatch(PreviousAyaAction());
-    if(store.state.reader.isHeaderVisible) {
+    if (store.state.reader.isHeaderVisible) {
       store.dispatch(ToggleHeaderVisibilityAction());
     }
   }

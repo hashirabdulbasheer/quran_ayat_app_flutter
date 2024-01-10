@@ -3,7 +3,7 @@ import 'package:redux/redux.dart';
 import '../actions/actions.dart';
 import '../challenge_screen_state.dart';
 
-Reducer<ChallengeScreenState> readerScreenReducer =
+Reducer<ChallengeScreenState> challengeScreenReducer =
     combineReducers<ChallengeScreenState>([
   TypedReducer<ChallengeScreenState, InitializeChallengeScreenAction>(
     _initializeChallengeScreenReducer,
@@ -20,6 +20,7 @@ ChallengeScreenState _initializeChallengeScreenReducer(
   ChallengeScreenState state,
   InitializeChallengeScreenAction action,
 ) {
+
   return state.copyWith(questions: action.questions);
 }
 

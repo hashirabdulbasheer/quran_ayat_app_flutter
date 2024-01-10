@@ -1,3 +1,4 @@
+import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 import 'package:redux/redux.dart';
 
@@ -18,6 +19,7 @@ void appStateMiddleware(
     store.dispatch(InitializeTagsAction());
     store.dispatch(InitializeNotesAction());
     store.dispatch(InitializeReaderScreenAction());
+    store.dispatch(InitializeChallengeScreenAction(questions: const []));
   }
   next(action);
 }

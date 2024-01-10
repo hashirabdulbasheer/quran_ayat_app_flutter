@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/home/presentation/widgets/quran_home_content_body_widget.dart';
 import 'package:redux/redux.dart';
 
 import '../../bookmark/data/bookmarks_local_impl.dart';
@@ -9,6 +8,7 @@ import '../../core/domain/app_state/app_state.dart';
 import '../../drawer/presentation/nav_drawer.dart';
 import 'widgets/quran_home_app_bar.dart';
 import 'widgets/quran_home_bottom_sheet_widget.dart';
+import 'widgets/quran_home_content_body_widget.dart';
 
 enum QuranHomeScreenBottomTabsEnum { reader, challenge }
 
@@ -21,7 +21,7 @@ class QuranHomeScreen extends StatefulWidget {
 
 class _QuranHomeScreenState extends State<QuranHomeScreen> {
   QuranHomeScreenBottomTabsEnum _selectedBottomTab =
-      QuranHomeScreenBottomTabsEnum.reader;
+      QuranHomeScreenBottomTabsEnum.challenge;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
                 label: 'Reader',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.calculate),
                 label: 'Challenges',
               ),
             ],
