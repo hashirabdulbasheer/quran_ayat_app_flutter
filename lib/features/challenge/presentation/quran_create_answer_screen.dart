@@ -4,17 +4,29 @@ import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/auth/domain/auth_factory.dart';
+import 'package:quran_ayat/features/challenge/domain/challenge_manager.dart';
+import 'package:quran_ayat/features/challenge/domain/enums/quran_answer_status_enum.dart';
+import 'package:quran_ayat/features/challenge/domain/models/quran_answer.dart';
+import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
+import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../../models/qr_user_model.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
 
 class QuranCreateChallengeScreen extends StatefulWidget {
+  final QuranQuestion question;
+
   const QuranCreateChallengeScreen({
     Key? key,
+    required this.question,
   }) : super(key: key);
 
   @override
@@ -28,6 +40,7 @@ class _QuranCreateChallengeScreenState
   NQSurahTitle currentSurahDetails = NQSurahTitle.defaultValue();
   SurahIndex? currentIndex;
   String note = "";
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -181,10 +194,13 @@ class _QuranCreateChallengeScreenState
                                 child: SizedBox(
                                   height: 50,
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      _displayRemovalConfirmationDialog();
-                                    },
-                                    child: const Text("Submit"),
+                                    onPressed: () =>
+                                        _displayRemovalConfirmationDialog(),
+                                    child: isLoading
+                                        ? const CircularProgressIndicator(
+                                            color: Colors.white,
+                                          )
+                                        : const Text("Submit"),
                                   ),
                                 ),
                               ),
@@ -198,6 +214,76 @@ class _QuranCreateChallengeScreenState
           ),
         ),
       ),
+    );
+  }
+
+  void _onSubmitAnswerTapped() {
+    /// validate
+    if (currentIndex == null) {
+      QuranUtils.showMessage(
+        context,
+        "Please select an aya",
+      );
+
+      return;
+    }
+
+    if (_notesController.text.isEmpty) {
+      QuranUtils.showMessage(
+        context,
+        "Please enter a note",
+      );
+
+      return;
+    }
+
+    if (isLoading) {
+      return;
+    }
+
+    /// proceed to submission
+    setState(() {
+      isLoading = true;
+    });
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user == null) {
+      QuranUtils.showMessage(
+        context,
+        "Please login",
+      );
+
+      return;
+    }
+
+    QuranAnswer answer = QuranAnswer(
+      id: const Uuid().v4(),
+      surah: currentIndex!.sura,
+      aya: currentIndex!.aya,
+      userId: user.uid,
+      username: user.name,
+      note: _notesController.text,
+      createdOn: DateTime.now().millisecondsSinceEpoch,
+      status: QuranAnswerStatusEnum.submitted,
+    );
+
+    QuranChallengeManager.instance.submitAnswer(
+      user.uid,
+      widget.question.id,
+      answer,
+    );
+
+    StoreProvider.of<AppState>(context)
+        .dispatch(InitializeChallengeScreenAction(questions: const []));
+
+    setState(() {
+      isLoading = true;
+    });
+
+    Navigator.of(context).pop();
+
+    QuranUtils.showMessage(
+      context,
+      "Submitted successfully for review.",
     );
   }
 
@@ -230,6 +316,7 @@ class _QuranCreateChallengeScreenState
               ),
               onPressed: () => {
                 Navigator.of(context).pop(),
+                _onSubmitAnswerTapped(),
               },
             ),
           ],
