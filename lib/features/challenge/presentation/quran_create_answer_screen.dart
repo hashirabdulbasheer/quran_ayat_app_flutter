@@ -314,12 +314,12 @@ class _QuranCreateChallengeScreenState
               onPressed: () => Navigator.of(context).pop(),
             ),
             MaterialButton(
-              color: Colors.white60,
+              color: Colors.blueGrey,
               textColor: Colors.white,
               child: const Text(
                 'Submit',
                 style: TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
               onPressed: () => {

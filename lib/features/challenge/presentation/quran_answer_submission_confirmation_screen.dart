@@ -39,7 +39,7 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                   child: Directionality(
                     textDirection: TextDirection.ltr,
                     child: Text(
-                      "Thank You.\n\nYour answer has been submitted successfully for review.\n\nIt will be published once approved.",
+                      "Thank You.\n\nYour answer has been submitted successfully for review.\n\nIt will be published upon approval.",
                       style: TextStyle(
                         fontSize: 20,
                       ),
