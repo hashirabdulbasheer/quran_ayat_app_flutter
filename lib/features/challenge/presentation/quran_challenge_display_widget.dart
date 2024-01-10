@@ -35,9 +35,9 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                       question.title,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+                        color: Colors.black45,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
                       ),
                     ),
                   ],
