@@ -122,7 +122,6 @@ class _QuranCreateChallengeScreenState
 
                               return Column(
                                 children: [
-
                                   /// ARABIC AYA
                                   QuranFullAyatRowWidget(
                                     text: arabic.aya[currentIndex!.aya].text,
@@ -182,7 +181,9 @@ class _QuranCreateChallengeScreenState
                                 child: SizedBox(
                                   height: 50,
                                   child: ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _displayRemovalConfirmationDialog();
+                                    },
                                     child: const Text("Submit"),
                                   ),
                                 ),
@@ -197,6 +198,43 @@ class _QuranCreateChallengeScreenState
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _displayRemovalConfirmationDialog() async {
+    return showDialog(
+      context: context,
+      builder: (
+        context,
+      ) {
+        return AlertDialog(
+          title: const Text(
+            'Submit answer?',
+          ),
+          content: const Text(
+            "Are you sure that you want to submit the answer?",
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            MaterialButton(
+              color: Colors.white60,
+              textColor: Colors.white,
+              child: const Text(
+                'Submit',
+                style: TextStyle(
+                  color: Colors.black87,
+                ),
+              ),
+              onPressed: () => {
+                Navigator.of(context).pop(),
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
