@@ -1,3 +1,4 @@
+import 'package:quran_ayat/features/challenge/domain/redux/reducers/reducers.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../auth/domain/auth_factory.dart';
@@ -45,6 +46,10 @@ AppState _allOtherReducer(
     ),
     reader: readerScreenReducer(
       state.reader,
+      action,
+    ),
+    challenge: challengeScreenReducer(
+      state.challenge,
       action,
     ),
   );
