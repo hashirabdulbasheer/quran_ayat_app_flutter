@@ -1,39 +1,44 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../models/quran_answer.dart';
 import '../models/quran_question.dart';
 
 @immutable
 class ChallengeScreenState extends Equatable {
-  final List<QuranQuestion> questions;
+  final List<QuranQuestion> allQuestions;
+  final List<QuranQuestion> filteredQuestions;
   final int currentIndex;
   final bool isLoading;
 
   const ChallengeScreenState({
-    this.questions = const [],
+    this.allQuestions = const [],
+    this.filteredQuestions = const [],
     this.currentIndex = 0,
     this.isLoading = false,
   });
 
   ChallengeScreenState copyWith({
-    List<QuranQuestion>? questions,
+    List<QuranQuestion>? allQuestions,
+    List<QuranQuestion>? filteredQuestions,
     int? currentIndex,
     bool? isLoading,
   }) {
     return ChallengeScreenState(
-      questions: questions ?? this.questions,
+      allQuestions: allQuestions ?? this.allQuestions,
+      filteredQuestions: filteredQuestions ?? this.filteredQuestions,
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,
     );
   }
 
-  QuranQuestion? get currentQuestion =>
-      questions.length > currentIndex ? questions[currentIndex] : null;
+  QuranQuestion? get currentQuestion => filteredQuestions.length > currentIndex
+      ? filteredQuestions[currentIndex]
+      : null;
 
   @override
   List<Object?> get props => [
-        questions,
+        allQuestions,
+        filteredQuestions,
         currentIndex,
         isLoading,
       ];

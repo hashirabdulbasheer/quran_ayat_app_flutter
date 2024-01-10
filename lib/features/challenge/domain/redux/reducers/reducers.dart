@@ -1,5 +1,8 @@
 import 'package:redux/redux.dart';
 
+import '../../enums/quran_answer_status_enum.dart';
+import '../../enums/quran_question_status_enum.dart';
+import '../../models/quran_question.dart';
 import '../actions/actions.dart';
 import '../challenge_screen_state.dart';
 
@@ -20,8 +23,21 @@ ChallengeScreenState _initializeChallengeScreenReducer(
   ChallengeScreenState state,
   InitializeChallengeScreenAction action,
 ) {
+  // filtered = only show open questions that are open and answers that are approved
+  List<QuranQuestion> filteredQuestions = [];
+  filteredQuestions = action.questions
+      .where((element) => element.status == QuranQuestionStatusEnum.open)
+      .toList();
+  for (QuranQuestion question in filteredQuestions) {
+    question.answers.removeWhere(
+      (element) => element.status != QuranAnswerStatusEnum.approved,
+    );
+  }
 
-  return state.copyWith(questions: action.questions);
+  return state.copyWith(
+    allQuestions: action.questions,
+    filteredQuestions: filteredQuestions,
+  );
 }
 
 ChallengeScreenState _nextChallengeScreenReducer(
@@ -29,7 +45,7 @@ ChallengeScreenState _nextChallengeScreenReducer(
   NextChallengeScreenAction action,
 ) {
   int nextIndex = state.currentIndex + 1;
-  if (nextIndex < state.questions.length) {
+  if (nextIndex < state.filteredQuestions.length) {
     return state.copyWith(currentIndex: nextIndex);
   }
 
