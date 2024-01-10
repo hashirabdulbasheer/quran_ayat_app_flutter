@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
 
 import '../../../../models/qr_user_model.dart';
+import '../../../../utils/logger_utils.dart';
 import '../../../auth/domain/auth_factory.dart';
+import '../../../auth/presentation/quran_login_screen.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../core/presentation/shimmer.dart';
-import '../../domain/models/quran_answer.dart';
+import '../quran_create_answer_screen.dart';
 import 'quran_answers_body_widget.dart';
 
 class QuranAnswersWidget extends StatefulWidget {
-  final List<QuranAnswer> answers;
+  final QuranQuestion? question;
 
   const QuranAnswersWidget({
     Key? key,
-    required this.answers,
+    required this.question,
   }) : super(key: key);
 
   @override
@@ -50,7 +53,10 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
             children: [
               const Text("Submissions"),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => _goToCreateChallengeScreen(
+                  user,
+                  widget.question,
+                ),
                 child: const Text("Submit"),
               ),
             ],
@@ -60,13 +66,46 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
           height: 10,
         ),
         QuranShimmer(
-          isLoading: StoreProvider.of<AppState>(context).state.challenge.isLoading,
+          isLoading:
+              StoreProvider.of<AppState>(context).state.challenge.isLoading,
           child: QuranAnswerBodyWidget(
             user: user,
-            answers: widget.answers,
+            question: widget.question,
+            onSubmitTapped: () => _goToCreateChallengeScreen(
+              user,
+              widget.question,
+            ),
           ),
         ),
       ],
     );
+  }
+
+  void _goToLoginScreen() {
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
+    ).then((value) {
+      setState(() {});
+    });
+  }
+
+  void _goToCreateChallengeScreen(
+    QuranUser? user,
+    QuranQuestion? question,
+  ) {
+    if (user == null) {
+      _goToLoginScreen();
+    } else {
+      Navigator.push<void>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const QuranCreateChallengeScreen(),
+        ),
+      ).then((value) {
+        setState(() {});
+      });
+      QuranLogger.logAnalytics("add_challenge");
+    }
   }
 }
