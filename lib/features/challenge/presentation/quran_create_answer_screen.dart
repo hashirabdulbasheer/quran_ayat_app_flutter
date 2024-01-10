@@ -10,6 +10,7 @@ import 'package:quran_ayat/features/challenge/domain/enums/quran_answer_status_e
 import 'package:quran_ayat/features/challenge/domain/models/quran_answer.dart';
 import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
 import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
+import 'package:quran_ayat/features/challenge/presentation/quran_answer_submission_confirmation_screen.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
@@ -281,10 +282,17 @@ class _QuranCreateChallengeScreenState
 
     Navigator.of(context).pop();
 
-    QuranUtils.showMessage(
+    Navigator.push<void>(
       context,
-      "Submitted successfully for review.",
-    );
+      MaterialPageRoute(
+        builder: (context) => const QuranAnswerSubmissionConfirmationScreen(),
+      ),
+    ).then((value) {});
+
+    // QuranUtils.showMessage(
+    //   context,
+    //   "Submitted successfully for review.",
+    // );
   }
 
   Future<void> _displayRemovalConfirmationDialog() async {
@@ -324,4 +332,5 @@ class _QuranCreateChallengeScreenState
       },
     );
   }
+
 }
