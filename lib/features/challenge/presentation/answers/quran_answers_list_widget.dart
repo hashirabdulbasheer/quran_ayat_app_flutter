@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/challenge/domain/challenge_manager.dart';
 
 import '../../../../models/qr_user_model.dart';
 import '../../../../utils/utils.dart';
@@ -68,7 +69,7 @@ class QuranAnswersListWidget extends StatelessWidget {
                     height: 8,
                   ),
                   Text(
-                    QuranNotesManager.instance.formattedDate(
+                    QuranChallengeManager.instance.formattedDate(
                       answers[index].createdOn,
                     ),
                     style: const TextStyle(fontSize: 12),
