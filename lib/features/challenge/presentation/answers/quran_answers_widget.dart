@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
+import 'package:quran_ayat/utils/utils.dart';
+import 'package:redux/redux.dart';
 
 import '../../../../models/qr_user_model.dart';
 import '../../../../utils/logger_utils.dart';
@@ -97,15 +99,22 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
     if (user == null) {
       _goToLoginScreen();
     } else {
-      Navigator.push<void>(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const QuranCreateChallengeScreen(),
-        ),
-      ).then((value) {
-        setState(() {});
-      });
-      QuranLogger.logAnalytics("add_challenge");
+      if (question != null) {
+        Navigator.push<void>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QuranCreateChallengeScreen(
+              question: question,
+            ),
+          ),
+        ).then((value) {});
+        QuranLogger.logAnalytics("add_challenge");
+      } else {
+        QuranUtils.showMessage(
+          context,
+          "Invalid question !",
+        );
+      }
     }
   }
 }

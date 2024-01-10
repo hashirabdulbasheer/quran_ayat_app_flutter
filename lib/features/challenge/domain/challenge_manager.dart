@@ -31,7 +31,7 @@ class QuranChallengeManager {
       return [];
     }
 
-    return _challengesEngine.fetchQuestions();
+    return await _challengesEngine.fetchQuestions();
   }
 
   Future<QuranQuestion?> fetchQuestion(int questionId) async {
@@ -40,7 +40,7 @@ class QuranChallengeManager {
       return null;
     }
 
-    return _challengesEngine.fetchQuestion(questionId);
+    return await _challengesEngine.fetchQuestion(questionId);
   }
 
   Future<bool> submitAnswer(
@@ -53,7 +53,7 @@ class QuranChallengeManager {
       return false;
     }
 
-    return _challengesEngine.submitAnswer(
+    return await _challengesEngine.submitAnswer(
       userId,
       questionId,
       answer,
@@ -70,7 +70,7 @@ class QuranChallengeManager {
       return false;
     }
 
-    return _challengesEngine.editAnswer(
+    return await _challengesEngine.editAnswer(
       userId,
       questionId,
       answer,
@@ -87,7 +87,7 @@ class QuranChallengeManager {
       return false;
     }
 
-    return _challengesEngine.deleteAnswer(
+    return await _challengesEngine.deleteAnswer(
       userId,
       questionId,
       answer,

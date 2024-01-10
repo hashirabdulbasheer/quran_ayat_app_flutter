@@ -62,7 +62,7 @@ class QuranAnswersListWidget extends StatelessWidget {
                     height: 4,
                   ),
                   Text(
-                    answers[index].note,
+                    "${answers[index].surah+1}:${answers[index].aya+1} - ${answers[index].note}",
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(

@@ -66,6 +66,9 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                 QuranAnswersWidget(
                   question: store.state.challenge.currentQuestion,
                 ),
+                const SizedBox(
+                  height: 100,
+                ),
               ],
             ),
           ),

@@ -130,7 +130,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
 
     try {
       question.answers.removeWhere((element) => element.id == answer.id);
-      dataSource.update(
+      await dataSource.update(
         "questions/$questionId",
         question.toMap(),
       );
@@ -159,7 +159,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
       // if answer not found then this will throw error
       question.answers.firstWhere((element) => element.id == answer.id);
 
-      dataSource.update(
+      await dataSource.update(
         "questions/$questionId/answers/${answer.id}",
         answer.toMap(),
       );
@@ -189,7 +189,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
       } else {
         question.answers.add(answer);
       }
-      dataSource.update(
+      await dataSource.update(
         "questions/$questionId",
         question.toMap(),
       );

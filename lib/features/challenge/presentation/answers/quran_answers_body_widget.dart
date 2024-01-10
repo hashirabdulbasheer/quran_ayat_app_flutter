@@ -25,6 +25,7 @@ class _QuranAnswerBodyWidgetState extends State<QuranAnswerBodyWidget> {
   @override
   Widget build(BuildContext context) {
     List<QuranAnswer> answers = widget.question?.answers ?? [];
+    answers.sort((a, b,) => b.createdOn.compareTo(a.createdOn));
     if (answers.isNotEmpty) {
       return SizedBox(
         width: MediaQuery.of(context).size.width,
