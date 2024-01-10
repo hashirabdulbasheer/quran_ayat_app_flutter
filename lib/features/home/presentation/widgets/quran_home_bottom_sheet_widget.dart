@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
 import 'package:redux/redux.dart';
 
 import '../../../core/domain/app_state/app_state.dart';
@@ -18,63 +19,64 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String nextTooltip = "Next aya";
+    String previousTooltip = "Previous aya";
+
     if (selectedTab == QuranHomeScreenBottomTabsEnum.reader) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(
-          10,
-          10,
-          10,
-          30,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Tooltip(
-                    message: "Previous aya",
-                    child: ElevatedButton(
-                      style: _elevatedButtonTheme,
-                      onPressed: () => _moveToPreviousAyat(
-                        store,
-                      ),
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: _elevatedButtonIconColor(
-                          context,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Tooltip(
-                    message: "Next aya",
-                    child: ElevatedButton(
-                      style: _elevatedButtonTheme,
-                      onPressed: () => _moveToNextAyat(
-                        store,
-                      ),
-                      child: Icon(
-                        Icons.arrow_forward,
-                        color: _elevatedButtonIconColor(
-                          context,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
+      nextTooltip = "Next aya";
+      previousTooltip = "Previous aya";
+    } else {
+      nextTooltip = "Next challenge";
+      previousTooltip = "Previous challenge";
     }
 
-    return Container(
-      height: 0,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        10,
+        10,
+        10,
+        30,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Tooltip(
+                  message: previousTooltip,
+                  child: ElevatedButton(
+                    style: _elevatedButtonTheme,
+                    onPressed: () => _moveToPreviousAction(store),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: _elevatedButtonIconColor(
+                        context,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Tooltip(
+                  message: nextTooltip,
+                  child: ElevatedButton(
+                    style: _elevatedButtonTheme,
+                    onPressed: () => _moveToNextAction(store),
+                    child: Icon(
+                      Icons.arrow_forward,
+                      color: _elevatedButtonIconColor(
+                        context,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -112,6 +114,22 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
     return Theme.of(context).primaryColor;
   }
 
+  void _moveToNextAction( Store<AppState> store, ) {
+    if (selectedTab == QuranHomeScreenBottomTabsEnum.reader) {
+      _moveToNextAyat(store);
+    } else if (selectedTab == QuranHomeScreenBottomTabsEnum.challenge) {
+      _moveToNextChallenge(store);
+    }
+  }
+
+  void _moveToPreviousAction( Store<AppState> store, ) {
+    if (selectedTab == QuranHomeScreenBottomTabsEnum.reader) {
+      _moveToPreviousAyat(store);
+    } else if (selectedTab == QuranHomeScreenBottomTabsEnum.challenge) {
+      _moveToPreviousChallenge(store);
+    }
+  }
+
   /// display next aya
   void _moveToNextAyat(
     Store<AppState> store,
@@ -130,5 +148,19 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
     if (store.state.reader.isHeaderVisible) {
       store.dispatch(ToggleHeaderVisibilityAction());
     }
+  }
+
+  /// display next challenge
+  void _moveToNextChallenge(
+    Store<AppState> store,
+  ) {
+    store.dispatch(NextChallengeScreenAction());
+  }
+
+  /// display previous challenge
+  void _moveToPreviousChallenge(
+    Store<AppState> store,
+  ) {
+    store.dispatch(PreviousChallengeScreenAction());
   }
 }
