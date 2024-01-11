@@ -8,6 +8,7 @@ import 'features/core/domain/app_state/app_state.dart';
 import 'features/home/presentation/quran_home_screen.dart';
 import 'features/notes/data/hive_notes_impl.dart';
 import 'main_common.dart';
+import 'misc/configs/remote_config_manager.dart';
 import 'misc/url/url_strategy.dart';
 
 // TODO: Update before release
@@ -18,6 +19,7 @@ void main() async {
   await QuranHiveNotesEngine.instance.initialize();
   await QuranAuthFactory.engine.initialize();
   FirebaseAnalytics.instance.logAppOpen();
+  RemoteConfigManager.instance.init();
 
   runApp(MyApp(
     homeScreen: StoreBuilder<AppState>(
