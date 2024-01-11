@@ -1,6 +1,8 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
-import 'package:quran_ayat/misc/constants/feature_flag_constants.dart';
+
+import '../constants/feature_flag_constants.dart';
+import '../enums/quran_feature_flag_enum.dart';
 
 class RemoteConfigManager {
   final _remoteConfig = FirebaseRemoteConfig.instance;
@@ -8,10 +10,12 @@ class RemoteConfigManager {
   static final RemoteConfigManager instance =
       RemoteConfigManager._privateConstructor();
 
-  RemoteConfigManager._privateConstructor();
+  RemoteConfigManager._privateConstructor() {
+    init();
+  }
 
   // Remote Flags
-  bool enableChallengesFeature = false;
+  bool isChallengesFeatureEnabled = false;
 
   Future<void> init() async {
     try {
@@ -33,14 +37,20 @@ class RemoteConfigManager {
     }
   }
 
+  bool get(RemoteConfigFeatureFlagEnum flag) {
+    switch (flag) {
+      case RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled:
+        return isChallengesFeatureEnabled;
+    }
+  }
+
   Future<void> _updateConfigs(RemoteConfigUpdate remoteConfigUpdate) async {
     await _remoteConfig.activate();
-    enableChallengesFeature =
+    isChallengesFeatureEnabled =
         _remoteConfig.getBool(kEnableChallengesFeatureKey);
   }
 
   Future<void> _setDefaultConfigs() async {
-    return _remoteConfig
-        .setDefaults(<String, dynamic>{kEnableChallengesFeatureKey: false});
+    return _remoteConfig.setDefaults(<String, dynamic>{});
   }
 }
