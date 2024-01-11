@@ -45,11 +45,31 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                 Center(
                   child: Directionality(
                     textDirection: TextDirection.ltr,
-                    child: Text(
-                      "Thank You.\n\nRef: $answerId\n\n\nYour answer has been submitted successfully for review.\n\nIt will be published upon approval.",
-                      style: const TextStyle(
-                        fontSize: 20,
-                      ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Good Job",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10,),
+                        Text(
+                          "Ref: $answerId",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.black45,
+                          ),
+                        ),
+                        const SizedBox(height: 30,),
+                        const Text(
+                          "Your answer has been submitted successfully for review.\n\nIt will be published upon approval.",
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
