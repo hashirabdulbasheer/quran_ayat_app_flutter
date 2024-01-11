@@ -18,6 +18,7 @@ import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
 import 'widgets/quran_arabic_translation_widget.dart';
 import 'widgets/quran_note_entry_textfield_widget.dart';
+import 'widgets/quran_single_action_button_widget.dart';
 
 class QuranCreateChallengeScreen extends StatefulWidget {
   final QuranQuestion question;
@@ -131,23 +132,9 @@ class _QuranCreateChallengeScreenState
                 ),
 
                 /// SUBMIT BUTTON
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () => _displayRemovalConfirmationDialog(),
-                          child: isLoading
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                              : const Text("Submit"),
-                        ),
-                      ),
-                    ),
-                  ],
+                QuranSingleActionButtonWidget(
+                  isLoading: isLoading,
+                  onPressed: () => _displayRemovalConfirmationDialog(),
                 ),
               ],
             ),
