@@ -78,6 +78,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                 icon: Icons.tag,
                 destination: QuranViewTagsScreen(user: userParam),
               ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'My Submissions',
+                icon: Icons.assignment_outlined,
+                destination: QuranViewTagsScreen(user: userParam),
+              ),
               // TODO: Search in menu disabled, enable when fixed - Logged IN
               // QuranNavDrawerRowWidget(
               //   context: context,

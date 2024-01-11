@@ -21,7 +21,7 @@ class QuranHomeScreen extends StatefulWidget {
 
 class _QuranHomeScreenState extends State<QuranHomeScreen> {
   QuranHomeScreenBottomTabsEnum _selectedBottomTab =
-      QuranHomeScreenBottomTabsEnum.challenge;
+      QuranHomeScreenBottomTabsEnum.reader;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,8 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
                 _selectedBottomTab == QuranHomeScreenBottomTabsEnum.reader
                     ? 0
                     : 1,
-            selectedItemColor: Colors.primaries.first,
+            selectedItemColor: Colors.blueGrey,
+            unselectedItemColor: Colors.black38,
             onTap: (value) => setState(() {
               if (value == 0) {
                 _selectedBottomTab = QuranHomeScreenBottomTabsEnum.reader;
@@ -75,12 +76,12 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
             }),
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Reader',
+                icon: Icon(Icons.menu_book_rounded),
+                label: 'Read',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.calculate),
-                label: 'Challenges',
+                icon: Icon(Icons.assignment_outlined),
+                label: 'Challenge',
               ),
             ],
           ),
