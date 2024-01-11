@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:quran_ayat/features/auth/domain/auth_factory.dart';
-import 'package:quran_ayat/features/challenge/domain/challenge_manager.dart';
-import 'package:quran_ayat/features/challenge/domain/enums/quran_answer_status_enum.dart';
-import 'package:quran_ayat/features/challenge/domain/models/quran_answer.dart';
-import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
-import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
-import 'package:quran_ayat/features/challenge/presentation/quran_answer_submission_confirmation_screen.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../../../utils/dialog_utils.dart';
+import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/data/surah_index.dart';
+import '../domain/challenge_manager.dart';
+import '../domain/enums/quran_answer_status_enum.dart';
+import '../domain/models/quran_answer.dart';
+import '../domain/models/quran_question.dart';
+import '../domain/redux/actions/actions.dart';
+import 'quran_answer_submission_confirmation_screen.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
 import 'widgets/create/quran_note_entry_textfield_widget.dart';
@@ -39,7 +39,6 @@ class _QuranCreateChallengeScreenState
   final TextEditingController _notesController = TextEditingController();
   NQSurahTitle currentSurahDetails = NQSurahTitle.defaultValue();
   SurahIndex? currentIndex;
-  String note = "";
   bool isLoading = false;
 
   @override
@@ -126,13 +125,15 @@ class _QuranCreateChallengeScreenState
                 QuranSingleActionButtonWidget(
                   buttonText: "Submit",
                   isLoading: isLoading,
-                  onPressed: () => DialogUtils.confirmationDialog(
-                    context,
-                    'Submit answer?',
-                    "Are you sure that you want to submit the answer?",
-                    'Submit',
-                    () => _onSubmitAnswerTapped(),
-                  ),
+                  onPressed: () => _isValidForm()
+                      ? DialogUtils.confirmationDialog(
+                          context,
+                          'Submit answer?',
+                          "Are you sure that you want to submit the answer?",
+                          'Submit',
+                          () => _onSubmitAnswerTapped(),
+                        )
+                      : null,
                 ),
               ],
             ),
@@ -142,7 +143,8 @@ class _QuranCreateChallengeScreenState
     );
   }
 
-  void _onSubmitAnswerTapped() {
+  /// Validation
+  bool _isValidForm() {
     /// validate
     if (currentIndex == null) {
       QuranUtils.showMessage(
@@ -150,7 +152,7 @@ class _QuranCreateChallengeScreenState
         "Please select an aya",
       );
 
-      return;
+      return false;
     }
 
     if (_notesController.text.isEmpty) {
@@ -159,17 +161,24 @@ class _QuranCreateChallengeScreenState
         "Please enter a note",
       );
 
-      return;
+      return false;
     }
 
     if (isLoading) {
-      return;
+      return false;
     }
 
+    return true;
+  }
+
+  /// ACTION
+  void _onSubmitAnswerTapped() {
     /// proceed to submission
     setState(() {
       isLoading = true;
     });
+
+    /// Get User details
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user == null) {
       QuranUtils.showMessage(
@@ -180,6 +189,7 @@ class _QuranCreateChallengeScreenState
       return;
     }
 
+    /// Create answer
     QuranAnswer answer = QuranAnswer(
       id: const Uuid().v4(),
       surah: currentIndex!.sura,
@@ -191,12 +201,14 @@ class _QuranCreateChallengeScreenState
       status: QuranAnswerStatusEnum.submitted,
     );
 
+    /// Submit answer
     QuranChallengeManager.instance.submitAnswer(
       user.uid,
       widget.question.id,
       answer,
     );
 
+    /// Fetch the questions again
     StoreProvider.of<AppState>(context)
         .dispatch(InitializeChallengeScreenAction(questions: const []));
 
@@ -204,8 +216,10 @@ class _QuranCreateChallengeScreenState
       isLoading = true;
     });
 
+    /// Dismiss screen
     Navigator.of(context).pop();
 
+    /// Display confirmation screen
     Navigator.push<void>(
       context,
       MaterialPageRoute(
