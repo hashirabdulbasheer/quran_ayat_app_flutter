@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/create/quran_single_action_button_widget.dart';
+
 class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
   const QuranAnswerSubmissionConfirmationScreen({Key? key}) : super(key: key);
 
@@ -49,19 +51,9 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text("Close"),
-                        ),
-                      ),
-                    ),
-                  ],
+                QuranSingleActionButtonWidget(
+                  buttonText: "Close",
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ],
             ),
