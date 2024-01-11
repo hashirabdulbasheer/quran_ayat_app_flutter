@@ -1,6 +1,7 @@
 import 'package:quran_ayat/features/challenge/domain/models/quran_answer.dart';
 import 'package:quran_ayat/utils/utils.dart';
 
+import '../../../models/qr_user_model.dart';
 import '../../../utils/logger_utils.dart';
 import '../../core/data/quran_data_interface.dart';
 import '../domain/interfaces/quran_challenge_interface.dart';
@@ -59,6 +60,35 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     }
 
     return questions;
+  }
+
+  @override
+  Future<List<QuranQuestion>> fetchQuestionsWithUserSubmission(
+    QuranUser user,
+  ) async {
+    List<QuranQuestion> questions = await fetchQuestions();
+    List<QuranQuestion> questionsWithUserSubmissions = [];
+    for(QuranQuestion question in questions) {
+      List<QuranAnswer> answers = question.answers;
+      if(answers.isNotEmpty) {
+        List<QuranAnswer> userAnswers = [];
+        for(QuranAnswer answer in answers) {
+          if(answer.userId == user.uid) {
+            userAnswers.add(answer);
+          }
+        }
+        // latest on top
+        userAnswers.sort((a,b,) => b.createdOn.compareTo(a.createdOn));
+        question.answers = userAnswers;
+        if(question.answers.isNotEmpty) {
+          questionsWithUserSubmissions.add(question);
+        }
+      }
+    }
+    // latest on top
+    questionsWithUserSubmissions.sort((a,b,) => b.createdOn.compareTo(a.createdOn));
+
+    return questionsWithUserSubmissions;
   }
 
   @override

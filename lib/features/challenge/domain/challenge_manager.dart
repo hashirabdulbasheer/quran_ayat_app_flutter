@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart' as intl;
 
+import '../../../models/qr_user_model.dart';
 import '../../../utils/utils.dart';
 import '../../core/data/quran_firebase_engine.dart';
 import '../data/quran_challenges_impl.dart';
@@ -32,6 +33,15 @@ class QuranChallengeManager {
     }
 
     return await _challengesEngine.fetchQuestions();
+  }
+
+  Future<List<QuranQuestion>> fetchQuestionsWithUserSubmissions(QuranUser user) async {
+    if (await isOffline()) {
+      /// OFFLINE
+      return [];
+    }
+
+    return await _challengesEngine.fetchQuestionsWithUserSubmission(user);
   }
 
   Future<QuranQuestion?> fetchQuestion(int questionId) async {

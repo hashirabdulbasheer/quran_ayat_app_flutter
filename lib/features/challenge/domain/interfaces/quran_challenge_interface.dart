@@ -1,3 +1,4 @@
+import '../../../../models/qr_user_model.dart';
 import '../models/quran_answer.dart';
 import '../models/quran_question.dart';
 
@@ -7,6 +8,8 @@ abstract class QuranChallengesDataSource {
   Future<List<QuranQuestion>> fetchQuestions();
 
   Future<QuranQuestion?> fetchQuestion(int questionId);
+
+  Future<List<QuranQuestion>> fetchQuestionsWithUserSubmission(QuranUser user);
 
   Future<bool> submitAnswer(
     String userId,
