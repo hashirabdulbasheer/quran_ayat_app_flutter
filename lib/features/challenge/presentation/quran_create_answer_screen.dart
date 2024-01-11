@@ -17,6 +17,7 @@ import '../../../models/qr_user_model.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
 import 'widgets/quran_arabic_translation_widget.dart';
+import 'widgets/quran_note_entry_textfield_widget.dart';
 
 class QuranCreateChallengeScreen extends StatefulWidget {
   final QuranQuestion question;
@@ -119,33 +120,10 @@ class _QuranCreateChallengeScreenState
                 ),
 
                 /// NOTES TEXT FIELD
-                const Text(
-                  "Enter notes/reflection on how the verse answers the question",
-                  style: TextStyle(color: Colors.black54),
-                ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-
-
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Container(
-                    padding: const EdgeInsets.all(0),
-                    child: TextField(
-                      controller: _notesController..text = note,
-                      maxLines: 10,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.grey,
-                            width: 0.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                QuranNotesTextFieldWidget(
+                  title:
+                      "Enter notes/reflection on how the verse answers the question",
+                  textEditingController: _notesController,
                 ),
 
                 const SizedBox(
@@ -160,12 +138,11 @@ class _QuranCreateChallengeScreenState
                       child: SizedBox(
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () =>
-                              _displayRemovalConfirmationDialog(),
+                          onPressed: () => _displayRemovalConfirmationDialog(),
                           child: isLoading
                               ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
+                                  color: Colors.white,
+                                )
                               : const Text("Submit"),
                         ),
                       ),
