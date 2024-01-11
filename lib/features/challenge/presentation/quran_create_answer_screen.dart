@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:noble_quran/enums/translations.dart';
-import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:noble_quran/noble_quran.dart';
 import 'package:quran_ayat/features/auth/domain/auth_factory.dart';
 import 'package:quran_ayat/features/challenge/domain/challenge_manager.dart';
 import 'package:quran_ayat/features/challenge/domain/enums/quran_answer_status_enum.dart';
@@ -18,9 +15,8 @@ import 'package:uuid/uuid.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
-import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
-import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
+import 'widgets/quran_arabic_translation_widget.dart';
 
 class QuranCreateChallengeScreen extends StatefulWidget {
   final QuranQuestion question;
@@ -76,10 +72,12 @@ class _QuranCreateChallengeScreenState
                 const SizedBox(
                   height: 10,
                 ),
+
                 const Text(
                   "Select a verse that could answer the question",
                   style: TextStyle(color: Colors.black54),
                 ),
+
                 const SizedBox(
                   height: 5,
                 ),
@@ -103,113 +101,77 @@ class _QuranCreateChallengeScreenState
                   currentlySelectedSurah: currentSurahDetails,
                   currentIndex: currentIndex ?? SurahIndex.defaultIndex,
                 ),
+
                 const SizedBox(
                   height: 10,
                 ),
 
                 /// REST OF CONTENT
-                currentIndex != null
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          /// ARABIC + TRANSLATION
-                          FutureBuilder<List<NQSurah>>(
-                            future: Future.wait([
-                              NobleQuran.getSurahArabic(
-                                currentIndex!.sura,
-                              ),
-                              NobleQuran.getTranslationString(
-                                currentIndex!.sura,
-                                NQTranslation.wahiduddinkhan,
-                              ),
-                            ]),
-                            builder: (
-                              BuildContext context,
-                              AsyncSnapshot<List<NQSurah>> snapshot,
-                            ) {
-                              final surah = snapshot.data;
-                              if (surah == null || surah.length != 2) {
-                                return const SizedBox();
-                              }
-                              NQSurah arabic = surah.first;
-                              NQSurah translation = surah[1];
 
-                              return Column(
-                                children: [
-                                  /// ARABIC AYA
-                                  QuranFullAyatRowWidget(
-                                    text: arabic.aya[currentIndex!.aya].text,
-                                  ),
+                /// VERSE DISPLAY
+                if (currentIndex != null)
+                  QuranArabicTranslationWidget(
+                    index: currentIndex ?? SurahIndex.defaultIndex,
+                  ),
 
-                                  /// TRANSLATION OF AYA
-                                  QuranAyatDisplayTranslationWidget(
-                                    translation: translation
-                                            .aya[currentIndex!.aya].text ??
-                                        "",
-                                    translationType:
-                                        NQTranslation.wahiduddinkhan,
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                const SizedBox(
+                  height: 20,
+                ),
 
-                          /// NOTES TEXT FIELD
-                          const Text(
-                            "Enter notes/reflection on how the verse answers the question",
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Directionality(
-                            textDirection: TextDirection.ltr,
-                            child: Container(
-                              padding: const EdgeInsets.all(0),
-                              child: TextField(
-                                controller: _notesController..text = note,
-                                maxLines: 10,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.grey,
-                                      width: 0.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 50,
-                          ),
+                /// NOTES TEXT FIELD
+                const Text(
+                  "Enter notes/reflection on how the verse answers the question",
+                  style: TextStyle(color: Colors.black54),
+                ),
 
-                          /// SUBMIT BUTTON
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50,
-                                  child: ElevatedButton(
-                                    onPressed: () =>
-                                        _displayRemovalConfirmationDialog(),
-                                    child: isLoading
-                                        ? const CircularProgressIndicator(
-                                            color: Colors.white,
-                                          )
-                                        : const Text("Submit"),
-                                  ),
-                                ),
-                              ),
-                            ],
+                const SizedBox(
+                  height: 10,
+                ),
+
+
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Container(
+                    padding: const EdgeInsets.all(0),
+                    child: TextField(
+                      controller: _notesController..text = note,
+                      maxLines: 10,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.grey,
+                            width: 0.0,
                           ),
-                        ],
-                      )
-                    : Container(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 50,
+                ),
+
+                /// SUBMIT BUTTON
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () =>
+                              _displayRemovalConfirmationDialog(),
+                          child: isLoading
+                              ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                              : const Text("Submit"),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -332,5 +294,4 @@ class _QuranCreateChallengeScreenState
       },
     );
   }
-
 }
