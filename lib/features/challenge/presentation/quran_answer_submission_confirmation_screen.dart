@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'widgets/create/quran_single_action_button_widget.dart';
 
 class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
-  const QuranAnswerSubmissionConfirmationScreen({Key? key}) : super(key: key);
+  final String answerId;
+
+  const QuranAnswerSubmissionConfirmationScreen({
+    Key? key,
+    required this.answerId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +42,12 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                 const SizedBox(
                   height: 30,
                 ),
-                const Center(
+                Center(
                   child: Directionality(
                     textDirection: TextDirection.ltr,
                     child: Text(
-                      "Thank You.\n\nYour answer has been submitted successfully for review.\n\nIt will be published upon approval.",
-                      style: TextStyle(
+                      "Thank You.\n\nRef: $answerId\n\n\nYour answer has been submitted successfully for review.\n\nIt will be published upon approval.",
+                      style: const TextStyle(
                         fontSize: 20,
                       ),
                     ),

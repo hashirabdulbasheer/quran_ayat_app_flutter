@@ -190,8 +190,9 @@ class _QuranCreateChallengeScreenState
     }
 
     /// Create answer
+    String answerId = const Uuid().v4();
     QuranAnswer answer = QuranAnswer(
-      id: const Uuid().v4(),
+      id: answerId,
       surah: currentIndex!.sura,
       aya: currentIndex!.aya,
       userId: user.uid,
@@ -223,7 +224,9 @@ class _QuranCreateChallengeScreenState
     Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (context) => const QuranAnswerSubmissionConfirmationScreen(),
+        builder: (context) => QuranAnswerSubmissionConfirmationScreen(
+          answerId: answerId,
+        ),
       ),
     ).then((value) {});
 
