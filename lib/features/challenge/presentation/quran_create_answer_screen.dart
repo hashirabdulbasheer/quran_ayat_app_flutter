@@ -14,6 +14,7 @@ import 'package:redux/redux.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../models/qr_user_model.dart';
+import '../../../utils/dialog_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
@@ -125,7 +126,13 @@ class _QuranCreateChallengeScreenState
                 QuranSingleActionButtonWidget(
                   buttonText: "Submit",
                   isLoading: isLoading,
-                  onPressed: () => _displayRemovalConfirmationDialog(),
+                  onPressed: () => DialogUtils.confirmationDialog(
+                    context,
+                    'Submit answer?',
+                    "Are you sure that you want to submit the answer?",
+                    'Submit',
+                    () => _onSubmitAnswerTapped(),
+                  ),
                 ),
               ],
             ),
@@ -210,43 +217,5 @@ class _QuranCreateChallengeScreenState
     //   context,
     //   "Submitted successfully for review.",
     // );
-  }
-
-  Future<void> _displayRemovalConfirmationDialog() async {
-    return showDialog(
-      context: context,
-      builder: (
-        context,
-      ) {
-        return AlertDialog(
-          title: const Text(
-            'Submit answer?',
-          ),
-          content: const Text(
-            "Are you sure that you want to submit the answer?",
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            MaterialButton(
-              color: Colors.blueGrey,
-              textColor: Colors.white,
-              child: const Text(
-                'Submit',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () => {
-                Navigator.of(context).pop(),
-                _onSubmitAnswerTapped(),
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }
