@@ -3,9 +3,9 @@ import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
 
-import '../../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
-import '../../../ayats/presentation/widgets/full_ayat_row_widget.dart';
-import '../../../newAyat/data/surah_index.dart';
+import '../../../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
+import '../../../../ayats/presentation/widgets/full_ayat_row_widget.dart';
+import '../../../../newAyat/data/surah_index.dart';
 
 class QuranArabicTranslationWidget extends StatelessWidget {
   final SurahIndex index;

@@ -16,9 +16,9 @@ import 'package:uuid/uuid.dart';
 import '../../../models/qr_user_model.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
-import 'widgets/quran_arabic_translation_widget.dart';
-import 'widgets/quran_note_entry_textfield_widget.dart';
-import 'widgets/quran_single_action_button_widget.dart';
+import 'widgets/create/quran_arabic_translation_widget.dart';
+import 'widgets/create/quran_note_entry_textfield_widget.dart';
+import 'widgets/create/quran_single_action_button_widget.dart';
 
 class QuranCreateChallengeScreen extends StatefulWidget {
   final QuranQuestion question;
