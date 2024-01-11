@@ -14,9 +14,9 @@ import 'package:redux/redux.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../models/qr_user_model.dart';
-import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
+import 'widgets/create/quran_ayat_selection_widget.dart';
 import 'widgets/create/quran_note_entry_textfield_widget.dart';
 import 'widgets/create/quran_single_action_button_widget.dart';
 
@@ -75,40 +75,30 @@ class _QuranCreateChallengeScreenState
                   height: 10,
                 ),
 
-                const Text(
-                  "Select a verse that could answer the question",
-                  style: TextStyle(color: Colors.black54),
-                ),
-
-                const SizedBox(
-                  height: 5,
-                ),
-
-                /// HEADER - AYA SELECTION
-                QuranAyatHeaderWidget(
-                  surahTitles: store.state.reader.surahTitles,
-                  onSurahSelected: (surah) => setState(() => {
+                /// AYA SELECTION
+                QuranAyatSelectionWidget(
+                  store: store,
+                  title: "Select a verse that could answer the question",
+                  currentIndex: currentIndex ?? SurahIndex.defaultIndex,
+                  currentSurahDetails: currentSurahDetails,
+                  onSuraSelected: (surah) => setState(() => {
                         currentSurahDetails = surah,
                         currentIndex = SurahIndex(
                           surah.number - 1,
                           0,
                         ),
                       }),
-                  onAyaNumberSelected: (aya) => setState(
+                  onAyaSelected: (aya) => setState(
                     () => currentIndex = SurahIndex(
                       currentSurahDetails.number - 1,
                       aya,
                     ),
                   ),
-                  currentlySelectedSurah: currentSurahDetails,
-                  currentIndex: currentIndex ?? SurahIndex.defaultIndex,
                 ),
 
                 const SizedBox(
                   height: 10,
                 ),
-
-                /// REST OF CONTENT
 
                 /// VERSE DISPLAY
                 if (currentIndex != null)
