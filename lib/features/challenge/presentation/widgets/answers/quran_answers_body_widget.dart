@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../models/qr_user_model.dart';
-import '../../domain/models/quran_answer.dart';
-import '../../domain/models/quran_question.dart';
+import '../../../../../models/qr_user_model.dart';
+import '../../../domain/models/quran_answer.dart';
+import '../../../domain/models/quran_question.dart';
 import 'quran_answers_list_widget.dart';
 
 class QuranAnswerBodyWidget extends StatefulWidget {

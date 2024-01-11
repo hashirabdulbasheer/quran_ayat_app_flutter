@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/challenge/domain/challenge_manager.dart';
 
-import '../../../../models/qr_user_model.dart';
-import '../../../../utils/utils.dart';
-import '../../../notes/domain/notes_manager.dart';
-import '../../domain/models/quran_answer.dart';
+import '../../../../../models/qr_user_model.dart';
+import '../../../../../utils/utils.dart';
+import '../../../domain/challenge_manager.dart';
+import '../../../domain/models/quran_answer.dart';
+
 
 class QuranAnswersListWidget extends StatelessWidget {
   final QuranUser? user;

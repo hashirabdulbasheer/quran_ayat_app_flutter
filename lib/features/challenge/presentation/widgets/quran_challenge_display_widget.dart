@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
 import 'package:redux/redux.dart';
 
-import '../../core/domain/app_state/app_state.dart';
+import '../../../core/domain/app_state/app_state.dart';
 import 'answers/quran_answers_widget.dart';
 
 class QuranChallengeDisplayWidget extends StatelessWidget {
