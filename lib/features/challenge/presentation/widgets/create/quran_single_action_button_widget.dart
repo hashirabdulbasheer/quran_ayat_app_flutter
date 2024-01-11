@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class QuranSingleActionButtonWidget extends StatelessWidget {
   final bool? isLoading;
+  final String buttonText;
   final Function onPressed;
 
   const QuranSingleActionButtonWidget({
     Key? key,
+    required this.buttonText,
     this.isLoading = false,
     required this.onPressed,
   }) : super(key: key);
@@ -24,7 +26,7 @@ class QuranSingleActionButtonWidget extends StatelessWidget {
                   ? const CircularProgressIndicator(
                       color: Colors.white,
                     )
-                  : const Text("Submit"),
+                  : Text(buttonText),
             ),
           ),
         ),

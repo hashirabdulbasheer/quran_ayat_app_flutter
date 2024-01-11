@@ -133,6 +133,7 @@ class _QuranCreateChallengeScreenState
 
                 /// SUBMIT BUTTON
                 QuranSingleActionButtonWidget(
+                  buttonText: "Submit",
                   isLoading: isLoading,
                   onPressed: () => _displayRemovalConfirmationDialog(),
                 ),
