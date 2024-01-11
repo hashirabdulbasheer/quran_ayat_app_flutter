@@ -20,6 +20,7 @@ void _initializeMiddleware(
 ) async {
   List<QuranQuestion> questions =
       await QuranChallengeManager.instance.fetchQuestions();
+  questions.sort((a,b,) => b.createdOn.compareTo(a.createdOn));
   action = InitializeChallengeScreenAction(questions: questions);
   next(action);
 }
