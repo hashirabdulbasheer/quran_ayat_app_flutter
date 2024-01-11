@@ -1,4 +1,4 @@
-enum QuranAnswerStatusEnum { submitted, approved, rejected }
+enum QuranAnswerStatusEnum { submitted, approved, rejected, undefined }
 
 extension QuranAnswerStatusEnumToString on QuranAnswerStatusEnum {
   String rawString() {
@@ -9,6 +9,9 @@ extension QuranAnswerStatusEnumToString on QuranAnswerStatusEnum {
         return "approved";
       case QuranAnswerStatusEnum.rejected:
         return "rejected";
+
+      default:
+        return "undefined";
     }
   }
 }

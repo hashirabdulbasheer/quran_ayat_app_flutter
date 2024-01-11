@@ -12,6 +12,7 @@ import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../auth/presentation/quran_profile_screen.dart';
 import '../../bookmark/domain/bookmarks_manager.dart';
+import '../../challenge/presentation/my_challenge_submissions_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/domain/redux/actions/actions.dart';
 import '../../notes/presentation/quran_view_notes_screen.dart';
@@ -80,9 +81,9 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               ),
               QuranNavDrawerRowWidget(
                 context: context,
-                title: 'My Submissions',
+                title: 'Submissions',
                 icon: Icons.assignment_outlined,
-                destination: QuranViewTagsScreen(user: userParam),
+                destination: const MyChallengeSubmissionsScreen(),
               ),
               // TODO: Search in menu disabled, enable when fixed - Logged IN
               // QuranNavDrawerRowWidget(

@@ -1,4 +1,4 @@
-enum QuranQuestionStatusEnum { open, close }
+enum QuranQuestionStatusEnum { open, close, undefined }
 
 extension QuranQuestionStatusEnumToString on QuranQuestionStatusEnum {
   String rawString() {
@@ -7,6 +7,9 @@ extension QuranQuestionStatusEnumToString on QuranQuestionStatusEnum {
         return "open";
       case QuranQuestionStatusEnum.close:
         return "close";
+
+      default:
+        return "undefined";
     }
   }
 }

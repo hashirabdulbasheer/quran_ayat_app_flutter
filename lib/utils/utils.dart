@@ -97,7 +97,7 @@ class QuranUtils {
       return QuranQuestionStatusEnum.close;
     }
 
-    return QuranQuestionStatusEnum.open;
+    return QuranQuestionStatusEnum.undefined;
   }
 
   static QuranAnswerStatusEnum answerStatusFromString(String value) {
@@ -109,7 +109,7 @@ class QuranUtils {
       return QuranAnswerStatusEnum.rejected;
     }
 
-    return QuranAnswerStatusEnum.submitted;
+    return QuranAnswerStatusEnum.undefined;
   }
 
   static bool isEmail(String e) {

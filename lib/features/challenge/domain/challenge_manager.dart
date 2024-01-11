@@ -118,18 +118,18 @@ class QuranChallengeManager {
     if (millis.day == now.day &&
         millis.month == now.month &&
         millis.year == now.year) {
-      return intl.DateFormat('jm').format(now);
+      return intl.DateFormat('jm').format(millis);
     }
     DateTime yesterday = now.subtract(const Duration(days: 1));
     if (millis.day == yesterday.day &&
         millis.month == yesterday.month &&
         millis.year == yesterday.year) {
-      return 'Yesterday, ${intl.DateFormat('jm').format(now)}';
+      return 'Yesterday, ${intl.DateFormat('jm').format(millis)}';
     }
     if (now.difference(millis).inDays < 4) {
       String weekday = intl.DateFormat('EEEE').format(millis);
 
-      return '$weekday, ${intl.DateFormat('jm').format(now)}';
+      return '$weekday, ${intl.DateFormat('jm').format(millis)}';
     }
     var d24 = intl.DateFormat('dd/MM/yyyy HH:mm').format(millis);
 

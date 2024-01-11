@@ -75,6 +75,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
         for(QuranAnswer answer in answers) {
           if(answer.userId == user.uid) {
             userAnswers.add(answer);
+            print(answer.createdOn);
           }
         }
         // latest on top
