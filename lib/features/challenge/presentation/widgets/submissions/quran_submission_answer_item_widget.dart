@@ -50,27 +50,38 @@ class QuranSubmissionAnswerItemWidget extends StatelessWidget {
 
           /// Status
           if (formattedStatus.isNotEmpty)
-            Text(
-              "Status: $formattedStatus",
-              style: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: _colorForStatus(answer.status),
-                fontSize: 12,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  formattedStatus,
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    color: _colorForStatus(answer.status),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
             ),
+
           if (formattedStatus.isNotEmpty)
             const SizedBox(
-              height: 10,
+              height: 5,
             ),
 
           /// Submitted time
-          Text(
-            "Submitted ${QuranChallengeManager.instance.formattedDate(answer.createdOn)}",
-            style: const TextStyle(
-              fontWeight: FontWeight.normal,
-              color: Colors.black38,
-              fontSize: 12,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "Submitted ${QuranChallengeManager.instance.formattedDate(answer.createdOn)}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black38,
+                  fontSize: 12,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -90,14 +101,15 @@ class QuranSubmissionAnswerItemWidget extends StatelessWidget {
   }
 
   Color _colorForStatus(QuranAnswerStatusEnum status) {
-    if (status == QuranAnswerStatusEnum.submitted) {
-      return Colors.orange;
-    } else if (status == QuranAnswerStatusEnum.approved) {
-      return Colors.green;
-    } else if (status == QuranAnswerStatusEnum.rejected) {
-      return Colors.red;
-    } else {
-      return Colors.black;
-    }
+    // if (status == QuranAnswerStatusEnum.submitted) {
+    //   return Colors.orange;
+    // } else if (status == QuranAnswerStatusEnum.approved) {
+    //   return Colors.green;
+    // } else if (status == QuranAnswerStatusEnum.rejected) {
+    //   return Colors.red;
+    // } else {
+    //   return Colors.black;
+    // }
+    return Colors.black;
   }
 }
