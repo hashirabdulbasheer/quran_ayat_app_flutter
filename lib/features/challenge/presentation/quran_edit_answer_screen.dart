@@ -122,7 +122,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
                 ),
 
                 const SizedBox(
-                  height: 50,
+                  height: 10,
                 ),
 
                 /// SUBMIT BUTTON
@@ -170,7 +170,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
     if (currentIndex == null) {
       QuranUtils.showMessage(
         context,
-        "Please select an aya",
+        "Please select an aya that answers the question",
       );
 
       return false;
@@ -179,7 +179,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
     if (_notesController.text.isEmpty) {
       QuranUtils.showMessage(
         context,
-        "Please enter a note",
+        "Please enter a note about your reflection on the aya",
       );
 
       return false;
