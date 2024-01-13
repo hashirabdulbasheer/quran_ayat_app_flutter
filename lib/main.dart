@@ -12,6 +12,7 @@ import 'main_common.dart';
 import 'misc/configs/remote_config_manager.dart';
 import 'misc/enums/quran_feature_flag_enum.dart';
 import 'misc/url/url_strategy.dart';
+import 'models/qr_user_model.dart';
 
 // TODO: Update before release
 const String appVersion = "v2.8.8";
@@ -23,6 +24,15 @@ void main() async {
   FirebaseAnalytics.instance.logAppOpen();
   await RemoteConfigManager.instance.init();
 
+  QuranUser? user = QuranAuthFactory.engine.getUser();
+  Widget homeScreen = const QuranNewAyatScreen();
+  // enabling new challenges for logged in users only - for beta
+  if (RemoteConfigManager.instance
+          .get(RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled) &&
+      user != null) {
+    homeScreen = const QuranHomeScreen();
+  }
+
   runApp(MyApp(
     homeScreen: StoreBuilder<AppState>(
       rebuildOnChange: false,
@@ -31,10 +41,7 @@ void main() async {
         BuildContext context,
         Store<AppState> store,
       ) =>
-          RemoteConfigManager.instance
-                  .get(RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled)
-              ? const QuranHomeScreen()
-              : const QuranNewAyatScreen(),
+          homeScreen,
     ),
   ));
 }
