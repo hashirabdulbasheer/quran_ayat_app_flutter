@@ -1,10 +1,10 @@
-import 'package:quran_ayat/features/challenge/domain/models/quran_answer.dart';
 import 'package:quran_ayat/utils/utils.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../../../utils/logger_utils.dart';
 import '../../core/data/quran_data_interface.dart';
 import '../domain/interfaces/quran_challenge_interface.dart';
+import '../domain/models/quran_answer.dart';
 import '../domain/models/quran_question.dart';
 
 class QuranChallengesEngine implements QuranChallengesDataSource {
@@ -187,10 +187,15 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     try {
       // validate that answer id already exists
       // if answer not found then this will throw error
-      question.answers.firstWhere((element) => element.id == answer.id);
+      int answerIndex = question.answers.indexWhere((element) => element.id == answer.id);
+      if(answerIndex < 0) {
+        /// not found
 
+        return false;
+      }
+      /// found
       await dataSource.update(
-        "questions/$questionId/answers/${answer.id}",
+        "questions/$questionId/answers/$answerIndex",
         answer.toMap(),
       );
 
