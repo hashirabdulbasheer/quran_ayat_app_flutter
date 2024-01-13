@@ -14,7 +14,6 @@ import '../domain/challenge_manager.dart';
 import '../domain/enums/quran_answer_status_enum.dart';
 import '../domain/models/quran_answer.dart';
 import '../domain/redux/actions/actions.dart';
-import 'quran_answer_submission_confirmation_screen.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
 import 'widgets/create/quran_note_entry_textfield_widget.dart';
@@ -241,17 +240,13 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
         }),
 
         /// Dismiss screen
-        Navigator.of(context).pop(),
+        Navigator.of(context).pop(true),
 
-        /// Display confirmation screen
-        Navigator.push<void>(
+        /// Display confirmation
+        QuranUtils.showMessage(
           context,
-          MaterialPageRoute(
-            builder: (context) => QuranAnswerSubmissionConfirmationScreen(
-              answerId: answer.id,
-            ),
-          ),
-        ).then((value) {}),
+          "Updated successfully. Submitted for review.",
+        ),
       },
     );
   }
