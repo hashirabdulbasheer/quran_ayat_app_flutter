@@ -36,7 +36,8 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
   final TextEditingController _notesController = TextEditingController();
   NQSurahTitle currentSurahDetails = NQSurahTitle.defaultValue();
   SurahIndex? currentIndex;
-  bool isLoading = false;
+  bool isDeleteLoading = false;
+  bool isUpdateLoading = false;
 
   @override
   void initState() {
@@ -128,6 +129,8 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
                 QuranUpdateControlsWidget(
                   onDelete: () => _onDeleteTapped(),
                   onUpdate: () => _onUpdateTapped(),
+                  isDeleteLoading: isDeleteLoading,
+                  isUpdateLoading: isUpdateLoading,
                 ),
               ],
             ),
@@ -182,7 +185,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
       return false;
     }
 
-    if (isLoading) {
+    if (isDeleteLoading || isUpdateLoading) {
       return false;
     }
 
@@ -193,7 +196,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
   void _updateAnswer() {
     /// proceed to submission
     setState(() {
-      isLoading = true;
+      isUpdateLoading = true;
     });
 
     /// Get User details
@@ -216,10 +219,6 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
     answer.aya = currentIndex!.aya;
     answer.createdOn = DateTime.now().millisecondsSinceEpoch;
 
-    setState(() {
-      isLoading = true;
-    });
-
     /// Submit answer
     QuranChallengeManager.instance.editAnswer(
       user.uid,
@@ -236,7 +235,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
             .dispatch(InitializeChallengeScreenAction(questions: const [])),
 
         setState(() {
-          isLoading = false;
+          isUpdateLoading = false;
         }),
 
         /// Dismiss screen
@@ -254,7 +253,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
   void _deleteAnswer() {
     /// proceed to submission
     setState(() {
-      isLoading = true;
+      isDeleteLoading = true;
     });
 
     /// Get User details
@@ -267,10 +266,6 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
 
       return;
     }
-
-    setState(() {
-      isLoading = true;
-    });
 
     /// Delete
     QuranChallengeManager.instance.deleteAnswer(
@@ -288,7 +283,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
             .dispatch(InitializeChallengeScreenAction(questions: const [])),
 
         setState(() {
-          isLoading = false;
+          isDeleteLoading = false;
         }),
 
         /// Dismiss screen

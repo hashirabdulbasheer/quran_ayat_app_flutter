@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class QuranUpdateControlsWidget extends StatelessWidget {
   final Function onUpdate;
   final Function onDelete;
+  final bool? isDeleteLoading;
+  final bool? isUpdateLoading;
 
   const QuranUpdateControlsWidget({
     Key? key,
     required this.onUpdate,
     required this.onDelete,
+    this.isDeleteLoading = false,
+    this.isUpdateLoading = false,
   }) : super(key: key);
 
   @override
@@ -21,7 +25,11 @@ class QuranUpdateControlsWidget extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () => onUpdate(),
-                child: const Text("Update"),
+                child: isUpdateLoading == true
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Text("Update"),
               ),
             ),
           ),
@@ -34,7 +42,11 @@ class QuranUpdateControlsWidget extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () => onDelete(),
-                child: const Text("Delete"),
+                child: isDeleteLoading == true
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Text("Delete"),
               ),
             ),
           ),
