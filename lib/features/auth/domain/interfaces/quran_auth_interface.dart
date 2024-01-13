@@ -29,4 +29,6 @@ abstract class QuranAuthInterface {
   void registerAuthChangeListener(Function listener);
 
   void unregisterAuthChangeListener(Function listener);
+
+  Future<bool> isAdmin(String userId);
 }

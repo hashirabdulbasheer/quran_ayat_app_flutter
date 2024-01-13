@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
 
 import '../../../firebase_options.dart';
 import '../../../models/qr_response_model.dart';
@@ -207,18 +208,22 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     }
   }
 
+  @override
   Future<bool> isAdmin(
-    String userEmail,
+    String userId,
   ) async {
     if (dataSource == null) {
       return false;
     }
-
-    var resultList = await dataSource?.fetch(
-      "users/$userEmail",
-    );
-    if (resultList != null) {
-      return true;
+    try {
+      var resultList = await QuranFirebaseEngine.instance.fetch(
+        "users/$userId",
+      );
+      if (resultList != null) {
+        return true;
+      }
+    } catch (error) {
+      QuranLogger.logE(error);
     }
 
     return false;
