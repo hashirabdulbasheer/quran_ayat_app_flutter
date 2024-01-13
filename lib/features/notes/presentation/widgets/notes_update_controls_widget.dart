@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/presentation/widgets/quran_action_progress_widget.dart';
+
 class QuranUpdateControlsWidget extends StatelessWidget {
   final Function onUpdate;
   final Function onDelete;
@@ -26,9 +28,7 @@ class QuranUpdateControlsWidget extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () => onUpdate(),
                 child: isUpdateLoading == true
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
+                    ? const QuranActionProgressIndicatorWidget()
                     : const Text("Update"),
               ),
             ),
@@ -43,9 +43,7 @@ class QuranUpdateControlsWidget extends StatelessWidget {
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () => onDelete(),
                 child: isDeleteLoading == true
-                    ? const CircularProgressIndicator(
-                        color: Colors.white,
-                      )
+                    ? const QuranActionProgressIndicatorWidget()
                     : const Text("Delete"),
               ),
             ),

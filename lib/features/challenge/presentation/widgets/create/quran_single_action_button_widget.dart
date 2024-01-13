@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/presentation/widgets/quran_action_progress_widget.dart';
+
 class QuranSingleActionButtonWidget extends StatelessWidget {
   final bool? isLoading;
   final String buttonText;
@@ -23,9 +25,7 @@ class QuranSingleActionButtonWidget extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => onPressed(),
               child: isLoading == true
-                  ? const CircularProgressIndicator(
-                      color: Colors.white,
-                    )
+                  ? const QuranActionProgressIndicatorWidget()
                   : Text(buttonText),
             ),
           ),
