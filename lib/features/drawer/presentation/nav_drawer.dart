@@ -40,7 +40,6 @@ class QuranNavDrawer extends StatefulWidget {
 }
 
 class _QuranNavDrawerState extends State<QuranNavDrawer> {
-
   @override
   Widget build(BuildContext context) {
     Store<AppState> store = StoreProvider.of<AppState>(context);
@@ -99,6 +98,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               //   icon: Icons.search_rounded,
               //   destination: const QuranSearchScreen(),
               // ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Mobile Apps',
+                icon: Icons.install_mobile,
+                onSelected: () => _goToMobileApps(),
+              ),
               QuranNavDrawerRowWidget(
                 context: context,
                 title: 'Settings',
@@ -170,6 +175,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
             ),
             QuranNavDrawerRowWidget(
               context: context,
+              title: 'Mobile Apps',
+              icon: Icons.install_mobile,
+              onSelected: () => _goToMobileApps(),
+            ),
+            QuranNavDrawerRowWidget(
+              context: context,
               title: 'Settings',
               icon: Icons.settings,
               destination: const QuranSettingsScreen(),
@@ -223,5 +234,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
 
   void _goToBlog() {
     _launchUrl(Uri.parse(QuranAppConfig.blogUrl));
+  }
+
+  void _goToMobileApps() {
+    QuranUtils.showMessage(
+      context,
+      "Coming soon...",
+    );
   }
 }
