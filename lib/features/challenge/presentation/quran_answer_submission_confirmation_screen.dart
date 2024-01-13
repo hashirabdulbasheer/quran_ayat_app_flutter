@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/challenge/presentation/my_challenge_submissions_screen.dart';
 
 import 'widgets/create/quran_single_action_button_widget.dart';
 
@@ -54,7 +55,9 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 10,),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         Text(
                           "Ref: $answerId",
                           style: const TextStyle(
@@ -62,7 +65,9 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                             color: Colors.black45,
                           ),
                         ),
-                        const SizedBox(height: 30,),
+                        const SizedBox(
+                          height: 30,
+                        ),
                         const Text(
                           "Your answer has been submitted successfully for review.\n\nIt will be published upon approval.",
                           style: TextStyle(
@@ -78,7 +83,18 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                 ),
                 QuranSingleActionButtonWidget(
                   buttonText: "Close",
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => {
+                    /// dismiss confirmation screen
+                    Navigator.of(context).pop(),
+                    /// navigate to my submissions list screen
+                    Navigator.push<void>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const QuranMyChallengeSubmissionsScreen(),
+                      ),
+                    ).then((value) {}),
+                  },
                 ),
               ],
             ),

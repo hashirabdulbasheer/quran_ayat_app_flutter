@@ -83,7 +83,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                 context: context,
                 title: 'Submissions',
                 icon: Icons.assignment_outlined,
-                destination: const MyChallengeSubmissionsScreen(),
+                destination: const QuranMyChallengeSubmissionsScreen(),
               ),
               // TODO: Search in menu disabled, enable when fixed - Logged IN
               // QuranNavDrawerRowWidget(

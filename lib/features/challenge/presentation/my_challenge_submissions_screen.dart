@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/models/qr_user_model.dart';
 import 'package:redux/redux.dart';
 
@@ -8,10 +7,11 @@ import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/challenge_manager.dart';
 import '../domain/models/quran_question.dart';
+import '../domain/redux/actions/actions.dart';
 import 'widgets/submissions/quran_submission_question_item_widget.dart';
 
-class MyChallengeSubmissionsScreen extends StatelessWidget {
-  const MyChallengeSubmissionsScreen({Key? key}) : super(key: key);
+class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
+  const QuranMyChallengeSubmissionsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
