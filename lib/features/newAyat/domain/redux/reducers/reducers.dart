@@ -162,6 +162,7 @@ ReaderScreenState _nextAyaReducer(
   if (nextAyat <= totalVerses) {
     return state.copyWith(
       currentIndex: state.currentIndex.next(),
+      isHeaderVisible: false,
     );
   }
 
@@ -175,6 +176,7 @@ ReaderScreenState _previousAyaReducer(
 ) {
   return state.copyWith(
     currentIndex: state.currentIndex.previous(),
+    isHeaderVisible: false,
   );
 }
 

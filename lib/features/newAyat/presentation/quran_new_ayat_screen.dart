@@ -179,7 +179,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     Store<AppState> store,
   ) {
     store.dispatch(NextAyaAction());
-    _closeHeader();
   }
 
   /// display previous aya
@@ -187,7 +186,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     Store<AppState> store,
   ) {
     store.dispatch(PreviousAyaAction());
-    _closeHeader();
   }
 
   ///
@@ -222,10 +220,5 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     }
 
     return Theme.of(context).primaryColor;
-  }
-
-  void _closeHeader() {
-    _isHeaderVisible = false;
-    setState(() {});
   }
 }
