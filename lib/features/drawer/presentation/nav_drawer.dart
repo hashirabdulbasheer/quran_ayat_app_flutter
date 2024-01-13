@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+import 'package:quran_ayat/misc/configs/app_config.dart';
 import 'package:quran_ayat/misc/enums/quran_app_mode_enum.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
@@ -85,6 +86,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                 icon: Icons.assignment_outlined,
                 destination: const QuranMyChallengeSubmissionsScreen(),
               ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Blog',
+                icon: Icons.comment_outlined,
+                onSelected: () => _goToBlog(),
+              ),
               // TODO: Search in menu disabled, enable when fixed - Logged IN
               // QuranNavDrawerRowWidget(
               //   context: context,
@@ -157,6 +164,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
             ),
             QuranNavDrawerRowWidget(
               context: context,
+              title: 'Blog',
+              icon: Icons.comment_outlined,
+              onSelected: () => _goToBlog(),
+            ),
+            QuranNavDrawerRowWidget(
+              context: context,
               title: 'Settings',
               icon: Icons.settings,
               destination: const QuranSettingsScreen(),
@@ -206,5 +219,9 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
         "No Bookmarks found!",
       );
     }
+  }
+
+  void _goToBlog() {
+    _launchUrl(Uri.parse(QuranAppConfig.blogUrl));
   }
 }
