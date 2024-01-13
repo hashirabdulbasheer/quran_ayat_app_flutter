@@ -217,6 +217,10 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
     answer.aya = currentIndex!.aya;
     answer.createdOn = DateTime.now().millisecondsSinceEpoch;
 
+    setState(() {
+      isLoading = true;
+    });
+
     /// Submit answer
     QuranChallengeManager.instance.editAnswer(
       user.uid,
@@ -224,31 +228,32 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
       answer,
     );
 
-    /// Fetch the questions again
-    StoreProvider.of<AppState>(context)
-        .dispatch(InitializeChallengeScreenAction(questions: const []));
+    /// Reload after a delay
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () => {
+        /// Fetch the questions again
+        StoreProvider.of<AppState>(context)
+            .dispatch(InitializeChallengeScreenAction(questions: const [])),
 
-    setState(() {
-      isLoading = true;
-    });
+        setState(() {
+          isLoading = false;
+        }),
 
-    /// Dismiss screen
-    Navigator.of(context).pop();
+        /// Dismiss screen
+        Navigator.of(context).pop(),
 
-    /// Display confirmation screen
-    Navigator.push<void>(
-      context,
-      MaterialPageRoute(
-        builder: (context) => QuranAnswerSubmissionConfirmationScreen(
-          answerId: answer.id,
-        ),
-      ),
-    ).then((value) {});
-
-    // QuranUtils.showMessage(
-    //   context,
-    //   "Submitted successfully for review.",
-    // );
+        /// Display confirmation screen
+        Navigator.push<void>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QuranAnswerSubmissionConfirmationScreen(
+              answerId: answer.id,
+            ),
+          ),
+        ).then((value) {}),
+      },
+    );
   }
 
   void _deleteAnswer() {
@@ -268,6 +273,10 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
       return;
     }
 
+    setState(() {
+      isLoading = true;
+    });
+
     /// Delete
     QuranChallengeManager.instance.deleteAnswer(
       user.uid,
@@ -275,21 +284,27 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
       widget.answer,
     );
 
-    /// Fetch the questions again
-    StoreProvider.of<AppState>(context)
-        .dispatch(InitializeChallengeScreenAction(questions: const []));
+    /// Delete - after a delay for the delete to reflect
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () => {
+        /// Fetch the questions again
+        StoreProvider.of<AppState>(context)
+            .dispatch(InitializeChallengeScreenAction(questions: const [])),
 
-    setState(() {
-      isLoading = true;
-    });
+        setState(() {
+          isLoading = false;
+        }),
 
-    /// Dismiss screen
-    Navigator.of(context).pop();
+        /// Dismiss screen
+        Navigator.of(context).pop(true),
 
-    /// Display confirmation
-    QuranUtils.showMessage(
-      context,
-      "Deleted successfully.",
+        /// Display confirmation
+        QuranUtils.showMessage(
+          context,
+          "Deleted successfully.",
+        ),
+      },
     );
   }
 }

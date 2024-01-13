@@ -15,3 +15,5 @@ class InitializeChallengeScreenAction extends AppStateAction {
 class NextChallengeScreenAction extends AppStateAction {}
 
 class PreviousChallengeScreenAction extends AppStateAction {}
+
+class ToggleLoadingScreenAction extends AppStateAction {}

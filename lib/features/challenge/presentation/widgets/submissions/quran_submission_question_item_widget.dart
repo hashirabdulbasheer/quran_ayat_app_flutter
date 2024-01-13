@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../domain/models/quran_question.dart';
@@ -19,68 +18,63 @@ class QuranSubmissionQuestionItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreBuilder<AppState>(builder: (
-      BuildContext context,
-      Store<AppState> store,
-    ) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
 
-          /// QUESTION
-          QuranTitleWithBackground(title: question.title),
+        /// QUESTION
+        QuranTitleWithBackground(title: question.title),
 
-          const SizedBox(
-            height: 15,
-          ),
+        const SizedBox(
+          height: 15,
+        ),
 
-          /// ANSWERS LIST
-          ListView.separated(
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: question.answers.length,
-            shrinkWrap: true,
-            separatorBuilder: (
-              BuildContext context,
-              int index,
-            ) {
-              return const Divider(
-                thickness: 1,
-              );
-            },
-            itemBuilder: (
-              BuildContext context,
-              int index,
-            ) {
-              return ListTile(
-                title: QuranSubmissionAnswerItemWidget(
-                  answer: question.answers[index],
-                ),
-                onTap: () => Navigator.push<void>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QuranEditAnswerScreen(
-                      questionId: question.id,
-                      answer: question.answers[index],
-                    ),
+        /// ANSWERS LIST
+        ListView.separated(
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: question.answers.length,
+          shrinkWrap: true,
+          separatorBuilder: (
+            BuildContext context,
+            int index,
+          ) {
+            return const Divider(
+              thickness: 1,
+            );
+          },
+          itemBuilder: (
+            BuildContext context,
+            int index,
+          ) {
+            return ListTile(
+              title: QuranSubmissionAnswerItemWidget(
+                answer: question.answers[index],
+              ),
+              onTap: () => Navigator.push<void>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuranEditAnswerScreen(
+                    questionId: question.id,
+                    answer: question.answers[index],
                   ),
-                ).then((value) {
-                  print("here");
-                  StoreProvider.of<AppState>(context).dispatch(
-                      InitializeChallengeScreenAction(questions: const []));
-                }),
-                trailing: const Icon(Icons.arrow_right),
-              );
-            },
-          ),
+                ),
+              ).then((value) {
+                StoreProvider.of<AppState>(context).dispatch(
+                  ToggleLoadingScreenAction(),
+                );
+              }),
+              trailing: const Icon(Icons.arrow_right),
+            );
+          },
+        ),
 
-          const SizedBox(
-            height: 20,
-          ),
-        ],
-      );
-    });
+        const SizedBox(
+          height: 20,
+        ),
+      ],
+    );
   }
 }
