@@ -55,7 +55,6 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
       // do not handle key press if not this screen
       return false;
     }
-
     // right arrow key - back
     // left arrow key - next
     // space bar key - next
@@ -168,12 +167,15 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(
-                      onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
-                      child: Text(
-                        "${currentIndex.human.aya}:${currentIndex.human.sura}", // RTL
-                        style: const TextStyle(
-                          color: Colors.black54,
+                    Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: TextButton(
+                        onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
+                        child: Text(
+                          "${currentIndex.human.sura}:${currentIndex.human.aya}", // RTL
+                          style: const TextStyle(
+                            color: Colors.black54,
+                          ),
                         ),
                       ),
                     ),

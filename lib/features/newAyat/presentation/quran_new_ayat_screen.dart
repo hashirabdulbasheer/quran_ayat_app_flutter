@@ -1,10 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:noble_quran/enums/translations.dart';
-import 'package:noble_quran/models/surah_title.dart';
-import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
@@ -25,49 +20,6 @@ class QuranNewAyatScreen extends StatefulWidget {
 }
 
 class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
-  bool _isHeaderVisible = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (kIsWeb) {
-      ServicesBinding.instance.keyboard.addHandler(_onKey);
-    }
-  }
-
-  @override
-  void dispose() {
-    if (kIsWeb) {
-      ServicesBinding.instance.keyboard.removeHandler(_onKey);
-    }
-    super.dispose();
-  }
-
-  // Handle hardware keyboard events, for web only, to use hardware keyboard
-  // to move between ayats on a desktop
-  bool _onKey(KeyEvent event) {
-    if (ModalRoute.of(context)?.isCurrent == false) {
-      // do not handle key press if not this screen
-      return false;
-    }
-
-    // right arrow key - back
-    // left arrow key - next
-    // space bar key - next
-    // others ignore
-    final key = event.logicalKey.keyLabel;
-    var store = StoreProvider.of<AppState>(context);
-    if (event is KeyDownEvent) {
-      if (key == "Arrow Right") {
-        store.dispatch(PreviousAyaAction());
-      } else if (key == "Arrow Left" || key == " ") {
-        store.dispatch(NextAyaAction());
-      }
-    }
-
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return StoreBuilder<AppState>(builder: (
@@ -75,12 +27,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
       Store<AppState> store,
     ) {
       SurahIndex currentIndex = store.state.reader.currentIndex;
-      NQSurahTitle currentSurahDetails =
-          store.state.reader.currentSurahDetails();
-      List<NQWord> ayaWords = store.state.reader.currentAyaWords();
-      Map<NQTranslation, String> translations =
-          store.state.reader.currentTranslations();
-      String? transliteration = store.state.reader.currentTransliteration();
 
       if (store.state.reader.data.words.isEmpty) {
         // still loading

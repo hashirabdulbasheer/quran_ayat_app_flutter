@@ -126,12 +126,12 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             MaterialButton(
-              color: Colors.white60,
+              color: Colors.blueGrey,
               textColor: Colors.white,
               child: const Text(
                 'Save',
                 style: TextStyle(
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
               onPressed: () => {
