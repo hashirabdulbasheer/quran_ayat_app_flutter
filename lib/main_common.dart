@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/challenge/domain/redux/middleware/middleware.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
+import 'features/challenge/domain/redux/middleware/middleware.dart';
 import 'features/core/domain/app_state/app_state.dart';
+import 'features/newAyat/data/surah_index.dart';
 import 'features/newAyat/domain/redux/actions/actions.dart';
 import 'features/newAyat/domain/redux/actions/bookmark_actions.dart';
 import 'features/newAyat/domain/redux/middleware/bookmark_middleware.dart';
@@ -137,12 +137,16 @@ void _handleUrlPathsForWeb(
         try {
           var selectedSurahIndex = int.parse(suraIndex);
           var ayaIndexInt = int.parse(ayaIndex);
-          store.dispatch(SelectParticularAyaAction(
-            index: SurahIndex.fromHuman(
-              sura: selectedSurahIndex,
-              aya: ayaIndexInt,
-            ),
-          ));
+          // TODO: Improve url parsing by implementing proper navigation and routing - this is a workaround
+          Future<void>.delayed(
+            const Duration(seconds: 1),
+            () => store.dispatch(SelectParticularAyaAction(
+              index: SurahIndex.fromHuman(
+                sura: selectedSurahIndex,
+                aya: ayaIndexInt,
+              ),
+            )),
+          );
         } catch (_) {}
         QuranLogger.logAnalytics("url-sura-aya");
       } else if (suraIndex != null && suraIndex.isNotEmpty) {
@@ -150,12 +154,16 @@ void _handleUrlPathsForWeb(
         // the last path will be surah index
         try {
           var selectedSurahIndex = int.parse(suraIndex);
-          store.dispatch(SelectParticularAyaAction(
-            index: SurahIndex.fromHuman(
-              sura: selectedSurahIndex,
-              aya: 1,
-            ),
-          ));
+          // TODO: Improve url parsing by implementing proper navigation and routing - this is a workaround
+          Future<void>.delayed(
+            const Duration(seconds: 1),
+            () => store.dispatch(SelectParticularAyaAction(
+              index: SurahIndex.fromHuman(
+                sura: selectedSurahIndex,
+                aya: 1,
+              ),
+            )),
+          );
         } catch (_) {}
         QuranLogger.logAnalytics("url-aya");
       }
