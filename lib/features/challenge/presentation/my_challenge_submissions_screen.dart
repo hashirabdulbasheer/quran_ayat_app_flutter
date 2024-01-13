@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/models/qr_user_model.dart';
 import 'package:redux/redux.dart';
 
@@ -27,6 +28,14 @@ class MyChallengeSubmissionsScreen extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             title: const Text("Submissions"),
+            actions: [
+              IconButton(
+                onPressed: () => _reloadQuestions(store),
+                icon: const Icon(
+                  Icons.refresh_rounded,
+                ),
+              ),
+            ],
           ),
 
           /// BODY
@@ -60,7 +69,7 @@ class MyChallengeSubmissionsScreen extends StatelessWidget {
                                   BuildContext context,
                                   int index,
                                 ) {
-                                  print("fetched ${questions[index].answers[0].note}");
+
                                   return QuranSubmissionQuestionItemWidget(
                                     question: questions[index],
                                   );
@@ -76,4 +85,9 @@ class MyChallengeSubmissionsScreen extends StatelessWidget {
       );
     });
   }
+
+  void _reloadQuestions(Store<AppState> store) {
+     store.dispatch(ToggleLoadingScreenAction());
+  }
+
 }
