@@ -9,23 +9,13 @@ import 'package:quran_ayat/features/bookmark/domain/bookmarks_manager.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
-import '../../../misc/enums/quran_app_mode_enum.dart';
-import '../../ayats/domain/enums/audio_events_enum.dart';
-import '../../ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
-import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
-import '../../ayats/presentation/widgets/ayat_display_notes_widget.dart';
-import '../../ayats/presentation/widgets/ayat_display_surah_progress_widget.dart';
-import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
-import '../../ayats/presentation/widgets/ayat_display_transliteration_widget.dart';
-import '../../ayats/presentation/widgets/ayat_display_word_by_word_widget.dart';
 import '../../bookmark/data/bookmarks_local_impl.dart';
 import '../../bookmark/presentation/bookmark_icon_widget.dart';
-import '../../contextList/presentation/quran_context_list_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../drawer/presentation/nav_drawer.dart';
 import '../../settings/domain/theme_manager.dart';
-import '../../tags/presentation/quran_tag_display.dart';
 import '../domain/redux/actions/actions.dart';
+import 'quran_new_ayat_widget.dart';
 
 class QuranNewAyatScreen extends StatefulWidget {
   const QuranNewAyatScreen({Key? key}) : super(key: key);
@@ -178,265 +168,10 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
               ),
             ],
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                20,
-                10,
-                20,
-                10,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  /// header
-                  _isHeaderVisible
-                      ? QuranAyatHeaderWidget(
-                          surahTitles: store.state.reader.surahTitles,
-                          onSurahSelected: (surah) => store.dispatch(
-                            SelectSurahAction(
-                              index: SurahIndex.fromHuman(
-                                sura: surah.number,
-                                aya: 1,
-                              ),
-                            ),
-                          ),
-                          onAyaNumberSelected: (aya) =>
-                              store.dispatch(SelectAyaAction(aya: aya)),
-                          currentlySelectedSurah: currentSurahDetails,
-                          currentIndex: currentIndex,
-                        )
-                      : Container(),
-
-                  // Surah title
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      !_isHeaderVisible
-                          ? Expanded(
-                              child: SizedBox(
-                                height: 30,
-                                child: TextButton(
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black54,
-                                      ),
-                                      textAlign: TextAlign.start,
-                                    ),
-                                  ),
-                                  onPressed: () => _toggleHeader(),
-                                ),
-                              ),
-                            )
-                          : IconButton(
-                              tooltip: "Close header",
-                              onPressed: () => _toggleHeader(),
-                              icon: const Icon(
-                                Icons.close,
-                                size: 12,
-                              ),
-                            ),
-                    ],
-                  ),
-
-                  /// surah progress
-                  QuranAyatDisplaySurahProgressWidget(
-                    currentlySelectedSurah: currentSurahDetails,
-                    currentIndex: currentIndex,
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () => _toggleHeader(),
-                          child: Text(
-                            "${currentIndex.human.sura}:${currentIndex.human.aya}",
-                            style: const TextStyle(
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: "Context aya list view",
-                          onPressed: () => _navigateToContextListScreen(
-                            store,
-                            context,
-                          ),
-                          icon: const Icon(
-                            Icons.list_alt,
-                            size: 15,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const Spacer(),
-                        IconButton(
-                          tooltip: "Increase font size",
-                          onPressed: () => _incrementFontSize(store),
-                          icon: const Icon(
-                            Icons.add,
-                            size: 15,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: "Decrease font size",
-                          onPressed: () => _decrementFontSize(store),
-                          icon: const Icon(
-                            Icons.remove,
-                            size: 15,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: "Reset font size",
-                          onPressed: () => _resetFontSize(store),
-                          icon: const Icon(
-                            Icons.refresh,
-                            size: 15,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  /// Bismillah
-                  store.state.reader.isBismillahDisplayed()
-                      ? const Center(
-                          child: Text(
-                            "In the name of Allah, the Most Gracious, the Most Merciful",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        )
-                      : Container(),
-
-                  /// word by word widget
-                  ayaWords.isNotEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: QuranAyatDisplayWordByWordWidget(
-                            words: ayaWords,
-                          ),
-                        )
-                      : Container(),
-
-                  /// transliterationWidget if enabled
-                  transliteration != null
-                      ? QuranAyatDisplayTransliterationWidget(
-                          transliteration: transliteration,
-                        )
-                      : Container(),
-
-                  /// translation widget
-                  for (NQTranslation type in translations.keys)
-                    QuranAyatDisplayTranslationWidget(
-                      translation: translations[type] ?? "",
-                      translationType: type,
-                    ),
-
-                  /// audio controls
-                  QuranAyatDisplayAudioControlsWidget(
-                    currentIndex: currentIndex,
-                    onAudioPlayStatusChanged: (event) =>
-                        _onAudioPlayStatusChanged(
-                      event,
-                      store,
-                    ),
-                  ),
-
-                  /// Tags
-                  if (store.state.appMode == QuranAppMode.advanced)
-                    QuranAyatDisplayTagsWidget(
-                      currentIndex: currentIndex,
-                    ),
-
-                  /// Notes
-                  if (store.state.appMode == QuranAppMode.advanced)
-                    QuranAyatDisplayNotesWidget(
-                      currentIndex: currentIndex,
-                    ),
-
-                  const SizedBox(height: 80),
-                ],
-              ),
-            ),
-          ),
+          body: const QuranNewAyatReaderWidget(),
         ),
       );
     });
-  }
-
-  void _navigateToContextListScreen(
-    Store<AppState> store,
-    BuildContext context,
-  ) async {
-    int? selectedAyaIndex = await Navigator.push<int>(
-      context,
-      MaterialPageRoute(
-        builder: (context) => QuranContextListScreen(
-          title: store.state.reader.currentSurahDetails().transliterationEn,
-          index: store.state.reader.currentIndex,
-        ),
-      ),
-    );
-
-    if (selectedAyaIndex != null) {
-      store.dispatch(SelectAyaAction(aya: selectedAyaIndex));
-    }
-  }
-
-  void _incrementFontSize(
-    Store<AppState> store,
-  ) {
-    store.dispatch(IncreaseFontSizeAction());
-  }
-
-  void _decrementFontSize(
-    Store<AppState> store,
-  ) {
-    store.dispatch(DecreaseFontSizeAction());
-  }
-
-  void _resetFontSize(
-    Store<AppState> store,
-  ) {
-    store.dispatch(ResetFontSizeAction());
-  }
-
-  ///
-  /// Audio
-  ///
-  void _onAudioPlayStatusChanged(
-    QuranAudioEventsEnum event,
-    Store<AppState> store,
-  ) {
-    switch (event) {
-      case QuranAudioEventsEnum.stopped:
-        store.dispatch(SetAudioContinuousPlayMode(isEnabled: false));
-        break;
-
-      case QuranAudioEventsEnum.loadNext:
-        store.dispatch(NextAyaAction());
-        break;
-
-      case QuranAudioEventsEnum.contPlayStatusChanged:
-        // TODO: Cont. mode temporarily disabled
-        store.dispatch(SetAudioContinuousPlayMode(
-          isEnabled: false,
-        ));
-        break;
-
-      default:
-        break;
-    }
   }
 
   /// display next aya
@@ -487,11 +222,6 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
     }
 
     return Theme.of(context).primaryColor;
-  }
-
-  void _toggleHeader() {
-    _isHeaderVisible = !_isHeaderVisible;
-    setState(() {});
   }
 
   void _closeHeader() {
