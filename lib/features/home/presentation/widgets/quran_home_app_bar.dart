@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 import '../../../bookmark/presentation/bookmark_icon_widget.dart';
+import '../../../challenge/domain/redux/actions/actions.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../newAyat/domain/redux/actions/actions.dart';
 import '../quran_home_screen.dart';
@@ -23,6 +24,14 @@ class QuranHomeAppBarWidget extends StatelessWidget
       return AppBar(
         centerTitle: true,
         title: const Text("Quran"),
+        actions: [
+          IconButton(
+            onPressed: () => _reloadQuestions(store),
+            icon: const Icon(
+              Icons.refresh_rounded,
+            ),
+          ),
+        ],
       );
     }
 
@@ -49,4 +58,8 @@ class QuranHomeAppBarWidget extends StatelessWidget
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  void _reloadQuestions(Store<AppState> store) {
+    store.dispatch(InitializeChallengeScreenAction(questions: const []));
+  }
 }
