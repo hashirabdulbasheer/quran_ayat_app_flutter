@@ -35,7 +35,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
         10,
         10,
         10,
-        30,
+        10,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
