@@ -171,7 +171,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                     TextButton(
                       onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
                       child: Text(
-                        "${currentIndex.human.sura}:${currentIndex.human.aya}",
+                        "${currentIndex.human.aya}:${currentIndex.human.sura}", // RTL
                         style: const TextStyle(
                           color: Colors.black54,
                         ),
