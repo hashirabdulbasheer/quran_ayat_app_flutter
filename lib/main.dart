@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
@@ -20,7 +21,7 @@ const String appVersion = "v2.8.8";
 void main() async {
   usePathUrlStrategy();
   await QuranHiveNotesEngine.instance.initialize();
-  await QuranAuthFactory.engine.initialize();
+  await QuranAuthFactory.engine.initialize(QuranFirebaseEngine.instance);
   FirebaseAnalytics.instance.logAppOpen();
   await RemoteConfigManager.instance.init();
 
