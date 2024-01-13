@@ -12,20 +12,20 @@ class QuranNotesTextFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(color: Colors.black54),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: Container(
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(color: Colors.black54),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Container(
             padding: const EdgeInsets.all(0),
             child: TextField(
               controller: textEditingController..text,
@@ -40,8 +40,8 @@ class QuranNotesTextFieldWidget extends StatelessWidget {
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
