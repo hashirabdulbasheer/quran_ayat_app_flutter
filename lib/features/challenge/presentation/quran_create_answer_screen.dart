@@ -149,7 +149,7 @@ class _QuranCreateChallengeScreenState
     if (currentIndex == null) {
       QuranUtils.showMessage(
         context,
-        "Please select an aya",
+        "Please select an aya that answers the question",
       );
 
       return false;
@@ -158,7 +158,7 @@ class _QuranCreateChallengeScreenState
     if (_notesController.text.isEmpty) {
       QuranUtils.showMessage(
         context,
-        "Please enter a note",
+        "Please enter a note about your reflection on the aya",
       );
 
       return false;
