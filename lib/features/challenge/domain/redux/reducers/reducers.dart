@@ -1,3 +1,4 @@
+import 'package:quran_ayat/features/challenge/domain/models/quran_answer.dart';
 import 'package:redux/redux.dart';
 
 import '../../enums/quran_answer_status_enum.dart';
@@ -28,13 +29,16 @@ ChallengeScreenState _initializeChallengeScreenReducer(
 ) {
   // filtered = only show open questions that are open and answers that are approved
   List<QuranQuestion> filteredQuestions = [];
-  filteredQuestions = action.questions
-      .where((element) => element.status == QuranQuestionStatusEnum.open)
-      .toList();
-  for (QuranQuestion question in filteredQuestions) {
-    question.answers.removeWhere(
-      (element) => element.status != QuranAnswerStatusEnum.approved,
-    );
+  for (QuranQuestion question in action.questions) {
+    if (question.status == QuranQuestionStatusEnum.open) {
+      List<QuranAnswer> filteredAnswers = [];
+      for (QuranAnswer answer in question.answers) {
+        if (answer.status != QuranAnswerStatusEnum.approved) {
+          filteredAnswers.add(answer);
+        }
+      }
+      filteredQuestions.add(question.copyWith(answers: filteredAnswers));
+    }
   }
 
   return state.copyWith(
