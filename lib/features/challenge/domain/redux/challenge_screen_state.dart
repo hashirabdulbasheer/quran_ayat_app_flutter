@@ -46,11 +46,11 @@ class ChallengeScreenState extends Equatable {
   // questions with approved answers
   List<QuranQuestion> allApprovedAnswers() {
     return _filterQuestionsBasedOn(
-        (element) => element.status == QuranAnswerStatusEnum.approved);
+        (element) => element.status == QuranAnswerStatusEnum.approved,);
   }
 
   List<QuranQuestion> _filterQuestionsBasedOn(
-      bool Function(QuranAnswer element) answerCondition) {
+      bool Function(QuranAnswer element) answerCondition,) {
     List<QuranQuestion> questions = List.from(allQuestions);
     List<QuranQuestion> filteredQuestions = [];
     for (QuranQuestion question in questions) {

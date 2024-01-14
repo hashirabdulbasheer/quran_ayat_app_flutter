@@ -35,6 +35,12 @@ class QuranSubmissionAnswerItemWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(answer.username),
+
+          const SizedBox(
+            height: 10,
+          ),
+
           /// Note
           Text(
             "${answer.surah + 1}:${answer.aya + 1} - $note",
