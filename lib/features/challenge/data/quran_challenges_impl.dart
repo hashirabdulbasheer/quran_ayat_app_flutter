@@ -1,3 +1,5 @@
+import 'package:quran_ayat/features/challenge/domain/enums/quran_question_status_enum.dart';
+
 import '../../../utils/logger_utils.dart';
 import '../../../utils/utils.dart';
 import '../../core/data/quran_data_interface.dart';
@@ -56,6 +58,9 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
         error,
       );
     }
+
+    /// only returns open questions
+    questions.removeWhere((element) => element.status != QuranQuestionStatusEnum.open);
 
     return questions;
   }
