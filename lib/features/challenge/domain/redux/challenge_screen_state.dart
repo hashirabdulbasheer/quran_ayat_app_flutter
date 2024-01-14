@@ -46,11 +46,13 @@ class ChallengeScreenState extends Equatable {
   // questions with approved answers
   List<QuranQuestion> allApprovedAnswers() {
     return _filterQuestionsBasedOn(
-        (element) => element.status == QuranAnswerStatusEnum.approved,);
+      (element) => element.status == QuranAnswerStatusEnum.approved,
+    );
   }
 
   List<QuranQuestion> _filterQuestionsBasedOn(
-      bool Function(QuranAnswer element) answerCondition,) {
+    bool Function(QuranAnswer element) answerCondition,
+  ) {
     List<QuranQuestion> questions = List.from(allQuestions);
     List<QuranQuestion> filteredQuestions = [];
     for (QuranQuestion question in questions) {
@@ -63,11 +65,9 @@ class ChallengeScreenState extends Equatable {
         b,
       ) =>
           b.createdOn.compareTo(a.createdOn));
-      if (answers.isNotEmpty) {
-        filteredQuestions.add(
-          question.copyWith(answers: answers),
-        );
-      }
+      filteredQuestions.add(
+        question.copyWith(answers: answers),
+      );
     }
     // latest on top
     filteredQuestions.sort((
