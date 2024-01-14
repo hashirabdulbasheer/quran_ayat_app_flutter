@@ -124,7 +124,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                   context: context,
                   title: 'Approvals',
                   icon: Icons.admin_panel_settings_rounded,
-                  onSelected: () => const QuranChallengesApprovalScreen(),
+                  destination: const QuranChallengesApprovalScreen(),
                 ),
             ],
           ),

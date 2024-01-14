@@ -33,43 +33,47 @@ class QuranSubmissionQuestionItemWidget extends StatelessWidget {
         ),
 
         /// ANSWERS LIST
-        ListView.separated(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: question.answers.length,
-          shrinkWrap: true,
-          separatorBuilder: (
-            BuildContext context,
-            int index,
-          ) {
-            return const Divider(
-              thickness: 1,
-            );
-          },
-          itemBuilder: (
-            BuildContext context,
-            int index,
-          ) {
-            return ListTile(
-              title: QuranSubmissionAnswerItemWidget(
-                answer: question.answers[index],
-              ),
-              onTap: () => Navigator.push<void>(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => QuranEditAnswerScreen(
-                    questionId: question.id,
-                    answer: question.answers[index],
-                  ),
+        if (question.answers.isNotEmpty)
+          ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: question.answers.length,
+            shrinkWrap: true,
+            separatorBuilder: (
+              BuildContext context,
+              int index,
+            ) {
+              return const Divider(
+                thickness: 1,
+              );
+            },
+            itemBuilder: (
+              BuildContext context,
+              int index,
+            ) {
+              return ListTile(
+                title: QuranSubmissionAnswerItemWidget(
+                  answer: question.answers[index],
                 ),
-              ).then((value) {
-                StoreProvider.of<AppState>(context).dispatch(
-                  ToggleLoadingScreenAction(),
-                );
-              }),
-              trailing: const Icon(Icons.arrow_right),
-            );
-          },
-        ),
+                onTap: () => Navigator.push<void>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuranEditAnswerScreen(
+                      questionId: question.id,
+                      answer: question.answers[index],
+                    ),
+                  ),
+                ).then((value) {
+                  StoreProvider.of<AppState>(context).dispatch(
+                    ToggleLoadingScreenAction(),
+                  );
+                }),
+                trailing: const Icon(Icons.arrow_right),
+              );
+            },
+          ),
+
+        if (question.answers.isEmpty)
+          const Center(child: Text("No submissions")),
 
         const SizedBox(
           height: 20,

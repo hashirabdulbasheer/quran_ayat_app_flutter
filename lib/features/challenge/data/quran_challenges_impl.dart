@@ -1,7 +1,7 @@
-import 'package:quran_ayat/utils/utils.dart';
-
 import '../../../models/qr_user_model.dart';
 import '../../../utils/logger_utils.dart';
+import '../../../utils/utils.dart';
+import '../../auth/domain/auth_factory.dart';
 import '../../core/data/quran_data_interface.dart';
 import '../domain/interfaces/quran_challenge_interface.dart';
 import '../domain/models/quran_answer.dart';
@@ -68,18 +68,18 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
   ) async {
     List<QuranQuestion> questions = await fetchQuestions();
     List<QuranQuestion> questionsWithUserSubmissions = [];
-    for(QuranQuestion question in questions) {
+    for (QuranQuestion question in questions) {
       List<QuranAnswer> answers = question.answers;
-      if(answers.isNotEmpty) {
+      if (answers.isNotEmpty) {
         List<QuranAnswer> userAnswers = [];
-        for(QuranAnswer answer in answers) {
-          if(answer.userId == user.uid) {
+        for (QuranAnswer answer in answers) {
+          if (answer.userId == user.uid) {
             userAnswers.add(answer);
           }
         }
         // latest on top
         userAnswers.sort((a,b,) => b.createdOn.compareTo(a.createdOn));
-        question.answers = userAnswers;
+        question.copyWith(answers: userAnswers);
         if(question.answers.isNotEmpty) {
           questionsWithUserSubmissions.add(question);
         }
@@ -187,12 +187,14 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     try {
       // validate that answer id already exists
       // if answer not found then this will throw error
-      int answerIndex = question.answers.indexWhere((element) => element.id == answer.id);
-      if(answerIndex < 0) {
+      int answerIndex =
+          question.answers.indexWhere((element) => element.id == answer.id);
+      if (answerIndex < 0) {
         /// not found
 
         return false;
       }
+
       /// found
       await dataSource.update(
         "questions/$questionId/answers/$answerIndex",
@@ -220,7 +222,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
 
     try {
       if (question.answers == null || question.answers.isEmpty) {
-        question.answers = [answer];
+        question.copyWith(answers: [answer]);
       } else {
         question.answers.add(answer);
       }
