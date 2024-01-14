@@ -15,6 +15,7 @@ import 'features/notes/domain/redux/middleware/middleware.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'features/tags/domain/redux/middleware/middleware.dart';
+import 'models/qr_user_model.dart';
 import 'utils/logger_utils.dart';
 
 ///
@@ -93,6 +94,12 @@ class MyAppState extends State<MyApp> {
 
   void _authChangeListener() async {
     store.dispatch(InitBookmarkAction());
+    // update user rold
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      bool isAdmin = await QuranAuthFactory.engine.isAdmin(user.uid);
+      store.dispatch(AppStateUserRoleAction(isAdmin: isAdmin));
+    }
   }
 }
 
