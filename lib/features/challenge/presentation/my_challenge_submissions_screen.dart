@@ -68,6 +68,7 @@ class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
   }
 
   void _reloadQuestions(Store<AppState> store) {
+    store.dispatch(InitializeChallengeScreenAction(questions: const []));
     store.dispatch(ToggleLoadingScreenAction());
   }
 }
