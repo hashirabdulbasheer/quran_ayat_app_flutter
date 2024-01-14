@@ -1,4 +1,3 @@
-import '../../../models/qr_user_model.dart';
 import '../../../utils/logger_utils.dart';
 import '../../../utils/utils.dart';
 import '../../core/data/quran_data_interface.dart';
@@ -62,46 +61,98 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
   }
 
   @override
-  Future<List<QuranQuestion>> fetchQuestionsWithUserSubmission(
-    QuranUser user,
+  Future<bool> deleteAnswer(
+    String userId,
+    int questionId,
+    QuranAnswer answer,
   ) async {
-    print(user.uid);
-    List<QuranQuestion> questions = await fetchQuestions();
-    List<QuranQuestion> questionsWithUserSubmissions = [];
-    for (QuranQuestion question in questions) {
-      List<QuranAnswer> answers = question.answers;
-      if (answers.isNotEmpty) {
-        List<QuranAnswer> userAnswers = [];
-        for (QuranAnswer answer in answers) {
-          if (answer.userId == user.uid) {
-            userAnswers.add(answer);
-          }
-        }
-        // latest on top
-        userAnswers.sort((
-          a,
-          b,
-        ) =>
-            b.createdOn.compareTo(a.createdOn));
-        if (question.answers.isNotEmpty) {
-          questionsWithUserSubmissions.add(
-            question.copyWith(answers: userAnswers),
-          );
-        }
-      }
+    QuranQuestion? question = await _fetchQuestion(questionId);
+    if (question == null || answer.id.isEmpty) {
+      return false;
     }
-    // latest on top
-    questionsWithUserSubmissions.sort((
-      a,
-      b,
-    ) =>
-        b.createdOn.compareTo(a.createdOn));
 
-    return questionsWithUserSubmissions;
+    try {
+      question.answers.removeWhere((element) => element.id == answer.id);
+      await dataSource.update(
+        "questions/$questionId",
+        question.toMap(),
+      );
+
+      return true;
+    } catch (e) {
+      QuranLogger.logE(e);
+    }
+
+    return false;
   }
 
   @override
-  Future<QuranQuestion?> fetchQuestion(int questionId) async {
+  Future<bool> editAnswer(
+    String userId,
+    int questionId,
+    QuranAnswer answer,
+  ) async {
+    QuranQuestion? question = await _fetchQuestion(questionId);
+    if (question == null || answer.id.isEmpty) {
+      return false;
+    }
+
+    try {
+      // validate that answer id already exists
+      // if answer not found then this will throw error
+      int answerIndex =
+          question.answers.indexWhere((element) => element.id == answer.id);
+      if (answerIndex < 0) {
+        /// not found
+
+        return false;
+      }
+
+      /// found
+      await dataSource.update(
+        "questions/$questionId/answers/$answerIndex",
+        answer.toMap(),
+      );
+
+      return true;
+    } catch (e) {
+      QuranLogger.logE(e);
+    }
+
+    return false;
+  }
+
+  @override
+  Future<bool> submitAnswer(
+    String userId,
+    int questionId,
+    QuranAnswer answer,
+  ) async {
+    QuranQuestion? question = await _fetchQuestion(questionId);
+    if (question == null) {
+      return false;
+    }
+
+    try {
+      if (question.answers == null || question.answers.isEmpty) {
+        question.copyWith(answers: [answer]);
+      } else {
+        question.answers.add(answer);
+      }
+      await dataSource.update(
+        "questions/$questionId",
+        question.toMap(),
+      );
+
+      return true;
+    } catch (e) {
+      QuranLogger.logE(e);
+    }
+
+    return false;
+  }
+
+  Future<QuranQuestion?> _fetchQuestion(int questionId) async {
     try {
       dynamic resultList = await dataSource.fetch("questions/$questionId");
       if (resultList == null) {
@@ -154,97 +205,5 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     }
 
     return null;
-  }
-
-  @override
-  Future<bool> deleteAnswer(
-    String userId,
-    int questionId,
-    QuranAnswer answer,
-  ) async {
-    QuranQuestion? question = await fetchQuestion(questionId);
-    if (question == null || answer.id.isEmpty) {
-      return false;
-    }
-
-    try {
-      question.answers.removeWhere((element) => element.id == answer.id);
-      await dataSource.update(
-        "questions/$questionId",
-        question.toMap(),
-      );
-
-      return true;
-    } catch (e) {
-      QuranLogger.logE(e);
-    }
-
-    return false;
-  }
-
-  @override
-  Future<bool> editAnswer(
-    String userId,
-    int questionId,
-    QuranAnswer answer,
-  ) async {
-    QuranQuestion? question = await fetchQuestion(questionId);
-    if (question == null || answer.id.isEmpty) {
-      return false;
-    }
-
-    try {
-      // validate that answer id already exists
-      // if answer not found then this will throw error
-      int answerIndex =
-          question.answers.indexWhere((element) => element.id == answer.id);
-      if (answerIndex < 0) {
-        /// not found
-
-        return false;
-      }
-
-      /// found
-      await dataSource.update(
-        "questions/$questionId/answers/$answerIndex",
-        answer.toMap(),
-      );
-
-      return true;
-    } catch (e) {
-      QuranLogger.logE(e);
-    }
-
-    return false;
-  }
-
-  @override
-  Future<bool> submitAnswer(
-    String userId,
-    int questionId,
-    QuranAnswer answer,
-  ) async {
-    QuranQuestion? question = await fetchQuestion(questionId);
-    if (question == null) {
-      return false;
-    }
-
-    try {
-      if (question.answers == null || question.answers.isEmpty) {
-        question.copyWith(answers: [answer]);
-      } else {
-        question.answers.add(answer);
-      }
-      await dataSource.update(
-        "questions/$questionId",
-        question.toMap(),
-      );
-
-      return true;
-    } catch (e) {
-      QuranLogger.logE(e);
-    }
-
-    return false;
   }
 }
