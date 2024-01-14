@@ -1,9 +1,5 @@
-import 'package:quran_ayat/features/challenge/domain/models/quran_answer.dart';
 import 'package:redux/redux.dart';
 
-import '../../enums/quran_answer_status_enum.dart';
-import '../../enums/quran_question_status_enum.dart';
-import '../../models/quran_question.dart';
 import '../actions/actions.dart';
 import '../challenge_screen_state.dart';
 
@@ -27,32 +23,17 @@ ChallengeScreenState _initializeChallengeScreenReducer(
   ChallengeScreenState state,
   InitializeChallengeScreenAction action,
 ) {
-  // filtered = only show open questions that are open and answers that are approved
-  List<QuranQuestion> filteredQuestions = [];
-  for (QuranQuestion question in action.questions) {
-    if (question.status == QuranQuestionStatusEnum.open) {
-      List<QuranAnswer> filteredAnswers = [];
-      for (QuranAnswer answer in question.answers) {
-        if (answer.status == QuranAnswerStatusEnum.approved) {
-          filteredAnswers.add(answer);
-        }
-      }
-      filteredQuestions.add(question.copyWith(answers: filteredAnswers));
-    }
-  }
-
   return state.copyWith(
     allQuestions: action.questions,
-    filteredQuestions: filteredQuestions,
   );
 }
 
 ChallengeScreenState _nextChallengeScreenReducer(
   ChallengeScreenState state,
-  NextChallengeScreenAction action,
+  NextChallengeScreenAction _,
 ) {
   int nextIndex = state.currentIndex + 1;
-  if (nextIndex < state.filteredQuestions.length) {
+  if (nextIndex < state.allQuestions.length) {
     return state.copyWith(currentIndex: nextIndex);
   }
 
@@ -61,7 +42,7 @@ ChallengeScreenState _nextChallengeScreenReducer(
 
 ChallengeScreenState _previousChallengeScreenReducer(
   ChallengeScreenState state,
-  PreviousChallengeScreenAction action,
+  PreviousChallengeScreenAction _,
 ) {
   int previousIndex = state.currentIndex - 1;
   if (previousIndex >= 0) {
@@ -73,7 +54,7 @@ ChallengeScreenState _previousChallengeScreenReducer(
 
 ChallengeScreenState _toggleLoadingScreenReducer(
   ChallengeScreenState state,
-  ToggleLoadingScreenAction action,
+  ToggleLoadingScreenAction _,
 ) {
   return state.copyWith(isLoading: !state.isLoading);
 }

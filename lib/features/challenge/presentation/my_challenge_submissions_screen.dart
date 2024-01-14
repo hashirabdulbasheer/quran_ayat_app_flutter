@@ -5,7 +5,6 @@ import 'package:redux/redux.dart';
 
 import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
-import '../domain/challenge_manager.dart';
 import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
 import 'widgets/submissions/quran_submission_question_item_widget.dart';
@@ -16,11 +15,17 @@ class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user == null) {
+      return const Center(child: Text('No submissions'));
+    }
 
     return StoreBuilder<AppState>(builder: (
       BuildContext context,
       Store<AppState> store,
     ) {
+      List<QuranQuestion> questions =
+          store.state.challenge.userSubmittedQuestions(user);
+
       return Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
@@ -39,55 +44,30 @@ class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
           ),
 
           /// BODY
-          body: user == null
-              ? const Center(child: Text('No submissions'))
-              : Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: FutureBuilder<List<QuranQuestion>>(
-                    future: QuranChallengeManager.instance
-                        .fetchQuestionsWithUserSubmissions(user),
-                    builder: (
-                      BuildContext context,
-                      AsyncSnapshot<List<QuranQuestion>> snapshot,
-                    ) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        default:
-                          List<QuranQuestion> questions = snapshot.data ?? [];
-                          if (snapshot.hasError || questions.isEmpty) {
-                            return const Center(child: Text('No submissions'));
-                          } else {
-                            return SingleChildScrollView(
-                              child: ListView.builder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: questions.length,
-                                shrinkWrap: true,
-                                itemBuilder: (
-                                  BuildContext context,
-                                  int index,
-                                ) {
-
-                                  return QuranSubmissionQuestionItemWidget(
-                                    question: questions[index],
-                                  );
-                                },
-                              ),
-                            );
-                          }
-                      }
-                    },
-                  ),
-                ),
+          body: Directionality(
+            textDirection: TextDirection.ltr,
+            child: SingleChildScrollView(
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: questions.length,
+                shrinkWrap: true,
+                itemBuilder: (
+                  BuildContext context,
+                  int index,
+                ) {
+                  return QuranSubmissionQuestionItemWidget(
+                    question: questions[index],
+                  );
+                },
+              ),
+            ),
+          ),
         ),
       );
     });
   }
 
   void _reloadQuestions(Store<AppState> store) {
-     store.dispatch(ToggleLoadingScreenAction());
+    store.dispatch(ToggleLoadingScreenAction());
   }
-
 }

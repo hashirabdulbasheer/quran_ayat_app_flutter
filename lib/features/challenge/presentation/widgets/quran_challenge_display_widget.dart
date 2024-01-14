@@ -15,7 +15,7 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
       BuildContext context,
       Store<AppState> store,
     ) {
-      QuranQuestion? question = store.state.challenge.currentQuestion;
+      QuranQuestion? question = store.state.challenge.currentQuestionForDisplay();
       if (question == null) {
         return const Center(child: CircularProgressIndicator());
       }
@@ -64,7 +64,7 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                   height: 20,
                 ),
                 QuranAnswersWidget(
-                  question: store.state.challenge.currentQuestion,
+                  question: question,
                 ),
                 const SizedBox(
                   height: 100,
