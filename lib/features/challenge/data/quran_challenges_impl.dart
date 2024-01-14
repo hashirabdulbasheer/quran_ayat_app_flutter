@@ -1,7 +1,6 @@
 import '../../../models/qr_user_model.dart';
 import '../../../utils/logger_utils.dart';
 import '../../../utils/utils.dart';
-import '../../auth/domain/auth_factory.dart';
 import '../../core/data/quran_data_interface.dart';
 import '../domain/interfaces/quran_challenge_interface.dart';
 import '../domain/models/quran_answer.dart';
@@ -79,15 +78,24 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
           }
         }
         // latest on top
-        userAnswers.sort((a,b,) => b.createdOn.compareTo(a.createdOn));
-        question.copyWith(answers: userAnswers);
-        if(question.answers.isNotEmpty) {
-          questionsWithUserSubmissions.add(question);
+        userAnswers.sort((
+          a,
+          b,
+        ) =>
+            b.createdOn.compareTo(a.createdOn));
+        if (question.answers.isNotEmpty) {
+          questionsWithUserSubmissions.add(
+            question.copyWith(answers: userAnswers),
+          );
         }
       }
     }
     // latest on top
-    questionsWithUserSubmissions.sort((a,b,) => b.createdOn.compareTo(a.createdOn));
+    questionsWithUserSubmissions.sort((
+      a,
+      b,
+    ) =>
+        b.createdOn.compareTo(a.createdOn));
 
     return questionsWithUserSubmissions;
   }
