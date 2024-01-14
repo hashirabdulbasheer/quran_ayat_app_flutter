@@ -66,6 +66,21 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                 icon: Icons.bookmark,
                 onSelected: () => _goToBookmark(store),
               ),
+
+              /// Approvals screen for admin user
+              if (store.state.isAdminUser)
+                QuranNavDrawerRowWidget(
+                  context: context,
+                  title: 'Approvals',
+                  icon: Icons.admin_panel_settings_rounded,
+                  destination: const QuranChallengesApprovalScreen(),
+                ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Submissions',
+                icon: Icons.assignment_outlined,
+                destination: const QuranMyChallengeSubmissionsScreen(),
+              ),
               QuranNavDrawerRowWidget(
                 context: context,
                 title: 'Notes',
@@ -77,12 +92,6 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                 title: 'Tags',
                 icon: Icons.tag,
                 destination: QuranViewTagsScreen(user: userParam),
-              ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Submissions',
-                icon: Icons.assignment_outlined,
-                destination: const QuranMyChallengeSubmissionsScreen(),
               ),
               QuranNavDrawerRowWidget(
                 context: context,
@@ -117,15 +126,6 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                   QuranSettingsConstants.feedbackEmailUrl,
                 )),
               ),
-
-              /// Approvals screen for admin user
-              if (store.state.isAdminUser)
-                QuranNavDrawerRowWidget(
-                  context: context,
-                  title: 'Approvals',
-                  icon: Icons.admin_panel_settings_rounded,
-                  destination: const QuranChallengesApprovalScreen(),
-                ),
             ],
           ),
         ),
