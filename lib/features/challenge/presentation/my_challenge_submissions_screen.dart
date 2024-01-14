@@ -44,24 +44,26 @@ class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
           ),
 
           /// BODY
-          body: Directionality(
-            textDirection: TextDirection.ltr,
-            child: SingleChildScrollView(
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: questions.length,
-                shrinkWrap: true,
-                itemBuilder: (
-                  BuildContext context,
-                  int index,
-                ) {
-                  return QuranSubmissionQuestionItemWidget(
-                    question: questions[index],
-                  );
-                },
-              ),
-            ),
-          ),
+          body: questions.isEmpty
+              ? const Center(child: Text("No submissions"))
+              : Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: SingleChildScrollView(
+                    child: ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: questions.length,
+                      shrinkWrap: true,
+                      itemBuilder: (
+                        BuildContext context,
+                        int index,
+                      ) {
+                        return QuranSubmissionQuestionItemWidget(
+                          question: questions[index],
+                        );
+                      },
+                    ),
+                  ),
+                ),
         ),
       );
     });
