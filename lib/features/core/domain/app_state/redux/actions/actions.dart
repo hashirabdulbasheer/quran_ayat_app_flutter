@@ -67,3 +67,16 @@ class AppStateSelectAppModeAction extends AppStateAction {
     return '{action: ${super.toString()}, appMode: ${appMode.rawString()}';
   }
 }
+
+class AppStateUserRoleAction extends AppStateAction {
+  final bool isAdmin;
+
+  AppStateUserRoleAction({
+    required this.isAdmin,
+  });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, isAdmin: $isAdmin}';
+  }
+}
