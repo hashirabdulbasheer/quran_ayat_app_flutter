@@ -119,27 +119,13 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               ),
 
               /// Approvals screen for admin user
-              FutureBuilder<bool>(
-                future: QuranAuthFactory.engine.isAdmin(userParam.uid),
-                builder: (
-                  context,
-                  snapshot,
-                ) {
-                  if (snapshot.hasData) {
-                    bool isAdmin = snapshot.data as bool;
-                    if (isAdmin) {
-                      return QuranNavDrawerRowWidget(
-                        context: context,
-                        title: 'Approvals',
-                        icon: Icons.admin_panel_settings_rounded,
-                        onSelected: () => const QuranChallengesApprovalScreen(),
-                      );
-                    }
-                  }
-
-                  return Container();
-                },
-              ),
+              if (store.state.isAdminUser)
+                QuranNavDrawerRowWidget(
+                  context: context,
+                  title: 'Approvals',
+                  icon: Icons.admin_panel_settings_rounded,
+                  onSelected: () => const QuranChallengesApprovalScreen(),
+                ),
             ],
           ),
         ),
