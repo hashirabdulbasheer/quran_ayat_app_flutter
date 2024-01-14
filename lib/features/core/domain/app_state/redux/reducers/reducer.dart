@@ -25,6 +25,9 @@ Reducer<AppState> appStateReducer = combineReducers<AppState>([
   TypedReducer<AppState, AppStateSelectAppModeAction>(
     _selectAppModeReducer,
   ),
+  TypedReducer<AppState, AppStateUserRoleAction>(
+    _setAppStateUserRoleReducer,
+  ),
   TypedReducer<AppState, dynamic>(
     _allOtherReducer,
   ),
@@ -104,5 +107,14 @@ AppState _selectAppModeReducer(
 ) {
   return state.copyWith(
     appMode: action.appMode,
+  );
+}
+
+AppState _setAppStateUserRoleReducer(
+  AppState state,
+  AppStateUserRoleAction action,
+) {
+  return state.copyWith(
+    isAdminUser: action.isAdmin,
   );
 }
