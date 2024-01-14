@@ -48,18 +48,21 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
             10,
             0,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Submissions"),
-              ElevatedButton(
-                onPressed: () => _goToCreateChallengeScreen(
-                  user,
-                  widget.question,
+          child: Directionality(
+            textDirection: TextDirection.rtl,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Submissions"),
+                ElevatedButton(
+                  onPressed: () => _goToCreateChallengeScreen(
+                    user,
+                    widget.question,
+                  ),
+                  child: const Text("Add"),
                 ),
-                child: const Text("Submit"),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         const SizedBox(
