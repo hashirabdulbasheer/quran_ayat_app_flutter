@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../../../core/presentation/widgets/quran_action_progress_widget.dart';
 
+/// two buttons in a row
+/// negative button - red background, positive button - primary color
 class QuranUpdateControlsWidget extends StatelessWidget {
-  final Function onUpdate;
-  final Function onDelete;
-  final bool? isDeleteLoading;
-  final bool? isUpdateLoading;
+  final String positiveActionText;
+  final Function onPositiveAction;
+  final bool? isPositiveActionRunning;
+
+  final String negativeActionText;
+  final Function onNegativeAction;
+  final bool? isNegativeActionRunning;
 
   const QuranUpdateControlsWidget({
     Key? key,
-    required this.onUpdate,
-    required this.onDelete,
-    this.isDeleteLoading = false,
-    this.isUpdateLoading = false,
+    required this.positiveActionText,
+    required this.onPositiveAction,
+    this.isPositiveActionRunning = false,
+    required this.negativeActionText,
+    required this.onNegativeAction,
+    this.isNegativeActionRunning = false,
   }) : super(key: key);
 
   @override
@@ -26,10 +33,10 @@ class QuranUpdateControlsWidget extends StatelessWidget {
             child: SizedBox(
               height: 50,
               child: ElevatedButton(
-                onPressed: () => onUpdate(),
-                child: isUpdateLoading == true
+                onPressed: () => onPositiveAction(),
+                child: isPositiveActionRunning == true
                     ? const QuranActionProgressIndicatorWidget()
-                    : const Text("Update"),
+                    : Text(positiveActionText),
               ),
             ),
           ),
@@ -41,10 +48,10 @@ class QuranUpdateControlsWidget extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                onPressed: () => onDelete(),
-                child: isDeleteLoading == true
+                onPressed: () => onNegativeAction(),
+                child: isNegativeActionRunning == true
                     ? const QuranActionProgressIndicatorWidget()
-                    : const Text("Delete"),
+                    : Text(negativeActionText),
               ),
             ),
           ),

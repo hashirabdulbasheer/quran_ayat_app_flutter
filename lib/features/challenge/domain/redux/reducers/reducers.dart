@@ -33,7 +33,7 @@ ChallengeScreenState _initializeChallengeScreenReducer(
     if (question.status == QuranQuestionStatusEnum.open) {
       List<QuranAnswer> filteredAnswers = [];
       for (QuranAnswer answer in question.answers) {
-        if (answer.status != QuranAnswerStatusEnum.approved) {
+        if (answer.status == QuranAnswerStatusEnum.approved) {
           filteredAnswers.add(answer);
         }
       }

@@ -66,6 +66,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
   Future<List<QuranQuestion>> fetchQuestionsWithUserSubmission(
     QuranUser user,
   ) async {
+    print(user.uid);
     List<QuranQuestion> questions = await fetchQuestions();
     List<QuranQuestion> questionsWithUserSubmissions = [];
     for (QuranQuestion question in questions) {

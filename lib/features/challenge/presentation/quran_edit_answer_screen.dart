@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../../../utils/dialog_utils.dart';
+import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
@@ -17,6 +17,14 @@ import '../domain/redux/actions/actions.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
 import 'widgets/create/quran_note_entry_textfield_widget.dart';
+
+enum QuranEditAnswerScreenLoadingAction {
+  update,
+  delete,
+  approve,
+  reject,
+  none,
+}
 
 class QuranEditAnswerScreen extends StatefulWidget {
   final int questionId;
@@ -36,8 +44,8 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
   final TextEditingController _notesController = TextEditingController();
   NQSurahTitle currentSurahDetails = NQSurahTitle.defaultValue();
   SurahIndex? currentIndex;
-  bool isDeleteLoading = false;
-  bool isUpdateLoading = false;
+  QuranEditAnswerScreenLoadingAction? currentLoadingAction =
+      QuranEditAnswerScreenLoadingAction.none;
 
   @override
   void initState() {
@@ -127,11 +135,48 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
 
                 /// SUBMIT BUTTON
                 QuranUpdateControlsWidget(
-                  onDelete: () => _onDeleteTapped(),
-                  onUpdate: () => _onUpdateTapped(),
-                  isDeleteLoading: isDeleteLoading,
-                  isUpdateLoading: isUpdateLoading,
+                  positiveActionText: "Update",
+                  onPositiveAction: () => onConfirmation(
+                    title: "Update?",
+                    message: "Are you sure that you want to update?",
+                    action: "Update",
+                    onConfirmation: () => _updateAnswer(),
+                  ),
+                  isPositiveActionRunning: currentLoadingAction ==
+                      QuranEditAnswerScreenLoadingAction.update,
+                  negativeActionText: "Delete",
+                  onNegativeAction: () => onConfirmation(
+                    title: "Delete?",
+                    message: "Are you sure that you want to delete?",
+                    action: "Delete",
+                    onConfirmation: () => _deleteAnswer(),
+                  ),
+                  isNegativeActionRunning: currentLoadingAction ==
+                      QuranEditAnswerScreenLoadingAction.delete,
                 ),
+
+                /// ADMIN Functionality
+                if (store.state.isAdminUser)
+                  QuranUpdateControlsWidget(
+                    positiveActionText: "Approve",
+                    onPositiveAction: () => onConfirmation(
+                      title: "Approve?",
+                      message: "Are you sure that you want to approve?",
+                      action: "Approve",
+                      onConfirmation: () => _approveAnswer(),
+                    ),
+                    isPositiveActionRunning: currentLoadingAction ==
+                        QuranEditAnswerScreenLoadingAction.approve,
+                    negativeActionText: "Reject",
+                    onNegativeAction: () => onConfirmation(
+                      title: "Reject?",
+                      message: "Are you sure that you want to reject?",
+                      action: "Reject",
+                      onConfirmation: () => _rejectAnswer(),
+                    ),
+                    isNegativeActionRunning: currentLoadingAction ==
+                        QuranEditAnswerScreenLoadingAction.reject,
+                  ),
               ],
             ),
           ),
@@ -140,66 +185,23 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
     );
   }
 
-  void _onDeleteTapped() {
+  void onConfirmation({
+    required String title,
+    required String message,
+    required String action,
+    required Function onConfirmation,
+  }) {
     DialogUtils.confirmationDialog(
       context,
-      "Delete?",
-      "Are you sure that you want to delete?",
-      "Delete",
-      () => _deleteAnswer(),
+      title,
+      message,
+      action,
+      () => onConfirmation(),
     );
-  }
-
-  void _onUpdateTapped() {
-    if (!_isValidForm()) {
-      return;
-    }
-
-    DialogUtils.confirmationDialog(
-      context,
-      "Update?",
-      "Are you sure that you want to update?",
-      "Update",
-      () => _updateAnswer(),
-    );
-  }
-
-  /// Validation
-  bool _isValidForm() {
-    /// validate
-    if (currentIndex == null) {
-      QuranUtils.showMessage(
-        context,
-        "Please select an aya that answers the question",
-      );
-
-      return false;
-    }
-
-    if (_notesController.text.isEmpty) {
-      QuranUtils.showMessage(
-        context,
-        "Please enter a note about your reflection on the aya",
-      );
-
-      return false;
-    }
-
-    if (isDeleteLoading || isUpdateLoading) {
-      return false;
-    }
-
-    return true;
   }
 
   /// ACTION
   void _updateAnswer() {
-    /// proceed to submission
-    setState(() {
-      isUpdateLoading = true;
-    });
-
-    /// Get User details
     QuranUser? user = QuranAuthFactory.engine.getUser();
     if (user == null) {
       QuranUtils.showMessage(
@@ -209,33 +211,33 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
 
       return;
     }
+    // Execute
+    _executeAction(
+      user: user,
+      action: () {
+        QuranAnswer answer = widget.answer.copyWith(
+          status: QuranAnswerStatusEnum.submitted,
+          note: _notesController.text,
+          surah: currentIndex!.sura,
+          // current index cannot be null here as its checked before
+          aya: currentIndex!.aya,
+          createdOn: DateTime.now().millisecondsSinceEpoch,
+        );
 
-    /// Create answer
-    QuranAnswer answer = widget.answer;
-    answer.status = QuranAnswerStatusEnum.submitted;
-    answer.note = _notesController.text;
-    answer.surah = currentIndex!
-        .sura; // current index cannot be null here as its checked before
-    answer.aya = currentIndex!.aya;
-    answer.createdOn = DateTime.now().millisecondsSinceEpoch;
-
-    /// Submit answer
-    QuranChallengeManager.instance.editAnswer(
-      user.uid,
-      widget.questionId,
-      answer,
-    );
-
-    /// Reload after a delay
-    Future.delayed(
-      const Duration(milliseconds: 500),
-      () => {
+        /// Submit answer
+        QuranChallengeManager.instance.editAnswer(
+          user.uid,
+          widget.questionId,
+          answer,
+        );
+      },
+      postAction: () => {
         /// Fetch the questions again
         StoreProvider.of<AppState>(context)
             .dispatch(InitializeChallengeScreenAction(questions: const [])),
 
         setState(() {
-          isUpdateLoading = false;
+          currentLoadingAction = QuranEditAnswerScreenLoadingAction.none;
         }),
 
         /// Dismiss screen
@@ -247,13 +249,125 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
           "Updated successfully. Submitted for review.",
         ),
       },
+      loadingAction: QuranEditAnswerScreenLoadingAction.update,
     );
   }
 
   void _deleteAnswer() {
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user == null) {
+      QuranUtils.showMessage(
+        context,
+        "Please login",
+      );
+
+      return;
+    }
+
+    // Execute
+    _executeAction(
+      user: user,
+      action: () => {
+        /// Delete
+        QuranChallengeManager.instance.deleteAnswer(
+          user.uid,
+          widget.questionId,
+          widget.answer,
+        ),
+      },
+      postAction: () => {
+        /// Fetch the questions again
+        StoreProvider.of<AppState>(context)
+            .dispatch(InitializeChallengeScreenAction(questions: const [])),
+
+        setState(() {
+          currentLoadingAction = QuranEditAnswerScreenLoadingAction.none;
+        }),
+
+        /// Dismiss screen
+        Navigator.of(context).pop(true),
+
+        /// Display confirmation
+        QuranUtils.showMessage(
+          context,
+          "Deleted successfully.",
+        ),
+      },
+      loadingAction: QuranEditAnswerScreenLoadingAction.delete,
+    );
+  }
+
+  void _approveAnswer() {
+    _updateAnswerStatus(
+      status: QuranAnswerStatusEnum.approved,
+      loadingAction: QuranEditAnswerScreenLoadingAction.approve,
+    );
+  }
+
+  void _rejectAnswer() {
+    _updateAnswerStatus(
+      status: QuranAnswerStatusEnum.rejected,
+      loadingAction: QuranEditAnswerScreenLoadingAction.reject,
+    );
+  }
+
+  void _updateAnswerStatus({
+    required QuranAnswerStatusEnum status,
+    required QuranEditAnswerScreenLoadingAction loadingAction,
+  }) {
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user == null) {
+      QuranUtils.showMessage(
+        context,
+        "Please login",
+      );
+
+      return;
+    }
+
+    // Execute action
+    QuranAnswer answer = widget.answer.copyWith(status: status);
+    _executeAction(
+      user: user,
+      action: () => {
+        /// Submit answer
+        QuranChallengeManager.instance.editAnswer(
+          user.uid,
+          widget.questionId,
+          answer,
+        ),
+      },
+      postAction: () => {
+        /// Fetch the questions again
+        StoreProvider.of<AppState>(context)
+            .dispatch(InitializeChallengeScreenAction(questions: const [])),
+
+        setState(() {
+          currentLoadingAction = QuranEditAnswerScreenLoadingAction.none;
+        }),
+
+        /// Dismiss screen
+        Navigator.of(context).pop(true),
+
+        /// Display confirmation
+        QuranUtils.showMessage(
+          context,
+          "Updated successfully.",
+        ),
+      },
+      loadingAction: loadingAction,
+    );
+  }
+
+  void _executeAction({
+    required QuranUser? user,
+    required Function action,
+    required Function postAction,
+    required QuranEditAnswerScreenLoadingAction loadingAction,
+  }) {
     /// proceed to submission
     setState(() {
-      isDeleteLoading = true;
+      currentLoadingAction = loadingAction;
     });
 
     /// Get User details
@@ -267,34 +381,13 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
       return;
     }
 
-    /// Delete
-    QuranChallengeManager.instance.deleteAnswer(
-      user.uid,
-      widget.questionId,
-      widget.answer,
-    );
+    /// Action
+    action();
 
-    /// Delete - after a delay for the delete to reflect
-    Future.delayed(
+    /// Reload after a delay
+    Future<void>.delayed(
       const Duration(milliseconds: 500),
-      () => {
-        /// Fetch the questions again
-        StoreProvider.of<AppState>(context)
-            .dispatch(InitializeChallengeScreenAction(questions: const [])),
-
-        setState(() {
-          isDeleteLoading = false;
-        }),
-
-        /// Dismiss screen
-        Navigator.of(context).pop(true),
-
-        /// Display confirmation
-        QuranUtils.showMessage(
-          context,
-          "Deleted successfully.",
-        ),
-      },
+      () => postAction(),
     );
   }
 }
