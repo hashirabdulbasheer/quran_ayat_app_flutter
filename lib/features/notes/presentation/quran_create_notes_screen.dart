@@ -138,10 +138,10 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                       },
                     )
                   : QuranUpdateControlsWidget(
-                      onDelete: () => {
-                        _deleteButtonPressed(),
-                      },
-                      onUpdate: () => _updateButtonPressed(),
+                      positiveActionText: "Update",
+                      onPositiveAction: () => _updateButtonPressed(),
+                      negativeActionText: "Delete",
+                      onNegativeAction: () => _deleteButtonPressed(),
                     ),
               const SizedBox(
                 height: 20,

@@ -1,8 +1,9 @@
 import '../../../../models/qr_response_model.dart';
 import '../../../../models/qr_user_model.dart';
+import '../../../core/data/quran_data_interface.dart';
 
 abstract class QuranAuthInterface {
-  Future<bool> initialize();
+  Future<bool> initialize(QuranDataSource dataSource);
 
   Future<QuranResponse> login(
     String username,
@@ -28,4 +29,6 @@ abstract class QuranAuthInterface {
   void registerAuthChangeListener(Function listener);
 
   void unregisterAuthChangeListener(Function listener);
+
+  Future<bool> isAdmin(String userId);
 }

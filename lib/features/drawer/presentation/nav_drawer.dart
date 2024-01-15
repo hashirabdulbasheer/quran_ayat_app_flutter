@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
-import 'package:quran_ayat/misc/enums/quran_app_mode_enum.dart';
+import 'package:quran_ayat/misc/configs/app_config.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,11 +12,12 @@ import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../auth/presentation/quran_profile_screen.dart';
 import '../../bookmark/domain/bookmarks_manager.dart';
+import '../../challenge/presentation/my_challenge_submissions_screen.dart';
+import '../../challenge/presentation/quran_challenges_approval_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/domain/redux/actions/actions.dart';
 import '../../notes/presentation/quran_view_notes_screen.dart';
 import '../../settings/domain/constants/setting_constants.dart';
-import '../../settings/domain/settings_manager.dart';
 import '../../settings/presentation/quran_settings_screen.dart';
 import '../../tags/presentation/quran_view_tags_screen.dart';
 import 'widgets/nav_drawer_header.dart';
@@ -38,7 +39,6 @@ class QuranNavDrawer extends StatefulWidget {
 }
 
 class _QuranNavDrawerState extends State<QuranNavDrawer> {
-
   @override
   Widget build(BuildContext context) {
     Store<AppState> store = StoreProvider.of<AppState>(context);
@@ -66,6 +66,21 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                 icon: Icons.bookmark,
                 onSelected: () => _goToBookmark(store),
               ),
+
+              /// Approvals screen for admin user
+              if (store.state.isAdminUser)
+                QuranNavDrawerRowWidget(
+                  context: context,
+                  title: 'Approvals',
+                  icon: Icons.admin_panel_settings_rounded,
+                  destination: const QuranChallengesApprovalScreen(),
+                ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Submissions',
+                icon: Icons.assignment_outlined,
+                destination: const QuranMyChallengeSubmissionsScreen(),
+              ),
               QuranNavDrawerRowWidget(
                 context: context,
                 title: 'Notes',
@@ -78,6 +93,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                 icon: Icons.tag,
                 destination: QuranViewTagsScreen(user: userParam),
               ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Blog',
+                icon: Icons.comment_outlined,
+                onSelected: () => _goToBlog(),
+              ),
               // TODO: Search in menu disabled, enable when fixed - Logged IN
               // QuranNavDrawerRowWidget(
               //   context: context,
@@ -85,6 +106,12 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               //   icon: Icons.search_rounded,
               //   destination: const QuranSearchScreen(),
               // ),
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Mobile Apps',
+                icon: Icons.install_mobile,
+                onSelected: () => _goToMobileApps(),
+              ),
               QuranNavDrawerRowWidget(
                 context: context,
                 title: 'Settings',
@@ -113,26 +140,11 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
           items: [
             const QuranNavDrawerHeaderWidget(),
 
-            FutureBuilder<QuranAppMode>(
-              future: QuranSettingsManager.instance.getAppMode(),
-              builder: (
-                context,
-                snapshot,
-              ) {
-                if (snapshot.hasData) {
-                  QuranAppMode mode = snapshot.data as QuranAppMode;
-                  if (mode == QuranAppMode.advanced) {
-                    return QuranNavDrawerRowWidget(
-                      context: context,
-                      title: 'Login',
-                      icon: Icons.account_circle_outlined,
-                      destination: const QuranLoginScreen(),
-                    );
-                  }
-                }
-
-                return Container();
-              },
+            QuranNavDrawerRowWidget(
+              context: context,
+              title: 'Login',
+              icon: Icons.account_circle_outlined,
+              destination: const QuranLoginScreen(),
             ),
 
             // TODO: Search in menu disabled, enable when fixed - Logged OUT
@@ -147,6 +159,18 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               title: 'Bookmark',
               icon: Icons.bookmark,
               onSelected: () => _goToBookmark(store),
+            ),
+            QuranNavDrawerRowWidget(
+              context: context,
+              title: 'Blog',
+              icon: Icons.comment_outlined,
+              onSelected: () => _goToBlog(),
+            ),
+            QuranNavDrawerRowWidget(
+              context: context,
+              title: 'Mobile Apps',
+              icon: Icons.install_mobile,
+              onSelected: () => _goToMobileApps(),
             ),
             QuranNavDrawerRowWidget(
               context: context,
@@ -199,5 +223,16 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
         "No Bookmarks found!",
       );
     }
+  }
+
+  void _goToBlog() {
+    _launchUrl(Uri.parse(QuranAppConfig.blogUrl));
+  }
+
+  void _goToMobileApps() {
+    QuranUtils.showMessage(
+      context,
+      "Coming soon...",
+    );
   }
 }

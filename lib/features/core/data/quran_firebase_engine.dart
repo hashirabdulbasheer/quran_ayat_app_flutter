@@ -39,7 +39,7 @@ class QuranFirebaseEngine implements QuranDataSource {
   @override
   Future<bool> update(
     String path,
-    Map<String, dynamic> item,
+    dynamic item,
   ) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
     try {

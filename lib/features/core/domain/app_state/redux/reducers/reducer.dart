@@ -1,3 +1,4 @@
+import 'package:quran_ayat/features/challenge/domain/redux/reducers/reducers.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../auth/domain/auth_factory.dart';
@@ -24,6 +25,9 @@ Reducer<AppState> appStateReducer = combineReducers<AppState>([
   TypedReducer<AppState, AppStateSelectAppModeAction>(
     _selectAppModeReducer,
   ),
+  TypedReducer<AppState, AppStateUserRoleAction>(
+    _setAppStateUserRoleReducer,
+  ),
   TypedReducer<AppState, dynamic>(
     _allOtherReducer,
   ),
@@ -45,6 +49,10 @@ AppState _allOtherReducer(
     ),
     reader: readerScreenReducer(
       state.reader,
+      action,
+    ),
+    challenge: challengeScreenReducer(
+      state.challenge,
       action,
     ),
   );
@@ -99,5 +107,14 @@ AppState _selectAppModeReducer(
 ) {
   return state.copyWith(
     appMode: action.appMode,
+  );
+}
+
+AppState _setAppStateUserRoleReducer(
+  AppState state,
+  AppStateUserRoleAction action,
+) {
+  return state.copyWith(
+    isAdminUser: action.isAdmin,
   );
 }

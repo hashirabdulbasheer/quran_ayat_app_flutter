@@ -1,9 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
+
 import '../../../firebase_options.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/logger_utils.dart';
+import '../../core/data/quran_data_interface.dart';
 import '../domain/interfaces/quran_auth_interface.dart';
 
 /// Singleton
@@ -13,12 +16,15 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
 
   QuranUser? _user;
 
+  QuranDataSource? dataSource;
+
   final List<Function> _authChangeListeners = [];
 
   QuranFirebaseAuthEngine._privateConstructor();
 
   @override
-  Future<bool> initialize() async {
+  Future<bool> initialize(QuranDataSource dataSource) async {
+    this.dataSource = dataSource;
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -200,6 +206,27 @@ class QuranFirebaseAuthEngine implements QuranAuthInterface {
     for (Function listener in _authChangeListeners) {
       listener();
     }
+  }
+
+  @override
+  Future<bool> isAdmin(
+    String userId,
+  ) async {
+    if (dataSource == null) {
+      return false;
+    }
+    try {
+      var resultList = await QuranFirebaseEngine.instance.fetch(
+        "users/$userId",
+      );
+      if (resultList != null) {
+        return true;
+      }
+    } catch (error) {
+      QuranLogger.logE(error);
+    }
+
+    return false;
   }
 
   /// User? -> QuranUser?

@@ -13,6 +13,7 @@ class ReaderScreenState extends Equatable {
   final List<NQSurahTitle> surahTitles;
   final SurahIndex currentIndex;
   final bool isLoading;
+  final bool isHeaderVisible;
   final BookmarkState? bookmarkState;
   final QuranData data;
 
@@ -20,6 +21,7 @@ class ReaderScreenState extends Equatable {
     this.surahTitles = const [],
     this.currentIndex = SurahIndex.defaultIndex,
     this.isLoading = false,
+    this.isHeaderVisible = false,
     this.bookmarkState,
     this.data = const QuranData(),
   });
@@ -28,6 +30,7 @@ class ReaderScreenState extends Equatable {
     List<NQSurahTitle>? surahTitles,
     SurahIndex? currentIndex,
     bool? isLoading,
+    bool? isHeaderVisible,
     BookmarkState? bookmarkState,
     QuranData? data,
   }) {
@@ -35,6 +38,7 @@ class ReaderScreenState extends Equatable {
       surahTitles: surahTitles ?? this.surahTitles,
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,
+      isHeaderVisible: isHeaderVisible ?? this.isHeaderVisible,
       bookmarkState: bookmarkState ?? this.bookmarkState,
       data: data ?? this.data,
     );
@@ -50,15 +54,18 @@ class ReaderScreenState extends Equatable {
 
   Map<NQTranslation, String> currentTranslations() {
     Map<NQTranslation, String> translations = {};
-    data.translationMap.forEach((key, value) {
-      translations[key] = value?.aya[currentIndex.aya]?.text ?? "";
+    data.translationMap.forEach((
+      key,
+      value,
+    ) {
+      translations[key] = value?.aya[currentIndex.aya].text ?? "";
     });
 
     return translations;
   }
 
   String? currentTransliteration() =>
-      data.transliteration?.aya[currentIndex.aya]?.text;
+      data.transliteration?.aya[currentIndex.aya].text;
 
   List<NQWord> currentAyaWords() =>
       data.words.isNotEmpty ? data.words[currentIndex.aya] : [];
@@ -81,6 +88,7 @@ class ReaderScreenState extends Equatable {
   List<Object?> get props => [
         surahTitles,
         isLoading,
+        isHeaderVisible,
         currentIndex,
         bookmarkState,
         data,

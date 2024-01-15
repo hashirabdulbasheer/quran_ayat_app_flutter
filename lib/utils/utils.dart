@@ -1,19 +1,48 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/challenge/domain/enums/quran_question_status_enum.dart';
 import 'package:uuid/uuid.dart';
 
+import '../features/challenge/domain/enums/quran_answer_status_enum.dart';
 import '../features/newAyat/data/surah_index.dart';
 import '../features/settings/domain/settings_manager.dart';
 import '../misc/enums/quran_status_enum.dart';
 import '../models/qr_word_model.dart';
 
-import 'package:intl/intl.dart' as intl;
-
 class QuranUtils {
+
+  static String formattedDate(int timeMs) {
+    DateTime now = DateTime.now();
+    DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
+    var millis = DateTime.fromMillisecondsSinceEpoch(timeMs);
+    if (!millis.difference(justNow).isNegative) {
+      return 'Just now';
+    }
+    if (millis.day == now.day &&
+        millis.month == now.month &&
+        millis.year == now.year) {
+      return intl.DateFormat('jm').format(millis);
+    }
+    DateTime yesterday = now.subtract(const Duration(days: 1));
+    if (millis.day == yesterday.day &&
+        millis.month == yesterday.month &&
+        millis.year == yesterday.year) {
+      return 'Yesterday, ${intl.DateFormat('jm').format(millis)}';
+    }
+    if (now.difference(millis).inDays < 4) {
+      String weekday = intl.DateFormat('EEEE').format(millis);
+
+      return '$weekday, ${intl.DateFormat('jm').format(millis)}';
+    }
+    var d24 = intl.DateFormat('dd/MM/yyyy HH:mm').format(millis);
+
+    return d24;
+  }
+
   static void showMessage(
     BuildContext context,
     String? message,
@@ -63,7 +92,8 @@ class QuranUtils {
       translation.first, // while sharing, use first translation
     );
     StringBuffer response = StringBuffer();
-    response.write("Sura $surahName - ${index.human.sura}:${index.human.aya}\n");
+    response
+        .write("Sura $surahName - ${index.human.sura}:${index.human.aya}\n");
     // response.write("${arabicSurah.aya[index.aya].text}\n\n");
     response.write("${translationSurah.aya[index.aya].text}\n");
     response.write(
@@ -87,6 +117,28 @@ class QuranUtils {
 
   static String uniqueId() {
     return const Uuid().v1();
+  }
+
+  static QuranQuestionStatusEnum questionStatusFromString(String value) {
+    if (value.toLowerCase() == "open") {
+      return QuranQuestionStatusEnum.open;
+    } else if (value.toLowerCase() == "close") {
+      return QuranQuestionStatusEnum.close;
+    }
+
+    return QuranQuestionStatusEnum.undefined;
+  }
+
+  static QuranAnswerStatusEnum answerStatusFromString(String value) {
+    if (value.toLowerCase() == "submitted") {
+      return QuranAnswerStatusEnum.submitted;
+    } else if (value.toLowerCase() == "approved") {
+      return QuranAnswerStatusEnum.approved;
+    } else if (value.toLowerCase() == "rejected") {
+      return QuranAnswerStatusEnum.rejected;
+    }
+
+    return QuranAnswerStatusEnum.undefined;
   }
 
   static bool isEmail(String e) {
