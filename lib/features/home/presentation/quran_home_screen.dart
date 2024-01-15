@@ -76,12 +76,20 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
             }),
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.menu_book_rounded),
+                icon: Icon(
+                  Icons.menu_book_rounded,
+                  size: 20,
+                ),
                 label: 'Read',
+                tooltip: 'Read',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.assignment_outlined),
+                icon: Icon(
+                  Icons.assignment_outlined,
+                  size: 20,
+                ),
                 label: 'Challenge',
+                tooltip: 'Challenge',
               ),
             ],
           ),
