@@ -16,7 +16,7 @@ import 'misc/url/url_strategy.dart';
 import 'models/qr_user_model.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.8.8";
+const String appVersion = "v2.8.9";
 
 void main() async {
   usePathUrlStrategy();
