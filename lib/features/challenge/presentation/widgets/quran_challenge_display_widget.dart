@@ -50,13 +50,15 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      question.question,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 20,
+                    Expanded(
+                      child: Text(
+                        question.question,
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ],
