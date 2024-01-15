@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 
 import '../../../../../models/qr_user_model.dart';
 import '../../../../../utils/utils.dart';
+import '../../../../core/domain/app_state/app_state.dart';
 import '../../../domain/challenge_manager.dart';
 import '../../../domain/models/quran_answer.dart';
-
 
 class QuranAnswersListWidget extends StatelessWidget {
   final QuranUser? user;
@@ -42,9 +45,14 @@ class QuranAnswersListWidget extends StatelessWidget {
         return Directionality(
           textDirection: textDirection,
           child: ListTile(
-            onTap: () {
-              // TODO: Implement action onTap of an answer
-            },
+            onTap: () => StoreProvider.of<AppState>(context).dispatch(
+              SelectParticularAyaAction(
+                index: SurahIndex(
+                  answers[index].surah,
+                  answers[index].aya,
+                ),
+              ),
+            ),
             title: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -62,7 +70,7 @@ class QuranAnswersListWidget extends StatelessWidget {
                     height: 4,
                   ),
                   Text(
-                    "${answers[index].surah+1}:${answers[index].aya+1} - ${answers[index].note}",
+                    "${answers[index].surah + 1}:${answers[index].aya + 1} - ${answers[index].note}",
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(
