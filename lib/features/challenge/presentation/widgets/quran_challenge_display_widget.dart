@@ -29,39 +29,46 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      question.title,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Colors.black45,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        question.title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.black45,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const Divider(),
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        question.question,
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 20,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          question.question,
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            height: 1.5,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
