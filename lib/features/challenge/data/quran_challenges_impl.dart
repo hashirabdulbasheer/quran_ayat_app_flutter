@@ -141,16 +141,17 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
 
     try {
       if (question.answers == null || question.answers.isEmpty) {
-        question.copyWith(answers: [answer]);
+        question = question.copyWith(answers: [answer]);
       } else {
         question.answers.add(answer);
       }
-      await dataSource.update(
+      bool status = await dataSource.update(
         "questions/$questionId",
         question.toMap(),
       );
-
-      return true;
+      if (status) {
+        return true;
+      }
     } catch (e) {
       QuranLogger.logE(e);
     }
