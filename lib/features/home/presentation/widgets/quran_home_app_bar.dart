@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/challenge/presentation/quran_message_display_screen.dart';
 import 'package:redux/redux.dart';
 
 import '../../../bookmark/presentation/bookmark_icon_widget.dart';
@@ -29,6 +30,12 @@ class QuranHomeAppBarWidget extends StatelessWidget
             onPressed: () => _reloadQuestions(store),
             icon: const Icon(
               Icons.refresh_rounded,
+            ),
+          ),
+          IconButton(
+            onPressed: () => _help(context),
+            icon: const Icon(
+              Icons.question_mark,
             ),
           ),
         ],
@@ -62,5 +69,20 @@ class QuranHomeAppBarWidget extends StatelessWidget
   void _reloadQuestions(Store<AppState> store) {
     store.dispatch(InitializeChallengeScreenAction(questions: const []));
     store.dispatch(ToggleLoadingScreenAction());
+  }
+
+  void _help(BuildContext context) {
+    String message =
+        "Challenges feature occasional questions posted for you to explore. Your task is to discover answers within the Noble Quran. Each response requires a verse that addresses the question, along with reflections on how the verse answers it."
+        "\n\n\nKeep in mind, **there's no right or wrong answer**. Each response represents a personal perspective or interpretation of how a verse might address the question.";
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuranMessageDisplayScreen(
+          title: "Help",
+          message: message,
+        ),
+      ),
+    );
   }
 }
