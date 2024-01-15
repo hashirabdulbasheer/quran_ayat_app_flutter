@@ -90,4 +90,15 @@ class QuranChallengeManager {
   String formattedDate(int timeMs) {
     return QuranUtils.formattedDate(timeMs);
   }
+
+  Future<bool> createQuestion(
+    QuranQuestion question,
+  ) async {
+    if (await isOffline()) {
+      /// OFFLINE
+      return false;
+    }
+
+    return await _challengesEngine.createQuestion(question);
+  }
 }

@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/challenge/presentation/widgets/create/quran_single_action_button_widget.dart';
+import 'package:quran_ayat/utils/dialog_utils.dart';
+import 'package:quran_ayat/utils/utils.dart';
+import 'package:uuid/uuid.dart';
+
+import '../domain/challenge_manager.dart';
+import '../domain/enums/quran_question_status_enum.dart';
+import '../domain/models/quran_question.dart';
+import 'widgets/create/quran_single_action_button_widget.dart';
 
 class QuranCreateQuestionScreen extends StatefulWidget {
   const QuranCreateQuestionScreen({Key? key}) : super(key: key);
@@ -12,6 +19,7 @@ class QuranCreateQuestionScreen extends StatefulWidget {
 class _QuranCreateQuestionScreenState extends State<QuranCreateQuestionScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _questionController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +77,16 @@ class _QuranCreateQuestionScreenState extends State<QuranCreateQuestionScreen> {
                   ),
                   QuranSingleActionButtonWidget(
                     buttonText: "Submit",
-                    onPressed: () {},
+                    onPressed: () => {
+                      DialogUtils.confirmationDialog(
+                        context,
+                        "Submit?",
+                        "Are you sure?",
+                        "Submit",
+                        () => _onSubmit(),
+                      ),
+                    },
+                    isLoading: _isLoading,
                   ),
                 ],
               ),
@@ -78,5 +95,42 @@ class _QuranCreateQuestionScreenState extends State<QuranCreateQuestionScreen> {
         ),
       ),
     );
+  }
+
+  void _onSubmit() {
+    if (_isLoading) {
+      return;
+    }
+    setState(() {
+      _isLoading = true;
+    });
+    String title = _titleController.text;
+    String questionText = _questionController.text;
+    if (title.isEmpty || questionText.isEmpty) {
+      QuranUtils.showMessage(
+        context,
+        "Please enter both title and question",
+      );
+
+      return;
+    }
+    String questionId = const Uuid().v4();
+    QuranQuestion question = QuranQuestion(
+      id: 0,
+      title: title,
+      question: questionText,
+      status: QuranQuestionStatusEnum.undefined,
+      createdOn: DateTime.now().millisecondsSinceEpoch,
+      answers: const [],
+    );
+    QuranChallengeManager.instance.createQuestion(question);
+    setState(() {
+      _isLoading = false;
+    });
+    QuranUtils.showMessage(
+      context,
+      "Question created successfully",
+    );
+    Navigator.of(context).pop();
   }
 }

@@ -23,4 +23,8 @@ abstract class QuranChallengesDataSource {
     int questionId,
     QuranAnswer answer,
   );
+
+  Future<bool> createQuestion(
+    QuranQuestion question,
+  );
 }

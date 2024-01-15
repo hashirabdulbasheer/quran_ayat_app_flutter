@@ -1,8 +1,7 @@
-import 'package:quran_ayat/features/challenge/domain/enums/quran_question_status_enum.dart';
-
 import '../../../utils/logger_utils.dart';
 import '../../../utils/utils.dart';
 import '../../core/data/quran_data_interface.dart';
+import '../domain/enums/quran_question_status_enum.dart';
 import '../domain/interfaces/quran_challenge_interface.dart';
 import '../domain/models/quran_answer.dart';
 import '../domain/models/quran_question.dart';
@@ -60,7 +59,9 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     }
 
     /// only returns open questions
-    questions.removeWhere((element) => element.status != QuranQuestionStatusEnum.open);
+    questions.removeWhere(
+      (element) => element.status != QuranQuestionStatusEnum.open,
+    );
 
     return questions;
   }
@@ -210,5 +211,25 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     }
 
     return null;
+  }
+
+  @override
+  Future<bool> createQuestion(
+    QuranQuestion question,
+  ) async {
+    try {
+      List<dynamic> questions = <dynamic>[];
+      questions.add(question.toMap());
+      await dataSource.create(
+        "questions",
+        question.toMap(),
+      );
+
+      return true;
+    } catch (e) {
+      QuranLogger.logE(e);
+    }
+
+    return false;
   }
 }
