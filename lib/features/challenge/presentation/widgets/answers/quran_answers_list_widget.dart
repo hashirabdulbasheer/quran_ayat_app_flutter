@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
-import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
+import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
+import 'package:quran_ayat/features/home/presentation/quran_home_screen.dart';
 
 import '../../../../../models/qr_user_model.dart';
 import '../../../../../utils/utils.dart';
 import '../../../../core/domain/app_state/app_state.dart';
+import '../../../../newAyat/data/surah_index.dart';
+import '../../../../newAyat/domain/redux/actions/actions.dart';
 import '../../../domain/challenge_manager.dart';
 import '../../../domain/models/quran_answer.dart';
 
@@ -45,13 +47,9 @@ class QuranAnswersListWidget extends StatelessWidget {
         return Directionality(
           textDirection: textDirection,
           child: ListTile(
-            onTap: () => StoreProvider.of<AppState>(context).dispatch(
-              SelectParticularAyaAction(
-                index: SurahIndex(
-                  answers[index].surah,
-                  answers[index].aya,
-                ),
-              ),
+            onTap: () => _onAnswerTapped(
+              context,
+              answers[index],
             ),
             title: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -89,5 +87,26 @@ class QuranAnswersListWidget extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _onAnswerTapped(
+    BuildContext context,
+    QuranAnswer answer,
+  ) {
+    {
+      StoreProvider.of<AppState>(context).dispatch(
+        SelectParticularAyaAction(
+          index: SurahIndex(
+            answer.surah,
+            answer.aya,
+          ),
+        ),
+      );
+      StoreProvider.of<AppState>(context).dispatch(
+        SelectHomeScreenTabAction(
+          tab: QuranHomeScreenBottomTabsEnum.reader,
+        ),
+      );
+    }
   }
 }

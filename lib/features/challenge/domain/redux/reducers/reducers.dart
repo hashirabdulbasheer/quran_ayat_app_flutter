@@ -17,6 +17,9 @@ Reducer<ChallengeScreenState> challengeScreenReducer =
   TypedReducer<ChallengeScreenState, ToggleLoadingScreenAction>(
     _toggleLoadingScreenReducer,
   ),
+  TypedReducer<ChallengeScreenState, SelectHomeScreenTabAction>(
+    _selectHomeScreenTabReducer,
+  ),
 ]);
 
 ChallengeScreenState _initializeChallengeScreenReducer(
@@ -57,4 +60,11 @@ ChallengeScreenState _toggleLoadingScreenReducer(
   ToggleLoadingScreenAction _,
 ) {
   return state.copyWith(isLoading: !state.isLoading);
+}
+
+ChallengeScreenState _selectHomeScreenTabReducer(
+  ChallengeScreenState state,
+  SelectHomeScreenTabAction action,
+) {
+  return state.copyWith(selectedHomeScreenTab: action.tab);
 }

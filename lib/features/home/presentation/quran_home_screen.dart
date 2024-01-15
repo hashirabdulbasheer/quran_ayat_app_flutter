@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
 import 'package:redux/redux.dart';
 
 import '../../bookmark/data/bookmarks_local_impl.dart';
@@ -20,9 +21,6 @@ class QuranHomeScreen extends StatefulWidget {
 }
 
 class _QuranHomeScreenState extends State<QuranHomeScreen> {
-  QuranHomeScreenBottomTabsEnum _selectedBottomTab =
-      QuranHomeScreenBottomTabsEnum.reader;
-
   @override
   Widget build(BuildContext context) {
     return StoreBuilder<AppState>(builder: (
@@ -35,7 +33,7 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
           /// APP BAR
           appBar: QuranHomeAppBarWidget(
             store: store,
-            selectedTab: _selectedBottomTab,
+            selectedTab: store.state.challenge.selectedHomeScreenTab,
           ),
 
           /// DRAWER
@@ -49,29 +47,37 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
           /// BOTTOM SHEET
           bottomSheet: QuranHomeBottomSheetWidget(
             store: store,
-            selectedTab: _selectedBottomTab,
+            selectedTab: store.state.challenge.selectedHomeScreenTab,
           ),
 
           /// BODY
           body: QuranHomeBodyContentWidget(
             store: store,
-            selectedTab: _selectedBottomTab,
+            selectedTab: store.state.challenge.selectedHomeScreenTab,
           ),
 
           /// BOTTOM TABS
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            currentIndex:
-                _selectedBottomTab == QuranHomeScreenBottomTabsEnum.reader
-                    ? 0
-                    : 1,
+            currentIndex: store.state.challenge.selectedHomeScreenTab ==
+                    QuranHomeScreenBottomTabsEnum.reader
+                ? 0
+                : 1,
             selectedItemColor: Colors.blueGrey,
             unselectedItemColor: Colors.black38,
             onTap: (value) => setState(() {
               if (value == 0) {
-                _selectedBottomTab = QuranHomeScreenBottomTabsEnum.reader;
+                store.dispatch(
+                  SelectHomeScreenTabAction(
+                    tab: QuranHomeScreenBottomTabsEnum.reader,
+                  ),
+                );
               } else {
-                _selectedBottomTab = QuranHomeScreenBottomTabsEnum.challenge;
+                store.dispatch(
+                  SelectHomeScreenTabAction(
+                    tab: QuranHomeScreenBottomTabsEnum.challenge,
+                  ),
+                );
               }
             }),
             items: const [

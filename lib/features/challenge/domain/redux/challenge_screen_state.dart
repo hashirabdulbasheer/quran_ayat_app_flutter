@@ -3,28 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:quran_ayat/features/challenge/domain/enums/quran_answer_status_enum.dart';
 
 import '../../../../models/qr_user_model.dart';
+import '../../../home/presentation/quran_home_screen.dart';
 import '../models/quran_answer.dart';
 import '../models/quran_question.dart';
 
 @immutable
 class ChallengeScreenState extends Equatable {
   final List<QuranQuestion> allQuestions;
+  final QuranHomeScreenBottomTabsEnum selectedHomeScreenTab;
   final int currentIndex;
   final bool isLoading;
 
   const ChallengeScreenState({
     this.allQuestions = const [],
+    this.selectedHomeScreenTab = QuranHomeScreenBottomTabsEnum.reader,
     this.currentIndex = 0,
     this.isLoading = false,
   });
 
   ChallengeScreenState copyWith({
     List<QuranQuestion>? allQuestions,
+    QuranHomeScreenBottomTabsEnum? selectedHomeScreenTab,
     int? currentIndex,
     bool? isLoading,
   }) {
     return ChallengeScreenState(
       allQuestions: allQuestions ?? this.allQuestions,
+      selectedHomeScreenTab:
+          selectedHomeScreenTab ?? this.selectedHomeScreenTab,
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,
     );
@@ -82,6 +88,7 @@ class ChallengeScreenState extends Equatable {
   @override
   List<Object?> get props => [
         allQuestions,
+        selectedHomeScreenTab,
         currentIndex,
         isLoading,
       ];
