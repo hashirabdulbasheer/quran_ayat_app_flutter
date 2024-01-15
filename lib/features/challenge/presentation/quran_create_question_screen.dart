@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quran_ayat/utils/dialog_utils.dart';
 import 'package:quran_ayat/utils/utils.dart';
-import 'package:uuid/uuid.dart';
 
 import '../domain/challenge_manager.dart';
 import '../domain/enums/quran_question_status_enum.dart';
@@ -114,7 +113,7 @@ class _QuranCreateQuestionScreenState extends State<QuranCreateQuestionScreen> {
 
       return;
     }
-    String questionId = const Uuid().v4();
+
     QuranQuestion question = QuranQuestion(
       id: 0,
       title: title,
@@ -123,6 +122,8 @@ class _QuranCreateQuestionScreenState extends State<QuranCreateQuestionScreen> {
       createdOn: DateTime.now().millisecondsSinceEpoch,
       answers: const [],
     );
+
+    /// TODO: Used only by admin, so ignoring error during question creation for now
     QuranChallengeManager.instance.createQuestion(question);
     setState(() {
       _isLoading = false;

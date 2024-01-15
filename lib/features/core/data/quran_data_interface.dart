@@ -20,6 +20,6 @@ abstract class QuranDataSource {
 
   Future<bool> update(
     String path,
-    Map<String, dynamic> item,
+    dynamic item,
   );
 }

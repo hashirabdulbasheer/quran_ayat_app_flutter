@@ -218,14 +218,35 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     QuranQuestion question,
   ) async {
     try {
+      Map<String, dynamic>? configs = await dataSource.fetch("config");
+      if (configs == null) {
+        return false;
+      }
+      int lastQuestionIndex = configs["lastQuestionIndex"] as int;
+      question = question.copyWith(
+        id: lastQuestionIndex,
+      );
+
+      /// add the question
       List<dynamic> questions = <dynamic>[];
       questions.add(question.toMap());
-      await dataSource.create(
-        "questions",
+      bool status = await dataSource.update(
+        "questions/$lastQuestionIndex",
         question.toMap(),
       );
 
-      return true;
+      /// if success then update the last index
+      if (status) {
+        Map<String, dynamic> config = <String, dynamic>{};
+        config["lastQuestionIndex"] = lastQuestionIndex + 1;
+        bool status = await dataSource.update(
+          "config",
+          config,
+        );
+        if (status) {
+          return true;
+        }
+      }
     } catch (e) {
       QuranLogger.logE(e);
     }
