@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
+import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
@@ -18,6 +19,10 @@ import 'models/qr_user_model.dart';
 // TODO: Update before release
 const String appVersion = "v2.8.9";
 
+bool isChallengeBetaModeEnabled = RemoteConfigManager.instance
+        .get(RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled) &&
+    QuranAuthFactory.engine.getUser() != null;
+
 void main() async {
   usePathUrlStrategy();
   await QuranHiveNotesEngine.instance.initialize();
@@ -25,12 +30,12 @@ void main() async {
   FirebaseAnalytics.instance.logAppOpen();
   await RemoteConfigManager.instance.init();
 
-  QuranUser? user = QuranAuthFactory.engine.getUser();
   Widget homeScreen = const QuranNewAyatScreen();
+
   // enabling new challenges for logged in users only - for beta
-  if (RemoteConfigManager.instance
-          .get(RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled) &&
-      user != null) {
+  bool isChallengesEnabledInUserSettings =
+      await QuranSettingsManager.instance.isChallengesFeatureEnabled();
+  if (isChallengeBetaModeEnabled && isChallengesEnabledInUserSettings) {
     homeScreen = const QuranHomeScreen();
   }
 

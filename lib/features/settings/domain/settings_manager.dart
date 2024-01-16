@@ -2,9 +2,14 @@ import 'dart:async';
 
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/misc/enums/quran_app_mode_enum.dart';
 
+import '../../../main.dart';
 import '../../../misc/configs/app_config.dart';
+import '../../../misc/configs/remote_config_manager.dart';
+import '../../../misc/enums/quran_app_mode_enum.dart';
+import '../../../misc/enums/quran_feature_flag_enum.dart';
+import '../../../models/qr_user_model.dart';
+import '../../auth/domain/auth_factory.dart';
 import '../data/repository/settings_repository_impl.dart';
 import 'constants/setting_constants.dart';
 import 'entities/quran_dropdown_values_factory.dart';
@@ -112,12 +117,25 @@ class QuranSettingsManager {
     type: QuranSettingType.dropdown,
   );
 
+  final QuranSetting _challengeFeatureSettings = QuranSetting(
+    name: "Challenges Feature",
+    description: "on/off challenges feature (relaunch app to apply)",
+    id: QuranSettingsConstants.challengedFeatureId,
+    possibleValues: QuranDropdownValuesFactory.createValues(
+      QuranSettingsConstants.challengedFeatureId,
+    ),
+    defaultValue: QuranDropdownValuesFactory.defaultValue(
+      QuranSettingsConstants.challengedFeatureId,
+    ),
+    type: QuranSettingType.onOff,
+  );
+
   QuranSettingsManager._privateConstructor();
 
   final double _fontScaleFactor = 0.2;
 
   List<QuranSetting> generateSettings() {
-    return [
+    List<QuranSetting> settings = [
       // _themeSettings,
       _appModeSetting,
       _translationSettings,
@@ -125,6 +143,12 @@ class QuranSettingsManager {
       _audioControlSettings,
       _audioReciterSetting,
     ];
+
+    if (isChallengeBetaModeEnabled) {
+      settings.add(_challengeFeatureSettings);
+    }
+
+    return settings;
   }
 
   void save(
@@ -202,6 +226,15 @@ class QuranSettingsManager {
 
   Future<bool> isAudioControlsEnabled() async {
     String isEnabledStr = await getValue(_audioControlSettings);
+    if (isEnabledStr == "Off") {
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<bool> isChallengesFeatureEnabled() async {
+    String isEnabledStr = await getValue(_challengeFeatureSettings);
     if (isEnabledStr == "Off") {
       return false;
     }
