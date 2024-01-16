@@ -1,7 +1,7 @@
 import '../../../models/qr_response_model.dart';
 import '../../../utils/utils.dart';
 import '../../core/data/quran_firebase_engine.dart';
-import '../data/hive_notes_impl.dart';
+import '../data/dummy_offline_impl.dart';
 import '../data/quran_notes_impl.dart';
 import 'entities/quran_note.dart';
 import 'interfaces/quran_notes_interface.dart';
