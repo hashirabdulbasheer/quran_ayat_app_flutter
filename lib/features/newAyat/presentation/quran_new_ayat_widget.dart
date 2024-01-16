@@ -31,7 +31,6 @@ class QuranNewAyatReaderWidget extends StatefulWidget {
 }
 
 class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
-
   @override
   void initState() {
     super.initState();
@@ -88,7 +87,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
       if (store.state.reader.data.words.isEmpty) {
         // still loading
-        return Container();
+        return const Center(child: CircularProgressIndicator());
       }
 
       return SingleChildScrollView(
@@ -141,13 +140,15 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                                   textAlign: TextAlign.start,
                                 ),
                               ),
-                              onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
+                              onPressed: () => store
+                                  .dispatch(ToggleHeaderVisibilityAction()),
                             ),
                           ),
                         )
                       : IconButton(
                           tooltip: "Close header",
-                          onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
+                          onPressed: () =>
+                              store.dispatch(ToggleHeaderVisibilityAction()),
                           icon: const Icon(
                             Icons.close,
                             size: 12,
@@ -170,7 +171,8 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                     Directionality(
                       textDirection: TextDirection.ltr,
                       child: TextButton(
-                        onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
+                        onPressed: () =>
+                            store.dispatch(ToggleHeaderVisibilityAction()),
                         child: Text(
                           "${currentIndex.human.sura}:${currentIndex.human.aya}", // RTL
                           style: const TextStyle(
