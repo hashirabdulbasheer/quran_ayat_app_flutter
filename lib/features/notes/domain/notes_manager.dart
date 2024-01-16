@@ -1,12 +1,10 @@
-import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
-
 import '../../../models/qr_response_model.dart';
 import '../../../utils/utils.dart';
+import '../../core/data/quran_firebase_engine.dart';
 import '../data/hive_notes_impl.dart';
 import '../data/quran_notes_impl.dart';
 import 'entities/quran_note.dart';
 import 'interfaces/quran_notes_interface.dart';
-import 'package:intl/intl.dart' as intl;
 
 class QuranNotesManager implements QuranNotesDataSource {
   static final QuranNotesManager instance =
@@ -17,6 +15,13 @@ class QuranNotesManager implements QuranNotesDataSource {
   final QuranNotesEngine _notesEngine =
       QuranNotesEngine(dataSource: QuranFirebaseEngine.instance);
 
+  /// TODO: Hive disabled temporarily - using a dummy data source for offline mode
+  ///  To enable hive enable here
+  // final QuranNotesDataSource _offlineEngine = QuranHiveNotesEngine.instance;
+  final QuranNotesDataSource _offlineEngine = DummyOfflineEngine();
+
+  QuranNotesDataSource get offlineEngine => _offlineEngine;
+
   @override
   Future<QuranResponse> create(
     String userId,
@@ -24,7 +29,7 @@ class QuranNotesManager implements QuranNotesDataSource {
   ) async {
     if (await isOffline()) {
       /// OFFLINE
-      return await QuranHiveNotesEngine.instance.create(
+      return await _offlineEngine.create(
         userId,
         note,
       );
@@ -51,7 +56,7 @@ class QuranNotesManager implements QuranNotesDataSource {
     }
 
     /// OFFLINE
-    return QuranHiveNotesEngine.instance.delete(
+    return _offlineEngine.delete(
       userId,
       note,
     );
@@ -65,7 +70,7 @@ class QuranNotesManager implements QuranNotesDataSource {
   ) async {
     if (await isOffline()) {
       /// OFFLINE
-      return await QuranHiveNotesEngine.instance.fetch(
+      return await _offlineEngine.fetch(
         userId,
         suraIndex,
         ayaIndex,
@@ -84,7 +89,7 @@ class QuranNotesManager implements QuranNotesDataSource {
   Future<void> initialize() async {
     if (await isOffline()) {
       /// OFFLINE
-      await QuranHiveNotesEngine.instance.initialize();
+      await _offlineEngine.initialize();
     }
 
     /// ONLINE
@@ -105,7 +110,7 @@ class QuranNotesManager implements QuranNotesDataSource {
     }
 
     /// OFFLINE
-    return QuranHiveNotesEngine.instance.update(
+    return _offlineEngine.update(
       userId,
       note,
     );
@@ -134,7 +139,7 @@ class QuranNotesManager implements QuranNotesDataSource {
   Future<List<QuranNote>> fetchAll(String userId) async {
     if (await isOffline()) {
       /// OFFLINE
-      return await QuranHiveNotesEngine.instance.fetchAll(userId);
+      return await _offlineEngine.fetchAll(userId);
     }
 
     /// ONLINE
@@ -142,14 +147,14 @@ class QuranNotesManager implements QuranNotesDataSource {
   }
 
   Future<List<QuranNote>> fetchAllLocal(String userId) {
-    return QuranHiveNotesEngine.instance.fetchAll(userId);
+    return _offlineEngine.fetchAll(userId);
   }
 
   Future<bool> deleteLocal(
     String userId,
     QuranNote note,
   ) {
-    return QuranHiveNotesEngine.instance.delete(
+    return _offlineEngine.delete(
       userId,
       note,
     );
@@ -160,7 +165,6 @@ class QuranNotesManager implements QuranNotesDataSource {
   }
 
   String formattedDate(int timeMs) {
-
     return QuranUtils.formattedDate(timeMs);
   }
 }
