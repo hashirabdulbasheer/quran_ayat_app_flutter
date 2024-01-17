@@ -10,6 +10,7 @@ import '../../../../newAyat/data/surah_index.dart';
 import '../../../../newAyat/domain/redux/actions/actions.dart';
 import '../../../domain/challenge_manager.dart';
 import '../../../domain/models/quran_answer.dart';
+import 'quran_translation_aya_widget.dart';
 
 class QuranAnswersListWidget extends StatelessWidget {
   final QuranUser? user;
@@ -65,10 +66,19 @@ class QuranAnswersListWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 4,
+                    height: 10,
+                  ),
+                  QuranTranslationForAyaWidget(
+                    index: SurahIndex(
+                      answers[index].surah,
+                      answers[index].aya,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
                   ),
                   Text(
-                    "${answers[index].surah + 1}:${answers[index].aya + 1} - ${answers[index].note}",
+                    answers[index].note,
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(
