@@ -6,6 +6,7 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
   final int numLikes;
   final bool isLiked;
   final bool isLoading;
+  final bool isEnabled;
   final Function onLikeTapped;
 
   const QuranAnswerLikeButtonWidget({
@@ -13,6 +14,7 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
     required this.numLikes,
     required this.isLiked,
     required this.isLoading,
+    required this.isEnabled,
     required this.onLikeTapped,
   }) : super(key: key);
 
@@ -21,12 +23,13 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
     return SizedBox(
       width: 100,
       child: TextButton(
-        onPressed: () => onTappedAction(),
+        onPressed: () => isEnabled ? onTappedAction() : null,
         child: Row(
           children: [
             /// Icon
             QuranAnswerLikeThumbsUpWidget(
               isLiked: isLiked,
+              isEnabled: isEnabled,
             ),
 
             const SizedBox(

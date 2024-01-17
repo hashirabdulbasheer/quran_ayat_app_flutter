@@ -38,10 +38,20 @@ class _QuranAnswerActionControlWidgetState
           numLikes: widget.answer.likedUsers.length,
           isLiked: widget.answer.likedUsers.contains(widget.currentUser?.uid),
           isLoading: _isLoading,
+          isEnabled: _isLikeButtonEnable() ? true : false,
           onLikeTapped: () => _onLikeTapped(context),
         ),
       ],
     );
+  }
+
+  bool _isLikeButtonEnable() {
+    // do not show like button if the answer was submitted by logged in user
+    if (widget.currentUser?.uid == widget.answer.userId) {
+      return false;
+    }
+
+    return true;
   }
 
   void _onLikeTapped(BuildContext context) {
