@@ -4,6 +4,9 @@ import 'package:redux/redux.dart';
 
 import '../../../../../models/qr_user_model.dart';
 import '../../../../core/domain/app_state/app_state.dart';
+import '../../../../home/presentation/quran_home_screen.dart';
+import '../../../../newAyat/data/surah_index.dart';
+import '../../../../newAyat/domain/redux/actions/actions.dart';
 import '../../../domain/models/quran_answer.dart';
 import '../../../domain/redux/actions/actions.dart';
 import 'quran_answer_like_button_widget.dart';
@@ -40,6 +43,16 @@ class _QuranAnswerActionControlWidgetState
           isLoading: _isLoading,
           isEnabled: _isLikeButtonEnable() ? true : false,
           onLikeTapped: () => _onLikeTapped(context),
+        ),
+        IconButton(
+          onPressed: () => _onReadTapped(
+            context,
+            widget.answer,
+          ),
+          icon: const Icon(
+            Icons.menu_book_rounded,
+            color: Colors.blueGrey,
+          ),
         ),
       ],
     );
@@ -78,10 +91,31 @@ class _QuranAnswerActionControlWidgetState
       ));
     }
 
-    Future<void>.delayed(Duration(milliseconds: 500)).then((value) => {
+    Future<void>.delayed(const Duration(milliseconds: 500)).then((value) => {
           setState(() {
             _isLoading = false;
           }),
         });
+  }
+
+  void _onReadTapped(
+    BuildContext context,
+    QuranAnswer answer,
+  ) {
+    {
+      StoreProvider.of<AppState>(context).dispatch(
+        SelectParticularAyaAction(
+          index: SurahIndex(
+            answer.surah,
+            answer.aya,
+          ),
+        ),
+      );
+      StoreProvider.of<AppState>(context).dispatch(
+        SelectHomeScreenTabAction(
+          tab: QuranHomeScreenBottomTabsEnum.reader,
+        ),
+      );
+    }
   }
 }
