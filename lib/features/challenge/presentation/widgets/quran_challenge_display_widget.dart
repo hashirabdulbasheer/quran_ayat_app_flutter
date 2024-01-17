@@ -40,16 +40,13 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                         style: const TextStyle(
                           color: Colors.black45,
                           fontWeight: FontWeight.normal,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ],
                   ),
                 ),
                 const Divider(),
-                const SizedBox(
-                  height: 10,
-                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
                   child: Row(
@@ -63,15 +60,12 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                             color: Colors.black,
                             height: 1.5,
                             fontWeight: FontWeight.normal,
-                            fontSize: 18,
+                            fontSize: 14,
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
                 ),
                 QuranAnswersWidget(
                   question: question,

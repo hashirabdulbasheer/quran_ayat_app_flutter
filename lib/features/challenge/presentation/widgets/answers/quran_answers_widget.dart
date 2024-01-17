@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
-import 'package:quran_ayat/utils/utils.dart';
 import '../../../../../models/qr_user_model.dart';
 import '../../../../../utils/logger_utils.dart';
+import '../../../../../utils/utils.dart';
 import '../../../../auth/domain/auth_factory.dart';
 import '../../../../auth/presentation/quran_login_screen.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../core/presentation/shimmer.dart';
+import '../../../domain/models/quran_question.dart';
 import '../../quran_create_answer_screen.dart';
 import 'quran_answers_body_widget.dart';
 
