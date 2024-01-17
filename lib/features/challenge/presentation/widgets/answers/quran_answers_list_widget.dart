@@ -98,9 +98,6 @@ class QuranAnswersListWidget extends StatelessWidget {
                       height: 8,
                     ),
                     const Divider(),
-                    const SizedBox(
-                      height: 8,
-                    ),
                     QuranAnswerActionControlWidget(
                       currentUser: user,
                       questionId: questionId,
