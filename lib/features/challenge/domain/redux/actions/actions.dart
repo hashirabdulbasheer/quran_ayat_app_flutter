@@ -36,7 +36,7 @@ class SelectHomeScreenTabAction extends AppStateAction {
 }
 
 class LikeAnswerAction extends AppStateAction {
-  final String questionId;
+  final int questionId;
   final QuranAnswer answer;
 
   LikeAnswerAction({
@@ -51,7 +51,7 @@ class LikeAnswerAction extends AppStateAction {
 }
 
 class UnlikeAnswerAction extends AppStateAction {
-  final String questionId;
+  final int questionId;
   final QuranAnswer answer;
 
   UnlikeAnswerAction({

@@ -1,7 +1,10 @@
 import 'package:redux/redux.dart';
 
+import '../../../../../models/qr_user_model.dart';
+import '../../../../auth/domain/auth_factory.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../challenge_manager.dart';
+import '../../models/quran_answer.dart';
 import '../../models/quran_question.dart';
 import '../actions/actions.dart';
 
@@ -10,17 +13,74 @@ List<Middleware<AppState>> createChallengeScreenMiddleware() {
     TypedMiddleware<AppState, InitializeChallengeScreenAction>(
       _initializeMiddleware,
     ),
+    TypedMiddleware<AppState, LikeAnswerAction>(
+      _likeAnswerMiddleware,
+    ),
+    TypedMiddleware<AppState, UnlikeAnswerAction>(
+      _unlikeAnswerMiddleware,
+    ),
   ];
 }
 
 void _initializeMiddleware(
-  Store<AppState> store,
+  Store<AppState> _,
   InitializeChallengeScreenAction action,
   NextDispatcher next,
 ) async {
   List<QuranQuestion> questions =
       await QuranChallengeManager.instance.fetchQuestions();
-  questions.sort((a,b,) => b.createdOn.compareTo(a.createdOn));
+  questions.sort((
+    a,
+    b,
+  ) =>
+      b.createdOn.compareTo(a.createdOn));
   action = InitializeChallengeScreenAction(questions: questions);
+  next(action);
+}
+
+void _likeAnswerMiddleware(
+  Store<AppState> _,
+  LikeAnswerAction action,
+  NextDispatcher next,
+) async {
+  QuranUser? user = QuranAuthFactory.engine.getUser();
+  String userId = user?.uid ?? "";
+  if (userId.isEmpty /*|| userId == action.answer.userId*/) {
+    /// if current user is the creator of the answer then do not like
+    next(action);
+
+    return;
+  }
+  Set<String> likedUsers = action.answer.likedUsers.toSet();
+  likedUsers.add(userId);
+  QuranAnswer answer = action.answer.copyWith(likedUsers: likedUsers.toList());
+  await QuranChallengeManager.instance.editAnswer(
+    userId,
+    action.questionId,
+    answer,
+  );
+  next(action);
+}
+
+void _unlikeAnswerMiddleware(
+  Store<AppState> _,
+  UnlikeAnswerAction action,
+  NextDispatcher next,
+) async {
+  QuranUser? user = QuranAuthFactory.engine.getUser();
+  String userId = user?.uid ?? "";
+  if (userId.isEmpty) {
+    next(action);
+
+    return;
+  }
+  List<String> likedUsers = action.answer.likedUsers;
+  likedUsers.remove(userId);
+  QuranAnswer answer = action.answer.copyWith(likedUsers: likedUsers);
+  await QuranChallengeManager.instance.editAnswer(
+    userId,
+    action.questionId,
+    answer,
+  );
   next(action);
 }
