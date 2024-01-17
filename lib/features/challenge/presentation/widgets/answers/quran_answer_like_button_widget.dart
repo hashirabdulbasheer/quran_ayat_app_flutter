@@ -20,8 +20,7 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 100,
+    return IntrinsicWidth(
       child: TextButton(
         onPressed: () => isEnabled ? onTappedAction() : null,
         child: Row(
