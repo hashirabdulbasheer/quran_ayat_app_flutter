@@ -67,6 +67,14 @@ class _QuranAnswerActionControlWidgetState
             color: _isEditButtonEnable() ? Colors.blueGrey : Colors.black12,
           ),
         ),
+        IconButton(
+          tooltip: "Report problem with answer",
+          onPressed: () => _onReportAnswerTapped(),
+          icon: const Icon(
+            Icons.report_problem_outlined,
+            color: Colors.black12 ,
+          ),
+        ),
       ],
     );
   }
@@ -161,5 +169,9 @@ class _QuranAnswerActionControlWidgetState
     ).then((value) {
       setState(() {});
     });
+  }
+
+  void _onReportAnswerTapped() {
+
   }
 }
