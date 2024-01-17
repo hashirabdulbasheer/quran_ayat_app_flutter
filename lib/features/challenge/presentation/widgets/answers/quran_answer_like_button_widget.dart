@@ -18,37 +18,42 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => onTappedAction(),
-      child: Row(
-        children: [
-          /// Icon
-          QuranAnswerLikeThumbsUpWidget(
-            isLiked: isLiked,
-          ),
-
-          const SizedBox(
-            width: 10,
-          ),
-
-          if (isLoading)
-            const SizedBox(
-              height: 20,
-              width: 20,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+    return SizedBox(
+      width: 100,
+      child: TextButton(
+        onPressed: () => onTappedAction(),
+        child: Row(
+          children: [
+            /// Icon
+            QuranAnswerLikeThumbsUpWidget(
+              isLiked: isLiked,
             ),
 
-          /// Label with count
-          if (!isLoading)
-            numLikes > 0
-                ? Text(
-                    "($numLikes)",
-                    style: const TextStyle(fontSize: 12),
-                  )
-                : const Text(""),
-        ],
+            const SizedBox(
+              width: 10,
+            ),
+
+            if (isLoading)
+              const SizedBox(
+                height: 20,
+                width: 20,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ),
+
+            /// Label with count
+            if (!isLoading)
+              numLikes > 0
+                  ? Text(
+                      "($numLikes)",
+                      style: const TextStyle(fontSize: 12),
+                    )
+                  : const Text(""),
+          ],
+        ),
       ),
     );
   }

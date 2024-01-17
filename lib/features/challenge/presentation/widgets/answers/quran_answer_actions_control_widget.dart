@@ -8,7 +8,7 @@ import '../../../domain/models/quran_answer.dart';
 import '../../../domain/redux/actions/actions.dart';
 import 'quran_answer_like_button_widget.dart';
 
-class QuranAnswerActionControlWidget extends StatelessWidget {
+class QuranAnswerActionControlWidget extends StatefulWidget {
   final QuranUser? currentUser;
   final int? questionId;
   final QuranAnswer answer;
@@ -21,14 +21,23 @@ class QuranAnswerActionControlWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<QuranAnswerActionControlWidget> createState() =>
+      _QuranAnswerActionControlWidgetState();
+}
+
+class _QuranAnswerActionControlWidgetState
+    extends State<QuranAnswerActionControlWidget> {
+  bool _isLoading = false;
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         QuranAnswerLikeButtonWidget(
-          numLikes: answer.likedUsers.length,
-          isLiked: answer.likedUsers.contains(currentUser?.uid),
-          isLoading: false,
+          numLikes: widget.answer.likedUsers.length,
+          isLiked: widget.answer.likedUsers.contains(widget.currentUser?.uid),
+          isLoading: _isLoading,
           onLikeTapped: () => _onLikeTapped(context),
         ),
       ],
@@ -36,26 +45,33 @@ class QuranAnswerActionControlWidget extends StatelessWidget {
   }
 
   void _onLikeTapped(BuildContext context) {
-    int? question = questionId;
+    int? question = widget.questionId;
     if (question == null) {
       return;
     }
-    bool isLiked = answer.likedUsers.contains(currentUser?.uid);
+    setState(() {
+      _isLoading = true;
+    });
+    bool isLiked = widget.answer.likedUsers.contains(widget.currentUser?.uid);
     Store<AppState> store = StoreProvider.of<AppState>(context);
     if (isLiked) {
       /// Unlike
       store.dispatch(UnlikeAnswerAction(
         questionId: question,
-        answer: answer,
+        answer: widget.answer,
       ));
     } else {
       /// Like
       store.dispatch(LikeAnswerAction(
         questionId: question,
-        answer: answer,
+        answer: widget.answer,
       ));
     }
 
-    store.dispatch(InitializeChallengeScreenAction(questions: const []));
+    Future<void>.delayed(Duration(milliseconds: 500)).then((value) => {
+          setState(() {
+            _isLoading = false;
+          }),
+        });
   }
 }

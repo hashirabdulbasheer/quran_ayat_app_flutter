@@ -20,6 +20,12 @@ Reducer<ChallengeScreenState> challengeScreenReducer =
   TypedReducer<ChallengeScreenState, SelectHomeScreenTabAction>(
     _selectHomeScreenTabReducer,
   ),
+  TypedReducer<ChallengeScreenState, LikeAnswerAction>(
+    _likeActionReducer,
+  ),
+  TypedReducer<ChallengeScreenState, UnlikeAnswerAction>(
+    _unlikeActionReducer,
+  ),
 ]);
 
 ChallengeScreenState _initializeChallengeScreenReducer(
@@ -67,4 +73,18 @@ ChallengeScreenState _selectHomeScreenTabReducer(
   SelectHomeScreenTabAction action,
 ) {
   return state.copyWith(selectedHomeScreenTab: action.tab);
+}
+
+ChallengeScreenState _likeActionReducer(
+  ChallengeScreenState state,
+  LikeAnswerAction action,
+) {
+  return state;
+}
+
+ChallengeScreenState _unlikeActionReducer(
+  ChallengeScreenState state,
+  UnlikeAnswerAction action,
+) {
+  return state;
 }

@@ -39,13 +39,13 @@ void _initializeMiddleware(
 }
 
 void _likeAnswerMiddleware(
-  Store<AppState> _,
+  Store<AppState> store,
   LikeAnswerAction action,
   NextDispatcher next,
 ) async {
   QuranUser? user = QuranAuthFactory.engine.getUser();
   String userId = user?.uid ?? "";
-  if (userId.isEmpty /*|| userId == action.answer.userId*/) {
+  if (userId.isEmpty || userId == action.answer.userId) {
     /// if current user is the creator of the answer then do not like
     next(action);
 
@@ -59,11 +59,16 @@ void _likeAnswerMiddleware(
     action.questionId,
     answer,
   );
+  store.dispatch(InitializeChallengeScreenAction(questions: const []));
+  action = LikeAnswerAction(
+    questionId: action.questionId,
+    answer: answer,
+  );
   next(action);
 }
 
 void _unlikeAnswerMiddleware(
-  Store<AppState> _,
+  Store<AppState> store,
   UnlikeAnswerAction action,
   NextDispatcher next,
 ) async {
@@ -81,6 +86,11 @@ void _unlikeAnswerMiddleware(
     userId,
     action.questionId,
     answer,
+  );
+  store.dispatch(InitializeChallengeScreenAction(questions: const []));
+  action = UnlikeAnswerAction(
+    questionId: action.questionId,
+    answer: answer,
   );
   next(action);
 }
