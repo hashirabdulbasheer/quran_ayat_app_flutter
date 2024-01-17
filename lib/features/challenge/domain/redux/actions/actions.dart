@@ -1,6 +1,7 @@
 import 'package:quran_ayat/features/home/presentation/quran_home_screen.dart';
 
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
+import '../../models/quran_answer.dart';
 import '../../models/quran_question.dart';
 
 class InitializeChallengeScreenAction extends AppStateAction {
@@ -31,5 +32,35 @@ class SelectHomeScreenTabAction extends AppStateAction {
         tab == QuranHomeScreenBottomTabsEnum.reader ? "reader" : "challenge";
 
     return '{action: ${super.toString()}, questions: $tabString';
+  }
+}
+
+class LikeAnswerAction extends AppStateAction {
+  final String questionId;
+  final QuranAnswer answer;
+
+  LikeAnswerAction({
+    required this.questionId,
+    required this.answer,
+  });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, questionId: $questionId, answerId: ${answer.id}';
+  }
+}
+
+class UnlikeAnswerAction extends AppStateAction {
+  final String questionId;
+  final QuranAnswer answer;
+
+  UnlikeAnswerAction({
+    required this.questionId,
+    required this.answer,
+  });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, questionId: $questionId, answerId: ${answer.id}';
   }
 }
