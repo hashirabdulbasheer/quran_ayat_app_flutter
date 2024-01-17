@@ -31,6 +31,7 @@ class _QuranAnswerBodyWidgetState extends State<QuranAnswerBodyWidget> {
         width: MediaQuery.of(context).size.width,
         child: QuranAnswersListWidget(
           user: widget.user,
+          questionId: widget.question?.id,
           answers: answers,
         ),
       );

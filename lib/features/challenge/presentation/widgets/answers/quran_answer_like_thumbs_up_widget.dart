@@ -12,12 +12,12 @@ class QuranAnswerLikeThumbsUpWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return isLiked
         ? const Icon(
-            Icons.thumb_up_alt_outlined,
+            Icons.thumb_up,
             color: Colors.blueGrey,
             size: 24.0,
           )
         : const Icon(
-            Icons.thumb_up,
+            Icons.thumb_up_alt_outlined,
             color: Colors.blueGrey,
             size: 24.0,
           );

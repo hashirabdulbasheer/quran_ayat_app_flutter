@@ -38,9 +38,11 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
                         userId: e['userId'] as String,
                         username: e['username'] as String,
                         note: e['note'] as String,
-                        likedUsers: (e['likedUsers'] as List<dynamic>)
-                            .map((dynamic e) => e.toString())
-                            .toList(),
+                        likedUsers: e['likedUsers'] == null
+                            ? []
+                            : (e['likedUsers'] as List<dynamic>)
+                                .map((dynamic e) => e.toString())
+                                .toList(),
                         createdOn: e['createdOn'] as int,
                         status: QuranUtils.answerStatusFromString(
                           e['status'] as String,
@@ -191,7 +193,9 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
                 userId: e['userId'] as String,
                 username: e['username'] as String,
                 note: e['note'] as String,
-                likedUsers: (e['likedUsers'] as List<dynamic>)
+                likedUsers: e['likedUsers'] == null
+                    ? []
+                    : (e['likedUsers'] as List<dynamic>)
                     .map((dynamic e) => e.toString())
                     .toList(),
                 createdOn: e['createdOn'] as int,
