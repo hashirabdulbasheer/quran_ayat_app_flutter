@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
+import 'package:quran_ayat/features/challenge/presentation/widgets/answers/quran_answer_actions_control_widget.dart';
 import 'package:quran_ayat/features/home/presentation/quran_home_screen.dart';
 
 import '../../../../../models/qr_user_model.dart';
@@ -90,6 +91,17 @@ class QuranAnswersListWidget extends StatelessWidget {
                         answers[index].createdOn,
                       ),
                       style: const TextStyle(fontSize: 12),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const Divider(),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    QuranAnswerActionControlWidget(
+                      currentUser: user,
+                      answer: answers[index],
                     ),
                   ],
                 ),
