@@ -9,18 +9,20 @@ class QuranAnswer extends Equatable {
   final String userId;
   final String username;
   final String note;
+  final List<String> likedUsers;
   final int createdOn;
   final QuranAnswerStatusEnum status;
 
   const QuranAnswer({
-    required this.id,
-    required this.surah,
-    required this.aya,
-    required this.userId,
-    required this.username,
-    required this.note,
-    required this.createdOn,
-    required this.status,
+    this.id = "",
+    this.surah = 0,
+    this.aya = 0,
+    this.userId = "",
+    this.username = "",
+    this.note = "",
+    this.likedUsers = const [],
+    this.createdOn = 0,
+    this.status = QuranAnswerStatusEnum.undefined,
   });
 
   QuranAnswer copyWith({
@@ -30,6 +32,7 @@ class QuranAnswer extends Equatable {
     String? userId,
     String? username,
     String? note,
+    List<String>? likedUsers,
     int? createdOn,
     QuranAnswerStatusEnum? status,
   }) {
@@ -39,6 +42,7 @@ class QuranAnswer extends Equatable {
       aya: aya ?? this.aya,
       userId: userId ?? this.userId,
       username: username ?? this.username,
+      likedUsers: likedUsers ?? this.likedUsers,
       note: note ?? this.note,
       createdOn: createdOn ?? this.createdOn,
       status: status ?? this.status,
@@ -47,7 +51,7 @@ class QuranAnswer extends Equatable {
 
   @override
   String toString() {
-    return 'QuranAnswer{id: $id, note: $note, surah: $surah, aya: $aya, '
+    return 'QuranAnswer{id: $id, note: $note, numLikes: ${likedUsers.length}, surah: $surah, aya: $aya, '
         'userId: $userId, username: $username, createdOn: $createdOn, '
         'status: $status}';
   }
@@ -60,6 +64,7 @@ class QuranAnswer extends Equatable {
       "userId": userId,
       "username": username,
       "note": note,
+      "likedUsers": likedUsers,
       "createdOn": createdOn,
       "status": status.rawString(),
     };
@@ -73,6 +78,7 @@ class QuranAnswer extends Equatable {
         userId,
         username,
         note,
+        likedUsers,
         createdOn,
         status,
       ];
