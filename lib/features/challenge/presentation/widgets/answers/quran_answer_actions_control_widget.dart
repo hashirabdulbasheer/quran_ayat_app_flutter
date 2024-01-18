@@ -31,7 +31,13 @@ class QuranAnswerActionControlWidget extends StatefulWidget {
 
 class _QuranAnswerActionControlWidgetState
     extends State<QuranAnswerActionControlWidget> {
-  bool _isLoading = false;
+  bool _isLiked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLiked = widget.answer.likedUsers.contains(widget.currentUser?.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +48,8 @@ class _QuranAnswerActionControlWidgetState
           message: "Like",
           child: QuranAnswerLikeButtonWidget(
             numLikes: widget.answer.likedUsers.length,
-            isLiked: widget.answer.likedUsers.contains(widget.currentUser?.uid),
-            isLoading: _isLoading,
+            isLiked: _isLiked,
+            isLoading: false,
             isEnabled: _isLikeButtonEnable() ? true : false,
             onLikeTapped: () => _onLikeTapped(context),
           ),
@@ -72,7 +78,7 @@ class _QuranAnswerActionControlWidgetState
           onPressed: () => _onReportAnswerTapped(),
           icon: const Icon(
             Icons.report_problem_outlined,
-            color: Colors.black12 ,
+            color: Colors.black12,
           ),
         ),
       ],
@@ -106,30 +112,29 @@ class _QuranAnswerActionControlWidgetState
     if (question == null) {
       return;
     }
-    setState(() {
-      _isLoading = true;
-    });
     bool isLiked = widget.answer.likedUsers.contains(widget.currentUser?.uid);
     Store<AppState> store = StoreProvider.of<AppState>(context);
     if (isLiked) {
+      setState(() {
+        _isLiked = false;
+      });
+
       /// Unlike
       store.dispatch(UnlikeAnswerAction(
         questionId: question,
         answer: widget.answer,
       ));
     } else {
+      setState(() {
+        _isLiked = true;
+      });
+
       /// Like
       store.dispatch(LikeAnswerAction(
         questionId: question,
         answer: widget.answer,
       ));
     }
-
-    Future<void>.delayed(const Duration(milliseconds: 500)).then((value) => {
-          setState(() {
-            _isLoading = false;
-          }),
-        });
   }
 
   void _onReadTapped(
@@ -171,7 +176,5 @@ class _QuranAnswerActionControlWidgetState
     });
   }
 
-  void _onReportAnswerTapped() {
-
-  }
+  void _onReportAnswerTapped() {}
 }
