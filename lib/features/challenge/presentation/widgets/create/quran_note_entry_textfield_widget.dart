@@ -30,6 +30,7 @@ class QuranNotesTextFieldWidget extends StatelessWidget {
             child: TextField(
               controller: textEditingController..text,
               maxLines: 10,
+              enableInteractiveSelection: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(
                   borderSide: BorderSide(
