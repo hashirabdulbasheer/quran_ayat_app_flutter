@@ -130,7 +130,7 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
                 ),
 
                 const SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
 
                 /// SUBMIT BUTTON
@@ -153,6 +153,10 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
                   ),
                   isNegativeActionRunning: currentLoadingAction ==
                       QuranEditAnswerScreenLoadingAction.delete,
+                ),
+
+                const SizedBox(
+                  height: 10,
                 ),
 
                 /// ADMIN Functionality

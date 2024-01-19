@@ -25,38 +25,35 @@ class QuranUpdateControlsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => onPositiveAction(),
-                child: isPositiveActionRunning == true
-                    ? const QuranActionProgressIndicatorWidget()
-                    : Text(positiveActionText),
-              ),
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () => onPositiveAction(),
+              child: isPositiveActionRunning == true
+                  ? const QuranActionProgressIndicatorWidget()
+                  : Text(positiveActionText),
             ),
           ),
-          const SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                onPressed: () => onNegativeAction(),
-                child: isNegativeActionRunning == true
-                    ? const QuranActionProgressIndicatorWidget()
-                    : Text(negativeActionText),
-              ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () => onNegativeAction(),
+              child: isNegativeActionRunning == true
+                  ? const QuranActionProgressIndicatorWidget()
+                  : Text(negativeActionText),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
