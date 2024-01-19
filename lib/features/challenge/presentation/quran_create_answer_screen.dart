@@ -16,6 +16,7 @@ import '../domain/models/quran_answer.dart';
 import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
 import 'quran_answer_submission_confirmation_screen.dart';
+import 'quran_textfield_full_screen.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
 import 'widgets/create/quran_note_entry_textfield_widget.dart';
@@ -37,9 +38,10 @@ class QuranCreateChallengeScreen extends StatefulWidget {
 class _QuranCreateChallengeScreenState
     extends State<QuranCreateChallengeScreen> {
   final TextEditingController _notesController = TextEditingController();
-  NQSurahTitle currentSurahDetails = NQSurahTitle.defaultValue();
-  SurahIndex? currentIndex;
-  bool isLoading = false;
+  NQSurahTitle _currentSurahDetails = NQSurahTitle.defaultValue();
+  SurahIndex? _currentIndex;
+  bool _isLoading = false;
+  String _answerText = "";
 
   @override
   void initState() {
@@ -63,9 +65,9 @@ class _QuranCreateChallengeScreenState
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
-              30,
+              20,
               10,
-              30,
+              20,
               10,
             ),
             child: Column(
@@ -79,18 +81,18 @@ class _QuranCreateChallengeScreenState
                 QuranAyatSelectionWidget(
                   store: store,
                   title: "Select a verse that could answer the question",
-                  currentIndex: currentIndex ?? SurahIndex.defaultIndex,
-                  currentSurahDetails: currentSurahDetails,
+                  currentIndex: _currentIndex ?? SurahIndex.defaultIndex,
+                  currentSurahDetails: _currentSurahDetails,
                   onSuraSelected: (surah) => setState(() => {
-                        currentSurahDetails = surah,
-                        currentIndex = SurahIndex(
+                        _currentSurahDetails = surah,
+                        _currentIndex = SurahIndex(
                           surah.number - 1,
                           0,
                         ),
                       }),
                   onAyaSelected: (aya) => setState(
-                    () => currentIndex = SurahIndex(
-                      currentSurahDetails.number - 1,
+                    () => _currentIndex = SurahIndex(
+                      _currentSurahDetails.number - 1,
                       aya,
                     ),
                   ),
@@ -101,9 +103,9 @@ class _QuranCreateChallengeScreenState
                 ),
 
                 /// VERSE DISPLAY
-                if (currentIndex != null)
+                if (_currentIndex != null)
                   QuranArabicTranslationWidget(
-                    index: currentIndex ?? SurahIndex.defaultIndex,
+                    index: _currentIndex ?? SurahIndex.defaultIndex,
                   ),
 
                 const SizedBox(
@@ -111,10 +113,27 @@ class _QuranCreateChallengeScreenState
                 ),
 
                 /// NOTES TEXT FIELD
-                QuranNotesTextFieldWidget(
-                  title:
-                      "Enter notes/reflection on how the verse answers the question",
-                  textEditingController: _notesController,
+                GestureDetector(
+                  onTap: () => {
+                    Navigator.push<String>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => QuranFullTextFieldScreen(
+                          title: "Enter Note",
+                          controller: _notesController,
+                        ),
+                      ),
+                    ),
+                  },
+                  child: SizedBox(
+                    height: 250,
+                    child: QuranNotesTextFieldWidget(
+                      title:
+                          "Enter notes/reflection on how the verse answers the question",
+                      textEditingController: _notesController,
+                      isEnabled: false,
+                    ),
+                  ),
                 ),
 
                 const SizedBox(
@@ -124,7 +143,7 @@ class _QuranCreateChallengeScreenState
                 /// SUBMIT BUTTON
                 QuranSingleActionButtonWidget(
                   buttonText: "Submit",
-                  isLoading: isLoading,
+                  isLoading: _isLoading,
                   onPressed: () => _isValidForm()
                       ? DialogUtils.confirmationDialog(
                           context,
@@ -146,7 +165,7 @@ class _QuranCreateChallengeScreenState
   /// Validation
   bool _isValidForm() {
     /// validate
-    if (currentIndex == null) {
+    if (_currentIndex == null) {
       QuranUtils.showMessage(
         context,
         "Please select an aya that answers the question",
@@ -164,7 +183,7 @@ class _QuranCreateChallengeScreenState
       return false;
     }
 
-    if (isLoading) {
+    if (_isLoading) {
       return false;
     }
 
@@ -175,7 +194,7 @@ class _QuranCreateChallengeScreenState
   void _onSubmitAnswerTapped() {
     /// proceed to submission
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
 
     /// Get User details
@@ -193,8 +212,8 @@ class _QuranCreateChallengeScreenState
     String answerId = const Uuid().v4();
     QuranAnswer answer = QuranAnswer(
       id: answerId,
-      surah: currentIndex!.sura,
-      aya: currentIndex!.aya,
+      surah: _currentIndex!.sura,
+      aya: _currentIndex!.aya,
       userId: user.uid,
       username: user.name,
       note: _notesController.text,
@@ -218,7 +237,7 @@ class _QuranCreateChallengeScreenState
             .dispatch(InitializeChallengeScreenAction(questions: const [])),
 
         setState(() {
-          isLoading = true;
+          _isLoading = true;
         }),
 
         /// Dismiss screen
