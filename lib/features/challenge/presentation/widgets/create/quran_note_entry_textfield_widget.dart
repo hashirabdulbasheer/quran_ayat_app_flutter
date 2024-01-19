@@ -27,9 +27,17 @@ class QuranNotesTextFieldWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: const TextStyle(color: Colors.black54),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                10,
+                0,
+                10,
+                0,
+              ),
+              child: Text(
+                title,
+                style: const TextStyle(color: Colors.black54),
+              ),
             ),
             const SizedBox(
               height: 10,

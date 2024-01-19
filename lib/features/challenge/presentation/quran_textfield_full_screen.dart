@@ -4,12 +4,12 @@ import 'widgets/create/quran_note_entry_textfield_widget.dart';
 
 class QuranFullTextFieldScreen extends StatefulWidget {
   final String title;
-  final String text;
+  final TextEditingController controller;
 
   const QuranFullTextFieldScreen({
     Key? key,
     required this.title,
-    required this.text,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -18,8 +18,6 @@ class QuranFullTextFieldScreen extends StatefulWidget {
 }
 
 class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
-  final TextEditingController _controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -30,7 +28,7 @@ class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
           actions: [
             TextButton(
               onPressed: () => {
-                Navigator.of(context).pop(_controller.text),
+                Navigator.of(context).pop(widget.controller.text),
               },
               child: const Text(
                 "SAVE",
@@ -43,7 +41,7 @@ class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
           children: [
             Expanded(
               child: QuranNotesTextFieldWidget(
-                textEditingController: _controller..text = widget.text,
+                textEditingController: widget.controller,
                 title: "",
                 isEnabled: true,
               ),
