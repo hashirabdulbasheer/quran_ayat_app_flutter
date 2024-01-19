@@ -10,6 +10,7 @@ import '../domain/enums/quran_answer_status_enum.dart';
 import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
 import 'quran_create_question_screen.dart';
+import 'widgets/answers/quran_reload_button_widget.dart';
 import 'widgets/submissions/quran_submission_question_item_widget.dart';
 
 class QuranChallengesApprovalScreen extends StatefulWidget {
@@ -42,12 +43,7 @@ class _QuranChallengesApprovalScreenState
             centerTitle: true,
             title: const Text("Approvals"),
             actions: [
-              IconButton(
-                onPressed: () => _reloadQuestions(store),
-                icon: const Icon(
-                  Icons.refresh_rounded,
-                ),
-              ),
+              QuranReloadButtonWidget(action: () => _reloadQuestions(store)),
               IconButton(
                 onPressed: () => _addQuestion(store),
                 icon: const Icon(
