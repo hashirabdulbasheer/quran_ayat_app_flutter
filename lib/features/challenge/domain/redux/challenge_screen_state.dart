@@ -52,7 +52,9 @@ class ChallengeScreenState extends Equatable {
   // questions with approved answers
   List<QuranQuestion> allApprovedAnswers() {
     return _filterQuestionsBasedOn(
-      (element) => element.status == QuranAnswerStatusEnum.approved,
+      (element) =>
+          element.status == QuranAnswerStatusEnum.approved ||
+          element.status == QuranAnswerStatusEnum.reported,
     );
   }
 
