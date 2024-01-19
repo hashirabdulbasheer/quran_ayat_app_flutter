@@ -40,6 +40,12 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   String _notes = "";
 
   @override
+  void initState() {
+    super.initState();
+    _notes = widget.note?.note ?? "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
