@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/challenge/presentation/quran_message_display_screen.dart';
 import 'package:redux/redux.dart';
 
 import '../../../bookmark/presentation/bookmark_icon_widget.dart';
 import '../../../challenge/domain/redux/actions/actions.dart';
+import '../../../challenge/presentation/quran_message_display_screen.dart';
+import '../../../challenge/presentation/widgets/answers/quran_reload_button_widget.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../newAyat/domain/redux/actions/actions.dart';
 import '../quran_home_screen.dart';
@@ -26,11 +27,8 @@ class QuranHomeAppBarWidget extends StatelessWidget
         centerTitle: true,
         title: const Text("Quran"),
         actions: [
-          IconButton(
-            onPressed: () => _reloadQuestions(store),
-            icon: const Icon(
-              Icons.refresh_rounded,
-            ),
+          QuranReloadButtonWidget(
+            action: () => _reloadQuestions(store),
           ),
           IconButton(
             onPressed: () => _help(context),
@@ -68,7 +66,6 @@ class QuranHomeAppBarWidget extends StatelessWidget
 
   void _reloadQuestions(Store<AppState> store) {
     store.dispatch(InitializeChallengeScreenAction(questions: const []));
-    store.dispatch(ToggleLoadingScreenAction());
   }
 
   void _help(BuildContext context) {
