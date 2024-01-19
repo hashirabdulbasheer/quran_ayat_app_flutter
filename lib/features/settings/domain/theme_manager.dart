@@ -11,10 +11,11 @@ class QuranThemeManager {
     primarySwatch: Colors.blueGrey,
     primaryColor: Colors.blueGrey,
     dividerColor: Colors.black26,
+    shadowColor: Colors.transparent,
     textSelectionTheme:TextSelectionThemeData(
         selectionColor: Colors.blueGrey.withOpacity(0.5),
         cursorColor: Colors.blueGrey,
-        selectionHandleColor: Colors.blueGrey),
+        selectionHandleColor: Colors.blueGrey,),
     appBarTheme: const AppBarTheme(
       color: Colors.blueGrey,
       systemOverlayStyle: SystemUiOverlayStyle(

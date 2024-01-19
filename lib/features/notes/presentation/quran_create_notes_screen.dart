@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/challenge/presentation/quran_textfield_full_screen.dart';
 import 'package:redux/redux.dart';
 
 import '../../../misc/enums/quran_status_enum.dart';
@@ -11,6 +12,7 @@ import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
+import '../../challenge/presentation/widgets/create/quran_textfield_small_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_note.dart';
@@ -35,6 +37,7 @@ class QuranCreateNotesScreen extends StatefulWidget {
 
 class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
   final TextEditingController _notesController = TextEditingController();
+  String _notes = "";
 
   @override
   Widget build(BuildContext context) {
@@ -109,22 +112,29 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                       NQTranslation.wahiduddinkhan,
                 ),
               ),
-              Directionality(
-                textDirection: TextDirection.ltr,
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    controller: _notesController
-                      ..text = widget.note?.note ?? "",
-                    maxLines: 10,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.grey,
-                          width: 0.0,
-                        ),
+              GestureDetector(
+                onTap: () => {
+                  Navigator.push<String>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuranFullTextFieldScreen(
+                        title: "Enter note",
+                        text: _notes,
                       ),
                     ),
+                  ).then((value) {
+                    if (value != null) {
+                      setState(() {
+                        _notes = value;
+                      });
+                    }
+                  }),
+                },
+                child: SizedBox(
+                  height: 250,
+                  child: QuranSmallTextFieldWidget(
+                    controller: _notesController..text = _notes,
+                    isEnabled: false,
                   ),
                 ),
               ),
