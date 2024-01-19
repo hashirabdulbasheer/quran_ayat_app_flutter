@@ -10,21 +10,18 @@ class QuranNotesCreateControlsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => onConfirmation(),
-                child: const Text("Save"),
-              ),
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () => onConfirmation(),
+              child: const Text("Save"),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
