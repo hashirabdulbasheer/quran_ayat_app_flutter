@@ -16,7 +16,7 @@ import '../domain/models/quran_answer.dart';
 import '../domain/redux/actions/actions.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
-import 'widgets/create/quran_note_entry_textfield_widget.dart';
+import 'widgets/create/quran_small_tappable_textfield_widget.dart';
 
 enum QuranEditAnswerScreenLoadingAction {
   update,
@@ -123,10 +123,10 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
                 ),
 
                 /// NOTES TEXT FIELD
-                QuranNotesTextFieldWidget(
+                QuranTappableSmallTextFieldWidget(
                   title:
                       "Enter notes/reflection on how the verse answers the question",
-                  textEditingController: _notesController,
+                  controller: _notesController,
                 ),
 
                 const SizedBox(

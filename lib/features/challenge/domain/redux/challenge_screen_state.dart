@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/challenge/domain/enums/quran_answer_status_enum.dart';
 
 import '../../../../models/qr_user_model.dart';
 import '../../../home/presentation/quran_home_screen.dart';
+import '../enums/quran_answer_status_enum.dart';
 import '../models/quran_answer.dart';
 import '../models/quran_question.dart';
 
