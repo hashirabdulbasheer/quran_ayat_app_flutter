@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/challenge/presentation/widgets/answers/quran_reload_button_widget.dart';
 import 'package:quran_ayat/models/qr_user_model.dart';
 import 'package:redux/redux.dart';
 
@@ -34,12 +35,7 @@ class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
             centerTitle: true,
             title: const Text("Submissions"),
             actions: [
-              IconButton(
-                onPressed: () => _reloadQuestions(store),
-                icon: const Icon(
-                  Icons.refresh_rounded,
-                ),
-              ),
+              QuranReloadButtonWidget(action: () => _reloadQuestions(store)),
             ],
           ),
 
