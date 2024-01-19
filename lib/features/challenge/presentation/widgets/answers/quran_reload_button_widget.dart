@@ -18,27 +18,32 @@ class _QuranReloadButtonWidgetState extends State<QuranReloadButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoading
-        ? const Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: Center(
-              heightFactor: 1,
-              widthFactor: 1,
-              child: SizedBox(
-                height: 18,
-                width: 18,
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.white,
-                ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        if (_isLoading)
+          const Center(
+            heightFactor: 1,
+            widthFactor: 1,
+            child: SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.white,
               ),
             ),
-          )
-        : IconButton(
-            onPressed: () => _reloadAction(),
-            icon: const Icon(
-              Icons.refresh_rounded,
-            ),
-          );
+          ),
+
+        /// place holder icon button for size
+        IconButton(
+          onPressed: () => _reloadAction(),
+          icon: Icon(
+            Icons.refresh_rounded,
+            color: _isLoading ? Colors.transparent : Colors.white,
+          ),
+        ),
+      ],
+    );
   }
 
   void _reloadAction() {
