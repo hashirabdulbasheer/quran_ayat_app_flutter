@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/challenge/presentation/widgets/answers/quran_reload_button_widget.dart';
 import 'package:quran_ayat/models/qr_user_model.dart';
 import 'package:redux/redux.dart';
 
@@ -8,6 +7,7 @@ import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
+import 'widgets/answers/quran_reload_button_widget.dart';
 import 'widgets/submissions/quran_submission_question_item_widget.dart';
 
 class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
@@ -67,6 +67,5 @@ class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
 
   void _reloadQuestions(Store<AppState> store) {
     store.dispatch(InitializeChallengeScreenAction(questions: const []));
-    store.dispatch(ToggleLoadingScreenAction());
   }
 }

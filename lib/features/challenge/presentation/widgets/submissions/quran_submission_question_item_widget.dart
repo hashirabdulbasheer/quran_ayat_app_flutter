@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 
-import '../../../../core/domain/app_state/app_state.dart';
 import '../../../domain/models/quran_question.dart';
-import '../../../domain/redux/actions/actions.dart';
 import '../../quran_edit_answer_screen.dart';
 import 'quran_submission_answer_item_widget.dart';
 import 'quran_title_with_background.dart';
@@ -62,11 +59,7 @@ class QuranSubmissionQuestionItemWidget extends StatelessWidget {
                       answer: question.answers[index],
                     ),
                   ),
-                ).then((value) {
-                  StoreProvider.of<AppState>(context).dispatch(
-                    ToggleLoadingScreenAction(),
-                  );
-                }),
+                ),
                 trailing: const Icon(Icons.arrow_right),
               );
             },

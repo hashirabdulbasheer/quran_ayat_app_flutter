@@ -132,7 +132,7 @@ class _QuranChallengesApprovalScreenState
   }
 
   void _reloadQuestions(Store<AppState> store) async {
-    store.dispatch(ToggleLoadingScreenAction());
+    store.dispatch(InitializeChallengeScreenAction(questions: const []));
   }
 
   void _addQuestion(Store<AppState> store) async {
