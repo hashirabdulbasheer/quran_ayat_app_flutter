@@ -16,11 +16,10 @@ import '../domain/models/quran_answer.dart';
 import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
 import 'quran_answer_submission_confirmation_screen.dart';
-import 'quran_textfield_full_screen.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
-import 'widgets/create/quran_note_entry_textfield_widget.dart';
 import 'widgets/create/quran_single_action_button_widget.dart';
+import 'widgets/create/quran_small_tappable_textfield_widget.dart';
 
 class QuranCreateChallengeScreen extends StatefulWidget {
   final QuranQuestion question;
@@ -113,27 +112,10 @@ class _QuranCreateChallengeScreenState
                 ),
 
                 /// NOTES TEXT FIELD
-                GestureDetector(
-                  onTap: () => {
-                    Navigator.push<String>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => QuranFullTextFieldScreen(
-                          title: "Enter Note",
-                          controller: _notesController,
-                        ),
-                      ),
-                    ),
-                  },
-                  child: SizedBox(
-                    height: 250,
-                    child: QuranNotesTextFieldWidget(
-                      title:
-                          "Enter notes/reflection on how the verse answers the question",
-                      textEditingController: _notesController,
-                      isEnabled: false,
-                    ),
-                  ),
+                QuranTappableSmallTextFieldWidget(
+                  title:
+                      "Enter notes/reflection on how the verse answers the question",
+                  controller: _notesController,
                 ),
 
                 const SizedBox(
