@@ -19,7 +19,16 @@ class _QuranSmallTextFieldWidgetState extends State<QuranSmallTextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        Text(
+          "asd",
+          style: const TextStyle(color: Colors.black54),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
         Expanded(
           child: Hero(
             tag: 'fullScreenTextField',

@@ -12,7 +12,7 @@ import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import '../../ayats/presentation/widgets/full_ayat_row_widget.dart';
-import '../../challenge/presentation/widgets/create/quran_textfield_small_widget.dart';
+import '../../challenge/presentation/widgets/create/quran_note_entry_textfield_widget.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_note.dart';
@@ -56,7 +56,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(10.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               const QuranOfflineHeaderWidget(),
               Padding(
@@ -124,7 +124,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => QuranFullTextFieldScreen(
-                        title: "Enter note",
+                        title: "Note",
                         text: _notes,
                       ),
                     ),
@@ -138,8 +138,9 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                 },
                 child: SizedBox(
                   height: 250,
-                  child: QuranSmallTextFieldWidget(
-                    controller: _notesController..text = _notes,
+                  child: QuranNotesTextFieldWidget(
+                    textEditingController: _notesController..text = _notes,
+                    title: 'Note',
                     isEnabled: false,
                   ),
                 ),

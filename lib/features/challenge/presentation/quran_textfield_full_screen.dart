@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/create/quran_textfield_small_widget.dart';
+import 'widgets/create/quran_note_entry_textfield_widget.dart';
 
 class QuranFullTextFieldScreen extends StatefulWidget {
   final String title;
@@ -42,8 +42,9 @@ class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
         body: Column(
           children: [
             Expanded(
-              child: QuranSmallTextFieldWidget(
-                controller: _controller..text = widget.text,
+              child: QuranNotesTextFieldWidget(
+                textEditingController: _controller..text = widget.text,
+                title: "",
                 isEnabled: true,
               ),
             ),
