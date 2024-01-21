@@ -1,1 +1,1 @@
-enum RemoteConfigFeatureFlagEnum { isChallengeScreenEnabled }
+enum RemoteConfigFeatureFlagEnum { isChallengeScreenEnabled, isSocialMediaLoginEnabled }

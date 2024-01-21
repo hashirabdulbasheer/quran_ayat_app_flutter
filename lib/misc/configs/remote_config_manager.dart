@@ -16,6 +16,7 @@ class RemoteConfigManager {
 
   // Remote Flags
   bool isChallengesFeatureEnabled = false;
+  bool isSocialMediaLoginEnabled = false;
 
   Future<void> init() async {
     try {
@@ -41,6 +42,9 @@ class RemoteConfigManager {
     switch (flag) {
       case RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled:
         return isChallengesFeatureEnabled;
+
+      case RemoteConfigFeatureFlagEnum.isSocialMediaLoginEnabled:
+        return isSocialMediaLoginEnabled;
     }
   }
 
@@ -48,6 +52,8 @@ class RemoteConfigManager {
     await _remoteConfig.activate();
     isChallengesFeatureEnabled =
         _remoteConfig.getBool(kEnableChallengesFeatureKey);
+    isSocialMediaLoginEnabled =
+        _remoteConfig.getBool(kEnableSocialMediaLoginKey);
   }
 
   Future<void> _setDefaultConfigs() async {
