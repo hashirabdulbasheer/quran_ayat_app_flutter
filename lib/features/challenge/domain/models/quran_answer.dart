@@ -12,6 +12,7 @@ class QuranAnswer extends Equatable {
   final List<String> likedUsers;
   final int createdOn;
   final QuranAnswerStatusEnum status;
+  final String? rejectedReason;
 
   const QuranAnswer({
     this.id = "",
@@ -23,6 +24,7 @@ class QuranAnswer extends Equatable {
     this.likedUsers = const [],
     this.createdOn = 0,
     this.status = QuranAnswerStatusEnum.undefined,
+    this.rejectedReason,
   });
 
   QuranAnswer copyWith({
@@ -35,6 +37,7 @@ class QuranAnswer extends Equatable {
     List<String>? likedUsers,
     int? createdOn,
     QuranAnswerStatusEnum? status,
+    String? rejectedReason,
   }) {
     return QuranAnswer(
       id: id ?? this.id,
@@ -46,6 +49,7 @@ class QuranAnswer extends Equatable {
       note: note ?? this.note,
       createdOn: createdOn ?? this.createdOn,
       status: status ?? this.status,
+      rejectedReason: rejectedReason ?? this.rejectedReason,
     );
   }
 
@@ -53,7 +57,7 @@ class QuranAnswer extends Equatable {
   String toString() {
     return 'QuranAnswer{id: $id, note: $note, numLikes: ${likedUsers.length}, surah: $surah, aya: $aya, '
         'userId: $userId, username: $username, createdOn: $createdOn, '
-        'status: $status}';
+        'status: $status}, rejectedReason: $rejectedReason';
   }
 
   Map<String, dynamic> toMap() {
@@ -67,6 +71,7 @@ class QuranAnswer extends Equatable {
       "likedUsers": likedUsers,
       "createdOn": createdOn,
       "status": status.rawString(),
+      "rejectedReason": rejectedReason,
     };
   }
 
@@ -81,5 +86,6 @@ class QuranAnswer extends Equatable {
         likedUsers,
         createdOn,
         status,
+        rejectedReason,
       ];
 }
