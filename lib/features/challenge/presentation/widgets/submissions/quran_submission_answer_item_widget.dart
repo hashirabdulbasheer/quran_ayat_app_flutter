@@ -138,7 +138,9 @@ class QuranSubmissionAnswerItemWidget extends StatelessWidget {
     //   return Colors.black;
     // }
     if (status == QuranAnswerStatusEnum.rejected) {
-        return Colors.red;
+      return Colors.red;
+    } else if (status == QuranAnswerStatusEnum.approved) {
+      return Colors.green;
     }
 
     return Colors.black;
