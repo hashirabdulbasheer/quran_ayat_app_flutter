@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_login_buttons/social_login_buttons.dart';
 
+import '../../../../misc/configs/remote_config_manager.dart';
+
 class QuranSocialLoginButtons extends StatelessWidget {
   final bool isSignUp;
 
@@ -12,6 +14,10 @@ class QuranSocialLoginButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!RemoteConfigManager.instance.isSocialMediaLoginEnabled) {
+      return Container();
+    }
+
     return Column(
       children: [
         Card(
