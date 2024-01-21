@@ -56,17 +56,38 @@ class QuranSubmissionAnswerItemWidget extends StatelessWidget {
 
           /// Status
           if (formattedStatus.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Column(
               children: [
-                Text(
-                  formattedStatus,
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    color: _colorForStatus(answer.status),
-                    fontSize: 12,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      formattedStatus,
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: _colorForStatus(answer.status),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
+                if (answer.rejectedReason != null)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          "(${answer.rejectedReason})",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            color: _colorForStatus(answer.status),
+                            fontSize: 10,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
 
@@ -116,6 +137,10 @@ class QuranSubmissionAnswerItemWidget extends StatelessWidget {
     // } else {
     //   return Colors.black;
     // }
+    if (status == QuranAnswerStatusEnum.rejected) {
+        return Colors.red;
+    }
+
     return Colors.black;
   }
 }
