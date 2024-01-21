@@ -39,16 +39,20 @@ class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-          child: Column(
-            children: [
-              Expanded(
-                child: QuranNotesTextFieldWidget(
-                  textEditingController: widget.controller,
-                  title: "",
-                  isEnabled: true,
-                ),
+          child: SingleChildScrollView(
+            child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: QuranNotesTextFieldWidget(
+                      textEditingController: widget.controller,
+                      title: "",
+                      isEnabled: true,
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
