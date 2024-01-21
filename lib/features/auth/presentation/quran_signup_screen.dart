@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:social_login_buttons/social_login_buttons.dart';
+
 import '../../../models/qr_user_model.dart';
-import '../domain/auth_factory.dart';
 import '../../../utils/utils.dart';
+import '../domain/auth_factory.dart';
+import 'widgets/quran_social_login_widgets.dart';
 
 class QuranSignUpScreen extends StatefulWidget {
   const QuranSignUpScreen({Key? key}) : super(key: key);
@@ -40,7 +44,12 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
                   TextField(
                     controller: _nameController,
                     enabled: !_isLoading,
-                    autofillHints: const [AutofillHints.name, AutofillHints.username, AutofillHints.creditCardName, AutofillHints.givenName,],
+                    autofillHints: const [
+                      AutofillHints.name,
+                      AutofillHints.username,
+                      AutofillHints.creditCardName,
+                      AutofillHints.givenName,
+                    ],
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
@@ -119,6 +128,7 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
                   const SizedBox(
                     height: 50,
                   ),
+                  const QuranSocialLoginButtons(isSignUp: true,),
                 ],
               ),
             ),
@@ -126,6 +136,14 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
         ),
       ),
     );
+  }
+
+  Future<UserCredential?> signInWithGoogle() async {
+    GoogleAuthProvider googleProvider = GoogleAuthProvider();
+    await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+
+    return await FirebaseAuth.instance.getRedirectResult();
   }
 
   void _signUpButtonPressed() async {

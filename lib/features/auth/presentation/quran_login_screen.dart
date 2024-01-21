@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:social_login_buttons/social_login_buttons.dart';
+
 import '../../../models/qr_user_model.dart';
+import '../../../utils/utils.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/auth_factory.dart';
-import '../../../utils/utils.dart';
 import 'quran_signup_screen.dart';
+import 'widgets/quran_social_login_widgets.dart';
 
 class QuranLoginScreen extends StatefulWidget {
   const QuranLoginScreen({Key? key}) : super(key: key);
@@ -132,6 +136,10 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                       style: TextStyle(fontSize: 18),
                     ),
                   ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const QuranSocialLoginButtons(isSignUp: false,),
                 ],
               ),
             ),
