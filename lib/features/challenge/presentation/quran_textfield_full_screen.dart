@@ -23,6 +23,7 @@ class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(widget.title),
           actions: [
@@ -38,7 +39,12 @@ class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          padding: const EdgeInsets.fromLTRB(
+            20,
+            20,
+            20,
+            10,
+          ),
           child: SingleChildScrollView(
             child: IntrinsicHeight(
               child: Column(
