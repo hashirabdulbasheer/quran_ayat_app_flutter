@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:quran_ayat/features/notes/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
@@ -43,7 +44,6 @@ class _QuranCreateChallengeScreenState
   NQSurahTitle _currentSurahDetails = NQSurahTitle.defaultValue();
   SurahIndex? _currentIndex;
   bool _isLoading = false;
-  String _answerText = "";
 
   @override
   void initState() {
@@ -234,6 +234,8 @@ class _QuranCreateChallengeScreenState
         /// Fetch the questions again
         StoreProvider.of<AppState>(context)
             .dispatch(InitializeChallengeScreenAction(questions: const [])),
+
+        StoreProvider.of<AppState>(context).dispatch(FetchNotesAction()),
 
         setState(() {
           _isLoading = true;
