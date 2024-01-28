@@ -17,13 +17,19 @@ class QuranTappableSmallTextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {
-        Navigator.push<String>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => QuranFullTextFieldScreen(
-              title: "Enter Note",
-              controller: controller,
+        showModalBottomSheet<bool>(
+          isScrollControlled: true,
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.0),
+              topRight: Radius.circular(10.0),
             ),
+          ),
+          elevation: 5,
+          builder: (context) => QuranFullTextFieldScreen(
+            title: "Enter Note",
+            controller: controller,
           ),
         ),
       },

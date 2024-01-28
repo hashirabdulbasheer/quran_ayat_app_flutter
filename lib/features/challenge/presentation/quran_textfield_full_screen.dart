@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'widgets/create/quran_note_entry_textfield_widget.dart';
 
-class QuranFullTextFieldScreen extends StatefulWidget {
+class QuranFullTextFieldScreen extends StatelessWidget {
   final String title;
   final TextEditingController controller;
 
@@ -13,54 +13,56 @@ class QuranFullTextFieldScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<QuranFullTextFieldScreen> createState() =>
-      _QuranFullTextFieldScreenState();
-}
-
-class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
-  @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text(widget.title),
-          actions: [
-            TextButton(
-              onPressed: () => {
-                Navigator.of(context).pop(widget.controller.text),
-              },
-              child: const Text(
-                "SAVE",
-                style: TextStyle(color: Colors.white),
+    return Container(
+      height: MediaQuery.of(context).size.height - 50,
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 20,
+      ),
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () => {
+                    Navigator.of(context).pop(),
+                  },
+                  child: const Text(
+                    "Save",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 2 - 30,
+              child: QuranNotesTextFieldWidget(
+                textEditingController: controller,
+                hint: "Start writing...",
+                title: "",
+                isEnabled: true,
               ),
             ),
           ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            20,
-            10,
-            20,
-            10,
-          ),
-          child: SingleChildScrollView(
-            child: IntrinsicHeight(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: QuranNotesTextFieldWidget(
-                      textEditingController: widget.controller,
-                      hint: "Start writing...",
-                      title: "",
-                      isEnabled: true,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
         ),
       ),
     );

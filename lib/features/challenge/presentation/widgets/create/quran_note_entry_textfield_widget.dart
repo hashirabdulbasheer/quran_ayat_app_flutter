@@ -23,32 +23,25 @@ class QuranNotesTextFieldWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            child: Hero(
-              tag: 'fullScreenTextField',
-              child: Card(
-                color: Colors.transparent,
-                elevation: 0,
-                child: TextField(
-                  enabled: isEnabled,
-                  controller: textEditingController..text,
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
-                  minLines: 20,
-                  style: TextStyle(
-                    color: !isEnabled ? Colors.black : null,
-                  ),
-
-                  autofocus: true,
-                  canRequestFocus: true,
-                  enableInteractiveSelection: true,
-                  decoration: InputDecoration(
-                    hintText: hint,
-                    labelText: title,
-                    helperText: "",
-                    hintStyle: const TextStyle(
-                      height: 2.0, // sets the distance between label and input
-                    ),
-                  ),
+            child: TextField(
+              enabled: isEnabled,
+              controller: textEditingController..text,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              minLines: 20,
+              style: TextStyle(
+                color: !isEnabled ? Colors.black : null,
+              ),
+              autofocus: true,
+              canRequestFocus: true,
+              enableInteractiveSelection: true,
+              decoration: InputDecoration(
+                hintText: hint,
+                labelText: title,
+                helperText: "",
+                contentPadding: EdgeInsets.all(0.0),
+                hintStyle: const TextStyle(
+                  height: 2.0, // sets the distance between label and input
                 ),
               ),
             ),
