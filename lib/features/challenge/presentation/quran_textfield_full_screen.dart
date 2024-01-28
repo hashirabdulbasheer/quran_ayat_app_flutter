@@ -41,7 +41,7 @@ class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
         body: Padding(
           padding: const EdgeInsets.fromLTRB(
             20,
-            20,
+            10,
             20,
             10,
           ),
@@ -52,6 +52,7 @@ class _QuranFullTextFieldScreenState extends State<QuranFullTextFieldScreen> {
                   Expanded(
                     child: QuranNotesTextFieldWidget(
                       textEditingController: widget.controller,
+                      hint: "Start writing...",
                       title: "",
                       isEnabled: true,
                     ),

@@ -107,7 +107,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
                   ),
                 ),
                 QuranTappableSmallTextFieldWidget(
-                  title: "Note",
+                  title: "Enter Note",
                   controller: _notesController,
                 ),
                 const SizedBox(

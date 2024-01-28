@@ -31,6 +31,7 @@ class QuranTappableSmallTextFieldWidget extends StatelessWidget {
         height: 250,
         child: QuranNotesTextFieldWidget(
           title: title,
+          hint: title,
           textEditingController: controller,
           isEnabled: false,
         ),
