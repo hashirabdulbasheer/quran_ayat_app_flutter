@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:uuid/uuid.dart';
@@ -10,6 +11,8 @@ import '../../../utils/dialog_utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
+import '../../notes/domain/entities/quran_note.dart';
+import '../../notes/domain/notes_manager.dart';
 import '../domain/challenge_manager.dart';
 import '../domain/enums/quran_answer_status_enum.dart';
 import '../domain/models/quran_answer.dart';
@@ -208,6 +211,20 @@ class _QuranCreateChallengeScreenState
       user.uid,
       widget.question.id,
       answer,
+    );
+
+    /// Also save as a note
+    QuranNote note = QuranNote(
+      suraIndex: _currentIndex!.sura,
+      ayaIndex: _currentIndex!.aya,
+      note: _notesController.text,
+      localId: "",
+      createdOn: DateTime.now().millisecondsSinceEpoch,
+      status: QuranStatusEnum.created,
+    );
+    QuranNotesManager.instance.create(
+      user.uid,
+      note,
     );
 
     /// Move to next screen after a delay to show a loading state
