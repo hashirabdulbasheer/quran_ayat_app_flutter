@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+
 import '../../../../../models/qr_user_model.dart';
 import '../../../../../utils/logger_utils.dart';
 import '../../../../../utils/utils.dart';
@@ -53,7 +54,10 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Submissions"),
+                const Text(
+                  'Submissions',
+                ),
+                Expanded(child: Text(_getSubmissionsCount())),
                 ElevatedButton(
                   onPressed: () => _goToCreateChallengeScreen(
                     user,
@@ -82,6 +86,12 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
         ),
       ],
     );
+  }
+
+  String _getSubmissionsCount() {
+    return widget.question?.answers.isNotEmpty == true
+        ? " (${widget.question?.answers.length}) "
+        : "";
   }
 
   void _goToLoginScreen() {
