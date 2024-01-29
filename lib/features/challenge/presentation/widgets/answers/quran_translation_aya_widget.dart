@@ -23,7 +23,8 @@ class QuranTranslationForAyaWidget extends StatelessWidget {
         BuildContext context,
         AsyncSnapshot<NQSurah> snapshot,
       ) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData &&
+            (snapshot.data as NQSurah).aya.length >= index.aya) {
           NQSurah surah = snapshot.data as NQSurah;
           NQAyat aya = surah.aya[index.aya];
           String ayaText = aya.text.length > 300
