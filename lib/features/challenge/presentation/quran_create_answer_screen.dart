@@ -57,6 +57,7 @@ class _QuranCreateChallengeScreenState
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+
         /// APP BAR
         appBar: AppBar(
           centerTitle: true,
@@ -85,19 +86,23 @@ class _QuranCreateChallengeScreenState
                   title: "Select a verse that could answer the question",
                   currentIndex: _currentIndex ?? SurahIndex.defaultIndex,
                   currentSurahDetails: _currentSurahDetails,
-                  onSuraSelected: (surah) => setState(() => {
+                  onSuraSelected: (surah) =>
+                      setState(() =>
+                      {
                         _currentSurahDetails = surah,
                         _currentIndex = SurahIndex(
                           surah.number - 1,
                           0,
                         ),
                       }),
-                  onAyaSelected: (aya) => setState(
-                    () => _currentIndex = SurahIndex(
-                      _currentSurahDetails.number - 1,
-                      aya,
-                    ),
-                  ),
+                  onAyaSelected: (aya) =>
+                      setState(
+                            () =>
+                        _currentIndex = SurahIndex(
+                          _currentSurahDetails.number - 1,
+                          aya,
+                        ),
+                      ),
                 ),
 
                 const SizedBox(
@@ -114,10 +119,36 @@ class _QuranCreateChallengeScreenState
                   height: 20,
                 ),
 
+                /// The Question
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                    Text(widget.question.title, style: const TextStyle(
+                      color: Colors.black54,
+                      height: 1.5,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
+                    ),),
+                    Text(widget.question.question, style: const TextStyle(
+                      color: Colors.black54,
+                      height: 1.5,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
+                    ),),
+                  ],),
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
                 /// NOTES TEXT FIELD
                 QuranTappableSmallTextFieldWidget(
                   title:
-                      "Enter notes/reflection on how the verse answers the question",
+                  "Enter notes/reflection on how the verse answers the question",
                   controller: _notesController,
                 ),
 
@@ -129,14 +160,15 @@ class _QuranCreateChallengeScreenState
                 QuranSingleActionButtonWidget(
                   buttonText: "Submit",
                   isLoading: _isLoading,
-                  onPressed: () => _isValidForm()
+                  onPressed: () =>
+                  _isValidForm()
                       ? DialogUtils.confirmationDialog(
-                          context,
-                          'Submit answer?',
-                          "Are you sure that you want to submit the answer?",
-                          'Submit',
-                          () => _onSubmitAnswerTapped(),
-                        )
+                    context,
+                    'Submit answer?',
+                    "Are you sure that you want to submit the answer?",
+                    'Submit',
+                        () => _onSubmitAnswerTapped(),
+                  )
                       : null,
                 ),
               ],
@@ -202,7 +234,9 @@ class _QuranCreateChallengeScreenState
       userId: user.uid,
       username: user.name,
       note: _notesController.text,
-      createdOn: DateTime.now().millisecondsSinceEpoch,
+      createdOn: DateTime
+          .now()
+          .millisecondsSinceEpoch,
       status: QuranAnswerStatusEnum.submitted,
     );
 
@@ -219,7 +253,9 @@ class _QuranCreateChallengeScreenState
       ayaIndex: _currentIndex!.aya,
       note: 'Answer to ${widget.question.title}: ${_notesController.text}',
       localId: "",
-      createdOn: DateTime.now().millisecondsSinceEpoch,
+      createdOn: DateTime
+          .now()
+          .millisecondsSinceEpoch,
       status: QuranStatusEnum.created,
     );
     QuranNotesManager.instance.create(
@@ -230,7 +266,8 @@ class _QuranCreateChallengeScreenState
     /// Move to next screen after a delay to show a loading state
     Future.delayed(
       const Duration(milliseconds: 500),
-      () => {
+          () =>
+      {
         /// Fetch the questions again
         StoreProvider.of<AppState>(context)
             .dispatch(InitializeChallengeScreenAction(questions: const [])),
@@ -248,9 +285,10 @@ class _QuranCreateChallengeScreenState
         Navigator.push<void>(
           context,
           MaterialPageRoute(
-            builder: (context) => QuranAnswerSubmissionConfirmationScreen(
-              answerId: answerId,
-            ),
+            builder: (context) =>
+                QuranAnswerSubmissionConfirmationScreen(
+                  answerId: answerId,
+                ),
           ),
         ).then((value) {}),
       },

@@ -13,6 +13,7 @@ import '../../notes/presentation/widgets/notes_update_controls_widget.dart';
 import '../domain/challenge_manager.dart';
 import '../domain/enums/quran_answer_status_enum.dart';
 import '../domain/models/quran_answer.dart';
+import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
@@ -61,6 +62,9 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
   Widget build(BuildContext context) {
     Store<AppState> store = StoreProvider.of<AppState>(context);
     currentSurahDetails = store.state.reader.surahTitles[widget.answer.surah];
+    QuranQuestion question = store.state.challenge.allQuestions
+        .where((element) => element.id == widget.questionId)
+        .first;
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -117,6 +121,39 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
                   QuranArabicTranslationWidget(
                     index: currentIndex ?? SurahIndex.defaultIndex,
                   ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                /// The Question
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        question.title,
+                        style: const TextStyle(
+                          color: Colors.black54,
+                          height: 1.5,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        question.question,
+                        style: const TextStyle(
+                          color: Colors.black54,
+                          height: 1.5,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
 
                 const SizedBox(
                   height: 20,
