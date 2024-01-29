@@ -217,7 +217,7 @@ class _QuranCreateChallengeScreenState
     QuranNote note = QuranNote(
       suraIndex: _currentIndex!.sura,
       ayaIndex: _currentIndex!.aya,
-      note: _notesController.text,
+      note: 'Answer to ${widget.question.title}: ${_notesController.text}',
       localId: "",
       createdOn: DateTime.now().millisecondsSinceEpoch,
       status: QuranStatusEnum.created,
