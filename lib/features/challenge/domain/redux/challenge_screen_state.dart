@@ -36,6 +36,10 @@ class ChallengeScreenState extends Equatable {
     );
   }
 
+  int indexFromQuestionId(int questionId) {
+    return allQuestions.indexWhere((element) => element.id == questionId);
+  }
+
   QuranQuestion? currentQuestionForDisplay() {
     List<QuranQuestion> approved = allApprovedAnswers();
 

@@ -26,6 +26,9 @@ Reducer<ChallengeScreenState> challengeScreenReducer =
   TypedReducer<ChallengeScreenState, UnlikeAnswerAction>(
     _unlikeActionReducer,
   ),
+  TypedReducer<ChallengeScreenState, SelectCurrentQuestionAction>(
+    _selectCurrentQuestionActionReducer,
+  ),
 ]);
 
 ChallengeScreenState _initializeChallengeScreenReducer(
@@ -77,14 +80,23 @@ ChallengeScreenState _selectHomeScreenTabReducer(
 
 ChallengeScreenState _likeActionReducer(
   ChallengeScreenState state,
-  LikeAnswerAction action,
+  LikeAnswerAction _,
 ) {
   return state;
 }
 
 ChallengeScreenState _unlikeActionReducer(
   ChallengeScreenState state,
-  UnlikeAnswerAction action,
+  UnlikeAnswerAction _,
 ) {
   return state;
+}
+
+ChallengeScreenState _selectCurrentQuestionActionReducer(
+  ChallengeScreenState state,
+  SelectCurrentQuestionAction action,
+) {
+  int index = state.indexFromQuestionId(action.questionId);
+
+  return state.copyWith(currentIndex: index);
 }
