@@ -64,3 +64,16 @@ class UnlikeAnswerAction extends AppStateAction {
     return '{action: ${super.toString()}, questionId: $questionId, answerId: ${answer.id}';
   }
 }
+
+class SelectCurrentQuestionAction extends AppStateAction {
+  final int questionId;
+
+  SelectCurrentQuestionAction({
+    required this.questionId,
+  });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, questionId: $questionId';
+  }
+}
