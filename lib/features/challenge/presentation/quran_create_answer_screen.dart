@@ -97,8 +97,10 @@ class _QuranCreateChallengeScreenState
                   ),),
                 ],),
 
+              const Divider(),
+
               const SizedBox(
-                height: 20,
+                height: 5,
               ),
 
               /// AYA SELECTION
