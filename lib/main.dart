@@ -1,15 +1,15 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/core/data/quran_firebase_engine.dart';
-import 'package:quran_ayat/features/notes/domain/notes_manager.dart';
-import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
+import 'features/core/data/quran_firebase_engine.dart';
 import 'features/core/domain/app_state/app_state.dart';
 import 'features/home/presentation/quran_home_screen.dart';
 import 'features/newAyat/presentation/quran_new_ayat_screen.dart';
+import 'features/notes/domain/notes_manager.dart';
+import 'features/settings/domain/settings_manager.dart';
 import 'main_common.dart';
 import 'misc/configs/remote_config_manager.dart';
 import 'misc/enums/quran_feature_flag_enum.dart';
