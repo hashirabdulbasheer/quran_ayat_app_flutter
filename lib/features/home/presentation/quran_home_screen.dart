@@ -27,80 +27,83 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
       BuildContext context,
       Store<AppState> store,
     ) {
-      return Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          /// APP BAR
-          appBar: QuranHomeAppBarWidget(
-            store: store,
-            selectedTab: store.state.challenge.selectedHomeScreenTab,
-          ),
-
-          /// DRAWER
-          drawer: QuranNavDrawer(
-            user: store.state.user,
-            bookmarksManager: QuranBookmarksManager(
-              localEngine: QuranLocalBookmarksEngine(),
+      return SafeArea(
+        bottom: true,
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Scaffold(
+            /// APP BAR
+            appBar: QuranHomeAppBarWidget(
+              store: store,
+              selectedTab: store.state.challenge.selectedHomeScreenTab,
             ),
-          ),
 
-          /// BOTTOM SHEET
-          bottomSheet: store.state.challenge.selectedHomeScreenTab ==
-                  QuranHomeScreenBottomTabsEnum.reader
-              ? QuranHomeBottomSheetWidget(
-                  store: store,
-                  selectedTab: store.state.challenge.selectedHomeScreenTab,
-                )
-              : null,
+            /// DRAWER
+            drawer: QuranNavDrawer(
+              user: store.state.user,
+              bookmarksManager: QuranBookmarksManager(
+                localEngine: QuranLocalBookmarksEngine(),
+              ),
+            ),
 
-          /// BODY
-          body: QuranHomeBodyContentWidget(
-            store: store,
-            selectedTab: store.state.challenge.selectedHomeScreenTab,
-          ),
-
-          /// BOTTOM TABS
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            currentIndex: store.state.challenge.selectedHomeScreenTab ==
+            /// BOTTOM SHEET
+            bottomSheet: store.state.challenge.selectedHomeScreenTab ==
                     QuranHomeScreenBottomTabsEnum.reader
-                ? 0
-                : 1,
-            selectedItemColor: Colors.blueGrey,
-            unselectedItemColor: Colors.black38,
-            onTap: (value) => setState(() {
-              if (value == 0) {
-                store.dispatch(
-                  SelectHomeScreenTabAction(
-                    tab: QuranHomeScreenBottomTabsEnum.reader,
+                ? QuranHomeBottomSheetWidget(
+                    store: store,
+                    selectedTab: store.state.challenge.selectedHomeScreenTab,
+                  )
+                : null,
+
+            /// BODY
+            body: QuranHomeBodyContentWidget(
+              store: store,
+              selectedTab: store.state.challenge.selectedHomeScreenTab,
+            ),
+
+            /// BOTTOM TABS
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex: store.state.challenge.selectedHomeScreenTab ==
+                      QuranHomeScreenBottomTabsEnum.reader
+                  ? 0
+                  : 1,
+              selectedItemColor: Colors.blueGrey,
+              unselectedItemColor: Colors.black38,
+              onTap: (value) => setState(() {
+                if (value == 0) {
+                  store.dispatch(
+                    SelectHomeScreenTabAction(
+                      tab: QuranHomeScreenBottomTabsEnum.reader,
+                    ),
+                  );
+                } else {
+                  store.dispatch(
+                    SelectHomeScreenTabAction(
+                      tab: QuranHomeScreenBottomTabsEnum.challenge,
+                    ),
+                  );
+                }
+              }),
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.menu_book_rounded,
+                    size: 20,
                   ),
-                );
-              } else {
-                store.dispatch(
-                  SelectHomeScreenTabAction(
-                    tab: QuranHomeScreenBottomTabsEnum.challenge,
+                  label: 'Read',
+                  tooltip: 'Read',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.assignment_outlined,
+                    size: 20,
                   ),
-                );
-              }
-            }),
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.menu_book_rounded,
-                  size: 20,
+                  label: 'Challenge',
+                  tooltip: 'Challenge',
                 ),
-                label: 'Read',
-                tooltip: 'Read',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.assignment_outlined,
-                  size: 20,
-                ),
-                label: 'Challenge',
-                tooltip: 'Challenge',
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
