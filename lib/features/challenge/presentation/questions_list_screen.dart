@@ -67,7 +67,23 @@ class QuranQuestionsListScreen extends StatelessWidget {
                           Text(questions[index].question),
                         ],
                       ),
-                      trailing: const Icon(Icons.chevron_right_rounded),
+                      trailing: IntrinsicWidth(
+                        child: Row(
+                          children: [
+                            if (store.state.challenge
+                                .approvedAnswersForQuestion(questions[index])
+                                .isNotEmpty)
+                              Text(
+                                "${store.state.challenge.approvedAnswersForQuestion(questions[index]).length}",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            const Icon(Icons.chevron_right_rounded),
+                          ],
+                        ),
+                      ),
                       onTap: () => _onQuestionTapped(
                         store,
                         context,

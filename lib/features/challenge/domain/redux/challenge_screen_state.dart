@@ -62,6 +62,16 @@ class ChallengeScreenState extends Equatable {
     );
   }
 
+  List<QuranAnswer> approvedAnswersForQuestion(QuranQuestion question) {
+    return question.answers
+        .where(
+          (element) =>
+              element.status == QuranAnswerStatusEnum.approved ||
+              element.status == QuranAnswerStatusEnum.reported,
+        )
+        .toList();
+  }
+
   List<QuranQuestion> _filterQuestionsBasedOn(
     bool Function(QuranAnswer element) answerCondition,
   ) {
