@@ -25,7 +25,10 @@ class _QuranAnswerBodyWidgetState extends State<QuranAnswerBodyWidget> {
   @override
   Widget build(BuildContext context) {
     List<QuranAnswer> answers = widget.question?.answers ?? [];
+    // sort based on date to show latest first
     answers.sort((a, b,) => b.createdOn.compareTo(a.createdOn));
+    // sort based on liked to show the most liked one first
+    answers.sort((a, b,) => b.likedUsers.length.compareTo(a.likedUsers.length));
     if (answers.isNotEmpty) {
       return SizedBox(
         width: MediaQuery.of(context).size.width,
