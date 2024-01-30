@@ -54,125 +54,119 @@ class _QuranCreateChallengeScreenState
   Widget build(BuildContext context) {
     Store<AppState> store = StoreProvider.of<AppState>(context);
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
+    return Scaffold(
 
-        /// APP BAR
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Submit Answer"),
-        ),
+      /// APP BAR
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Submit Answer"),
+      ),
 
-        /// BODY
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              20,
-              10,
-              20,
-              10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
+      /// BODY
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            20,
+            10,
+            20,
+            10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
 
-                /// The Question
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(widget.question.title, style: const TextStyle(
-                        color: Colors.black54,
-                        height: 1.5,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
-                      ),),
-                      Text(widget.question.question, style: const TextStyle(
-                        color: Colors.black54,
-                        height: 1.5,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 14,
-                      ),),
-                    ],),
-                ),
+              /// The Question
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(widget.question.title, style: const TextStyle(
+                    color: Colors.black54,
+                    height: 1.5,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                  ),),
+                  Text(widget.question.question, style: const TextStyle(
+                    color: Colors.black54,
+                    height: 1.5,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                  ),),
+                ],),
 
-                const SizedBox(
-                  height: 20,
-                ),
+              const SizedBox(
+                height: 20,
+              ),
 
-                /// AYA SELECTION
-                QuranAyatSelectionWidget(
-                  store: store,
-                  title: "Select a verse that could answer the question",
-                  currentIndex: _currentIndex ?? SurahIndex.defaultIndex,
-                  currentSurahDetails: _currentSurahDetails,
-                  onSuraSelected: (surah) =>
-                      setState(() =>
-                      {
-                        _currentSurahDetails = surah,
-                        _currentIndex = SurahIndex(
-                          surah.number - 1,
-                          0,
-                        ),
-                      }),
-                  onAyaSelected: (aya) =>
-                      setState(
-                            () =>
-                        _currentIndex = SurahIndex(
-                          _currentSurahDetails.number - 1,
-                          aya,
-                        ),
+              /// AYA SELECTION
+              QuranAyatSelectionWidget(
+                store: store,
+                title: "Select a verse that could answer the question",
+                currentIndex: _currentIndex ?? SurahIndex.defaultIndex,
+                currentSurahDetails: _currentSurahDetails,
+                onSuraSelected: (surah) =>
+                    setState(() =>
+                    {
+                      _currentSurahDetails = surah,
+                      _currentIndex = SurahIndex(
+                        surah.number - 1,
+                        0,
                       ),
+                    }),
+                onAyaSelected: (aya) =>
+                    setState(
+                          () =>
+                      _currentIndex = SurahIndex(
+                        _currentSurahDetails.number - 1,
+                        aya,
+                      ),
+                    ),
+              ),
+
+              const SizedBox(
+                height: 10,
+              ),
+
+              /// VERSE DISPLAY
+              if (_currentIndex != null)
+                QuranArabicTranslationWidget(
+                  index: _currentIndex ?? SurahIndex.defaultIndex,
                 ),
 
-                const SizedBox(
-                  height: 10,
-                ),
+              const SizedBox(
+                height: 20,
+              ),
 
-                /// VERSE DISPLAY
-                if (_currentIndex != null)
-                  QuranArabicTranslationWidget(
-                    index: _currentIndex ?? SurahIndex.defaultIndex,
-                  ),
+              /// NOTES TEXT FIELD
+              QuranTappableSmallTextFieldWidget(
+                title:
+                "Enter notes/reflection on how the verse answers the question",
+                controller: _notesController,
+              ),
 
-                const SizedBox(
-                  height: 20,
-                ),
+              const SizedBox(
+                height: 50,
+              ),
 
-                /// NOTES TEXT FIELD
-                QuranTappableSmallTextFieldWidget(
-                  title:
-                  "Enter notes/reflection on how the verse answers the question",
-                  controller: _notesController,
-                ),
-
-                const SizedBox(
-                  height: 50,
-                ),
-
-                /// SUBMIT BUTTON
-                QuranSingleActionButtonWidget(
-                  buttonText: "Submit",
-                  isLoading: _isLoading,
-                  onPressed: () =>
-                  _isValidForm()
-                      ? DialogUtils.confirmationDialog(
-                    context,
-                    'Submit answer?',
-                    "Are you sure that you want to submit the answer?",
-                    'Submit',
-                        () => _onSubmitAnswerTapped(),
-                  )
-                      : null,
-                ),
-              ],
-            ),
+              /// SUBMIT BUTTON
+              QuranSingleActionButtonWidget(
+                buttonText: "Submit",
+                isLoading: _isLoading,
+                onPressed: () =>
+                _isValidForm()
+                    ? DialogUtils.confirmationDialog(
+                  context,
+                  'Submit answer?',
+                  "Are you sure that you want to submit the answer?",
+                  'Submit',
+                      () => _onSubmitAnswerTapped(),
+                )
+                    : null,
+              ),
+            ],
           ),
         ),
       ),
