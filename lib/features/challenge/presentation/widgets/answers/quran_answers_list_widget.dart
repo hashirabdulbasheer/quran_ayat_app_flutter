@@ -62,16 +62,6 @@ class QuranAnswersListWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      answers[index].username,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.black54,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
                     QuranTranslationForAyaWidget(
                       index: SurahIndex(
                         answers[index].surah,
