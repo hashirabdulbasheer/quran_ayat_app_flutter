@@ -10,14 +10,13 @@ import 'features/auth/domain/auth_factory.dart';
 import 'features/core/domain/app_state/app_state.dart';
 import 'features/home/presentation/quran_home_screen.dart';
 import 'features/newAyat/presentation/quran_new_ayat_screen.dart';
-import 'features/notes/data/hive_notes_impl.dart';
 import 'main_common.dart';
 import 'misc/configs/remote_config_manager.dart';
 import 'misc/enums/quran_feature_flag_enum.dart';
 import 'misc/url/url_strategy.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.9.8";
+const String appVersion = "v2.9.9";
 
 bool isChallengeBetaModeEnabled = RemoteConfigManager.instance
         .get(RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled) &&
