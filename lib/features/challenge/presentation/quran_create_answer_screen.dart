@@ -162,7 +162,7 @@ class _QuranCreateChallengeScreenState
                     ? DialogUtils.confirmationDialog(
                   context,
                   'Submit answer?',
-                  "Are you sure that you want to submit the answer?",
+                  "Are you sure that you want to submit the answer for review?",
                   'Submit',
                       () => _onSubmitAnswerTapped(),
                 )
