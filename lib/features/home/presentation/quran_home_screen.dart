@@ -45,10 +45,13 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
           ),
 
           /// BOTTOM SHEET
-          bottomSheet: QuranHomeBottomSheetWidget(
-            store: store,
-            selectedTab: store.state.challenge.selectedHomeScreenTab,
-          ),
+          bottomSheet: store.state.challenge.selectedHomeScreenTab ==
+                  QuranHomeScreenBottomTabsEnum.reader
+              ? QuranHomeBottomSheetWidget(
+                  store: store,
+                  selectedTab: store.state.challenge.selectedHomeScreenTab,
+                )
+              : null,
 
           /// BODY
           body: QuranHomeBodyContentWidget(

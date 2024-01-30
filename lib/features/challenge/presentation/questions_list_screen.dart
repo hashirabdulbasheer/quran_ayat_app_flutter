@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
 import 'package:redux/redux.dart';
 
 import '../../core/domain/app_state/app_state.dart';
+import '../domain/models/quran_question.dart';
+import '../domain/redux/actions/actions.dart';
+import 'quran_challenge_display_screen.dart';
 
 class QuranQuestionsListScreen extends StatelessWidget {
   const QuranQuestionsListScreen({Key? key}) : super(key: key);
@@ -14,8 +16,7 @@ class QuranQuestionsListScreen extends StatelessWidget {
       BuildContext context,
       Store<AppState> store,
     ) {
-      List<QuranQuestion> questions =
-          store.state.challenge.allQuestions.reversed.toList();
+      List<QuranQuestion> questions = store.state.challenge.allQuestions;
       if (questions.isEmpty) {
         return const Center(child: Text("No questions yet!"));
       }
@@ -67,9 +68,11 @@ class QuranQuestionsListScreen extends StatelessWidget {
                         ],
                       ),
                       trailing: const Icon(Icons.chevron_right_rounded),
-                      onTap: () {
-
-                      },
+                      onTap: () => _onQuestionTapped(
+                        store,
+                        context,
+                        questions[index].id,
+                      ),
                     );
                   },
                   separatorBuilder: (
@@ -85,5 +88,21 @@ class QuranQuestionsListScreen extends StatelessWidget {
         ),
       );
     });
+  }
+
+  void _onQuestionTapped(
+    Store<AppState> store,
+    BuildContext context,
+    int questionId,
+  ) {
+    store.dispatch(
+      SelectCurrentQuestionAction(questionId: questionId),
+    );
+    Navigator.push<void>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuranChallengeDisplayScreen(store: store),
+      ),
+    ).then((value) {});
   }
 }
