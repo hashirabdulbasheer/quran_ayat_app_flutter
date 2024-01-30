@@ -66,160 +66,156 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
         .where((element) => element.id == widget.questionId)
         .first;
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        /// APP BAR
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("Edit Answer"),
-        ),
+    return Scaffold(
+      /// APP BAR
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Edit Answer"),
+      ),
 
-        /// BODY
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              30,
-              10,
-              30,
-              10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
+      /// BODY
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            30,
+            10,
+            30,
+            10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
 
-                /// AYA SELECTION
-                QuranAyatSelectionWidget(
-                  store: store,
-                  title: "Select a verse that could answer the question",
-                  currentIndex: currentIndex ?? SurahIndex.defaultIndex,
-                  currentSurahDetails: currentSurahDetails,
-                  onSuraSelected: (surah) => setState(() => {
-                        currentSurahDetails = surah,
-                        currentIndex = SurahIndex(
-                          surah.number - 1,
-                          0,
-                        ),
-                      }),
-                  onAyaSelected: (aya) => setState(
-                    () => currentIndex = SurahIndex(
-                      currentSurahDetails.number - 1,
-                      aya,
+              /// The Question
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    question.title,
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      height: 1.5,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
                     ),
                   ),
-                ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-
-                /// VERSE DISPLAY
-                if (currentIndex != null)
-                  QuranArabicTranslationWidget(
-                    index: currentIndex ?? SurahIndex.defaultIndex,
+                  Text(
+                    question.question,
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      height: 1.5,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
+                    ),
                   ),
+                ],
+              ),
 
-                const SizedBox(
-                  height: 20,
-                ),
+              const Divider(),
 
-                /// The Question
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        question.title,
-                        style: const TextStyle(
-                          color: Colors.black54,
-                          height: 1.5,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
+              const SizedBox(
+                height: 5,
+              ),
+
+              /// AYA SELECTION
+              QuranAyatSelectionWidget(
+                store: store,
+                title: "Select a verse that could answer the question",
+                currentIndex: currentIndex ?? SurahIndex.defaultIndex,
+                currentSurahDetails: currentSurahDetails,
+                onSuraSelected: (surah) => setState(() => {
+                      currentSurahDetails = surah,
+                      currentIndex = SurahIndex(
+                        surah.number - 1,
+                        0,
                       ),
-                      Text(
-                        question.question,
-                        style: const TextStyle(
-                          color: Colors.black54,
-                          height: 1.5,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                    }),
+                onAyaSelected: (aya) => setState(
+                  () => currentIndex = SurahIndex(
+                    currentSurahDetails.number - 1,
+                    aya,
                   ),
                 ),
+              ),
 
-                const SizedBox(
-                  height: 20,
+              const SizedBox(
+                height: 10,
+              ),
+
+              /// VERSE DISPLAY
+              if (currentIndex != null)
+                QuranArabicTranslationWidget(
+                  index: currentIndex ?? SurahIndex.defaultIndex,
                 ),
 
-                /// NOTES TEXT FIELD
-                QuranTappableSmallTextFieldWidget(
-                  title:
-                      "Enter notes/reflection on how the verse answers the question",
-                  controller: _notesController,
-                ),
+              const SizedBox(
+                height: 20,
+              ),
 
-                const SizedBox(
-                  height: 20,
-                ),
+              /// NOTES TEXT FIELD
+              QuranTappableSmallTextFieldWidget(
+                title:
+                    "Enter notes/reflection on how the verse answers the question",
+                controller: _notesController,
+              ),
 
-                /// SUBMIT BUTTON
+              const SizedBox(
+                height: 20,
+              ),
+
+              /// SUBMIT BUTTON
+              QuranUpdateControlsWidget(
+                positiveActionText: "Update",
+                onPositiveAction: () => onConfirmation(
+                  title: "Update?",
+                  message: "Are you sure that you want to update?",
+                  action: "Update",
+                  onConfirmation: () => _updateAnswer(),
+                ),
+                isPositiveActionRunning: currentLoadingAction ==
+                    QuranEditAnswerScreenLoadingAction.update,
+                negativeActionText: "Delete",
+                onNegativeAction: () => onConfirmation(
+                  title: "Delete?",
+                  message: "Are you sure that you want to delete?",
+                  action: "Delete",
+                  onConfirmation: () => _deleteAnswer(),
+                ),
+                isNegativeActionRunning: currentLoadingAction ==
+                    QuranEditAnswerScreenLoadingAction.delete,
+              ),
+
+              const SizedBox(
+                height: 10,
+              ),
+
+              /// ADMIN Functionality
+              if (store.state.isAdminUser)
                 QuranUpdateControlsWidget(
-                  positiveActionText: "Update",
+                  positiveActionText: "Approve",
                   onPositiveAction: () => onConfirmation(
-                    title: "Update?",
-                    message: "Are you sure that you want to update?",
-                    action: "Update",
-                    onConfirmation: () => _updateAnswer(),
+                    title: "Approve?",
+                    message: "Are you sure that you want to approve?",
+                    action: "Approve",
+                    onConfirmation: () => _approveAnswer(),
                   ),
                   isPositiveActionRunning: currentLoadingAction ==
-                      QuranEditAnswerScreenLoadingAction.update,
-                  negativeActionText: "Delete",
+                      QuranEditAnswerScreenLoadingAction.approve,
+                  negativeActionText: "Reject",
                   onNegativeAction: () => onConfirmation(
-                    title: "Delete?",
-                    message: "Are you sure that you want to delete?",
-                    action: "Delete",
-                    onConfirmation: () => _deleteAnswer(),
+                    title: "Reject?",
+                    message: "Are you sure that you want to reject?",
+                    action: "Reject",
+                    onConfirmation: () => _rejectAnswer(),
                   ),
                   isNegativeActionRunning: currentLoadingAction ==
-                      QuranEditAnswerScreenLoadingAction.delete,
+                      QuranEditAnswerScreenLoadingAction.reject,
                 ),
-
-                const SizedBox(
-                  height: 10,
-                ),
-
-                /// ADMIN Functionality
-                if (store.state.isAdminUser)
-                  QuranUpdateControlsWidget(
-                    positiveActionText: "Approve",
-                    onPositiveAction: () => onConfirmation(
-                      title: "Approve?",
-                      message: "Are you sure that you want to approve?",
-                      action: "Approve",
-                      onConfirmation: () => _approveAnswer(),
-                    ),
-                    isPositiveActionRunning: currentLoadingAction ==
-                        QuranEditAnswerScreenLoadingAction.approve,
-                    negativeActionText: "Reject",
-                    onNegativeAction: () => onConfirmation(
-                      title: "Reject?",
-                      message: "Are you sure that you want to reject?",
-                      action: "Reject",
-                      onConfirmation: () => _rejectAnswer(),
-                    ),
-                    isNegativeActionRunning: currentLoadingAction ==
-                        QuranEditAnswerScreenLoadingAction.reject,
-                  ),
-              ],
-            ),
+            ],
           ),
         ),
       ),
