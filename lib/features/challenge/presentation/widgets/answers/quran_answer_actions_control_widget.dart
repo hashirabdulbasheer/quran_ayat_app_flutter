@@ -142,6 +142,7 @@ class _QuranAnswerActionControlWidgetState
     QuranAnswer answer,
   ) {
     {
+      Navigator.of(context).pop();
       StoreProvider.of<AppState>(context).dispatch(
         SelectParticularAyaAction(
           index: SurahIndex(
