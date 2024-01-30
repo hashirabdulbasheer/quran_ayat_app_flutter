@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:quran_ayat/features/notes/domain/redux/actions/actions.dart';
-import 'package:quran_ayat/misc/enums/quran_status_enum.dart';
-import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/dialog_utils.dart';
+import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
 import '../../notes/domain/entities/quran_note.dart';
 import '../../notes/domain/notes_manager.dart';
+import '../../notes/domain/redux/actions/actions.dart';
 import '../domain/challenge_manager.dart';
 import '../domain/enums/quran_answer_status_enum.dart';
 import '../domain/models/quran_answer.dart';
@@ -80,6 +80,32 @@ class _QuranCreateChallengeScreenState
                   height: 10,
                 ),
 
+                /// The Question
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(widget.question.title, style: const TextStyle(
+                        color: Colors.black54,
+                        height: 1.5,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                      ),),
+                      Text(widget.question.question, style: const TextStyle(
+                        color: Colors.black54,
+                        height: 1.5,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                      ),),
+                    ],),
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
                 /// AYA SELECTION
                 QuranAyatSelectionWidget(
                   store: store,
@@ -114,32 +140,6 @@ class _QuranCreateChallengeScreenState
                   QuranArabicTranslationWidget(
                     index: _currentIndex ?? SurahIndex.defaultIndex,
                   ),
-
-                const SizedBox(
-                  height: 20,
-                ),
-
-                /// The Question
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                    Text(widget.question.title, style: const TextStyle(
-                      color: Colors.black54,
-                      height: 1.5,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14,
-                    ),),
-                    Text(widget.question.question, style: const TextStyle(
-                      color: Colors.black54,
-                      height: 1.5,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14,
-                    ),),
-                  ],),
-                ),
 
                 const SizedBox(
                   height: 20,
