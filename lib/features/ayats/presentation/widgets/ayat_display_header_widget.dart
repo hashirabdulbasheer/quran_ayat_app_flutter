@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
 
+import '../../../../misc/design/design_system.dart';
 import '../../../../utils/utils.dart';
 import '../../../newAyat/data/surah_index.dart';
 
@@ -48,7 +49,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                 ),
               ),
               dropdownDecoratorProps: const DropDownDecoratorProps(
-                baseStyle: TextStyle(fontSize: 12),
+                baseStyle: QuranDS.textTitleSmall,
                 dropdownSearchDecoration: InputDecoration(
                   labelText: "Surah",
                   hintText: "select surah",
@@ -82,9 +83,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                     showSearchBox: true,
                     itemBuilder: _customAyaItem,
                     searchFieldProps: const TextFieldProps(
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
+                      style: QuranDS.textTitleSmall,
                     ),
                   ),
                   filterFn: (
@@ -97,7 +96,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                   ),
                   enabled: true,
                   dropdownDecoratorProps: const DropDownDecoratorProps(
-                    baseStyle: TextStyle(fontSize: 12),
+                    baseStyle: QuranDS.textTitleSmall,
                     dropdownSearchDecoration: InputDecoration(
                       labelText: "Ayat",
                       hintText: "ayat index",
@@ -134,7 +133,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
   }
 
   Widget _customItem(
-    BuildContext context,
+    BuildContext _,
     NQSurahTitle title,
     bool isSelected,
   ) {
@@ -146,7 +145,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
   }
 
   Widget _customAyaItem(
-    BuildContext context,
+    BuildContext _,
     int ayaIndex,
     bool isSelected,
   ) {

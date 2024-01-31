@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../misc/design/design_system.dart';
+import '../../../challenge/domain/redux/actions/actions.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../newAyat/domain/redux/actions/actions.dart';
 import '../quran_home_screen.dart';

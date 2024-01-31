@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Design System
 class QuranDS {
   /// TextSTyle
-  static TextStyle textTitleSmall = const TextStyle(fontSize: 12);
+  static const TextStyle textTitleSmall = TextStyle(fontSize: 12);
 
   /// ButtonStyle
   static ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
@@ -13,5 +13,5 @@ class QuranDS {
   );
 
   /// Color
-  static Color primaryColor = Colors.blueGrey;
+  static const Color primaryColor = Colors.blueGrey;
 }
