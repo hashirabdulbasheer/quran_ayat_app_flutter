@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -80,6 +81,9 @@ class MyAppState extends State<MyApp> {
         darkTheme: QuranThemeManager.instance.darkTheme,
         themeMode: QuranThemeManager.instance.currentAppThemeMode,
         home: widget.homeScreen,
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+        ],
       ),
     );
   }
