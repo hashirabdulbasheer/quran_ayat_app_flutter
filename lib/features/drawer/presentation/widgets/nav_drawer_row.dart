@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../utils/logger_utils.dart';
+
 class QuranNavDrawerRowWidget extends StatelessWidget {
   final BuildContext context;
   final String title;
@@ -28,6 +30,10 @@ class QuranNavDrawerRowWidget extends StatelessWidget {
       onTap: () => {
         Navigator.of(context).pop(),
         _onTapped(),
+        QuranLogger.logAnalyticsWithParams(
+          "menu-drawer-selected",
+          {'item': title},
+        ),
       },
     );
   }

@@ -22,6 +22,11 @@ class QuranLogger {
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     analytics.logEvent(name: event);
   }
+
+  static void logAnalyticsWithParams(String event, Map<String, Object>? params,) {
+    FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    analytics.logEvent(name: event, parameters: params,);
+  }
 }
 
 class LoggerMiddleware<State> implements MiddlewareClass<State> {

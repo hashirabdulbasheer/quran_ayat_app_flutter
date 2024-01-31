@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
-import 'package:quran_ayat/misc/configs/app_config.dart';
-import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../misc/configs/app_config.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
+import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../auth/presentation/quran_login_screen.dart';
 import '../../auth/presentation/quran_profile_screen.dart';
@@ -15,6 +14,7 @@ import '../../bookmark/domain/bookmarks_manager.dart';
 import '../../challenge/presentation/my_challenge_submissions_screen.dart';
 import '../../challenge/presentation/quran_challenges_approval_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/data/surah_index.dart';
 import '../../newAyat/domain/redux/actions/actions.dart';
 import '../../notes/presentation/quran_view_notes_screen.dart';
 import '../../settings/domain/constants/setting_constants.dart';

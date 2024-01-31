@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../models/qr_user_model.dart';
+import '../../../../../utils/logger_utils.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../home/presentation/quran_home_screen.dart';
 import '../../../../newAyat/data/surah_index.dart';
@@ -124,6 +125,13 @@ class _QuranAnswerActionControlWidgetState
         questionId: question,
         answer: widget.answer,
       ));
+      QuranLogger.logAnalyticsWithParams(
+        "answer-action-unlike",
+        {
+          'questionId': question,
+          'answerId': widget.answer.id,
+        },
+      );
     } else {
       setState(() {
         _isLiked = true;
@@ -134,6 +142,13 @@ class _QuranAnswerActionControlWidgetState
         questionId: question,
         answer: widget.answer,
       ));
+      QuranLogger.logAnalyticsWithParams(
+        "answer-action-like",
+        {
+          'questionId': question,
+          'answerId': widget.answer.id,
+        },
+      );
     }
   }
 
@@ -141,22 +156,27 @@ class _QuranAnswerActionControlWidgetState
     BuildContext context,
     QuranAnswer answer,
   ) {
-    {
-      Navigator.of(context).pop();
-      StoreProvider.of<AppState>(context).dispatch(
-        SelectParticularAyaAction(
-          index: SurahIndex(
-            answer.surah,
-            answer.aya,
-          ),
+    Navigator.of(context).pop();
+    StoreProvider.of<AppState>(context).dispatch(
+      SelectParticularAyaAction(
+        index: SurahIndex(
+          answer.surah,
+          answer.aya,
         ),
-      );
-      StoreProvider.of<AppState>(context).dispatch(
-        SelectHomeScreenTabAction(
-          tab: QuranHomeScreenBottomTabsEnum.reader,
-        ),
-      );
-    }
+      ),
+    );
+    StoreProvider.of<AppState>(context).dispatch(
+      SelectHomeScreenTabAction(
+        tab: QuranHomeScreenBottomTabsEnum.reader,
+      ),
+    );
+    QuranLogger.logAnalyticsWithParams(
+      "answer-action-read",
+      {
+        'questionId': widget.questionId ?? -1,
+        'answerId': widget.answer.id,
+      },
+    );
   }
 
   void _onEditTapped() {
@@ -175,7 +195,22 @@ class _QuranAnswerActionControlWidgetState
     ).then((value) {
       setState(() {});
     });
+    QuranLogger.logAnalyticsWithParams(
+      "answer-action-edit",
+      {
+        'questionId': questionId,
+        'answerId': widget.answer.id,
+      },
+    );
   }
 
-  void _onReportAnswerTapped() {}
+  void _onReportAnswerTapped() {
+    QuranLogger.logAnalyticsWithParams(
+      "answer-action-report",
+      {
+        'questionId': widget.questionId ?? -1,
+        'answerId': widget.answer.id,
+      },
+    );
+  }
 }

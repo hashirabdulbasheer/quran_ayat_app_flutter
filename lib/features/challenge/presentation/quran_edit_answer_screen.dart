@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../../../utils/dialog_utils.dart';
+import '../../../utils/logger_utils.dart';
 import '../../../utils/utils.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
@@ -285,6 +286,13 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
           context,
           "Updated successfully. Submitted for review.",
         ),
+        QuranLogger.logAnalyticsWithParams(
+          "edit-answer-update",
+          {
+            'questionId': widget.questionId,
+            'answerId': widget.answer.id,
+          },
+        ),
       },
       loadingAction: QuranEditAnswerScreenLoadingAction.update,
     );
@@ -328,6 +336,13 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
         QuranUtils.showMessage(
           context,
           "Deleted successfully.",
+        ),
+        QuranLogger.logAnalyticsWithParams(
+          "edit-answer-delete",
+          {
+            'questionId': widget.questionId,
+            'answerId': widget.answer.id,
+          },
         ),
       },
       loadingAction: QuranEditAnswerScreenLoadingAction.delete,

@@ -101,6 +101,7 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
     ).then((value) {
       setState(() {});
     });
+    QuranLogger.logAnalytics("answer-add-login");
   }
 
   void _goToCreateChallengeScreen(
@@ -119,12 +120,13 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
             ),
           ),
         ).then((value) {});
-        QuranLogger.logAnalytics("add_challenge");
+        QuranLogger.logAnalytics("answer-add-screen");
       } else {
         QuranUtils.showMessage(
           context,
           "Invalid question !",
         );
+        QuranLogger.logAnalytics("answer-add-invalid");
       }
     }
   }

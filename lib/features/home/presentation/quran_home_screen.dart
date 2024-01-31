@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
+import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
 
 import '../../bookmark/data/bookmarks_local_impl.dart';
@@ -77,12 +78,14 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
                       tab: QuranHomeScreenBottomTabsEnum.reader,
                     ),
                   );
+                  QuranLogger.logAnalytics("tab-reader");
                 } else {
                   store.dispatch(
                     SelectHomeScreenTabAction(
                       tab: QuranHomeScreenBottomTabsEnum.challenge,
                     ),
                   );
+                  QuranLogger.logAnalytics("tab-challenge");
                 }
               }),
               items: const [

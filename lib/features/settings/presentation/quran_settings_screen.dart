@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 
+import '../../../utils/logger_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/domain/redux/actions/actions.dart';
 import '../domain/entities/quran_setting.dart';
 import '../domain/settings_manager.dart';
 import 'widgets/settings_row_widget.dart';
@@ -46,8 +47,7 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
                     ),
                     child: QuranSettingsRowWidget(
                       setting: _settings[index],
-                      onChanged: () => StoreProvider.of<AppState>(context)
-                          .dispatch(InitializeReaderScreenAction()),
+                      onChanged: () => _onSettingsChanged(_settings[index]),
                     ),
                   ),
                 ),
@@ -57,6 +57,15 @@ class _QuranSettingsScreenState extends State<QuranSettingsScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _onSettingsChanged(QuranSetting setting) {
+    StoreProvider.of<AppState>(context)
+        .dispatch(InitializeReaderScreenAction());
+    QuranLogger.logAnalyticsWithParams(
+      "settings-changed",
+      {'id': setting.id},
     );
   }
 }
