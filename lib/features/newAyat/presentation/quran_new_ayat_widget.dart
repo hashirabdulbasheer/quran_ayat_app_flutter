@@ -7,6 +7,7 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/design/design_system.dart';
 import '../../../misc/enums/quran_app_mode_enum.dart';
 import '../../ayats/domain/enums/audio_events_enum.dart';
 import '../../ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
@@ -133,10 +134,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                                 alignment: Alignment.centerRight,
                                 child: Text(
                                   "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black54,
-                                  ),
+                                  style: QuranDS.textTitleSmallLight,
                                   textAlign: TextAlign.start,
                                 ),
                               ),
@@ -149,10 +147,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           tooltip: "Close header",
                           onPressed: () =>
                               store.dispatch(ToggleHeaderVisibilityAction()),
-                          icon: const Icon(
-                            Icons.close,
-                            size: 12,
-                          ),
+                          icon: QuranDS.closeIconVerySmall,
                         ),
                 ],
               ),
@@ -175,9 +170,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                             store.dispatch(ToggleHeaderVisibilityAction()),
                         child: Text(
                           "${currentIndex.human.sura}:${currentIndex.human.aya}", // RTL
-                          style: const TextStyle(
-                            color: Colors.black54,
-                          ),
+                          style: QuranDS.textTitleSmallLight,
                         ),
                       ),
                     ),
@@ -187,39 +180,23 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                         store,
                         context,
                       ),
-                      icon: const Icon(
-                        Icons.list_alt,
-                        size: 15,
-                        color: Colors.black54,
-                      ),
+                      icon: QuranDS.listIconLightSmall,
                     ),
                     const Spacer(),
                     IconButton(
                       tooltip: "Increase font size",
                       onPressed: () => _incrementFontSize(store),
-                      icon: const Icon(
-                        Icons.add,
-                        size: 15,
-                        color: Colors.black54,
-                      ),
+                      icon: QuranDS.addIconLightSmall,
                     ),
                     IconButton(
                       tooltip: "Decrease font size",
                       onPressed: () => _decrementFontSize(store),
-                      icon: const Icon(
-                        Icons.remove,
-                        size: 15,
-                        color: Colors.black54,
-                      ),
+                      icon: QuranDS.removeIconLightSmall,
                     ),
                     IconButton(
                       tooltip: "Reset font size",
                       onPressed: () => _resetFontSize(store),
-                      icon: const Icon(
-                        Icons.refresh,
-                        size: 15,
-                        color: Colors.black54,
-                      ),
+                      icon: QuranDS.refreshIconLightSmall,
                     ),
                   ],
                 ),
@@ -231,7 +208,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                       child: Text(
                         "In the name of Allah, the Most Gracious, the Most Merciful",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 12),
+                        style: QuranDS.textTitleSmall,
                       ),
                     )
                   : Container(),
