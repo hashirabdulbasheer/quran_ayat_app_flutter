@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../misc/design/design_system.dart';
+
 class QuranAnswerLikeThumbsUpWidget extends StatelessWidget {
   final bool isLiked;
   final bool isEnabled;
@@ -15,23 +17,11 @@ class QuranAnswerLikeThumbsUpWidget extends StatelessWidget {
     if (isEnabled) {
       /// Enabled state
       return isLiked
-          ? const Icon(
-              Icons.thumb_up,
-              color: Colors.blueGrey,
-              size: 24.0,
-            )
-          : const Icon(
-              Icons.thumb_up_alt_outlined,
-              color: Colors.blueGrey,
-              size: 24.0,
-            );
+          ? QuranDS.thumbsUpIconSelectedLarge
+          : QuranDS.thumbsUpIconUnSelectedLarge;
     } else {
       /// Disabled state
-      return const Icon(
-        Icons.thumb_up_alt_outlined,
-        color: Colors.black12,
-        size: 24.0,
-      );
+      return QuranDS.thumbsUpIconUnSelectedLarge;
     }
   }
 }

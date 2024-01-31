@@ -43,9 +43,7 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                 showSearchBox: true,
                 itemBuilder: _customItem,
                 searchFieldProps: const TextFieldProps(
-                  style: TextStyle(
-                    fontSize: 12,
-                  ),
+                  style: QuranDS.textTitleSmall,
                 ),
               ),
               dropdownDecoratorProps: const DropDownDecoratorProps(

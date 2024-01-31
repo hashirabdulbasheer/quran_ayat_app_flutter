@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 
+import '../../../../misc/design/design_system.dart';
 import '../../../../misc/enums/quran_font_family_enum.dart';
 import 'full_ayat_row_widget.dart';
 
@@ -23,10 +24,7 @@ class QuranAyatDisplayTranslationWidget extends StatelessWidget {
             child: Text(
               translationType.title,
               textAlign: TextAlign.end,
-              style: const TextStyle(
-                fontSize: 10,
-                color: Colors.black54,
-              ),
+              style: QuranDS.textTitleVerySmallLight,
             ),
           ),
         ],
@@ -35,7 +33,7 @@ class QuranAyatDisplayTranslationWidget extends StatelessWidget {
         text: translation,
         fontFamily: _translationFontFamily(translationType),
       ),
-      const Divider(color: Colors.black12,),
+      const Divider(color: QuranDS.veryLightColor),
     ]);
   }
 

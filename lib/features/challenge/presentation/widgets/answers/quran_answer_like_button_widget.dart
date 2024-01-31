@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../misc/design/design_system.dart';
+import '../../../../core/presentation/widgets/quran_normal_progress_widget.dart';
 import 'quran_answer_like_thumbs_up_widget.dart';
 
 class QuranAnswerLikeButtonWidget extends StatelessWidget {
@@ -40,9 +42,7 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
                 height: 20,
                 width: 20,
                 child: Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.blueGrey,
-                  ),
+                  child: QuranNormalProgressIndicatorWidget(),
                 ),
               ),
 
@@ -51,7 +51,7 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
               numLikes > 0
                   ? Text(
                       "($numLikes)",
-                      style: const TextStyle(fontSize: 12),
+                      style: QuranDS.textTitleSmall,
                     )
                   : const Text(""),
           ],

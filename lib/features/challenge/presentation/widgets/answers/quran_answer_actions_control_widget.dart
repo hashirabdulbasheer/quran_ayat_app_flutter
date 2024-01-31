@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../../misc/design/design_system.dart';
 import '../../../../../models/qr_user_model.dart';
 import '../../../../../utils/logger_utils.dart';
 import '../../../../core/domain/app_state/app_state.dart';
@@ -61,26 +62,19 @@ class _QuranAnswerActionControlWidgetState
             context,
             widget.answer,
           ),
-          icon: const Icon(
-            Icons.menu_book_rounded,
-            color: Colors.blueGrey,
-          ),
+          icon: QuranDS.readIconColoured,
         ),
         IconButton(
           tooltip: "Edit answer",
           onPressed: () => _isEditButtonEnable() ? _onEditTapped() : null,
-          icon: Icon(
-            Icons.edit_note,
-            color: _isEditButtonEnable() ? Colors.blueGrey : Colors.black12,
-          ),
+          icon: _isEditButtonEnable()
+              ? QuranDS.editIconColoured
+              : QuranDS.editIconDisabled,
         ),
         IconButton(
           tooltip: "Report problem with answer",
           onPressed: () => _onReportAnswerTapped(),
-          icon: const Icon(
-            Icons.report_problem_outlined,
-            color: Colors.black12,
-          ),
+          icon: QuranDS.reportProblemDisabled,
         ),
       ],
     );

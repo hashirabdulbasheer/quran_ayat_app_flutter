@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '../../../../../misc/design/design_system.dart';
 import '../../../../../models/qr_user_model.dart';
 import '../../../../../utils/utils.dart';
 import '../../../../core/domain/app_state/app_state.dart';
@@ -73,7 +74,7 @@ class QuranAnswersListWidget extends StatelessWidget {
                     ),
                     Text(
                       answers[index].note,
-                      style: const TextStyle(fontSize: 16),
+                      style: QuranDS.textTitleLarge,
                     ),
                     const SizedBox(
                       height: 8,
@@ -82,7 +83,7 @@ class QuranAnswersListWidget extends StatelessWidget {
                       QuranChallengeManager.instance.formattedDate(
                         answers[index].createdOn,
                       ),
-                      style: const TextStyle(fontSize: 12),
+                      style: QuranDS.textTitleSmall,
                     ),
                     const SizedBox(
                       height: 8,

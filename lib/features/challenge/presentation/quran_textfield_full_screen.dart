@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../misc/design/design_system.dart';
 import 'widgets/create/quran_note_entry_textfield_widget.dart';
 
 class QuranFullTextFieldScreen extends StatelessWidget {
@@ -38,18 +39,12 @@ class QuranFullTextFieldScreen extends StatelessWidget {
                   },
                   child: const Text(
                     "Save",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: QuranDS.textTitleLargeBold,
                   ),
                 ),
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: QuranDS.textTitleLargeBold,
                 ),
               ],
             ),

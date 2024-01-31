@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/design/design_system.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/dialog_utils.dart';
 import '../../../utils/logger_utils.dart';
@@ -97,21 +98,11 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
                 children: [
                   Text(
                     question.title,
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      height: 1.5,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14,
-                    ),
+                    style: QuranDS.textTitleMediumLightSmallLineSpacing,
                   ),
                   Text(
                     question.question,
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      height: 1.5,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14,
-                    ),
+                    style: QuranDS.textTitleMediumLightSmallLineSpacing,
                   ),
                 ],
               ),

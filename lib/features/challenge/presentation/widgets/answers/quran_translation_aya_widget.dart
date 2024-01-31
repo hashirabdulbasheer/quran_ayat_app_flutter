@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+
+import '../../../../../misc/design/design_system.dart';
+import '../../../../newAyat/data/surah_index.dart';
 
 class QuranTranslationForAyaWidget extends StatelessWidget {
   final SurahIndex index;
@@ -36,10 +38,7 @@ class QuranTranslationForAyaWidget extends StatelessWidget {
 
           return Text(
             "${index.sura + 1}:${index.aya + 1} $ayaText",
-            style: const TextStyle(
-              fontSize: 14,
-              fontStyle: FontStyle.italic,
-            ),
+            style: QuranDS.textTitleMediumItalic,
           );
         }
 

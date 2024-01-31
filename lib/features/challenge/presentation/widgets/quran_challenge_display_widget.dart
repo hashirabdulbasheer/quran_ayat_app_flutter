@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../misc/design/design_system.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../domain/models/quran_question.dart';
 import 'answers/quran_answers_widget.dart';
@@ -37,11 +38,7 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                       Text(
                         question.title,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.black45,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 14,
-                        ),
+                        style: QuranDS.textTitleMediumLight,
                       ),
                     ],
                   ),
@@ -56,12 +53,7 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
                         child: Text(
                           question.question,
                           textAlign: TextAlign.start,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            height: 1.5,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 14,
-                          ),
+                          style: QuranDS.textTitleMediumLightSmallLineSpacing,
                         ),
                       ),
                     ],

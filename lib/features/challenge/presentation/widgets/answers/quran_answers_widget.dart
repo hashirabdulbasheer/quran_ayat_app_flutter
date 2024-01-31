@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '../../../../../misc/design/design_system.dart';
 import '../../../../../models/qr_user_model.dart';
 import '../../../../../utils/logger_utils.dart';
 import '../../../../../utils/utils.dart';
@@ -36,13 +37,7 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
         ),
         Container(
           height: 50,
-          decoration: const BoxDecoration(
-            border: Border.fromBorderSide(
-              BorderSide(color: Colors.black12),
-            ),
-            color: Colors.black12,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
+          decoration: QuranDS.boxDecorationVeryLightBorder,
           padding: const EdgeInsets.fromLTRB(
             10,
             0,

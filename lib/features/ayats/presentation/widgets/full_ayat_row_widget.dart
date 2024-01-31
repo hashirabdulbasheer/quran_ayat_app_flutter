@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../misc/design/design_system.dart';
+import '../../../../misc/enums/quran_font_family_enum.dart';
 import '../../../../utils/utils.dart';
 import 'font_scaler_widget.dart';
 
@@ -19,7 +21,7 @@ class QuranFullAyatRowWidget extends StatelessWidget {
   }
 
   Widget _body(
-    BuildContext context,
+    BuildContext _,
     double fontScale,
   ) {
     return Directionality(
@@ -35,18 +37,21 @@ class QuranFullAyatRowWidget extends StatelessWidget {
                 _stripHtmlIfNeeded(text),
                 textAlign: TextAlign.start,
                 textScaleFactor: fontScale,
-                style: TextStyle(
-                  fontSize: 16,
-                  height: 1.5,
-                  fontFamily: fontFamily,
-                  color: Colors.black87,
-                ),
+                style: _textStyleForFont(fontFamily),
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  TextStyle _textStyleForFont(String? fontFamily) {
+    if (fontFamily == QuranFontFamily.malayalam.rawString) {
+      return QuranDS.textTitleLargeDarkSmallLineSpacingMalayalamFont;
+    }
+
+    return QuranDS.textTitleLargeDarkSmallLineSpacing;
   }
 
   static String _stripHtmlIfNeeded(String text) {
