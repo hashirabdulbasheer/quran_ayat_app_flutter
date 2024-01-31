@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:quran_ayat/features/challenge/domain/redux/actions/actions.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../misc/design/design_system.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../newAyat/domain/redux/actions/actions.dart';
 import '../../../settings/domain/theme_manager.dart';
@@ -46,7 +47,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
                 child: Tooltip(
                   message: previousTooltip,
                   child: ElevatedButton(
-                    style: _elevatedButtonTheme,
+                    style: QuranDS.elevatedButtonStyle,
                     onPressed: () => _moveToPreviousAction(store),
                     child: Icon(
                       Icons.arrow_back,
@@ -62,7 +63,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
                 child: Tooltip(
                   message: nextTooltip,
                   child: ElevatedButton(
-                    style: _elevatedButtonTheme,
+                    style: QuranDS.elevatedButtonStyle,
                     onPressed: () => _moveToNextAction(store),
                     child: Icon(
                       Icons.arrow_forward,
@@ -83,24 +84,6 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
   ///
   /// Theme
   ///
-
-  ButtonStyle? get _elevatedButtonTheme {
-    // if system dark mode is set then use dark mode buttons
-    // else use gray button
-    if (QuranThemeManager.instance.isDarkMode()) {
-      return ElevatedButton.styleFrom(
-        backgroundColor: Colors.white70,
-        shadowColor: Colors.transparent,
-        textStyle: const TextStyle(color: Colors.black),
-      );
-    }
-
-    return ElevatedButton.styleFrom(
-      backgroundColor: Colors.black12,
-      shadowColor: Colors.transparent,
-      textStyle: const TextStyle(color: Colors.deepPurple),
-    );
-  }
 
   Color? _elevatedButtonIconColor(
     BuildContext context,

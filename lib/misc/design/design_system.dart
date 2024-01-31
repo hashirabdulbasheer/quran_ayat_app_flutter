@@ -6,9 +6,9 @@ class QuranDS {
   static TextStyle textTitleSmall = const TextStyle(fontSize: 12);
 
   /// ButtonStyle
-  static ButtonStyle elevatedButtonTheme = ElevatedButton.styleFrom(
-    backgroundColor: Colors.white70,
+  static ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
+    backgroundColor: Colors.black12,
     shadowColor: Colors.transparent,
-    textStyle: const TextStyle(color: Colors.black),
+    textStyle: const TextStyle(color: Colors.deepPurple),
   );
 }
