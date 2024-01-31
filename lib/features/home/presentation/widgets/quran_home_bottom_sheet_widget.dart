@@ -5,7 +5,6 @@ import 'package:redux/redux.dart';
 import '../../../../misc/design/design_system.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../newAyat/domain/redux/actions/actions.dart';
-import '../../../settings/domain/theme_manager.dart';
 import '../quran_home_screen.dart';
 
 class QuranHomeBottomSheetWidget extends StatelessWidget {
@@ -51,9 +50,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
                     onPressed: () => _moveToPreviousAction(store),
                     child: Icon(
                       Icons.arrow_back,
-                      color: _elevatedButtonIconColor(
-                        context,
-                      ),
+                      color: QuranDS.primaryColor,
                     ),
                   ),
                 ),
@@ -67,9 +64,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
                     onPressed: () => _moveToNextAction(store),
                     child: Icon(
                       Icons.arrow_forward,
-                      color: _elevatedButtonIconColor(
-                        context,
-                      ),
+                      color: QuranDS.primaryColor,
                     ),
                   ),
                 ),
@@ -81,23 +76,9 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
     );
   }
 
-  ///
-  /// Theme
-  ///
-
-  Color? _elevatedButtonIconColor(
-    BuildContext context,
+  void _moveToNextAction(
+    Store<AppState> store,
   ) {
-    // if system dark mode is set then use dark mode buttons
-    // else use primate color
-    if (QuranThemeManager.instance.isDarkMode()) {
-      return null;
-    }
-
-    return Theme.of(context).primaryColor;
-  }
-
-  void _moveToNextAction( Store<AppState> store, ) {
     if (selectedTab == QuranHomeScreenBottomTabsEnum.reader) {
       _moveToNextAyat(store);
     } else if (selectedTab == QuranHomeScreenBottomTabsEnum.challenge) {
@@ -105,7 +86,9 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
     }
   }
 
-  void _moveToPreviousAction( Store<AppState> store, ) {
+  void _moveToPreviousAction(
+    Store<AppState> store,
+  ) {
     if (selectedTab == QuranHomeScreenBottomTabsEnum.reader) {
       _moveToPreviousAyat(store);
     } else if (selectedTab == QuranHomeScreenBottomTabsEnum.challenge) {

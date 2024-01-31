@@ -11,4 +11,7 @@ class QuranDS {
     shadowColor: Colors.transparent,
     textStyle: const TextStyle(color: Colors.deepPurple),
   );
+
+  /// Color
+  static Color primaryColor = Colors.blueGrey;
 }
