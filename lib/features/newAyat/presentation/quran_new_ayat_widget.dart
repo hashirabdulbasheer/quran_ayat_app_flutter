@@ -17,7 +17,6 @@ import '../../ayats/presentation/widgets/ayat_display_surah_progress_widget.dart
 import '../../ayats/presentation/widgets/ayat_display_translation_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_transliteration_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_word_by_word_widget.dart';
-import '../../contextList/presentation/quran_context_list_screen.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../tags/presentation/quran_tag_display.dart';
 import '../data/surah_index.dart';
@@ -270,15 +269,14 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
     Store<AppState> store,
     BuildContext context,
   ) async {
-    int? selectedAyaIndex = await Navigator.push<int>(
+    Map<String, dynamic> args = <String, dynamic>{};
+    args['title'] = store.state.reader.currentSurahDetails().transliterationEn;
+    args['index'] = store.state.reader.currentIndex;
+    int? selectedAyaIndex = await Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => QuranContextListScreen(
-          title: store.state.reader.currentSurahDetails().transliterationEn,
-          index: store.state.reader.currentIndex,
-        ),
-      ),
-    );
+      "/context",
+      arguments: args,
+    ) as int?;
 
     if (selectedAyaIndex != null) {
       store.dispatch(SelectAyaAction(aya: selectedAyaIndex));
