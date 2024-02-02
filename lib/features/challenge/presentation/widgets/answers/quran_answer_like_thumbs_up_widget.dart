@@ -21,7 +21,7 @@ class QuranAnswerLikeThumbsUpWidget extends StatelessWidget {
           : QuranDS.thumbsUpIconUnSelectedLarge;
     } else {
       /// Disabled state
-      return QuranDS.thumbsUpIconUnSelectedLarge;
+      return QuranDS.thumbsUpIconDisabledLarge;
     }
   }
 }

@@ -95,6 +95,11 @@ class QuranDS {
     color: QuranDS.primaryColor,
     size: 24.0,
   );
+  static const Icon thumbsUpIconDisabledLarge = Icon(
+    Icons.thumb_up_alt_outlined,
+    color: QuranDS.disabledIconColor,
+    size: 24.0,
+  );
   static const Icon readIconColoured = Icon(
     Icons.menu_book_rounded,
     color: QuranDS.primaryColor,
