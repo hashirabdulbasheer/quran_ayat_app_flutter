@@ -27,40 +27,37 @@ class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
       List<QuranQuestion> questions =
           store.state.challenge.userSubmittedQuestions(user);
 
-      return Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          /// APP BAR
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Submissions"),
-            actions: [
-              QuranReloadButtonWidget(action: () => _reloadQuestions(store)),
-            ],
-          ),
+      return Scaffold(
+        /// APP BAR
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Submissions"),
+          actions: [
+            QuranReloadButtonWidget(action: () => _reloadQuestions(store)),
+          ],
+        ),
 
-          /// BODY
-          body: questions.isEmpty
-              ? const Center(child: Text("No submissions"))
-              : Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: SingleChildScrollView(
-                    child: ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: questions.length,
-                      shrinkWrap: true,
-                      itemBuilder: (
-                        BuildContext context,
-                        int index,
-                      ) {
-                        return QuranSubmissionQuestionItemWidget(
-                          question: questions[index],
-                        );
-                      },
-                    ),
+        /// BODY
+        body: questions.isEmpty
+            ? const Center(child: Text("No submissions"))
+            : Directionality(
+                textDirection: TextDirection.ltr,
+                child: SingleChildScrollView(
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: questions.length,
+                    shrinkWrap: true,
+                    itemBuilder: (
+                      BuildContext context,
+                      int index,
+                    ) {
+                      return QuranSubmissionQuestionItemWidget(
+                        question: questions[index],
+                      );
+                    },
                   ),
                 ),
-        ),
+              ),
       );
     });
   }
