@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../features/auth/presentation/quran_login_screen.dart';
 import '../../features/auth/presentation/quran_signup_screen.dart';
 import '../../features/home/presentation/quran_home_screen.dart';
 import '../../features/newAyat/presentation/quran_new_ayat_screen.dart';
 
 class QuranRoutes {
-  static PageRoute getPageRoute(RouteSettings settings) {
+  static PageRoute<dynamic> getPageRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute<void>(
@@ -20,6 +21,11 @@ class QuranRoutes {
       case '/signup':
         return MaterialPageRoute<void>(
           builder: (_) => const QuranSignUpScreen(),
+        );
+
+      case '/login':
+        return MaterialPageRoute<void>(
+          builder: (_) => const QuranLoginScreen(),
         );
 
       default:

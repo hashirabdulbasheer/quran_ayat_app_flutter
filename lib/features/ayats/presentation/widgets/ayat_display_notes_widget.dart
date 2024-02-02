@@ -5,7 +5,6 @@ import '../../../../models/qr_user_model.dart';
 import '../../../../utils/logger_utils.dart';
 import '../../../../utils/utils.dart';
 import '../../../auth/domain/auth_factory.dart';
-import '../../../auth/presentation/quran_login_screen.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../core/presentation/shimmer.dart';
 import '../../../newAyat/data/surah_index.dart';
@@ -178,12 +177,10 @@ class _QuranAyatDisplayNotesWidgetState
   }
 
   void _goToLoginScreen() {
-    Navigator.push<void>(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(builder: (context) => const QuranLoginScreen()),
-    ).then((value) {
-      setState(() {});
-    });
+      "/login",
+    ).then((value) => setState(() {}));
   }
 
   void _goToCreateNoteScreen({QuranNote? note}) {
