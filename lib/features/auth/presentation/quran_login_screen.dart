@@ -22,121 +22,115 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Login"),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Login"),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          30,
+          20,
+          30,
+          20,
         ),
-        body: Directionality(
-          textDirection: TextDirection.ltr,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              30,
-              20,
-              30,
-              20,
-            ),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                autofillHints: const [AutofillHints.email],
+                keyboardType: TextInputType.emailAddress,
+                enabled: !_isLoading,
+                controller: _emailController,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                  labelText: 'Email',
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextField(
+                enabled: !_isLoading,
+                controller: _passwordController,
+                obscureText: !_passwordVisible,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      // Based on passwordVisible state choose the icon
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                    ),
+                    onPressed: () => _passwordVisibilityTogglePressed(),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextField(
-                    autofillHints: const [AutofillHints.email],
-                    keyboardType: TextInputType.emailAddress,
-                    enabled: !_isLoading,
-                    controller: _emailController,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      hintText: 'Email',
-                      labelText: 'Email',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    enabled: !_isLoading,
-                    controller: _passwordController,
-                    obscureText: !_passwordVisible,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      labelText: 'Password',
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          // Based on passwordVisible state choose the icon
-                          _passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () => _passwordVisibilityTogglePressed(),
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () => {
+                          if (!_isLoading) {_loginButtonPressed()},
+                        },
+                        child: _isLoading
+                            ? const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text("Login"),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () => {
-                              if (!_isLoading) {_loginButtonPressed()},
-                            },
-                            child: _isLoading
-                                ? const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : const Text("Login"),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      TextButton(
-                        onPressed: () => _forgotPasswordButtonPressed(),
-                        child: const Text("Forgot Password"),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  TextButton(
-                    onPressed: () => {
-                      Navigator.pushNamed(context, '/signup',).then((value) {
-                        if (value != null && value as bool) {
-                          Navigator.of(context).pop();
-                        }
-                      }),
-                    },
-                    child: const Text(
-                      "Create a new account",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  const QuranSocialLoginButtons(
-                    isSignUp: false,
                   ),
                 ],
               ),
-            ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () => _forgotPasswordButtonPressed(),
+                    child: const Text("Forgot Password"),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              TextButton(
+                onPressed: () => {
+                  Navigator.pushNamed(context, '/signup',).then((value) {
+                    if (value != null && value as bool) {
+                      Navigator.of(context).pop();
+                    }
+                  }),
+                },
+                child: const Text(
+                  "Create a new account",
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+              const QuranSocialLoginButtons(
+                isSignUp: false,
+              ),
+            ],
           ),
         ),
       ),
