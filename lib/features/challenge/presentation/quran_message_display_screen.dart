@@ -13,29 +13,26 @@ class QuranMessageDisplayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        /// APP BAR
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(title),
-        ),
+    return Scaffold(
+      /// APP BAR
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(title),
+      ),
 
-        /// BODY
-        body: Directionality(
-          textDirection: TextDirection.ltr,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              20,
-              10,
-              20,
-              10,
-            ),
-            child: Markdown(
-              data: message,
-              styleSheet: MarkdownStyleSheet(textScaleFactor: 1.2,),
-            ),
+      /// BODY
+      body: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(
+            20,
+            10,
+            20,
+            10,
+          ),
+          child: Markdown(
+            data: message,
+            styleSheet: MarkdownStyleSheet(textScaleFactor: 1.2,),
           ),
         ),
       ),
