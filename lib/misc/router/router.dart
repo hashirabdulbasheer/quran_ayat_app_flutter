@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
 import '../../features/auth/presentation/quran_login_screen.dart';
 import '../../features/auth/presentation/quran_signup_screen.dart';
 import '../../features/home/presentation/quran_home_screen.dart';
 import '../../features/newAyat/presentation/quran_new_ayat_screen.dart';
+import '../../features/notes/domain/entities/quran_note.dart';
+import '../../features/notes/presentation/quran_create_notes_screen.dart';
 
 class QuranRoutes {
   static PageRoute<dynamic> getPageRoute(RouteSettings settings) {
@@ -26,6 +29,17 @@ class QuranRoutes {
       case '/login':
         return MaterialPageRoute<void>(
           builder: (_) => const QuranLoginScreen(),
+        );
+
+      case '/createNote':
+        final args = settings.arguments as Map<String, dynamic>;
+        QuranNote? note = args["note"] as QuranNote?;
+        SurahIndex index = args["index"] as SurahIndex;
+        return MaterialPageRoute<void>(
+          builder: (_) => QuranCreateNotesScreen(
+            note: note,
+            index: index,
+          ),
         );
 
       default:

@@ -9,7 +9,6 @@ import '../../../models/qr_user_model.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_note.dart';
-import 'quran_create_notes_screen.dart';
 import 'widgets/notes_view_note_item_widget.dart';
 import 'widgets/offline_header_widget.dart';
 
@@ -135,22 +134,13 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
                             context: context,
                             note: notes[index],
                           ),
-                          onTap: () => {
-                            Navigator.push<void>(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => QuranCreateNotesScreen(
-                                  note: notes[index],
-                                  index: SurahIndex(
-                                    notes[index].suraIndex,
-                                    notes[index].ayaIndex,
-                                  ),
-                                ),
-                              ),
-                            ).then((value) {
-                              setState(() {});
-                            }),
-                          },
+                          onTap: () => _goToEditNoteScreen(
+                            note: notes[index],
+                            index: SurahIndex(
+                              notes[index].suraIndex,
+                              notes[index].ayaIndex,
+                            ),
+                          ),
                         );
                       },
                       separatorBuilder: (
@@ -168,8 +158,24 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     );
   }
 
+  void _goToEditNoteScreen({
+    required QuranNote note,
+    required SurahIndex index,
+  }) {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args["note"] = note;
+    args["index"] = index;
+    Navigator.pushNamed(
+      context,
+      "/createNote",
+      arguments: args,
+    ).then((value) {
+      setState(() {});
+    });
+  }
+
   Widget _customItem(
-    BuildContext context,
+    BuildContext _,
     NQSurahTitle title,
     bool isSelected,
   ) {

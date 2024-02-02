@@ -10,7 +10,6 @@ import '../../../core/presentation/shimmer.dart';
 import '../../../newAyat/data/surah_index.dart';
 import '../../../notes/domain/entities/quran_note.dart';
 import '../../../notes/domain/notes_manager.dart';
-import '../../../notes/presentation/quran_create_notes_screen.dart';
 import '../../../notes/presentation/widgets/offline_header_widget.dart';
 import 'font_scaler_widget.dart';
 
@@ -98,7 +97,7 @@ class _QuranAyatDisplayNotesWidgetState
   }
 
   Widget _bodyContent(
-    SurahIndex currentIndex,
+    SurahIndex _,
     QuranUser? user,
     List<QuranNote>? notes,
     double fontScale,
@@ -188,17 +187,16 @@ class _QuranAyatDisplayNotesWidgetState
     if (user == null) {
       _goToLoginScreen();
     } else {
-      Navigator.push<void>(
+      Map<String, dynamic> args = <String, dynamic>{};
+      args["note"] = note;
+      args["index"] = SurahIndex(
+        widget.currentIndex.sura,
+        widget.currentIndex.aya,
+      );
+      Navigator.pushNamed(
         context,
-        MaterialPageRoute(
-          builder: (context) => QuranCreateNotesScreen(
-            note: note,
-            index: SurahIndex(
-              widget.currentIndex.sura,
-              widget.currentIndex.aya,
-            ),
-          ),
-        ),
+        "/createNote",
+        arguments: args,
       ).then((value) {
         setState(() {});
       });
