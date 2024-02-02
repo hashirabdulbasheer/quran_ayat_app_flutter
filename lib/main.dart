@@ -16,7 +16,7 @@ import 'misc/enums/quran_feature_flag_enum.dart';
 import 'misc/url/url_strategy.dart';
 
 // TODO: Update before release
-const String appVersion = "v2.9.9";
+const String appVersion = "v3.0.0";
 
 bool isChallengeBetaModeEnabled = RemoteConfigManager.instance
         .get(RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled) &&
