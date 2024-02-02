@@ -54,106 +54,103 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
       _selectedSurah,
     );
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Notes"),
-          actions: [
-            IconButton(
-              onPressed: () => _exportNotes(),
-              icon: const Icon(
-                Icons.share,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Notes"),
+        actions: [
+          IconButton(
+            onPressed: () => _exportNotes(),
+            icon: const Icon(
+              Icons.share,
             ),
-          ],
-        ),
-        body: Column(
-          children: [
-            const QuranOfflineHeaderWidget(),
-            _suraTitles.isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.fromLTRB(
-                      10,
-                      5,
-                      10,
-                      5,
-                    ),
-                    child: StoreBuilder<AppState>(builder: (
-                      BuildContext context,
-                      Store<AppState> store,
-                    ) {
-                      return DropdownSearch<NQSurahTitle>(
-                        items: _suraTitles,
-                        enabled: true,
-                        itemAsString: (NQSurahTitle title) =>
-                            "(${title.number}) ${title.transliterationEn}",
-                        popupProps: PopupPropsMultiSelection.dialog(
-                          showSearchBox: true,
-                          itemBuilder: _customItem,
-                          searchFieldProps: const TextFieldProps(
-                            style: TextStyle(
-                              fontSize: 12,
-                            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          const QuranOfflineHeaderWidget(),
+          _suraTitles.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    10,
+                    5,
+                    10,
+                    5,
+                  ),
+                  child: StoreBuilder<AppState>(builder: (
+                    BuildContext context,
+                    Store<AppState> store,
+                  ) {
+                    return DropdownSearch<NQSurahTitle>(
+                      items: _suraTitles,
+                      enabled: true,
+                      itemAsString: (NQSurahTitle title) =>
+                          "(${title.number}) ${title.transliterationEn}",
+                      popupProps: PopupPropsMultiSelection.dialog(
+                        showSearchBox: true,
+                        itemBuilder: _customItem,
+                        searchFieldProps: const TextFieldProps(
+                          style: TextStyle(
+                            fontSize: 12,
                           ),
                         ),
-                        dropdownDecoratorProps: const DropDownDecoratorProps(
-                          baseStyle: TextStyle(fontSize: 12),
-                          dropdownSearchDecoration: InputDecoration(
-                            labelText: "Surah",
-                            hintText: "select surah",
-                          ),
-                          textAlign: TextAlign.start,
+                      ),
+                      dropdownDecoratorProps: const DropDownDecoratorProps(
+                        baseStyle: TextStyle(fontSize: 12),
+                        dropdownSearchDecoration: InputDecoration(
+                          labelText: "Surah",
+                          hintText: "select surah",
                         ),
-                        onChanged: (value) => {
-                          setState(() {
-                            if (value != null) {
-                              if (value.number > 0) {
-                                _selectedSurah = value;
-                              } else {
-                                _selectedSurah = null;
-                              }
+                        textAlign: TextAlign.start,
+                      ),
+                      onChanged: (value) => {
+                        setState(() {
+                          if (value != null) {
+                            if (value.number > 0) {
+                              _selectedSurah = value;
+                            } else {
+                              _selectedSurah = null;
                             }
-                          }),
-                        },
-                        selectedItem: _selectedSurah,
+                          }
+                        }),
+                      },
+                      selectedItem: _selectedSurah,
+                    );
+                  }),
+                )
+              : Container(),
+          Expanded(
+            child: notes.isEmpty
+                ? const Center(child: Text('No notes'))
+                : ListView.separated(
+                    itemBuilder: (
+                      context,
+                      index,
+                    ) {
+                      return ListTile(
+                        title: QuranViewNoteItemWidget(
+                          context: context,
+                          note: notes[index],
+                        ),
+                        onTap: () => _goToEditNoteScreen(
+                          note: notes[index],
+                          index: SurahIndex(
+                            notes[index].suraIndex,
+                            notes[index].ayaIndex,
+                          ),
+                        ),
                       );
-                    }),
-                  )
-                : Container(),
-            Expanded(
-              child: notes.isEmpty
-                  ? const Center(child: Text('No notes'))
-                  : ListView.separated(
-                      itemBuilder: (
-                        context,
-                        index,
-                      ) {
-                        return ListTile(
-                          title: QuranViewNoteItemWidget(
-                            context: context,
-                            note: notes[index],
-                          ),
-                          onTap: () => _goToEditNoteScreen(
-                            note: notes[index],
-                            index: SurahIndex(
-                              notes[index].suraIndex,
-                              notes[index].ayaIndex,
-                            ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (
-                        context,
-                        index,
-                      ) {
-                        return const Divider(thickness: 1);
-                      },
-                      itemCount: notes.length,
-                    ),
-            ),
-          ],
-        ),
+                    },
+                    separatorBuilder: (
+                      context,
+                      index,
+                    ) {
+                      return const Divider(thickness: 1);
+                    },
+                    itemCount: notes.length,
+                  ),
+          ),
+        ],
       ),
     );
   }

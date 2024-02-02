@@ -45,114 +45,111 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Notes"),
-        ),
-        body: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Notes"),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(10.0),
+        child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const QuranOfflineHeaderWidget(),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 0,
-                    bottom: 20,
-                  ),
-                  child: Text(
-                    "Enter your notes for ${widget.index.human.sura}:${widget.index.human.aya}",
-                  ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const QuranOfflineHeaderWidget(),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 0,
+                  bottom: 20,
                 ),
-                FutureBuilder<NQSurah>(
-                  future: NobleQuran.getSurahArabic(
-                    widget.index.sura,
-                  ),
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<NQSurah> snapshot,
-                  ) {
-                    final surah = snapshot.data;
-                    if (surah == null) return const SizedBox();
+                child: Text(
+                  "Enter your notes for ${widget.index.human.sura}:${widget.index.human.aya}",
+                ),
+              ),
+              FutureBuilder<NQSurah>(
+                future: NobleQuran.getSurahArabic(
+                  widget.index.sura,
+                ),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<NQSurah> snapshot,
+                ) {
+                  final surah = snapshot.data;
+                  if (surah == null) return const SizedBox();
 
-                    return QuranFullAyatRowWidget(
-                      text: surah.aya[widget.index.aya].text,
-                    );
-                  },
+                  return QuranFullAyatRowWidget(
+                    text: surah.aya[widget.index.aya].text,
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 10,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    bottom: 10,
-                  ),
-                  child: QuranAyatDisplayTranslationWidget(
-                    translation: StoreProvider.of<AppState>(context)
-                            .state
-                            .reader
-                            .data
-                            .firstTranslation()
-                            ?.aya[widget.index.aya]
-                            .text ??
-                        "",
-                    translationType: StoreProvider.of<AppState>(context)
-                            .state
-                            .reader
-                            .data
-                            .firstTranslationType() ??
-                        NQTranslation.wahiduddinkhan,
-                  ),
+                child: QuranAyatDisplayTranslationWidget(
+                  translation: StoreProvider.of<AppState>(context)
+                          .state
+                          .reader
+                          .data
+                          .firstTranslation()
+                          ?.aya[widget.index.aya]
+                          .text ??
+                      "",
+                  translationType: StoreProvider.of<AppState>(context)
+                          .state
+                          .reader
+                          .data
+                          .firstTranslationType() ??
+                      NQTranslation.wahiduddinkhan,
                 ),
-                QuranTappableSmallTextFieldWidget(
-                  title: "Enter Note",
-                  controller: _notesController,
+              ),
+              QuranTappableSmallTextFieldWidget(
+                title: "Enter Note",
+                controller: _notesController,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 10,
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    top: 10,
-                    bottom: 10,
-                  ),
-                  child: widget.note == null
-                      ? QuranNotesCreateControlsWidget(
-                          onConfirmation: () => {
-                            _createButtonPressed(),
-                          },
-                        )
-                      : QuranUpdateControlsWidget(
-                          positiveActionText: "Update",
-                          onPositiveAction: () => _updateButtonPressed(),
-                          negativeActionText: "Delete",
-                          onNegativeAction: () => _deleteButtonPressed(),
-                        ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                StoreBuilder<AppState>(
-                  onDidChange: (
-                    old,
-                    updated,
-                  ) =>
-                      _onStoreDidChange(),
-                  builder: (
-                    BuildContext context,
-                    Store<AppState> store,
-                  ) {
-                    if (store.state.notes.isLoading || store.state.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+                child: widget.note == null
+                    ? QuranNotesCreateControlsWidget(
+                        onConfirmation: () => {
+                          _createButtonPressed(),
+                        },
+                      )
+                    : QuranUpdateControlsWidget(
+                        positiveActionText: "Update",
+                        onPositiveAction: () => _updateButtonPressed(),
+                        negativeActionText: "Delete",
+                        onNegativeAction: () => _deleteButtonPressed(),
+                      ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              StoreBuilder<AppState>(
+                onDidChange: (
+                  old,
+                  updated,
+                ) =>
+                    _onStoreDidChange(),
+                builder: (
+                  BuildContext context,
+                  Store<AppState> store,
+                ) {
+                  if (store.state.notes.isLoading || store.state.isLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                    return Container();
-                  },
-                ),
-              ],
-            ),
+                  return Container();
+                },
+              ),
+            ],
           ),
         ),
       ),
