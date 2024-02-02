@@ -1,13 +1,8 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
 import 'features/core/data/quran_firebase_engine.dart';
-import 'features/core/domain/app_state/app_state.dart';
-import 'features/home/presentation/quran_home_screen.dart';
-import 'features/newAyat/presentation/quran_new_ayat_screen.dart';
 import 'features/notes/domain/notes_manager.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'main_common.dart';
@@ -29,24 +24,14 @@ void main() async {
   FirebaseAnalytics.instance.logAppOpen();
   await RemoteConfigManager.instance.init();
 
-  Widget homeScreen = const QuranNewAyatScreen();
+  bool isChallengeEnabled = false;
 
   // enabling new challenges for logged in users only - for beta
   bool isChallengesEnabledInUserSettings =
       await QuranSettingsManager.instance.isChallengesFeatureEnabled();
   if (isChallengeBetaModeEnabled && isChallengesEnabledInUserSettings) {
-    homeScreen = const QuranHomeScreen();
+    isChallengeEnabled = true;
   }
 
-  runApp(MyApp(
-    homeScreen: StoreBuilder<AppState>(
-      rebuildOnChange: false,
-      onInit: (store) => store.dispatch(AppStateInitializeAction()),
-      builder: (
-        BuildContext context,
-        Store<AppState> store,
-      ) =>
-          homeScreen,
-    ),
-  ));
+  runApp(MyApp(isChallengeEnabled: isChallengeEnabled));
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/newAyat/presentation/quran_new_ayat_screen.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';
@@ -14,6 +15,7 @@ import 'features/notes/domain/redux/middleware/middleware.dart';
 import 'features/settings/domain/settings_manager.dart';
 import 'features/settings/domain/theme_manager.dart';
 import 'features/tags/domain/redux/middleware/middleware.dart';
+import 'misc/router/router.dart';
 import 'models/qr_user_model.dart';
 import 'utils/logger_utils.dart';
 
@@ -22,11 +24,11 @@ import 'utils/logger_utils.dart';
 ///
 
 class MyApp extends StatefulWidget {
-  final Widget homeScreen;
+  final bool isChallengeEnabled;
 
   const MyApp({
     Key? key,
-    required this.homeScreen,
+    required this.isChallengeEnabled,
   }) : super(key: key);
 
   @override
@@ -67,17 +69,27 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return StoreProvider(
       store: store,
-      child: MaterialApp(
-        title: 'Quran',
-        initialRoute: "/",
-        debugShowCheckedModeBanner: false,
-        theme: QuranThemeManager.instance.theme,
-        darkTheme: QuranThemeManager.instance.darkTheme,
-        themeMode: QuranThemeManager.instance.currentAppThemeMode,
-        home: widget.homeScreen,
-        navigatorObservers: [
-          FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
-        ],
+      child: StoreBuilder<AppState>(
+        rebuildOnChange: false,
+        onInit: (store) => store.dispatch(AppStateInitializeAction()),
+        builder: (
+          BuildContext context,
+          Store<AppState> store,
+        ) =>
+            MaterialApp(
+          title: 'Quran',
+          initialRoute: widget.isChallengeEnabled ? '/home' : '/',
+          onGenerateRoute: QuranRoutes.getPageRoute,
+          debugShowCheckedModeBanner: false,
+          theme: QuranThemeManager.instance.theme,
+          darkTheme: QuranThemeManager.instance.darkTheme,
+          themeMode: QuranThemeManager.instance.currentAppThemeMode,
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(
+              analytics: FirebaseAnalytics.instance,
+            ),
+          ],
+        ),
       ),
     );
   }
