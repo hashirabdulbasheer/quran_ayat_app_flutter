@@ -1,5 +1,4 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -7,7 +6,6 @@ import 'package:redux/redux.dart';
 import 'features/auth/domain/auth_factory.dart';
 import 'features/challenge/domain/redux/middleware/middleware.dart';
 import 'features/core/domain/app_state/app_state.dart';
-import 'features/newAyat/data/surah_index.dart';
 import 'features/newAyat/domain/redux/actions/actions.dart';
 import 'features/newAyat/domain/redux/actions/bookmark_actions.dart';
 import 'features/newAyat/domain/redux/middleware/bookmark_middleware.dart';
@@ -56,10 +54,6 @@ class MyAppState extends State<MyApp> {
     super.initState();
     QuranAuthFactory.engine.registerAuthChangeListener(_authChangeListener);
     QuranSettingsManager.instance.registerListener(onSettingsChangedListener);
-    _handleUrlPathsForWeb(
-      context,
-      store,
-    );
   }
 
   @override
@@ -88,7 +82,7 @@ class MyAppState extends State<MyApp> {
     );
   }
 
-  void onSettingsChangedListener(String settings) {
+  void onSettingsChangedListener(String _) {
     // settings changed
     // fire actions to update screen
     store.dispatch(InitializeReaderScreenAction());
@@ -103,81 +97,6 @@ class MyAppState extends State<MyApp> {
     if (user != null) {
       bool isAdmin = await QuranAuthFactory.engine.isAdmin(user.uid);
       store.dispatch(AppStateUserRoleAction(isAdmin: isAdmin));
-    }
-  }
-}
-
-void _handleUrlPathsForWeb(
-  BuildContext context,
-  Store<AppState> store,
-) {
-  /// url parameters
-  final String? urlQuerySearchString = Uri.base.queryParameters["search"];
-  final String? urlQuerySuraIndex = Uri.base.queryParameters["sura"];
-  final String? urlQueryAyaIndex = Uri.base.queryParameters["aya"];
-  if (kIsWeb) {
-    String? searchString = urlQuerySearchString;
-    String? suraIndex = urlQuerySuraIndex;
-    String? ayaIndex = urlQueryAyaIndex;
-    if (searchString != null && searchString.isNotEmpty) {
-      // we have a search url
-      // navigate to search screen
-      // TODO: Implementation search via url params
-      // Future.delayed(
-      //   const Duration(seconds: 1),
-      //   () => {
-      //     Navigator.push<void>(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) =>
-      //             QuranSearchScreen(searchString: searchString),
-      //       ),
-      //     ),
-      //   },
-      // );
-      // QuranLogger.logAnalytics("url-search");
-    } else {
-      // not a search url
-      // check for surah/ayat format
-      if (suraIndex != null &&
-          ayaIndex != null &&
-          suraIndex.isNotEmpty &&
-          ayaIndex.isNotEmpty) {
-        // have more than one
-        // the last two paths should be surah/ayat format
-        try {
-          var selectedSurahIndex = int.parse(suraIndex);
-          var ayaIndexInt = int.parse(ayaIndex);
-          // TODO: Improve url parsing by implementing proper navigation and routing - this is a workaround
-          Future<void>.delayed(
-            const Duration(seconds: 1),
-            () => store.dispatch(SelectParticularAyaAction(
-              index: SurahIndex.fromHuman(
-                sura: selectedSurahIndex,
-                aya: ayaIndexInt,
-              ),
-            )),
-          );
-        } catch (_) {}
-        QuranLogger.logAnalytics("url-sura-aya");
-      } else if (suraIndex != null && suraIndex.isNotEmpty) {
-        // has only one
-        // the last path will be surah index
-        try {
-          var selectedSurahIndex = int.parse(suraIndex);
-          // TODO: Improve url parsing by implementing proper navigation and routing - this is a workaround
-          Future<void>.delayed(
-            const Duration(seconds: 1),
-            () => store.dispatch(SelectParticularAyaAction(
-              index: SurahIndex.fromHuman(
-                sura: selectedSurahIndex,
-                aya: 1,
-              ),
-            )),
-          );
-        } catch (_) {}
-        QuranLogger.logAnalytics("url-aya");
-      }
     }
   }
 }

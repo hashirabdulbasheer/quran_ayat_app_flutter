@@ -4,10 +4,10 @@ import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/misc/enums/quran_app_mode_enum.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../../misc/enums/quran_app_mode_enum.dart';
 import '../../../../../utils/logger_utils.dart';
 import '../../../../../utils/utils.dart';
 import '../../../../core/domain/app_state/app_state.dart';
@@ -58,7 +58,7 @@ List<Middleware<AppState>> createReaderScreenMiddleware() {
 }
 
 void _allOtherReaderMiddleware(
-  Store<AppState> store,
+  Store<AppState> _,
   dynamic action,
   NextDispatcher next,
 ) {
@@ -158,7 +158,7 @@ void _previousAyaMiddleware(
   if (store.state.reader.currentIndex.aya == 0) {
     int previousSuraIndex = store.state.reader.currentIndex.sura - 1;
     if (previousSuraIndex >= 0) {
-      SurahIndex previousSurah = SurahIndex(
+      SurahIndex _ = SurahIndex(
         previousSuraIndex,
         0,
       );
