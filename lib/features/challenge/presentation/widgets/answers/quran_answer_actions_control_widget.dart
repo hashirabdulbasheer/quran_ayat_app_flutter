@@ -11,7 +11,6 @@ import '../../../../newAyat/data/surah_index.dart';
 import '../../../../newAyat/domain/redux/actions/actions.dart';
 import '../../../domain/models/quran_answer.dart';
 import '../../../domain/redux/actions/actions.dart';
-import '../../quran_edit_answer_screen.dart';
 import 'quran_answer_like_button_widget.dart';
 
 class QuranAnswerActionControlWidget extends StatefulWidget {
@@ -178,14 +177,13 @@ class _QuranAnswerActionControlWidgetState
     if (questionId == null) {
       return;
     }
-    Navigator.push<void>(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => QuranEditAnswerScreen(
-          questionId: questionId,
-          answer: widget.answer,
-        ),
-      ),
+      "/editAnswer",
+      arguments: {
+        "questionId": questionId,
+        "answer": widget.answer,
+      },
     ).then((value) {
       setState(() {});
     });

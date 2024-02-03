@@ -4,11 +4,13 @@ import 'package:redux/redux.dart';
 
 import '../../features/auth/presentation/quran_login_screen.dart';
 import '../../features/auth/presentation/quran_signup_screen.dart';
+import '../../features/challenge/domain/models/quran_answer.dart';
 import '../../features/challenge/presentation/my_challenge_submissions_screen.dart';
 import '../../features/challenge/presentation/quran_answer_submission_confirmation_screen.dart';
 import '../../features/challenge/presentation/quran_challenge_display_screen.dart';
 import '../../features/challenge/presentation/quran_create_answer_screen.dart';
 import '../../features/challenge/presentation/quran_create_question_screen.dart';
+import '../../features/challenge/presentation/quran_edit_answer_screen.dart';
 import '../../features/contextList/presentation/quran_context_list_screen.dart';
 import '../../features/core/domain/app_state/app_state.dart';
 import '../../features/home/presentation/quran_home_screen.dart';
@@ -99,6 +101,17 @@ class QuranRoutes {
         return MaterialPageRoute<void>(
           builder: (_) =>
               QuranAnswerSubmissionConfirmationScreen(answerId: answerId),
+        );
+
+      case '/editAnswer':
+        final args = settings.arguments as Map<String, dynamic>;
+        int questionId = args["questionId"] as int;
+        QuranAnswer answer = args["answer"] as QuranAnswer;
+        return MaterialPageRoute<void>(
+          builder: (_) => QuranEditAnswerScreen(
+            questionId: questionId,
+            answer: answer,
+          ),
         );
 
       default:
