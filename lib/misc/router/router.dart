@@ -27,22 +27,26 @@ import '../../models/qr_user_model.dart';
 import 'quran_router_enum.dart';
 
 class QuranRoutes {
-  static PageRoute<dynamic> getPageRoute(RouteSettings settings, bool isChallengeEnabled,) {
+  static PageRoute<dynamic> getPageRoute(
+    RouteSettings settings,
+    bool isChallengeEnabled,
+  ) {
     /// check for url params
     /// if params present then display home or aya
-    if(_isQueryParamsPresentInUrl()) {
-        if(isChallengeEnabled) {
-          return MaterialPageRoute<void>(
-            builder: (_) => const QuranHomeScreen(),
-          );
-        }
-
+    if (_isQueryParamsPresentInUrl()) {
+      if (isChallengeEnabled) {
         return MaterialPageRoute<void>(
-          builder: (_) => const QuranNewAyatScreen(),
+          builder: (_) => const QuranHomeScreen(),
         );
+      }
+
+      return MaterialPageRoute<void>(
+        builder: (_) => const QuranNewAyatScreen(),
+      );
     }
 
     QuranScreen screen = screenFromRouteString(settings.name ?? "");
+
     /// no params -> proceed to normal routing
     switch (screen) {
       case QuranScreen.root:
@@ -66,32 +70,44 @@ class QuranRoutes {
         );
 
       case QuranScreen.context:
-        final args = settings.arguments as Map<String, dynamic>;
-        String title = args["title"] as String;
-        SurahIndex index = args["index"] as SurahIndex;
-        return MaterialPageRoute<void>(
-          builder: (_) => QuranContextListScreen(
-            title: title,
-            index: index,
-          ),
-        );
+        try {
+          final args = settings.arguments as Map<String, dynamic>;
+          String title = args["title"] as String;
+          SurahIndex index = args["index"] as SurahIndex;
+
+          return MaterialPageRoute<void>(
+            builder: (_) => QuranContextListScreen(
+              title: title,
+              index: index,
+            ),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       case QuranScreen.createNote:
-        final args = settings.arguments as Map<String, dynamic>;
-        QuranNote? note = args["note"] as QuranNote?;
-        SurahIndex index = args["index"] as SurahIndex;
-        return MaterialPageRoute<void>(
-          builder: (_) => QuranCreateNotesScreen(
-            note: note,
-            index: index,
-          ),
-        );
+        try {
+          final args = settings.arguments as Map<String, dynamic>;
+          QuranNote? note = args["note"] as QuranNote?;
+          SurahIndex index = args["index"] as SurahIndex;
+
+          return MaterialPageRoute<void>(
+            builder: (_) => QuranCreateNotesScreen(
+              note: note,
+              index: index,
+            ),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       case QuranScreen.viewTags:
-        final user = settings.arguments as QuranUser;
-        return MaterialPageRoute<void>(
-          builder: (_) => QuranViewTagsScreen(user: user),
-        );
+        try {
+          final user = settings.arguments as QuranUser;
+
+          return MaterialPageRoute<void>(
+            builder: (_) => QuranViewTagsScreen(user: user),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       case QuranScreen.mySubmissions:
         return MaterialPageRoute<void>(
@@ -99,12 +115,16 @@ class QuranRoutes {
         );
 
       case QuranScreen.createChallenge:
-        final question = settings.arguments as QuranQuestion;
-        return MaterialPageRoute<void>(
-          builder: (_) => QuranCreateChallengeScreen(
-            question: question,
-          ),
-        );
+        try {
+          final question = settings.arguments as QuranQuestion;
+
+          return MaterialPageRoute<void>(
+            builder: (_) => QuranCreateChallengeScreen(
+              question: question,
+            ),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       case QuranScreen.createQuestion:
         return MaterialPageRoute<void>(
@@ -112,65 +132,89 @@ class QuranRoutes {
         );
 
       case QuranScreen.challenge:
-        final store = settings.arguments as Store<AppState>;
-        return MaterialPageRoute<void>(
-          builder: (_) => QuranChallengeDisplayScreen(store: store),
-        );
+        try {
+          final store = settings.arguments as Store<AppState>;
+
+          return MaterialPageRoute<void>(
+            builder: (_) => QuranChallengeDisplayScreen(store: store),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       case QuranScreen.confirmation:
-        final answerId = settings.arguments as String;
-        return MaterialPageRoute<void>(
-          builder: (_) =>
-              QuranAnswerSubmissionConfirmationScreen(answerId: answerId),
-        );
+        try {
+          final answerId = settings.arguments as String;
+
+          return MaterialPageRoute<void>(
+            builder: (_) =>
+                QuranAnswerSubmissionConfirmationScreen(answerId: answerId),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       case QuranScreen.editAnswer:
-        final args = settings.arguments as Map<String, dynamic>;
-        int questionId = args["questionId"] as int;
-        QuranAnswer answer = args["answer"] as QuranAnswer;
-        return MaterialPageRoute<void>(
-          builder: (_) => QuranEditAnswerScreen(
-            questionId: questionId,
-            answer: answer,
-          ),
-        );
+        try {
+          final args = settings.arguments as Map<String, dynamic>;
+          int questionId = args["questionId"] as int;
+          QuranAnswer answer = args["answer"] as QuranAnswer;
+
+          return MaterialPageRoute<void>(
+            builder: (_) => QuranEditAnswerScreen(
+              questionId: questionId,
+              answer: answer,
+            ),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       case QuranScreen.message:
-        final args = settings.arguments as Map<String, dynamic>;
-        String title = args["title"] as String;
-        String message = args["message"] as String;
-        return MaterialPageRoute<void>(
-          builder: (_) => QuranMessageDisplayScreen(
-            title: title,
-            message: message,
-          ),
-        );
+        try {
+          final args = settings.arguments as Map<String, dynamic>;
+          String title = args["title"] as String;
+          String message = args["message"] as String;
+
+          return MaterialPageRoute<void>(
+            builder: (_) => QuranMessageDisplayScreen(
+              title: title,
+              message: message,
+            ),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       case QuranScreen.tagResults:
-        final tag = settings.arguments as QuranTag;
-        return MaterialPageRoute<void>(
-          builder: (_) => QuranResultsScreen(
-            tag: tag,
-          ),
-        );
+        try {
+          final tag = settings.arguments as QuranTag;
+
+          return MaterialPageRoute<void>(
+            builder: (_) => QuranResultsScreen(
+              tag: tag,
+            ),
+          );
+        } catch (_) {}
+        return _errorRoute();
 
       default:
-        return MaterialPageRoute<void>(
-          builder: (_) => const Scaffold(
-            body: Center(child: Text("Error page not found!")),
-          ),
-        );
+        return _errorRoute();
     }
   }
 
   static bool _isQueryParamsPresentInUrl() {
-    if(kIsWeb) {
+    if (kIsWeb) {
       final String? urlQuerySuraIndex = Uri.base.queryParameters["sura"];
-      if(urlQuerySuraIndex != null) {
+      if (urlQuerySuraIndex != null) {
         return true;
       }
     }
 
     return false;
+  }
+
+  static PageRoute<dynamic> _errorRoute() {
+    return MaterialPageRoute<void>(
+      builder: (_) => const Scaffold(
+        body: Center(child: Text("Error page not found!")),
+      ),
+    );
   }
 }
