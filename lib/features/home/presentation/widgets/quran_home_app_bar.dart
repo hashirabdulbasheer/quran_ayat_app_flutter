@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:redux/redux.dart';
 
 import '../../../bookmark/presentation/bookmark_icon_widget.dart';
@@ -72,13 +73,9 @@ class QuranHomeAppBarWidget extends StatelessWidget
         "Challenges feature occasional questions posted for you to explore. Your task is to discover answers within the Noble Quran. Each response requires a verse that addresses the question, along with reflections on how the verse answers it."
         "\n\n\nKeep in mind, **there's no right or wrong answer**. Each response represents a personal perspective or interpretation of how a verse might address the question.\n\n\nAlso, please note that the reflection should match the meaning of the verse."
         "\n\n\nDisclaimer: These are personal reflections from ordinary people. So, please do not consider them as official tafsir of the verses.";
-    Navigator.pushNamed(
-      context,
-      "/message",
-      arguments: {
-        'title': "Help",
-        'message': message,
-      },
-    );
+    QuranRouter.of(context).routeToMessage({
+      'title': "Help",
+      'message': message,
+    });
   }
 }

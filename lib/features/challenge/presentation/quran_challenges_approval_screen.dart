@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/router/router_utils.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
@@ -135,9 +136,6 @@ class _QuranChallengesApprovalScreenState
   }
 
   void _addQuestion() async {
-    Navigator.pushNamed(
-      context,
-      "/createQuestion",
-    );
+    QuranRouter.of(context).routeToCreateQuestions();
   }
 }

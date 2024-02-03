@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:redux/redux.dart';
 
 import '../../../utils/logger_utils.dart';
@@ -114,11 +115,7 @@ class QuranQuestionsListScreen extends StatelessWidget {
     store.dispatch(
       SelectCurrentQuestionAction(questionId: questionId),
     );
-    Navigator.pushNamed(
-      context,
-      "/challenge",
-      arguments: store,
-    );
+    QuranRouter.of(context).routeToChallenge(store);
     QuranLogger.logAnalyticsWithParams(
       "question-tap",
       {"questionId": questionId},

@@ -369,11 +369,7 @@ class _QuranAyatDisplayTagsWidgetState
       return;
     }
 
-    Navigator.pushNamed(
-      context,
-      "/viewTags",
-      arguments: user,
-    ).then((value) {
+    QuranRouter.of(context).routeToViewTags(user).then((value) {
       setState(() {});
     });
   }

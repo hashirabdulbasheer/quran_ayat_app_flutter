@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
@@ -183,11 +184,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
 
       return;
     }
-    Navigator.pushNamed(
-      context,
-      "/tagResults",
-      arguments: tag,
-    );
+    QuranRouter.of(context).routeToTagResults(tag);
   }
 
   List<QuranTag> _tags() =>

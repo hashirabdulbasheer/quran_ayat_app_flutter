@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../misc/enums/quran_status_enum.dart';
+import '../../../misc/router/router_utils.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/dialog_utils.dart';
 import '../../../utils/logger_utils.dart';
@@ -274,11 +275,7 @@ class _QuranCreateChallengeScreenState
         Navigator.of(context).pop(),
 
         /// Display confirmation screen
-        Navigator.pushNamed(
-          context,
-          "/confirmation",
-          arguments: answerId,
-        ),
+        QuranRouter.of(context).routeToConfirmation(answerId),
       },
     );
 

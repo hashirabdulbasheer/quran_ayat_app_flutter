@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/misc/router/router_utils.dart';
 
 import '../../../domain/models/quran_question.dart';
 import 'quran_submission_answer_item_widget.dart';
@@ -50,14 +51,10 @@ class QuranSubmissionQuestionItemWidget extends StatelessWidget {
                 title: QuranSubmissionAnswerItemWidget(
                   answer: question.answers[index],
                 ),
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  "/editAnswer",
-                  arguments: {
-                    "questionId": question.id,
-                    "answer": question.answers[index],
-                  },
-                ),
+                onTap: () => QuranRouter.of(context).routeToEditAnswer({
+                  "questionId": question.id,
+                  "answer": question.answers[index],
+                }),
                 trailing: const Icon(Icons.arrow_right),
               );
             },

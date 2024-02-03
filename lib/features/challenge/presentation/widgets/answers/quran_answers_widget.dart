@@ -101,11 +101,7 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
       _goToLoginScreen();
     } else {
       if (question != null) {
-        Navigator.pushNamed(
-          context,
-          "/createChallenge",
-          arguments: question,
-        );
+        QuranRouter.of(context).routeToCreateChallenge(question);
         QuranLogger.logAnalytics("answer-add-screen");
       } else {
         QuranUtils.showMessage(

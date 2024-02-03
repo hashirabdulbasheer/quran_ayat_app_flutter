@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -162,11 +163,7 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     Map<String, dynamic> args = <String, dynamic>{};
     args["note"] = note;
     args["index"] = index;
-    Navigator.pushNamed(
-      context,
-      "/createNote",
-      arguments: args,
-    ).then((value) {
+    QuranRouter.of(context).routeToCreateNote(arguments: args).then((value) {
       setState(() {});
     });
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../misc/design/design_system.dart';
@@ -177,14 +178,10 @@ class _QuranAnswerActionControlWidgetState
     if (questionId == null) {
       return;
     }
-    Navigator.pushNamed(
-      context,
-      "/editAnswer",
-      arguments: {
-        "questionId": questionId,
-        "answer": widget.answer,
-      },
-    ).then((value) {
+    QuranRouter.of(context).routeToEditAnswer({
+      "questionId": questionId,
+      "answer": widget.answer,
+    }).then((value) {
       setState(() {});
     });
     QuranLogger.logAnalyticsWithParams(
