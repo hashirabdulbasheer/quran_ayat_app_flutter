@@ -35,6 +35,12 @@ class QuranRoutes {
     /// if params present then display home or aya
     if (_isQueryParamsPresentInUrl()) {
       return _homeRoute(isChallengeEnabled);
+    } else {
+      // check for new format
+      List<String> paths = Uri.base.path.split("/");
+      if (paths.length == 2 || paths.length == 3) {
+        return _homeRoute(isChallengeEnabled);
+      }
     }
 
     QuranScreen screen = screenFromRouteString(settings.name ?? "");

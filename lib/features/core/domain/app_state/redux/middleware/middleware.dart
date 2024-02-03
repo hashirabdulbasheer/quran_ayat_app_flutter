@@ -41,6 +41,12 @@ void appStateMiddleware(
 }
 
 /// Handle URL params
+/// old:
+///   ?sura=18
+///   ?sura=18&aya=100
+/// new:
+///   /18
+///   /18/100
 bool _handleUrlPathsForWeb(Store<AppState> store) {
   /// url parameters
   final String? urlQuerySuraIndex = Uri.base.queryParameters["sura"];
@@ -56,35 +62,67 @@ bool _handleUrlPathsForWeb(Store<AppState> store) {
         ayaIndex.isNotEmpty) {
       // have more than one
       // the last two paths should be surah/ayat format
-      try {
-        var selectedSurahIndex = int.parse(suraIndex);
-        var ayaIndexInt = int.parse(ayaIndex);
-        store.dispatch(SelectParticularAyaAction(
-          index: SurahIndex.fromHuman(
-            sura: selectedSurahIndex,
-            aya: ayaIndexInt,
-          ),
-        ));
-
-        return true;
-      } catch (_) {}
       QuranLogger.logAnalytics("url-sura-aya");
+
+      return _handleParams(
+        store,
+        suraIndex,
+        ayaIndex,
+      );
     } else if (suraIndex != null && suraIndex.isNotEmpty) {
       // has only one
       // the last path will be surah index
-      try {
-        var selectedSurahIndex = int.parse(suraIndex);
-        store.dispatch(SelectParticularAyaAction(
-          index: SurahIndex.fromHuman(
-            sura: selectedSurahIndex,
-            aya: 1,
-          ),
-        ));
+      QuranLogger.logAnalytics("url-sura-aya");
 
-        return true;
-      } catch (_) {}
-      QuranLogger.logAnalytics("url-aya");
+      return _handleParams(
+        store,
+        suraIndex,
+        "1",
+      );
+    } else {
+      // check for new format
+      List<String> paths = Uri.base.path.trim().split("/");
+      if (paths.length == 2) {
+        QuranLogger.logAnalytics("url-aya");
+
+        return _handleParams(
+          store,
+          paths[1],
+          "1",
+        );
+      } else if (paths.length == 3) {
+        QuranLogger.logAnalytics("url-aya");
+
+        return _handleParams(
+          store,
+          paths[1],
+          paths[2],
+        );
+      }
     }
+  }
+
+  return false;
+}
+
+bool _handleParams(
+  Store<AppState> store,
+  String suraIndex,
+  String ayaIndex,
+) {
+  try {
+    var selectedSurahIndex = int.parse(suraIndex);
+    var ayaIndexInt = int.parse(ayaIndex);
+    store.dispatch(SelectParticularAyaAction(
+      index: SurahIndex.fromHuman(
+        sura: selectedSurahIndex,
+        aya: ayaIndexInt,
+      ),
+    ));
+
+    return true;
+  } catch (e) {
+    QuranLogger.logE(e);
   }
 
   return false;
