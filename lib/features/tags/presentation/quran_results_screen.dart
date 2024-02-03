@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
-import '../../../utils/nav_utils.dart';
+
+import '../../../utils/logger_utils.dart';
 import '../../settings/domain/settings_manager.dart';
 import '../domain/entities/quran_index.dart';
 import '../domain/entities/quran_tag.dart';
@@ -55,11 +56,7 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
                     title: _listRow(indices[index]),
                     onTap: () => {
                       // TODO: Fix navigation to ayat screen
-                      QuranNavigator.navigateToAyatScreen(
-                        context,
-                        surahIndex: indices[index].surahIndex - 1,
-                        ayaIndex: indices[index].ayaIndex,
-                      ),
+                      QuranLogger.log("Not implemented"),
                     },
                   );
                 },

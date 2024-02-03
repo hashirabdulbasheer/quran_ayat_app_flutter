@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
 import 'package:redux/redux.dart';
 
 import '../../features/auth/presentation/quran_login_screen.dart';
 import '../../features/auth/presentation/quran_signup_screen.dart';
 import '../../features/challenge/domain/models/quran_answer.dart';
+import '../../features/challenge/domain/models/quran_question.dart';
 import '../../features/challenge/presentation/my_challenge_submissions_screen.dart';
 import '../../features/challenge/presentation/quran_answer_submission_confirmation_screen.dart';
 import '../../features/challenge/presentation/quran_challenge_display_screen.dart';
@@ -19,6 +19,8 @@ import '../../features/newAyat/data/surah_index.dart';
 import '../../features/newAyat/presentation/quran_new_ayat_screen.dart';
 import '../../features/notes/domain/entities/quran_note.dart';
 import '../../features/notes/presentation/quran_create_notes_screen.dart';
+import '../../features/tags/domain/entities/quran_tag.dart';
+import '../../features/tags/presentation/quran_results_screen.dart';
 import '../../features/tags/presentation/quran_view_tags_screen.dart';
 import '../../models/qr_user_model.dart';
 
@@ -124,6 +126,13 @@ class QuranRoutes {
             title: title,
             message: message,
           ),
+        );
+
+      case '/tagResults':
+        final tag = settings.arguments as QuranTag;
+        return MaterialPageRoute<void>(
+          builder: (_) =>
+              QuranResultsScreen(tag: tag,),
         );
 
       default:

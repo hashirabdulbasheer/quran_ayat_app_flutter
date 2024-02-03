@@ -6,7 +6,6 @@ import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../models/qr_user_model.dart';
-import '../../../utils/nav_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/domain/redux/actions/actions.dart';
 import '../domain/entities/quran_tag.dart';
@@ -184,10 +183,10 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
 
       return;
     }
-
-    QuranNavigator.navigationToResultsScreen(
+    Navigator.pushNamed(
       context,
-      tag,
+      "/tagResults",
+      arguments: tag,
     );
   }
 
