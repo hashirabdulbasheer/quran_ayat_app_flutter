@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../quran_textfield_full_screen.dart';
+import '../../quran_textfield_full_sheet.dart';
 import 'quran_note_entry_textfield_widget.dart';
 
 class QuranTappableSmallTextFieldWidget extends StatelessWidget {
@@ -27,7 +27,7 @@ class QuranTappableSmallTextFieldWidget extends StatelessWidget {
             ),
           ),
           elevation: 5,
-          builder: (context) => QuranFullTextFieldScreen(
+          builder: (context) => QuranFullTextFieldBottomSheet(
             title: "Enter Note",
             controller: controller,
           ),

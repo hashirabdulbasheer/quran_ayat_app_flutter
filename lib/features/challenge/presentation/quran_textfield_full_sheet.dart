@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../misc/design/design_system.dart';
 import 'widgets/create/quran_note_entry_textfield_widget.dart';
 
-class QuranFullTextFieldScreen extends StatelessWidget {
+class QuranFullTextFieldBottomSheet extends StatelessWidget {
   final String title;
   final TextEditingController controller;
 
-  const QuranFullTextFieldScreen({
+  const QuranFullTextFieldBottomSheet({
     Key? key,
     required this.title,
     required this.controller,
