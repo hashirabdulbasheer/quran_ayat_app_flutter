@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'quran_router_enum.dart';
+
 class QuranRouter {
   final BuildContext context;
 
@@ -9,12 +11,19 @@ class QuranRouter {
     return QuranRouter(context);
   }
 
-  Future<void> routeToLogin() async {
-    await Navigator.pushNamed(
+  Future<dynamic> _route(QuranScreen screen, {Object? arguments,}) async {
+    return await Navigator.pushNamed(
       context,
-      "/login",
+      screen.rawString(),
+      arguments: arguments,
     );
+  }
 
-    return;
+  Future<void> routeToLogin() async {
+    return await _route(QuranScreen.login);
+  }
+
+  Future<bool> routeToSignUp() async {
+    return await _route(QuranScreen.signup) as bool;
   }
 }

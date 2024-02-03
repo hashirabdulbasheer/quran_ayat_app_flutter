@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/misc/router/router_utils.dart';
 
 import '../../../models/qr_user_model.dart';
 import '../../../utils/utils.dart';
@@ -113,8 +114,8 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
               ),
               TextButton(
                 onPressed: () => {
-                  Navigator.pushNamed(context, '/signup',).then((value) {
-                    if (value != null && value as bool) {
+                  QuranRouter.of(context).routeToSignUp().then((value) {
+                    if (value != null && value) {
                       Navigator.of(context).pop();
                     }
                   }),
