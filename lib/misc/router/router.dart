@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 import '../../features/auth/presentation/quran_login_screen.dart';
 import '../../features/auth/presentation/quran_signup_screen.dart';
 import '../../features/challenge/presentation/my_challenge_submissions_screen.dart';
+import '../../features/challenge/presentation/quran_answer_submission_confirmation_screen.dart';
 import '../../features/challenge/presentation/quran_challenge_display_screen.dart';
 import '../../features/challenge/presentation/quran_create_answer_screen.dart';
 import '../../features/challenge/presentation/quran_create_question_screen.dart';
@@ -77,7 +78,9 @@ class QuranRoutes {
       case '/createChallenge':
         final question = settings.arguments as QuranQuestion;
         return MaterialPageRoute<void>(
-          builder: (_) => QuranCreateChallengeScreen(question: question,),
+          builder: (_) => QuranCreateChallengeScreen(
+            question: question,
+          ),
         );
 
       case '/createQuestion':
@@ -89,6 +92,13 @@ class QuranRoutes {
         final store = settings.arguments as Store<AppState>;
         return MaterialPageRoute<void>(
           builder: (_) => QuranChallengeDisplayScreen(store: store),
+        );
+
+      case '/confirmation':
+        final answerId = settings.arguments as String;
+        return MaterialPageRoute<void>(
+          builder: (_) =>
+              QuranAnswerSubmissionConfirmationScreen(answerId: answerId),
         );
 
       default:

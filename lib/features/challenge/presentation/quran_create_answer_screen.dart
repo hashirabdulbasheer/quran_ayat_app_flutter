@@ -20,7 +20,6 @@ import '../domain/enums/quran_answer_status_enum.dart';
 import '../domain/models/quran_answer.dart';
 import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
-import 'quran_answer_submission_confirmation_screen.dart';
 import 'widgets/create/quran_arabic_translation_widget.dart';
 import 'widgets/create/quran_ayat_selection_widget.dart';
 import 'widgets/create/quran_single_action_button_widget.dart';
@@ -275,14 +274,11 @@ class _QuranCreateChallengeScreenState
         Navigator.of(context).pop(),
 
         /// Display confirmation screen
-        Navigator.push<void>(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => QuranAnswerSubmissionConfirmationScreen(
-              answerId: answerId,
-            ),
-          ),
-        ).then((value) {}),
+          "/confirmation",
+          arguments: answerId,
+        ),
       },
     );
 
