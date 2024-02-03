@@ -22,87 +22,85 @@ class QuranQuestionsListScreen extends StatelessWidget {
         return const Center(child: Text("No questions yet!"));
       }
 
-      return Directionality(
-        textDirection: TextDirection.ltr,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    color: Colors.black26,
-                    child: const Text(
-                      "Questions",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+      return Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  color: Colors.black26,
+                  child: const Text(
+                    "Questions",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ],
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: ListView.separated(
-                  itemBuilder: (
-                    context,
-                    index,
-                  ) {
-                    return ListTile(
-                      title: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: ListView.separated(
+                itemBuilder: (
+                  context,
+                  index,
+                ) {
+                  return ListTile(
+                    title: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          questions[index].title,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.black54,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(questions[index].question),
+                      ],
+                    ),
+                    trailing: IntrinsicWidth(
+                      child: Row(
                         children: [
-                          Text(
-                            questions[index].title,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.black54,
+                          if (store.state.challenge
+                              .approvedAnswersForQuestion(questions[index])
+                              .isNotEmpty)
+                            Text(
+                              "${store.state.challenge.approvedAnswersForQuestion(questions[index]).length}",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(questions[index].question),
+                          const Icon(Icons.chevron_right_rounded),
                         ],
                       ),
-                      trailing: IntrinsicWidth(
-                        child: Row(
-                          children: [
-                            if (store.state.challenge
-                                .approvedAnswersForQuestion(questions[index])
-                                .isNotEmpty)
-                              Text(
-                                "${store.state.challenge.approvedAnswersForQuestion(questions[index]).length}",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            const Icon(Icons.chevron_right_rounded),
-                          ],
-                        ),
-                      ),
-                      onTap: () => _onQuestionTapped(
-                        store,
-                        context,
-                        questions[index].id,
-                      ),
-                    );
-                  },
-                  separatorBuilder: (
-                    context,
-                    index,
-                  ) =>
-                      const Divider(),
-                  itemCount: questions.length,
-                ),
+                    ),
+                    onTap: () => _onQuestionTapped(
+                      store,
+                      context,
+                      questions[index].id,
+                    ),
+                  );
+                },
+                separatorBuilder: (
+                  context,
+                  index,
+                ) =>
+                    const Divider(),
+                itemCount: questions.length,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
     });
   }

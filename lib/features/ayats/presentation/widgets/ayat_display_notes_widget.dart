@@ -125,36 +125,33 @@ class _QuranAyatDisplayNotesWidgetState
             textDirection = TextDirection.rtl;
           }
 
-          return Directionality(
-            textDirection: textDirection,
-            child: ListTile(
-              onTap: () => {
-                _goToCreateNoteScreen(
-                  note: notes[index],
-                ),
-              },
-              title: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      notes[index].note,
-                      textScaleFactor: fontScale,
-                      style: const TextStyle(fontSize: 14),
+          return ListTile(
+            onTap: () => {
+              _goToCreateNoteScreen(
+                note: notes[index],
+              ),
+            },
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    notes[index].note,
+                    textScaleFactor: fontScale,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    QuranNotesManager.instance.formattedDate(
+                      notes[index].createdOn,
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      QuranNotesManager.instance.formattedDate(
-                        notes[index].createdOn,
-                      ),
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                  ],
-                ),
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
               ),
             ),
           );

@@ -23,50 +23,47 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
       }
 
       return SingleChildScrollView(
-        child: Directionality(
-          textDirection: TextDirection.ltr,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        question.title,
-                        textAlign: TextAlign.center,
-                        style: QuranDS.textTitleMediumLight,
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      question.title,
+                      textAlign: TextAlign.center,
+                      style: QuranDS.textTitleMediumLight,
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        question.question,
+                        textAlign: TextAlign.start,
+                        style: QuranDS.textTitleMediumLightSmallLineSpacing,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          question.question,
-                          textAlign: TextAlign.start,
-                          style: QuranDS.textTitleMediumLightSmallLineSpacing,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                QuranAnswersWidget(
-                  question: question,
-                ),
-                const SizedBox(
-                  height: 100,
-                ),
-              ],
-            ),
+              ),
+              QuranAnswersWidget(
+                question: question,
+              ),
+              const SizedBox(
+                height: 100,
+              ),
+            ],
           ),
         ),
       );

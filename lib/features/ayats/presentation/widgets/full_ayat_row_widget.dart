@@ -24,25 +24,20 @@ class QuranFullAyatRowWidget extends StatelessWidget {
     BuildContext _,
     double fontScale,
   ) {
-    return Directionality(
-      textDirection: QuranUtils.isArabic(text)
-          ? TextDirection.rtl
-          : TextDirection.ltr,
-      child: Row(
-        children: [
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-              child: Text(
-                _stripHtmlIfNeeded(text),
-                textAlign: TextAlign.start,
-                textScaleFactor: fontScale,
-                style: _textStyleForFont(fontFamily),
-              ),
+    return Row(
+      children: [
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+            child: Text(
+              _stripHtmlIfNeeded(text),
+              textAlign: TextAlign.start,
+              textScaleFactor: fontScale,
+              style: _textStyleForFont(fontFamily),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

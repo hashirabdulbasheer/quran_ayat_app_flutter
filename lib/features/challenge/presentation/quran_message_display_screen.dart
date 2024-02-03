@@ -21,19 +21,16 @@ class QuranMessageDisplayScreen extends StatelessWidget {
       ),
 
       /// BODY
-      body: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            20,
-            10,
-            20,
-            10,
-          ),
-          child: Markdown(
-            data: message,
-            styleSheet: MarkdownStyleSheet(textScaleFactor: 1.2,),
-          ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          20,
+          10,
+          20,
+          10,
+        ),
+        child: Markdown(
+          data: message,
+          styleSheet: MarkdownStyleSheet(textScaleFactor: 1.2,),
         ),
       ),
     );

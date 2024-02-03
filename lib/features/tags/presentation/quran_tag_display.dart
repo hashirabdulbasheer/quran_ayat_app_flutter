@@ -113,33 +113,30 @@ class _QuranAyatDisplayTagsWidgetState
   ) {
     List<Widget> children = [];
     for (String tagString in tag) {
-      children.add(Directionality(
-        textDirection: TextDirection.ltr,
-        child: Tooltip(
-          message: "Remove tag",
-          child: TextButton.icon(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.black12),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                ),
+      children.add(Tooltip(
+        message: "Remove tag",
+        child: TextButton.icon(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.black12),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
             ),
-            onPressed: () => _displayRemovalConfirmationDialog(
-              tagString,
-              user.uid,
-            ),
-            icon: const Icon(
-              Icons.close,
-              size: 20,
+          ),
+          onPressed: () => _displayRemovalConfirmationDialog(
+            tagString,
+            user.uid,
+          ),
+          icon: const Icon(
+            Icons.close,
+            size: 20,
+            color: Colors.black87,
+          ),
+          label: Text(
+            tagString,
+            style: const TextStyle(
               color: Colors.black87,
-            ),
-            label: Text(
-              tagString,
-              style: const TextStyle(
-                color: Colors.black87,
-              ),
             ),
           ),
         ),

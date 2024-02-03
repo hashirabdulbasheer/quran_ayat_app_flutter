@@ -35,81 +35,75 @@ class _QuranChallengesApprovalScreenState
     ) {
       List<QuranQuestion> questions = _filterQuestions(store);
 
-      return Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          /// APP BAR
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Approvals"),
-            actions: [
-              QuranReloadButtonWidget(action: () => _reloadQuestions(store)),
-              IconButton(
-                onPressed: () => _addQuestion(),
-                icon: const Icon(
-                  Icons.add,
-                ),
+      return Scaffold(
+        /// APP BAR
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Approvals"),
+          actions: [
+            QuranReloadButtonWidget(action: () => _reloadQuestions(store)),
+            IconButton(
+              onPressed: () => _addQuestion(),
+              icon: const Icon(
+                Icons.add,
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
 
-          /// BODY
-          body: user == null
-              ? const Center(child: Text('No submissions'))
-              : Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropdownSearch<QuranAnswerStatusEnum>(
-                            items: const [
-                              QuranAnswerStatusEnum.undefined,
-                              QuranAnswerStatusEnum.submitted,
-                              QuranAnswerStatusEnum.approved,
-                              QuranAnswerStatusEnum.rejected,
-                            ],
-                            enabled: true,
-                            itemAsString: (QuranAnswerStatusEnum status) =>
-                                status.rawString(),
-                            dropdownDecoratorProps:
-                                const DropDownDecoratorProps(
-                              baseStyle: TextStyle(fontSize: 12),
-                              dropdownSearchDecoration: InputDecoration(
-                                labelText: "Status",
-                                hintText: "select status",
-                              ),
-                              textAlign: TextAlign.start,
-                            ),
-                            onChanged: (value) => {
-                              setState(() {
-                                if (value != null) {
-                                  _selectedStatus = value;
-                                }
-                              }),
-                            },
-                            selectedItem: _selectedStatus,
-                          ),
-                        ),
-                        ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: questions.length,
-                          shrinkWrap: true,
-                          itemBuilder: (
-                            BuildContext context,
-                            int index,
-                          ) {
-                            return QuranSubmissionQuestionItemWidget(
-                              question: questions[index],
-                            );
-                          },
-                        ),
+        /// BODY
+        body: user == null
+            ? const Center(child: Text('No submissions'))
+            : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropdownSearch<QuranAnswerStatusEnum>(
+                      items: const [
+                        QuranAnswerStatusEnum.undefined,
+                        QuranAnswerStatusEnum.submitted,
+                        QuranAnswerStatusEnum.approved,
+                        QuranAnswerStatusEnum.rejected,
                       ],
+                      enabled: true,
+                      itemAsString: (QuranAnswerStatusEnum status) =>
+                          status.rawString(),
+                      dropdownDecoratorProps:
+                          const DropDownDecoratorProps(
+                        baseStyle: TextStyle(fontSize: 12),
+                        dropdownSearchDecoration: InputDecoration(
+                          labelText: "Status",
+                          hintText: "select status",
+                        ),
+                        textAlign: TextAlign.start,
+                      ),
+                      onChanged: (value) => {
+                        setState(() {
+                          if (value != null) {
+                            _selectedStatus = value;
+                          }
+                        }),
+                      },
+                      selectedItem: _selectedStatus,
                     ),
                   ),
-                ),
-        ),
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: questions.length,
+                    shrinkWrap: true,
+                    itemBuilder: (
+                      BuildContext context,
+                      int index,
+                    ) {
+                      return QuranSubmissionQuestionItemWidget(
+                        question: questions[index],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
       );
     });
   }

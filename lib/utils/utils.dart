@@ -49,10 +49,7 @@ class QuranUtils {
   ) {
     if (message != null && message.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Directionality(
-          textDirection: TextDirection.ltr,
-          child: Text(message),
-        ),
+        content: Text(message),
       ));
     }
   }

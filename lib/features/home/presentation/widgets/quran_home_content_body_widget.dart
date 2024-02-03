@@ -23,7 +23,10 @@ class QuranHomeBodyContentWidget extends StatelessWidget {
       return const QuranNewAyatReaderWidget();
     } else if (selectedTab == QuranHomeScreenBottomTabsEnum.challenge) {
       /// challenge screen
-      return const QuranQuestionsListScreen();
+      return const Directionality(
+        textDirection: TextDirection.ltr,
+        child: QuranQuestionsListScreen(),
+      );
     }
 
     return Container();

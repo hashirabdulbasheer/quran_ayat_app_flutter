@@ -21,44 +21,41 @@ class QuranFullTextFieldBottomSheet extends StatelessWidget {
         left: 20,
         right: 20,
       ),
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () => {
-                    Navigator.of(context).pop(),
-                  },
-                  child: const Text(
-                    "Save",
-                    style: QuranDS.textTitleLargeBold,
-                  ),
-                ),
-                Text(
-                  title,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(
+                onPressed: () => {
+                  Navigator.of(context).pop(),
+                },
+                child: const Text(
+                  "Save",
                   style: QuranDS.textTitleLargeBold,
                 ),
-              ],
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 2 - 30,
-              child: QuranNotesTextFieldWidget(
-                textEditingController: controller,
-                hint: "Start writing...",
-                title: "",
-                isEnabled: true,
               ),
+              Text(
+                title,
+                style: QuranDS.textTitleLargeBold,
+              ),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 2 - 30,
+            child: QuranNotesTextFieldWidget(
+              textEditingController: controller,
+              hint: "Start writing...",
+              title: "",
+              isEnabled: true,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

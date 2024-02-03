@@ -29,75 +29,72 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Tags"),
-          actions: [
-            IconButton(
-              onPressed: () => _exportTags(),
-              icon: const Icon(
-                Icons.share,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Tags"),
+        actions: [
+          IconButton(
+            onPressed: () => _exportTags(),
+            icon: const Icon(
+              Icons.share,
             ),
-            IconButton(
-              onPressed: () => _displayAddTagDialog(),
-              icon: const Icon(Icons.add),
-            ),
-          ],
-        ),
-        body: StoreBuilder<AppState>(
-          onDidChange: (
-            old,
-            updated,
-          ) =>
-              _onStoreDidChange(),
-          builder: (
-            BuildContext context,
-            Store<AppState> store,
-          ) {
-            List<QuranTag> tags = _tags();
+          ),
+          IconButton(
+            onPressed: () => _displayAddTagDialog(),
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
+      body: StoreBuilder<AppState>(
+        onDidChange: (
+          old,
+          updated,
+        ) =>
+            _onStoreDidChange(),
+        builder: (
+          BuildContext context,
+          Store<AppState> store,
+        ) {
+          List<QuranTag> tags = _tags();
 
-            return Column(
-              children: [
-                Expanded(
-                  child: tags.isEmpty
-                      ? Center(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height - 50,
-                            child: TextButton(
-                              child: const Text(
-                                'Add new tag',
-                              ),
-                              onPressed: () => _displayAddTagDialog(),
+          return Column(
+            children: [
+              Expanded(
+                child: tags.isEmpty
+                    ? Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height - 50,
+                          child: TextButton(
+                            child: const Text(
+                              'Add new tag',
                             ),
+                            onPressed: () => _displayAddTagDialog(),
                           ),
-                        )
-                      : ListView.separated(
-                          itemBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return ListTile(
-                              title: Text(tags[index].name),
-                              onTap: () => _navigateToResults(tags[index]),
-                            );
-                          },
-                          separatorBuilder: (
-                            context,
-                            index,
-                          ) {
-                            return const Divider(thickness: 1);
-                          },
-                          itemCount: tags.length,
                         ),
-                ),
-              ],
-            );
-          },
-        ),
+                      )
+                    : ListView.separated(
+                        itemBuilder: (
+                          context,
+                          index,
+                        ) {
+                          return ListTile(
+                            title: Text(tags[index].name),
+                            onTap: () => _navigateToResults(tags[index]),
+                          );
+                        },
+                        separatorBuilder: (
+                          context,
+                          index,
+                        ) {
+                          return const Divider(thickness: 1);
+                        },
+                        itemCount: tags.length,
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

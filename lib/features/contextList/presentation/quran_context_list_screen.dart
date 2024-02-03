@@ -29,14 +29,11 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: _list(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
+      body: _list(),
     );
   }
 
@@ -89,24 +86,21 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
           const SizedBox(
             width: 5,
           ),
-          Directionality(
-            textDirection: TextDirection.rtl,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(
-                    _ayaText(index),
-                    textScaleFactor: fontScale,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontFamily: QuranFontFamily.arabic.rawString,
-                    ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Text(
+                  _ayaText(index),
+                  textScaleFactor: fontScale,
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontFamily: QuranFontFamily.arabic.rawString,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           const SizedBox(
             height: 10,

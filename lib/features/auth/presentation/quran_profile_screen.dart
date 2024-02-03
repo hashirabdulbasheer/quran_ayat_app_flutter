@@ -33,91 +33,85 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(title: const Text("Profile")),
-        body: Directionality(
-          textDirection: TextDirection.ltr,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              30,
-              20,
-              30,
-              20,
-            ),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      appBar: AppBar(title: const Text("Profile")),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(
+          30,
+          20,
+          30,
+          20,
+        ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _nameController,
+                enabled: !_isLoading,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  hintText: 'Name',
+                  labelText: 'Name',
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextField(
+                controller: _emailController,
+                enabled: false,
+                style: const TextStyle(color: Colors.black54),
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                  labelText: 'Email',
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextField(
-                    controller: _nameController,
-                    enabled: !_isLoading,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      hintText: 'Name',
-                      labelText: 'Name',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    controller: _emailController,
-                    enabled: false,
-                    style: const TextStyle(color: Colors.black54),
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      hintText: 'Email',
-                      labelText: 'Email',
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () => {
-                              if (!_isLoading) {_updateButtonPressed()},
-                            },
-                            child: _isLoading
-                                ? const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : const Text("Update"),
-                          ),
-                        ),
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () => {
+                          if (!_isLoading) {_updateButtonPressed()},
+                        },
+                        child: _isLoading
+                            ? const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Text("Update"),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  TextButton(
-                    onPressed: () => {
-                      _signOutButtonPressed().then((bool value) {
-                        Navigator.of(context).pop();
-                      }),
-                    },
-                    child: const Text("Sign Out"),
+                    ),
                   ),
                 ],
               ),
-            ),
+              const SizedBox(
+                height: 50,
+              ),
+              TextButton(
+                onPressed: () => {
+                  _signOutButtonPressed().then((bool value) {
+                    Navigator.of(context).pop();
+                  }),
+                },
+                child: const Text("Sign Out"),
+              ),
+            ],
           ),
         ),
       ),
