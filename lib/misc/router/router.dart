@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
@@ -26,8 +27,23 @@ import '../../models/qr_user_model.dart';
 import 'quran_router_enum.dart';
 
 class QuranRoutes {
-  static PageRoute<dynamic> getPageRoute(RouteSettings settings) {
+  static PageRoute<dynamic> getPageRoute(RouteSettings settings, bool isChallengeEnabled,) {
+    /// check for url params
+    /// if params present then display home or aya
+    if(_isQueryParamsPresentInUrl()) {
+        if(isChallengeEnabled) {
+          return MaterialPageRoute<void>(
+            builder: (_) => const QuranHomeScreen(),
+          );
+        }
+
+        return MaterialPageRoute<void>(
+          builder: (_) => const QuranNewAyatScreen(),
+        );
+    }
+
     QuranScreen screen = screenFromRouteString(settings.name ?? "");
+    /// no params -> proceed to normal routing
     switch (screen) {
       case QuranScreen.root:
         return MaterialPageRoute<void>(
@@ -145,5 +161,16 @@ class QuranRoutes {
           ),
         );
     }
+  }
+
+  static bool _isQueryParamsPresentInUrl() {
+    if(kIsWeb) {
+      final String? urlQuerySuraIndex = Uri.base.queryParameters["sura"];
+      if(urlQuerySuraIndex != null) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

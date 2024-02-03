@@ -78,7 +78,10 @@ class MyAppState extends State<MyApp> {
             MaterialApp(
           title: 'Quran',
           initialRoute: widget.isChallengeEnabled ? '/home' : '/',
-          onGenerateRoute: QuranRoutes.getPageRoute,
+          onGenerateRoute: (settings) => QuranRoutes.getPageRoute(
+            settings,
+            widget.isChallengeEnabled,
+          ),
           debugShowCheckedModeBanner: false,
           theme: QuranThemeManager.instance.theme,
           darkTheme: QuranThemeManager.instance.darkTheme,
