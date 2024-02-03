@@ -17,24 +17,25 @@ class QuranAyatDisplayTranslationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Row(
-        children: [
-          Expanded(
-            child: Text(
-              translationType.title,
-              textAlign: TextAlign.end,
-              style: QuranDS.textTitleVerySmallLight,
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                translationType.title,
+                style: QuranDS.textTitleVerySmallLight,
+              ),
             ),
-          ),
-        ],
-      ),
-      QuranFullAyatRowWidget(
-        text: translation,
-        fontFamily: _translationFontFamily(translationType),
-      ),
-      const Divider(color: QuranDS.veryLightColor),
-    ]);
+          ],
+        ),
+        QuranFullAyatRowWidget(
+          text: translation,
+          fontFamily: _translationFontFamily(translationType),
+        ),
+        const Divider(color: QuranDS.veryLightColor),
+      ],
+    );
   }
 
   /// special font handling for translations

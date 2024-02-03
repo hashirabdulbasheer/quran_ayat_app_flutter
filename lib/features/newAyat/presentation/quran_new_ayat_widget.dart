@@ -232,9 +232,12 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// translation widget
               for (NQTranslation type in translations.keys)
-                QuranAyatDisplayTranslationWidget(
-                  translation: translations[type] ?? "",
-                  translationType: type,
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: QuranAyatDisplayTranslationWidget(
+                    translation: translations[type] ?? "",
+                    translationType: type,
+                  ),
                 ),
 
               /// audio controls
