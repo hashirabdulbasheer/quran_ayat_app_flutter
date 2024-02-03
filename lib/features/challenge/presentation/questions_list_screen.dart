@@ -115,7 +115,7 @@ class QuranQuestionsListScreen extends StatelessWidget {
     store.dispatch(
       SelectCurrentQuestionAction(questionId: questionId),
     );
-    QuranRouter.of(context).routeToChallenge(store);
+    QuranNavigator.of(context).routeToChallenge(store);
     QuranLogger.logAnalyticsWithParams(
       "question-tap",
       {"questionId": questionId},

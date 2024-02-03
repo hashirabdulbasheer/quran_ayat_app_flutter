@@ -163,7 +163,7 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
     Map<String, dynamic> args = <String, dynamic>{};
     args["note"] = note;
     args["index"] = index;
-    QuranRouter.of(context).routeToCreateNote(arguments: args).then((value) {
+    QuranNavigator.of(context).routeToCreateNote(arguments: args).then((value) {
       setState(() {});
     });
   }

@@ -178,7 +178,7 @@ class _QuranAnswerActionControlWidgetState
     if (questionId == null) {
       return;
     }
-    QuranRouter.of(context).routeToEditAnswer({
+    QuranNavigator.of(context).routeToEditAnswer({
       "questionId": questionId,
       "answer": widget.answer,
     }).then((value) {

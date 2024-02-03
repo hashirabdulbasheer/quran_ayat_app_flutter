@@ -273,7 +273,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
     Map<String, dynamic> args = <String, dynamic>{};
     args['title'] = store.state.reader.currentSurahDetails().transliterationEn;
     args['index'] = store.state.reader.currentIndex;
-    int? selectedAyaIndex = await QuranRouter.of(context).routeToContext(args);
+    int? selectedAyaIndex = await QuranNavigator.of(context).routeToContext(args);
 
     if (selectedAyaIndex != null) {
       store.dispatch(SelectAyaAction(aya: selectedAyaIndex));

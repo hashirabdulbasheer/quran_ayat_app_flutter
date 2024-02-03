@@ -275,7 +275,7 @@ class _QuranCreateChallengeScreenState
         Navigator.of(context).pop(),
 
         /// Display confirmation screen
-        QuranRouter.of(context).routeToConfirmation(answerId),
+        QuranNavigator.of(context).routeToConfirmation(answerId),
       },
     );
 

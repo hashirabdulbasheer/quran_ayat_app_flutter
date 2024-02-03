@@ -88,7 +88,7 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                     Navigator.of(context).pop(),
 
                     /// navigate to my submissions list screen
-                    QuranRouter.of(context).routeToMySubmissions(),
+                    QuranNavigator.of(context).routeToMySubmissions(),
                   },
                 ),
               ],

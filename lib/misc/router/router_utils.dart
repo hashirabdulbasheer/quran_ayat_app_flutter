@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'quran_router_enum.dart';
 
-class QuranRouter {
+class QuranNavigator {
   final BuildContext context;
 
-  QuranRouter(this.context);
+  QuranNavigator(this.context);
 
-  static QuranRouter of(BuildContext context) {
-    return QuranRouter(context);
+  static QuranNavigator of(BuildContext context) {
+    return QuranNavigator(context);
   }
 
   Future<dynamic> _route(QuranScreen screen, {Object? arguments,}) async {

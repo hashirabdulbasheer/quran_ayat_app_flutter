@@ -89,7 +89,7 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
   }
 
   void _goToLoginScreen() {
-    QuranRouter.of(context).routeToLogin().then((value) => setState(() {}));
+    QuranNavigator.of(context).routeToLogin().then((value) => setState(() {}));
     QuranLogger.logAnalytics("answer-add-login");
   }
 
@@ -101,7 +101,7 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
       _goToLoginScreen();
     } else {
       if (question != null) {
-        QuranRouter.of(context).routeToCreateChallenge(question);
+        QuranNavigator.of(context).routeToCreateChallenge(question);
         QuranLogger.logAnalytics("answer-add-screen");
       } else {
         QuranUtils.showMessage(

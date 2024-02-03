@@ -184,7 +184,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
 
       return;
     }
-    QuranRouter.of(context).routeToTagResults(tag);
+    QuranNavigator.of(context).routeToTagResults(tag);
   }
 
   List<QuranTag> _tags() =>

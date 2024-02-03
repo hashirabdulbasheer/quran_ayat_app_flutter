@@ -177,7 +177,7 @@ class _QuranAyatDisplayNotesWidgetState
   }
 
   void _goToLoginScreen() {
-    QuranRouter.of(context).routeToLogin().then((value) => setState(() {}));
+    QuranNavigator.of(context).routeToLogin().then((value) => setState(() {}));
   }
 
   void _goToCreateNoteScreen({QuranNote? note}) {
@@ -191,7 +191,7 @@ class _QuranAyatDisplayNotesWidgetState
         widget.currentIndex.sura,
         widget.currentIndex.aya,
       );
-      QuranRouter.of(context).routeToCreateNote().then((value) {
+      QuranNavigator.of(context).routeToCreateNote().then((value) {
         setState(() {});
       });
       QuranLogger.logAnalytics("add_note");

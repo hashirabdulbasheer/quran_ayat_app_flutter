@@ -136,6 +136,6 @@ class _QuranChallengesApprovalScreenState
   }
 
   void _addQuestion() async {
-    QuranRouter.of(context).routeToCreateQuestions();
+    QuranNavigator.of(context).routeToCreateQuestions();
   }
 }

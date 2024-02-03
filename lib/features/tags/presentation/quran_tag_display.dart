@@ -360,7 +360,7 @@ class _QuranAyatDisplayTagsWidgetState
   ///
 
   void _goToLoginScreen() {
-    QuranRouter.of(context).routeToLogin().then((value) => setState(() {}));
+    QuranNavigator.of(context).routeToLogin().then((value) => setState(() {}));
   }
 
   void _goToViewTagsScreen() {
@@ -369,7 +369,7 @@ class _QuranAyatDisplayTagsWidgetState
       return;
     }
 
-    QuranRouter.of(context).routeToViewTags(user).then((value) {
+    QuranNavigator.of(context).routeToViewTags(user).then((value) {
       setState(() {});
     });
   }
