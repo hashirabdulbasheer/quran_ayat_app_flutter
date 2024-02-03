@@ -3,7 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../../../../misc/design/design_system.dart';
 import '../../../../../models/qr_user_model.dart';
-import '../../../../../utils/utils.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../home/presentation/quran_home_screen.dart';
 import '../../../../newAyat/data/surah_index.dart';
@@ -44,7 +43,6 @@ class QuranAnswersListWidget extends StatelessWidget {
         BuildContext context,
         int index,
       ) {
-
         return Card(
           child: ListTile(
             onTap: () => _onAnswerTapped(

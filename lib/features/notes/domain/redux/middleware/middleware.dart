@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+
 import '../../../../../../models/qr_user_model.dart';
 import '../../../../auth/domain/auth_factory.dart';
 import '../../../../core/domain/app_state/app_state.dart';
@@ -8,7 +9,8 @@ import '../actions/actions.dart';
 
 List<Middleware<AppState>> createNotesMiddleware() {
   return [
-    TypedMiddleware<AppState, InitializeNotesAction>(_initializeNotesMiddleware),
+    TypedMiddleware<AppState, InitializeNotesAction>(
+        _initializeNotesMiddleware),
     TypedMiddleware<AppState, FetchNotesAction>(_fetchNotesMiddleware),
     TypedMiddleware<AppState, CreateNoteAction>(_createNoteMiddleware),
     TypedMiddleware<AppState, UpdateNoteAction>(_updateNoteMiddleware),
@@ -17,10 +19,10 @@ List<Middleware<AppState>> createNotesMiddleware() {
 }
 
 void _initializeNotesMiddleware(
-    Store<AppState> store,
-    InitializeNotesAction action,
-    NextDispatcher next,
-    ) {
+  Store<AppState> store,
+  InitializeNotesAction action,
+  NextDispatcher next,
+) {
   // Initialize notes
   store.dispatch(FetchNotesAction());
   next(action);
@@ -43,10 +45,10 @@ void _fetchNotesMiddleware(
       List<QuranNote> fetchedNotes = notes;
       // sort descending by time to show latest on top
       fetchedNotes.sort((
-          a,
-          b,
-          ) =>
-      b.createdOn - a.createdOn);
+        a,
+        b,
+      ) =>
+          b.createdOn - a.createdOn);
       store.dispatch(NotesLoadingAction(isLoading: false));
       store.dispatch(FetchNotesSucceededAction(fetchedNotes));
     });

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/models/qr_user_model.dart';
 import 'package:redux/redux.dart';
 
+import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/models/quran_question.dart';
@@ -41,20 +41,20 @@ class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
         body: questions.isEmpty
             ? const Center(child: Text("No submissions"))
             : SingleChildScrollView(
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: questions.length,
-                shrinkWrap: true,
-                itemBuilder: (
-                  BuildContext context,
-                  int index,
-                ) {
-                  return QuranSubmissionQuestionItemWidget(
-                    question: questions[index],
-                  );
-                },
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: questions.length,
+                  shrinkWrap: true,
+                  itemBuilder: (
+                    BuildContext context,
+                    int index,
+                  ) {
+                    return QuranSubmissionQuestionItemWidget(
+                      question: questions[index],
+                    );
+                  },
+                ),
               ),
-            ),
       );
     });
   }

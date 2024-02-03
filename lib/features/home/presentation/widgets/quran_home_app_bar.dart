@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../misc/router/router_utils.dart';
 import '../../../bookmark/presentation/bookmark_icon_widget.dart';
 import '../../../challenge/domain/redux/actions/actions.dart';
 import '../../../challenge/presentation/widgets/answers/quran_reload_button_widget.dart';

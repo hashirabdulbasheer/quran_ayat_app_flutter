@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../misc/design/design_system.dart';
 import '../../../../misc/enums/quran_font_family_enum.dart';
-import '../../../../utils/utils.dart';
 import 'font_scaler_widget.dart';
 
 class QuranFullAyatRowWidget extends StatelessWidget {

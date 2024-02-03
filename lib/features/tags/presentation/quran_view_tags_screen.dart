@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
-import 'package:quran_ayat/misc/router/router_utils.dart';
-import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../misc/router/router_utils.dart';
 import '../../../models/qr_user_model.dart';
+import '../../../utils/utils.dart';
 import '../../core/domain/app_state/app_state.dart';
+import '../../newAyat/data/surah_index.dart';
 import '../../newAyat/domain/redux/actions/actions.dart';
 import '../domain/entities/quran_tag.dart';
 import '../domain/redux/actions/actions.dart';

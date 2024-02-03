@@ -29,7 +29,12 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
+                padding: const EdgeInsets.fromLTRB(
+                  20,
+                  0,
+                  20,
+                  0,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -43,7 +48,12 @@ class QuranChallengeDisplayWidget extends StatelessWidget {
               ),
               const Divider(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0,),
+                padding: const EdgeInsets.fromLTRB(
+                  20,
+                  0,
+                  20,
+                  0,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

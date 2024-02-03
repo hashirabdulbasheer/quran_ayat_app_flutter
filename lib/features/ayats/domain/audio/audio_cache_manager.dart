@@ -1,7 +1,8 @@
 import 'package:just_audio/just_audio.dart';
-import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
+
 import '../../../../misc/configs/app_config.dart';
 import '../../../../utils/utils.dart';
+import '../../../settings/domain/settings_manager.dart';
 
 class QuranAudioCacheManager {
   // final QuranAudioCacheRepository _audioRepository =

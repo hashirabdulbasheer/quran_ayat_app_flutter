@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:quran_ayat/utils/logger_utils.dart';
 
+import '../../../../utils/logger_utils.dart';
 import '../../../../utils/utils.dart';
 import '../../../newAyat/data/surah_index.dart';
 import '../../domain/audio/audio_cache_manager.dart';

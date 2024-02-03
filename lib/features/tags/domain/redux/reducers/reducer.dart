@@ -8,8 +8,7 @@ import '../tag_state.dart';
 
 /// TAGS REDUCER
 ///
-Reducer<TagState> tagReducer =
-    combineReducers<TagState>([
+Reducer<TagState> tagReducer = combineReducers<TagState>([
   TypedReducer<TagState, FetchTagsSucceededAction>(
     _fetchTagsSuccessReducer,
   ),
@@ -52,9 +51,9 @@ TagState _fetchTagsSuccessReducer(
 }
 
 TagState _createTagsSuccessReducer(
-    TagState state,
-    CreateTagSucceededAction action,
-    ) {
+  TagState state,
+  CreateTagSucceededAction action,
+) {
   return state.copyWith(
     lastActionStatus: AppStateActionStatus(
       action: action.runtimeType.toString(),
@@ -64,9 +63,9 @@ TagState _createTagsSuccessReducer(
 }
 
 TagState _createTagsFailureReducer(
-    TagState state,
-    CreateTagFailureAction action,
-    ) {
+  TagState state,
+  CreateTagFailureAction action,
+) {
   return state.copyWith(
     lastActionStatus: AppStateActionStatus(
       action: action.runtimeType.toString(),

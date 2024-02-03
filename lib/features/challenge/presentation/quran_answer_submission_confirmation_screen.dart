@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/misc/router/router_utils.dart';
 
+import '../../../misc/router/router_utils.dart';
 import 'widgets/create/quran_single_action_button_widget.dart';
 
 class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {

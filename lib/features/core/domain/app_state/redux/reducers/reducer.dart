@@ -1,7 +1,7 @@
-import 'package:quran_ayat/features/challenge/domain/redux/reducers/reducers.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../auth/domain/auth_factory.dart';
+import '../../../../../challenge/domain/redux/reducers/reducers.dart';
 import '../../../../../newAyat/domain/redux/reducers/reducers.dart';
 import '../../../../../notes/domain/redux/reducers/reducer.dart';
 import '../../../../../tags/domain/redux/reducers/reducer.dart';

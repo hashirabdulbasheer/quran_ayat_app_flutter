@@ -1,6 +1,5 @@
-import 'package:quran_ayat/features/home/presentation/quran_home_screen.dart';
-
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
+import '../../../../home/presentation/quran_home_screen.dart';
 import '../../models/quran_answer.dart';
 import '../../models/quran_question.dart';
 

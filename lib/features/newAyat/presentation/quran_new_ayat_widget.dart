@@ -5,11 +5,11 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
-import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:redux/redux.dart';
 
 import '../../../misc/design/design_system.dart';
 import '../../../misc/enums/quran_app_mode_enum.dart';
+import '../../../misc/router/router_utils.dart';
 import '../../ayats/domain/enums/audio_events_enum.dart';
 import '../../ayats/presentation/widgets/ayat_display_audio_controls_widget.dart';
 import '../../ayats/presentation/widgets/ayat_display_header_widget.dart';
@@ -273,7 +273,8 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
     Map<String, dynamic> args = <String, dynamic>{};
     args['title'] = store.state.reader.currentSurahDetails().transliterationEn;
     args['index'] = store.state.reader.currentIndex;
-    int? selectedAyaIndex = await QuranNavigator.of(context).routeToContext(args);
+    int? selectedAyaIndex =
+        await QuranNavigator.of(context).routeToContext(args);
 
     if (selectedAyaIndex != null) {
       store.dispatch(SelectAyaAction(aya: selectedAyaIndex));

@@ -5,11 +5,7 @@ import 'package:noble_quran/noble_quran.dart';
 
 import '../../../main.dart';
 import '../../../misc/configs/app_config.dart';
-import '../../../misc/configs/remote_config_manager.dart';
 import '../../../misc/enums/quran_app_mode_enum.dart';
-import '../../../misc/enums/quran_feature_flag_enum.dart';
-import '../../../models/qr_user_model.dart';
-import '../../auth/domain/auth_factory.dart';
 import '../data/repository/settings_repository_impl.dart';
 import 'constants/setting_constants.dart';
 import 'entities/quran_dropdown_values_factory.dart';

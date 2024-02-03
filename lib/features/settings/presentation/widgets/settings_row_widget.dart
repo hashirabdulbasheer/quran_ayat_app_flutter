@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 
-import '../../../core/domain/app_state/app_state.dart';
 import '../../domain/entities/quran_setting.dart';
 import '../../domain/enum/settings_type_enum.dart';
 import '../../domain/settings_manager.dart';

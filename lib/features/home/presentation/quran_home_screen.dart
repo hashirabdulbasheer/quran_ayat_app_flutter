@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
 
+import '../../../utils/logger_utils.dart';
 import '../../bookmark/data/bookmarks_local_impl.dart';
 import '../../bookmark/domain/bookmarks_manager.dart';
 import '../../challenge/domain/redux/actions/actions.dart';

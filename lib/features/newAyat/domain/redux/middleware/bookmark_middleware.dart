@@ -1,5 +1,4 @@
 import 'package:noble_quran/models/bookmark.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../models/qr_user_model.dart';
@@ -7,6 +6,7 @@ import '../../../../auth/domain/auth_factory.dart';
 import '../../../../bookmark/data/bookmarks_local_impl.dart';
 import '../../../../bookmark/data/firebase_bookmarks_impl.dart';
 import '../../../../core/domain/app_state/app_state.dart';
+import '../../../data/surah_index.dart';
 import '../actions/actions.dart';
 import '../actions/bookmark_actions.dart';
 

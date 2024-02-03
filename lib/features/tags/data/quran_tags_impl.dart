@@ -1,6 +1,5 @@
-import 'package:quran_ayat/utils/logger_utils.dart';
-
 import '../../../models/qr_response_model.dart';
+import '../../../utils/logger_utils.dart';
 import '../../core/data/quran_data_interface.dart';
 import '../domain/entities/quran_tag.dart';
 import '../domain/entities/quran_tag_aya.dart';
@@ -56,7 +55,8 @@ class QuranTagsEngine implements QuranTagsDataSource {
         return [];
       }
       for (String tagKey in resultList.keys) {
-        Map<String, dynamic>? tag = Map<String, dynamic>.from(resultList[tagKey] as Map);
+        Map<String, dynamic>? tag =
+            Map<String, dynamic>.from(resultList[tagKey] as Map);
         QuranTag masterTag = QuranTag(
           id: tagKey,
           name: tag["name"] as String,

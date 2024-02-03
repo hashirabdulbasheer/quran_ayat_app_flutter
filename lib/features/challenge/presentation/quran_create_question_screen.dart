@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/utils/dialog_utils.dart';
-import 'package:quran_ayat/utils/utils.dart';
 
+import '../../../utils/dialog_utils.dart';
+import '../../../utils/utils.dart';
 import '../domain/challenge_manager.dart';
 import '../domain/enums/quran_question_status_enum.dart';
 import '../domain/models/quran_question.dart';

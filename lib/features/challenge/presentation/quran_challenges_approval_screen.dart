@@ -55,55 +55,54 @@ class _QuranChallengesApprovalScreenState
         body: user == null
             ? const Center(child: Text('No submissions'))
             : SingleChildScrollView(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DropdownSearch<QuranAnswerStatusEnum>(
-                      items: const [
-                        QuranAnswerStatusEnum.undefined,
-                        QuranAnswerStatusEnum.submitted,
-                        QuranAnswerStatusEnum.approved,
-                        QuranAnswerStatusEnum.rejected,
-                      ],
-                      enabled: true,
-                      itemAsString: (QuranAnswerStatusEnum status) =>
-                          status.rawString(),
-                      dropdownDecoratorProps:
-                          const DropDownDecoratorProps(
-                        baseStyle: TextStyle(fontSize: 12),
-                        dropdownSearchDecoration: InputDecoration(
-                          labelText: "Status",
-                          hintText: "select status",
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: DropdownSearch<QuranAnswerStatusEnum>(
+                        items: const [
+                          QuranAnswerStatusEnum.undefined,
+                          QuranAnswerStatusEnum.submitted,
+                          QuranAnswerStatusEnum.approved,
+                          QuranAnswerStatusEnum.rejected,
+                        ],
+                        enabled: true,
+                        itemAsString: (QuranAnswerStatusEnum status) =>
+                            status.rawString(),
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          baseStyle: TextStyle(fontSize: 12),
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: "Status",
+                            hintText: "select status",
+                          ),
+                          textAlign: TextAlign.start,
                         ),
-                        textAlign: TextAlign.start,
+                        onChanged: (value) => {
+                          setState(() {
+                            if (value != null) {
+                              _selectedStatus = value;
+                            }
+                          }),
+                        },
+                        selectedItem: _selectedStatus,
                       ),
-                      onChanged: (value) => {
-                        setState(() {
-                          if (value != null) {
-                            _selectedStatus = value;
-                          }
-                        }),
-                      },
-                      selectedItem: _selectedStatus,
                     ),
-                  ),
-                  ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: questions.length,
-                    shrinkWrap: true,
-                    itemBuilder: (
-                      BuildContext context,
-                      int index,
-                    ) {
-                      return QuranSubmissionQuestionItemWidget(
-                        question: questions[index],
-                      );
-                    },
-                  ),
-                ],
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: questions.length,
+                      shrinkWrap: true,
+                      itemBuilder: (
+                        BuildContext context,
+                        int index,
+                      ) {
+                        return QuranSubmissionQuestionItemWidget(
+                          question: questions[index],
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
       );
     });
   }

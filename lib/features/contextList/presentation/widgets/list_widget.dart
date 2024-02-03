@@ -4,7 +4,9 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 class ListWidget extends StatefulWidget {
   final int itemsCount;
   final int? initialIndex;
-  final Widget Function(int,) itemContent;
+  final Widget Function(
+    int,
+  ) itemContent;
 
   const ListWidget({
     Key? key,
@@ -23,8 +25,7 @@ class _ListWidgetState extends State<ListWidget> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _scrollToAyat());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToAyat());
   }
 
   @override
@@ -34,14 +35,26 @@ class _ListWidgetState extends State<ListWidget> {
 
   Widget _body() {
     return ScrollablePositionedList.separated(
-        itemScrollController: _itemScrollController,
-        itemCount: widget.itemsCount,
-        itemBuilder: (context, index,) => widget.itemContent(index,),
-        separatorBuilder: (context, index,) => const Divider(thickness: 0.2,),);
+      itemScrollController: _itemScrollController,
+      itemCount: widget.itemsCount,
+      itemBuilder: (
+        context,
+        index,
+      ) =>
+          widget.itemContent(
+        index,
+      ),
+      separatorBuilder: (
+        context,
+        index,
+      ) =>
+          const Divider(
+        thickness: 0.2,
+      ),
+    );
   }
 
   void _scrollToAyat() {
     _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
   }
-
 }

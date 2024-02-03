@@ -1,8 +1,8 @@
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
+import '../../../data/quran_data.dart';
+import '../../../data/surah_index.dart';
 
 class InitializeReaderScreenAction extends AppStateAction {}
 

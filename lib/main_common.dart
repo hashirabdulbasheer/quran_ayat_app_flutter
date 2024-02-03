@@ -1,7 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/features/newAyat/presentation/quran_new_ayat_screen.dart';
 import 'package:redux/redux.dart';
 
 import 'features/auth/domain/auth_factory.dart';

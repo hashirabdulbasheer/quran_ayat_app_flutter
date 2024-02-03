@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:quran_ayat/features/auth/domain/auth_factory.dart';
-import 'package:quran_ayat/models/qr_user_model.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../../../models/qr_user_model.dart';
 import '../../../../../../utils/logger_utils.dart';
+import '../../../../../auth/domain/auth_factory.dart';
 import '../../../../../challenge/domain/redux/actions/actions.dart';
 import '../../../../../newAyat/data/surah_index.dart';
 import '../../../../../newAyat/domain/redux/actions/actions.dart';
@@ -24,11 +24,10 @@ void appStateMiddleware(
     store.dispatch(InitializeTagsAction());
     store.dispatch(InitializeNotesAction());
     store.dispatch(InitializeChallengeScreenAction(questions: const []));
-    if(!_handleUrlPathsForWeb(store)) {
+    if (!_handleUrlPathsForWeb(store)) {
       // only handle initialization if there is no param, otherwise it gets
       // initialized while handling params
       store.dispatch(InitializeReaderScreenAction());
-
     }
 
     // setting user role

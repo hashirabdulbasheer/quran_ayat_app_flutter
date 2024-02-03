@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
 import '../../entities/quran_note.dart';
 import '../actions/actions.dart';

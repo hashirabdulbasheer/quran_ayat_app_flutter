@@ -2,10 +2,10 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/models/surah_title.dart';
-import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../misc/router/router_utils.dart';
 import '../../../models/qr_user_model.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';

@@ -133,8 +133,9 @@ class QuranRoutes {
       case QuranScreen.tagResults:
         final tag = settings.arguments as QuranTag;
         return MaterialPageRoute<void>(
-          builder: (_) =>
-              QuranResultsScreen(tag: tag,),
+          builder: (_) => QuranResultsScreen(
+            tag: tag,
+          ),
         );
 
       default:

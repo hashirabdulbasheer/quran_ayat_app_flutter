@@ -123,7 +123,9 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
               const SizedBox(
                 height: 50,
               ),
-              const QuranSocialLoginButtons(isSignUp: true,),
+              const QuranSocialLoginButtons(
+                isSignUp: true,
+              ),
             ],
           ),
         ),

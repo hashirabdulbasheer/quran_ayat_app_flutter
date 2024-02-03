@@ -38,12 +38,21 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
   }
 
   Widget _list() {
-    _translation = StoreProvider.of<AppState>(context).state.reader.data.firstTranslation();
+    _translation = StoreProvider.of<AppState>(context)
+        .state
+        .reader
+        .data
+        .firstTranslation();
     _wordsList = StoreProvider.of<AppState>(context).state.reader.data.words;
 
     return SafeArea(
       maintainBottomViewPadding: true,
-      minimum: const EdgeInsets.fromLTRB(0, 10, 0, 20,),
+      minimum: const EdgeInsets.fromLTRB(
+        0,
+        10,
+        0,
+        20,
+      ),
       child: ListWidget(
         initialIndex: widget.index.aya,
         itemsCount: _translation?.aya.length ?? 0,

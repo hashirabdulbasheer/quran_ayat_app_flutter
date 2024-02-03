@@ -26,7 +26,7 @@ class QuranNavigator {
     return await _route(QuranScreen.login);
   }
 
-  Future<bool> routeToSignUp() async {
+  Future<bool?> routeToSignUp() async {
     return await _route(QuranScreen.signup) as bool;
   }
 

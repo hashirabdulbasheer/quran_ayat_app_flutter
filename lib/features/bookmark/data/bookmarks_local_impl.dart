@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:noble_quran/models/bookmark.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../domain/interfaces/bookmark_interface.dart';
 
 class QuranLocalBookmarksEngine implements QuranBookmarksInterface {
-
   @override
   Future<bool> save(
     int sura,

@@ -1,4 +1,5 @@
 import 'package:redux/redux.dart';
+
 import '../../../../../../models/qr_user_model.dart';
 import '../../../../../../utils/logger_utils.dart';
 import '../../../../auth/domain/auth_factory.dart';

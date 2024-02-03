@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 
+import 'package:http/http.dart' as http;
+
 import '../../../misc/configs/app_config.dart';
 import '../../../utils/utils.dart';
 import 'interface/audio_data_source.dart';
-import 'package:http/http.dart' as http;
 
 class QuranAudioNetworkSource implements QuranAudioDataSource {
   @override

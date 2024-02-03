@@ -1,7 +1,6 @@
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../utils/utils.dart';
-import 'package:intl/intl.dart' as intl;
 import '../../core/data/quran_firebase_engine.dart';
 import '../data/quran_tags_impl.dart';
 import 'entities/quran_tag.dart';
@@ -84,7 +83,6 @@ class QuranTagsManager {
   }
 
   String formattedDate(int timeMs) {
-
     return QuranUtils.formattedDate(timeMs);
   }
 }

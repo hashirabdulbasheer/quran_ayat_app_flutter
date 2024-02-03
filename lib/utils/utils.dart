@@ -4,17 +4,16 @@ import 'package:intl/intl.dart' as intl;
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
-import 'package:quran_ayat/features/challenge/domain/enums/quran_question_status_enum.dart';
 import 'package:uuid/uuid.dart';
 
 import '../features/challenge/domain/enums/quran_answer_status_enum.dart';
+import '../features/challenge/domain/enums/quran_question_status_enum.dart';
 import '../features/newAyat/data/surah_index.dart';
 import '../features/settings/domain/settings_manager.dart';
 import '../misc/enums/quran_status_enum.dart';
 import '../models/qr_word_model.dart';
 
 class QuranUtils {
-
   static String formattedDate(int timeMs) {
     DateTime now = DateTime.now();
     DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));

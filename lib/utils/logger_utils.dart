@@ -23,9 +23,15 @@ class QuranLogger {
     analytics.logEvent(name: event);
   }
 
-  static void logAnalyticsWithParams(String event, Map<String, Object>? params,) {
+  static void logAnalyticsWithParams(
+    String event,
+    Map<String, Object>? params,
+  ) {
     FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-    analytics.logEvent(name: event, parameters: params,);
+    analytics.logEvent(
+      name: event,
+      parameters: params,
+    );
   }
 }
 

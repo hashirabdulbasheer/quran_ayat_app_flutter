@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
-import 'package:quran_ayat/features/newAyat/data/quran_data.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+
+import '../../data/quran_data.dart';
+import '../../data/surah_index.dart';
 
 typedef BookmarkState = SurahIndex;
 

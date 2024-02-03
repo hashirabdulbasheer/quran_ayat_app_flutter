@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/misc/router/router_utils.dart';
 
+import '../../../../../misc/router/router_utils.dart';
 import '../../../domain/models/quran_question.dart';
 import 'quran_submission_answer_item_widget.dart';
 import 'quran_title_with_background.dart';

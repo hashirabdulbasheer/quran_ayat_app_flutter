@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:quran_ayat/misc/router/router_utils.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/router/router_utils.dart';
 import '../../../utils/logger_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/models/quran_question.dart';
