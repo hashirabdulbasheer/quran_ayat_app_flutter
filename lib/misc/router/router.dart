@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:quran_ayat/features/challenge/domain/models/quran_question.dart';
 import 'package:redux/redux.dart';
 
 import '../../features/auth/presentation/quran_login_screen.dart';
 import '../../features/auth/presentation/quran_signup_screen.dart';
 import '../../features/challenge/presentation/my_challenge_submissions_screen.dart';
 import '../../features/challenge/presentation/quran_challenge_display_screen.dart';
+import '../../features/challenge/presentation/quran_create_answer_screen.dart';
 import '../../features/contextList/presentation/quran_context_list_screen.dart';
 import '../../features/core/domain/app_state/app_state.dart';
 import '../../features/home/presentation/quran_home_screen.dart';
@@ -69,6 +71,12 @@ class QuranRoutes {
       case '/mySubmissions':
         return MaterialPageRoute<void>(
           builder: (_) => const QuranMyChallengeSubmissionsScreen(),
+        );
+
+      case '/createChallenge':
+        final question = settings.arguments as QuranQuestion;
+        return MaterialPageRoute<void>(
+          builder: (_) => QuranCreateChallengeScreen(question: question,),
         );
 
       case '/challenge':

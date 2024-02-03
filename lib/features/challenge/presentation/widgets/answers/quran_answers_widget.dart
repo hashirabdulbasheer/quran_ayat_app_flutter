@@ -9,7 +9,6 @@ import '../../../../auth/domain/auth_factory.dart';
 import '../../../../core/domain/app_state/app_state.dart';
 import '../../../../core/presentation/shimmer.dart';
 import '../../../domain/models/quran_question.dart';
-import '../../quran_create_answer_screen.dart';
 import 'quran_answers_body_widget.dart';
 
 class QuranAnswersWidget extends StatefulWidget {
@@ -104,14 +103,11 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
       _goToLoginScreen();
     } else {
       if (question != null) {
-        Navigator.push<void>(
+        Navigator.pushNamed(
           context,
-          MaterialPageRoute(
-            builder: (context) => QuranCreateChallengeScreen(
-              question: question,
-            ),
-          ),
-        ).then((value) {});
+          "/createChallenge",
+          arguments: question,
+        );
         QuranLogger.logAnalytics("answer-add-screen");
       } else {
         QuranUtils.showMessage(
