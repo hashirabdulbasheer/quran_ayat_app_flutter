@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '../../../misc/router/router_utils.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
 import '../../core/domain/app_state/app_state.dart';
@@ -359,10 +360,7 @@ class _QuranAyatDisplayTagsWidgetState
   ///
 
   void _goToLoginScreen() {
-    Navigator.pushNamed(
-      context,
-      "/login",
-    ).then((value) => setState(() {}));
+    QuranRouter.of(context).routeToLogin().then((value) => setState(() {}));
   }
 
   void _goToViewTagsScreen() {

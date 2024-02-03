@@ -23,31 +23,33 @@ import '../../features/tags/domain/entities/quran_tag.dart';
 import '../../features/tags/presentation/quran_results_screen.dart';
 import '../../features/tags/presentation/quran_view_tags_screen.dart';
 import '../../models/qr_user_model.dart';
+import 'quran_router_enum.dart';
 
 class QuranRoutes {
   static PageRoute<dynamic> getPageRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/':
+    QuranScreen screen = screenFromRouteString(settings.name ?? "");
+    switch (screen) {
+      case QuranScreen.root:
         return MaterialPageRoute<void>(
           builder: (_) => const QuranNewAyatScreen(),
         );
 
-      case '/home':
+      case QuranScreen.home:
         return MaterialPageRoute<void>(
           builder: (_) => const QuranHomeScreen(),
         );
 
-      case '/signup':
+      case QuranScreen.signup:
         return MaterialPageRoute<void>(
           builder: (_) => const QuranSignUpScreen(),
         );
 
-      case '/login':
+      case QuranScreen.login:
         return MaterialPageRoute<void>(
           builder: (_) => const QuranLoginScreen(),
         );
 
-      case '/context':
+      case QuranScreen.context:
         final args = settings.arguments as Map<String, dynamic>;
         String title = args["title"] as String;
         SurahIndex index = args["index"] as SurahIndex;
@@ -58,7 +60,7 @@ class QuranRoutes {
           ),
         );
 
-      case '/createNote':
+      case QuranScreen.createNote:
         final args = settings.arguments as Map<String, dynamic>;
         QuranNote? note = args["note"] as QuranNote?;
         SurahIndex index = args["index"] as SurahIndex;
@@ -69,18 +71,18 @@ class QuranRoutes {
           ),
         );
 
-      case '/viewTags':
+      case QuranScreen.viewTags:
         final user = settings.arguments as QuranUser;
         return MaterialPageRoute<void>(
           builder: (_) => QuranViewTagsScreen(user: user),
         );
 
-      case '/mySubmissions':
+      case QuranScreen.mySubmissions:
         return MaterialPageRoute<void>(
           builder: (_) => const QuranMyChallengeSubmissionsScreen(),
         );
 
-      case '/createChallenge':
+      case QuranScreen.createChallenge:
         final question = settings.arguments as QuranQuestion;
         return MaterialPageRoute<void>(
           builder: (_) => QuranCreateChallengeScreen(
@@ -88,25 +90,25 @@ class QuranRoutes {
           ),
         );
 
-      case '/createQuestion':
+      case QuranScreen.createQuestion:
         return MaterialPageRoute<void>(
           builder: (_) => const QuranCreateQuestionScreen(),
         );
 
-      case '/challenge':
+      case QuranScreen.challenge:
         final store = settings.arguments as Store<AppState>;
         return MaterialPageRoute<void>(
           builder: (_) => QuranChallengeDisplayScreen(store: store),
         );
 
-      case '/confirmation':
+      case QuranScreen.confirmation:
         final answerId = settings.arguments as String;
         return MaterialPageRoute<void>(
           builder: (_) =>
               QuranAnswerSubmissionConfirmationScreen(answerId: answerId),
         );
 
-      case '/editAnswer':
+      case QuranScreen.editAnswer:
         final args = settings.arguments as Map<String, dynamic>;
         int questionId = args["questionId"] as int;
         QuranAnswer answer = args["answer"] as QuranAnswer;
@@ -117,7 +119,7 @@ class QuranRoutes {
           ),
         );
 
-      case '/message':
+      case QuranScreen.message:
         final args = settings.arguments as Map<String, dynamic>;
         String title = args["title"] as String;
         String message = args["message"] as String;
@@ -128,7 +130,7 @@ class QuranRoutes {
           ),
         );
 
-      case '/tagResults':
+      case QuranScreen.tagResults:
         final tag = settings.arguments as QuranTag;
         return MaterialPageRoute<void>(
           builder: (_) =>

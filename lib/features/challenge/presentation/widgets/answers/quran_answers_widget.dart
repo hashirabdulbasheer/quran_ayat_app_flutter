@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 import '../../../../../misc/design/design_system.dart';
+import '../../../../../misc/router/router_utils.dart';
 import '../../../../../models/qr_user_model.dart';
 import '../../../../../utils/logger_utils.dart';
 import '../../../../../utils/utils.dart';
@@ -88,10 +89,7 @@ class _QuranAnswersWidgetState extends State<QuranAnswersWidget> {
   }
 
   void _goToLoginScreen() {
-    Navigator.pushNamed(
-      context,
-      "/login",
-    ).then((value) => setState(() {}));
+    QuranRouter.of(context).routeToLogin().then((value) => setState(() {}));
     QuranLogger.logAnalytics("answer-add-login");
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '../../../../misc/router/router_utils.dart';
 import '../../../../models/qr_user_model.dart';
 import '../../../../utils/logger_utils.dart';
 import '../../../../utils/utils.dart';
@@ -176,10 +177,7 @@ class _QuranAyatDisplayNotesWidgetState
   }
 
   void _goToLoginScreen() {
-    Navigator.pushNamed(
-      context,
-      "/login",
-    ).then((value) => setState(() {}));
+    QuranRouter.of(context).routeToLogin().then((value) => setState(() {}));
   }
 
   void _goToCreateNoteScreen({QuranNote? note}) {
