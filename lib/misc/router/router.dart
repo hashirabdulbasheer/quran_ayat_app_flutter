@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
 import '../../features/auth/presentation/quran_login_screen.dart';
 import '../../features/auth/presentation/quran_signup_screen.dart';
 import '../../features/contextList/presentation/quran_context_list_screen.dart';
 import '../../features/home/presentation/quran_home_screen.dart';
+import '../../features/newAyat/data/surah_index.dart';
 import '../../features/newAyat/presentation/quran_new_ayat_screen.dart';
 import '../../features/notes/domain/entities/quran_note.dart';
 import '../../features/notes/presentation/quran_create_notes_screen.dart';
+import '../../features/tags/presentation/quran_view_tags_screen.dart';
+import '../../models/qr_user_model.dart';
 
 class QuranRoutes {
   static PageRoute<dynamic> getPageRoute(RouteSettings settings) {
@@ -52,6 +54,12 @@ class QuranRoutes {
             note: note,
             index: index,
           ),
+        );
+
+      case '/viewTags':
+        final user = settings.arguments as QuranUser;
+        return MaterialPageRoute<void>(
+          builder: (_) => QuranViewTagsScreen(user: user),
         );
 
       default:

@@ -9,7 +9,6 @@ import '../../core/presentation/shimmer.dart';
 import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_tag.dart';
 import '../domain/redux/actions/actions.dart';
-import 'quran_view_tags_screen.dart';
 
 class QuranAyatDisplayTagsWidget extends StatefulWidget {
   final SurahIndex currentIndex;
@@ -372,13 +371,10 @@ class _QuranAyatDisplayTagsWidgetState
       return;
     }
 
-    Navigator.push<void>(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => QuranViewTagsScreen(
-          user: user,
-        ),
-      ),
+      "/viewTags",
+      arguments: user,
     ).then((value) {
       setState(() {});
     });
