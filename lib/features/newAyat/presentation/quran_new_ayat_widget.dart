@@ -257,8 +257,11 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// Notes
               if (store.state.appMode == QuranAppMode.advanced)
-                QuranAyatDisplayNotesWidget(
-                  currentIndex: currentIndex,
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: QuranAyatDisplayNotesWidget(
+                    currentIndex: currentIndex,
+                  ),
                 ),
 
               const SizedBox(height: 80),
