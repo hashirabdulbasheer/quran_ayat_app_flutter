@@ -6,7 +6,6 @@ import '../../../utils/logger_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
 import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
-import 'quran_challenge_display_screen.dart';
 
 class QuranQuestionsListScreen extends StatelessWidget {
   const QuranQuestionsListScreen({Key? key}) : super(key: key);
@@ -115,12 +114,11 @@ class QuranQuestionsListScreen extends StatelessWidget {
     store.dispatch(
       SelectCurrentQuestionAction(questionId: questionId),
     );
-    Navigator.push<void>(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => QuranChallengeDisplayScreen(store: store),
-      ),
-    ).then((value) {});
+      "/challenge",
+      arguments: store,
+    );
     QuranLogger.logAnalyticsWithParams(
       "question-tap",
       {"questionId": questionId},

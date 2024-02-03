@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:quran_ayat/features/challenge/presentation/my_challenge_submissions_screen.dart';
 
 import 'widgets/create/quran_single_action_button_widget.dart';
 
@@ -86,14 +85,12 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
                   onPressed: () => {
                     /// dismiss confirmation screen
                     Navigator.of(context).pop(),
+
                     /// navigate to my submissions list screen
-                    Navigator.push<void>(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            const QuranMyChallengeSubmissionsScreen(),
-                      ),
-                    ).then((value) {}),
+                      "/mySubmissions",
+                    ),
                   },
                 ),
               ],
