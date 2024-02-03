@@ -34,15 +34,7 @@ class QuranRoutes {
     /// check for url params
     /// if params present then display home or aya
     if (_isQueryParamsPresentInUrl()) {
-      if (isChallengeEnabled) {
-        return MaterialPageRoute<void>(
-          builder: (_) => const QuranHomeScreen(),
-        );
-      }
-
-      return MaterialPageRoute<void>(
-        builder: (_) => const QuranNewAyatScreen(),
-      );
+      return _homeRoute(isChallengeEnabled);
     }
 
     QuranScreen screen = screenFromRouteString(settings.name ?? "");
@@ -82,7 +74,7 @@ class QuranRoutes {
             ),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       case QuranScreen.createNote:
         try {
@@ -97,7 +89,7 @@ class QuranRoutes {
             ),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       case QuranScreen.viewTags:
         try {
@@ -107,7 +99,7 @@ class QuranRoutes {
             builder: (_) => QuranViewTagsScreen(user: user),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       case QuranScreen.mySubmissions:
         return MaterialPageRoute<void>(
@@ -124,7 +116,7 @@ class QuranRoutes {
             ),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       case QuranScreen.createQuestion:
         return MaterialPageRoute<void>(
@@ -139,7 +131,7 @@ class QuranRoutes {
             builder: (_) => QuranChallengeDisplayScreen(store: store),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       case QuranScreen.confirmation:
         try {
@@ -150,7 +142,7 @@ class QuranRoutes {
                 QuranAnswerSubmissionConfirmationScreen(answerId: answerId),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       case QuranScreen.editAnswer:
         try {
@@ -165,7 +157,7 @@ class QuranRoutes {
             ),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       case QuranScreen.message:
         try {
@@ -180,7 +172,7 @@ class QuranRoutes {
             ),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       case QuranScreen.tagResults:
         try {
@@ -192,10 +184,10 @@ class QuranRoutes {
             ),
           );
         } catch (_) {}
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
 
       default:
-        return _errorRoute();
+        return _homeRoute(isChallengeEnabled);
     }
   }
 
@@ -210,11 +202,25 @@ class QuranRoutes {
     return false;
   }
 
+  /*
   static PageRoute<dynamic> _errorRoute() {
     return MaterialPageRoute<void>(
       builder: (_) => const Scaffold(
         body: Center(child: Text("Error page not found!")),
       ),
+    );
+  }
+   */
+
+  static PageRoute<dynamic> _homeRoute(bool isChallengeEnabled) {
+    if (isChallengeEnabled) {
+      return MaterialPageRoute<void>(
+        builder: (_) => const QuranHomeScreen(),
+      );
+    }
+
+    return MaterialPageRoute<void>(
+      builder: (_) => const QuranNewAyatScreen(),
     );
   }
 }
