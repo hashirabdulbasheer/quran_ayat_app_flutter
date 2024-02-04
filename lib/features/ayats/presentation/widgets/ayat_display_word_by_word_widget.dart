@@ -14,11 +14,14 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return QuranFontScalerWidget(body: _body);
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: QuranFontScalerWidget(body: _body),
+    );
   }
 
   Widget _body(
-    BuildContext context,
+    BuildContext _,
     double fontScale,
   ) {
     return Semantics(

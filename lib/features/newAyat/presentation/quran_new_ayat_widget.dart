@@ -158,14 +158,14 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                 currentIndex: currentIndex,
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Directionality(
-                      textDirection: TextDirection.ltr,
-                      child: TextButton(
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      TextButton(
                         onPressed: () =>
                             store.dispatch(ToggleHeaderVisibilityAction()),
                         child: Text(
@@ -173,32 +173,32 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           style: QuranDS.textTitleSmallLight,
                         ),
                       ),
-                    ),
-                    IconButton(
-                      tooltip: "Context aya list view",
-                      onPressed: () => _navigateToContextListScreen(
-                        store,
-                        context,
+                      IconButton(
+                        tooltip: "Context aya list view",
+                        onPressed: () => _navigateToContextListScreen(
+                          store,
+                          context,
+                        ),
+                        icon: QuranDS.listIconLightSmall,
                       ),
-                      icon: QuranDS.listIconLightSmall,
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      tooltip: "Increase font size",
-                      onPressed: () => _incrementFontSize(store),
-                      icon: QuranDS.addIconLightSmall,
-                    ),
-                    IconButton(
-                      tooltip: "Decrease font size",
-                      onPressed: () => _decrementFontSize(store),
-                      icon: QuranDS.removeIconLightSmall,
-                    ),
-                    IconButton(
-                      tooltip: "Reset font size",
-                      onPressed: () => _resetFontSize(store),
-                      icon: QuranDS.refreshIconLightSmall,
-                    ),
-                  ],
+                      const Spacer(),
+                      IconButton(
+                        tooltip: "Increase font size",
+                        onPressed: () => _incrementFontSize(store),
+                        icon: QuranDS.addIconLightSmall,
+                      ),
+                      IconButton(
+                        tooltip: "Decrease font size",
+                        onPressed: () => _decrementFontSize(store),
+                        icon: QuranDS.removeIconLightSmall,
+                      ),
+                      IconButton(
+                        tooltip: "Reset font size",
+                        onPressed: () => _resetFontSize(store),
+                        icon: QuranDS.refreshIconLightSmall,
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
@@ -225,19 +225,19 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// transliterationWidget if enabled
               transliteration != null
-                  ? QuranAyatDisplayTransliterationWidget(
-                      transliteration: transliteration,
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: QuranAyatDisplayTransliterationWidget(
+                        transliteration: transliteration,
+                      ),
                     )
                   : Container(),
 
               /// translation widget
               for (NQTranslation type in translations.keys)
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: QuranAyatDisplayTranslationWidget(
-                    translation: translations[type] ?? "",
-                    translationType: type,
-                  ),
+                QuranAyatDisplayTranslationWidget(
+                  translation: translations[type] ?? "",
+                  translationType: type,
                 ),
 
               /// audio controls
@@ -257,11 +257,8 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// Notes
               if (store.state.appMode == QuranAppMode.advanced)
-                Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: QuranAyatDisplayNotesWidget(
-                    currentIndex: currentIndex,
-                  ),
+                QuranAyatDisplayNotesWidget(
+                  currentIndex: currentIndex,
                 ),
 
               const SizedBox(height: 80),

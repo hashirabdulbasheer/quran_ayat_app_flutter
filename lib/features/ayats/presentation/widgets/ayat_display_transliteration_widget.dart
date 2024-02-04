@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../misc/design/design_system.dart';
 import 'full_ayat_row_widget.dart';
 
 class QuranAyatDisplayTransliterationWidget extends StatelessWidget {
@@ -14,8 +15,15 @@ class QuranAyatDisplayTransliterationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(
-          height: 20,
+        const Row(
+          children: [
+            Expanded(
+              child: Text(
+                "Transliteration",
+                style: QuranDS.textTitleVerySmallLight,
+              ),
+            ),
+          ],
         ),
         QuranFullAyatRowWidget(
           text: transliteration,

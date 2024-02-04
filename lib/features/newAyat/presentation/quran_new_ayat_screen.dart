@@ -34,43 +34,40 @@ class _QuranNewAyatScreenState extends State<QuranNewAyatScreen> {
         return Container();
       }
 
-      return Directionality(
-        textDirection: TextDirection.rtl,
-        child: SafeArea(
-          bottom: true,
-          child: Scaffold(
-            drawer: QuranNavDrawer(
-              user: store.state.user,
-              bookmarksManager: QuranBookmarksManager(
-                localEngine: QuranLocalBookmarksEngine(),
-              ),
+      return SafeArea(
+        bottom: true,
+        child: Scaffold(
+          drawer: QuranNavDrawer(
+            user: store.state.user,
+            bookmarksManager: QuranBookmarksManager(
+              localEngine: QuranLocalBookmarksEngine(),
             ),
-            // onDrawerChanged: null,
-            bottomSheet: QuranHomeBottomSheetWidget(
-              store: store,
-              selectedTab: QuranHomeScreenBottomTabsEnum.reader,
-            ),
-            appBar: AppBar(
-              centerTitle: true,
-              title: const Text("Quran"),
-              actions: [
-                IconButton(
-                  tooltip: "Share",
-                  onPressed: () => store.dispatch(ShareAyaAction()),
-                  icon: const Icon(Icons.share),
-                ),
-                IconButton(
-                  tooltip: "Random verse",
-                  onPressed: () => store.dispatch(RandomAyaAction()),
-                  icon: const Icon(Icons.auto_awesome_outlined),
-                ),
-                QuranBookmarkIconWidget(
-                  currentIndex: currentIndex,
-                ),
-              ],
-            ),
-            body: const QuranNewAyatReaderWidget(),
           ),
+          // onDrawerChanged: null,
+          bottomSheet: QuranHomeBottomSheetWidget(
+            store: store,
+            selectedTab: QuranHomeScreenBottomTabsEnum.reader,
+          ),
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text("Quran"),
+            actions: [
+              IconButton(
+                tooltip: "Share",
+                onPressed: () => store.dispatch(ShareAyaAction()),
+                icon: const Icon(Icons.share),
+              ),
+              IconButton(
+                tooltip: "Random verse",
+                onPressed: () => store.dispatch(RandomAyaAction()),
+                icon: const Icon(Icons.auto_awesome_outlined),
+              ),
+              QuranBookmarkIconWidget(
+                currentIndex: currentIndex,
+              ),
+            ],
+          ),
+          body: const QuranNewAyatReaderWidget(),
         ),
       );
     });

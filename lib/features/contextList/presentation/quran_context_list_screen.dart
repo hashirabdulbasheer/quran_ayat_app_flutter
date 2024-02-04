@@ -78,7 +78,7 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
       onTap: () => _onListTileTap(index),
       style: null,
       title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
             "${index + 1} ",
@@ -95,21 +95,24 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
           const SizedBox(
             width: 5,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                child: Text(
-                  _ayaText(index),
-                  textScaleFactor: fontScale,
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontFamily: QuranFontFamily.arabic.rawString,
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    _ayaText(index),
+                    textScaleFactor: fontScale,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontFamily: QuranFontFamily.arabic.rawString,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(
             height: 10,
