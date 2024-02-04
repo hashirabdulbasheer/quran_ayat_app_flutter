@@ -39,8 +39,9 @@ jobs:
           username: ${{secrets.SERVER_USERNAME}}
           password: ${{secrets.SERVER_PASSWORD}}
           port: ${{secrets.SERVER_PORT}}
-          source: "./build/web/*"
+          strip_components: 2
           overwrite: true
+          source: "./build/web/*"
           target: "/var/www/html/uxquran.com/"
       - name: Send mail
         uses: dawidd6/action-send-mail@v3
