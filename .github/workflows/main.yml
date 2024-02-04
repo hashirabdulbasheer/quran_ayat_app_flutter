@@ -31,20 +31,6 @@ jobs:
       - name: Run Build Web
         run: flutter build web --release --base-href="/" --web-renderer=canvaskit
 
-
-      - name: Deploy Github        
-        run: |
-          mkdir public
-          cd public
-          git config --global user.email hashir.abdulbasheer@gmail.com
-          git config --global user.name hashirabdulbasheer
-          git clone https://${{secrets.commit_secret}}@github.com/hashirabdulbasheer/hashirabdulbasheer.github.io.git
-          cd hashirabdulbasheer.github.io/
-          cp -R ../../build/web/* apps/quran-ayat/
-          date | cat > apps/quran-ayat/lastupdate.txt
-          git add --all .
-          git commit -am "update: Quran Ayat app"
-          git push origin main
       - name: Deploy Server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -52,7 +38,7 @@ jobs:
           username: ${{secrets.SERVER_USERNAME}}
           password: ${{secrets.SERVER_PASSWORD}}
           port: ${{secrets.SERVER_PORT}}
-          source: "apps/quran-ayat/*"
+          source: "../../build/web/*"
           target: "/var/www/html/uxquran.com/"
       - name: Clean
         run: |
