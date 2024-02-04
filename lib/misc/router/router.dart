@@ -24,6 +24,7 @@ import '../../features/tags/domain/entities/quran_tag.dart';
 import '../../features/tags/presentation/quran_results_screen.dart';
 import '../../features/tags/presentation/quran_view_tags_screen.dart';
 import '../../models/qr_user_model.dart';
+import '../constants/string_constants.dart';
 import 'quran_router_enum.dart';
 
 class QuranRoutes {
@@ -35,12 +36,6 @@ class QuranRoutes {
     /// if params present then display home or aya
     if (_isQueryParamsPresentInUrl()) {
       return _homeRoute(isChallengeEnabled);
-    } else {
-      // check for new format
-      List<String> paths = Uri.base.path.split("/");
-      if (paths.length == 2 || paths.length == 3) {
-        return _homeRoute(isChallengeEnabled);
-      }
     }
 
     QuranScreen screen = screenFromRouteString(settings.name ?? "");
@@ -199,8 +194,14 @@ class QuranRoutes {
 
   static bool _isQueryParamsPresentInUrl() {
     if (kIsWeb) {
+      // legacy format
       final String? urlQuerySuraIndex = Uri.base.queryParameters["sura"];
       if (urlQuerySuraIndex != null) {
+        return true;
+      }
+      // new format - /18, /18/100
+      final newFormatRegEx = RegExp(QuranStrings.urlParamsNewFormatRegEx);
+      if(newFormatRegEx.hasMatch(Uri.base.path)) {
         return true;
       }
     }

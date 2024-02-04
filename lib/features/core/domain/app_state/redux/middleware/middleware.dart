@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../../../misc/constants/string_constants.dart';
 import '../../../../../../models/qr_user_model.dart';
 import '../../../../../../utils/logger_utils.dart';
 import '../../../../../auth/domain/auth_factory.dart';
@@ -48,10 +49,20 @@ void appStateMiddleware(
 ///   /18
 ///   /18/100
 bool _handleUrlPathsForWeb(Store<AppState> store) {
-  /// url parameters
-  final String? urlQuerySuraIndex = Uri.base.queryParameters["sura"];
-  final String? urlQueryAyaIndex = Uri.base.queryParameters["aya"];
+  bool oldFormatResult = _handleUrlPathsForWebUsingOldFormat(store);
+  if (oldFormatResult) {
+    return true;
+  }
+
+  // old format didnt match, try new
+  return _handleUrlPathsForWebUsingNewFormat(store);
+}
+
+/// sura=18, sura=18&aya=100
+bool _handleUrlPathsForWebUsingOldFormat(Store<AppState> store) {
   if (kIsWeb) {
+    final String? urlQuerySuraIndex = Uri.base.queryParameters["sura"];
+    final String? urlQueryAyaIndex = Uri.base.queryParameters["aya"];
     String? suraIndex = urlQuerySuraIndex;
     String? ayaIndex = urlQueryAyaIndex;
     // not a search url
@@ -62,7 +73,7 @@ bool _handleUrlPathsForWeb(Store<AppState> store) {
         ayaIndex.isNotEmpty) {
       // have more than one
       // the last two paths should be surah/ayat format
-      QuranLogger.logAnalytics("url-sura-aya");
+      QuranLogger.logAnalytics("url-sura-aya-old");
 
       return _handleParams(
         store,
@@ -72,33 +83,45 @@ bool _handleUrlPathsForWeb(Store<AppState> store) {
     } else if (suraIndex != null && suraIndex.isNotEmpty) {
       // has only one
       // the last path will be surah index
-      QuranLogger.logAnalytics("url-sura-aya");
+      QuranLogger.logAnalytics("url-sura-old");
 
       return _handleParams(
         store,
         suraIndex,
         "1",
       );
-    } else {
-      // check for new format
-      List<String> paths = Uri.base.path.trim().split("/");
-      if (paths.length == 2) {
-        QuranLogger.logAnalytics("url-aya");
+    }
+  }
+
+  return false;
+}
+
+/// /18, /18/100
+bool _handleUrlPathsForWebUsingNewFormat(Store<AppState> store) {
+  if (kIsWeb) {
+    // check for new format
+    final newFormatRegEx = RegExp(QuranStrings.urlParamsNewFormatRegEx);
+    if (newFormatRegEx.hasMatch(Uri.base.path)) {
+      List<String> paths = Uri.base.pathSegments;
+      if (paths.length == 1) {
+        QuranLogger.logAnalytics("url-sura-new");
 
         return _handleParams(
           store,
-          paths[1],
+          paths.first,
           "1",
         );
-      } else if (paths.length == 3) {
-        QuranLogger.logAnalytics("url-aya");
+      } else if (paths.length == 2) {
+        QuranLogger.logAnalytics("url-sura-aya-new");
 
         return _handleParams(
           store,
+          paths.first,
           paths[1],
-          paths[2],
         );
       }
+
+      return true;
     }
   }
 
