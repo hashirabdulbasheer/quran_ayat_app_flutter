@@ -93,7 +93,7 @@ class QuranUtils {
     // response.write("${arabicSurah.aya[index.aya].text}\n\n");
     response.write("${translationSurah.aya[index.aya].text}\n");
     response.write(
-      "http://uxquran.com/apps/quran-ayat/${index.human.sura}/${index.human.aya}\n",
+      "http://uxquran.com/apps/quran-ayat/?sura=${index.human.sura}&aya=${index.human.aya}\n",
     );
 
     return response.toString();
