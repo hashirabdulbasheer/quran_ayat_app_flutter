@@ -31,6 +31,9 @@ jobs:
       - name: Run Build Web
         run: flutter build web --release --base-href="/" --web-renderer=canvaskit
 
+      - name: Print
+        run: ls -la  ./../build/web/       
+
       - name: Deploy Server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -39,11 +42,8 @@ jobs:
           password: ${{secrets.SERVER_PASSWORD}}
           port: ${{secrets.SERVER_PORT}}
           source: "../../build/web/*"
+          overwrite: true
           target: "/var/www/html/uxquran.com/"
-      - name: Clean
-        run: |
-          cd ../../
-          rm -rf public
       - name: Send mail
         uses: dawidd6/action-send-mail@v3
         with:
