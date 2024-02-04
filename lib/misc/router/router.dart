@@ -34,7 +34,7 @@ class QuranRoutes {
   ) {
     /// check for url params
     /// if params present then display home or aya
-    if (_isQueryParamsPresentInUrl()) {
+    if (settings.name == "/" && _isQueryParamsPresentInUrl()) {
       return _homeRoute(isChallengeEnabled);
     }
 

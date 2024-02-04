@@ -48,7 +48,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
                   child: ElevatedButton(
                     style: QuranDS.elevatedButtonStyle,
                     onPressed: () => _moveToPreviousAction(store),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back,
                       color: QuranDS.primaryColor,
                     ),
@@ -62,7 +62,7 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
                   child: ElevatedButton(
                     style: QuranDS.elevatedButtonStyle,
                     onPressed: () => _moveToNextAction(store),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_forward,
                       color: QuranDS.primaryColor,
                     ),
