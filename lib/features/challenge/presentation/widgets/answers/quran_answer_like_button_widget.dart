@@ -51,7 +51,7 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
               numLikes > 0
                   ? Text(
                       "($numLikes)",
-                      style: QuranDS.textTitleSmall,
+                      style: QuranDS.textTitleSmallLight,
                     )
                   : const Text(""),
           ],
