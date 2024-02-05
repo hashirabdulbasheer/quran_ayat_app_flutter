@@ -21,57 +21,62 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     String nextTooltip = "Next aya";
     String previousTooltip = "Previous aya";
-
+    TextDirection textDirection = TextDirection.ltr;
     if (selectedTab == QuranHomeScreenBottomTabsEnum.reader) {
       nextTooltip = "Next aya";
       previousTooltip = "Previous aya";
+      // reader buttons in RTL
+      textDirection = TextDirection.rtl;
     } else {
       nextTooltip = "Next challenge";
       previousTooltip = "Previous challenge";
     }
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(
-        10,
-        10,
-        10,
-        10,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Tooltip(
-                  message: previousTooltip,
-                  child: ElevatedButton(
-                    style: QuranDS.elevatedButtonStyle,
-                    onPressed: () => _moveToPreviousAction(store),
-                    child: const Icon(
-                      Icons.arrow_back,
-                      color: QuranDS.primaryColor,
+    return Directionality(
+      textDirection: textDirection,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          10,
+          10,
+          10,
+          10,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Tooltip(
+                    message: previousTooltip,
+                    child: ElevatedButton(
+                      style: QuranDS.elevatedButtonStyle,
+                      onPressed: () => _moveToPreviousAction(store),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: QuranDS.primaryColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Tooltip(
-                  message: nextTooltip,
-                  child: ElevatedButton(
-                    style: QuranDS.elevatedButtonStyle,
-                    onPressed: () => _moveToNextAction(store),
-                    child: const Icon(
-                      Icons.arrow_forward,
-                      color: QuranDS.primaryColor,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Tooltip(
+                    message: nextTooltip,
+                    child: ElevatedButton(
+                      style: QuranDS.elevatedButtonStyle,
+                      onPressed: () => _moveToNextAction(store),
+                      child: const Icon(
+                        Icons.arrow_forward,
+                        color: QuranDS.primaryColor,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
