@@ -173,12 +173,15 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      TextButton(
-                        onPressed: () =>
-                            store.dispatch(ToggleHeaderVisibilityAction()),
-                        child: Text(
-                          "${currentIndex.human.sura}:${currentIndex.human.aya}", // RTL
-                          style: QuranDS.textTitleSmallLight,
+                      Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: TextButton(
+                          onPressed: () =>
+                              store.dispatch(ToggleHeaderVisibilityAction()),
+                          child: Text(
+                            "${currentIndex.human.sura}:${currentIndex.human.aya}", // RTL
+                            style: QuranDS.textTitleSmallLight,
+                          ),
                         ),
                       ),
                       IconButton(
