@@ -5,6 +5,7 @@ import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/design/design_system.dart';
 import '../../../misc/enums/quran_status_enum.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/utils.dart';
@@ -201,6 +202,7 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
 
       AlertDialog alert = AlertDialog(
         title: const Text("Delete"),
+        backgroundColor: QuranDS.screenBackgroundLittleDarker,
         content: const Text("Are you sure?"),
         actions: [
           okButton,

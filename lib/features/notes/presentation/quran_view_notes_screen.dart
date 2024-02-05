@@ -5,6 +5,7 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../misc/design/design_system.dart';
 import '../../../misc/router/router_utils.dart';
 import '../../../models/qr_user_model.dart';
 import '../../core/domain/app_state/app_state.dart';
@@ -88,6 +89,9 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
                       itemAsString: (NQSurahTitle title) =>
                           "(${title.number}) ${title.transliterationEn}",
                       popupProps: PopupPropsMultiSelection.dialog(
+                        dialogProps: const DialogProps(
+                          backgroundColor: QuranDS.screenBackgroundLittleDarker,
+                        ),
                         showSearchBox: true,
                         itemBuilder: _customItem,
                         searchFieldProps: const TextFieldProps(

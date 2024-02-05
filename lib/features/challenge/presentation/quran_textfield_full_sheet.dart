@@ -32,6 +32,10 @@ class QuranFullTextFieldBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Text(
+                title,
+                style: QuranDS.textTitleLargeBold,
+              ),
               TextButton(
                 onPressed: () => {
                   Navigator.of(context).pop(),
@@ -40,10 +44,6 @@ class QuranFullTextFieldBottomSheet extends StatelessWidget {
                   "Save",
                   style: QuranDS.textTitleLargeBold,
                 ),
-              ),
-              Text(
-                title,
-                style: QuranDS.textTitleLargeBold,
               ),
             ],
           ),

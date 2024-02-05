@@ -112,6 +112,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
           title: const Text(
             'Create Tag',
           ),
+          backgroundColor: QuranDS.screenBackgroundLittleDarker,
           content: TextField(
             decoration: const InputDecoration(
               hintText: 'Enter tag',

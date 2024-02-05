@@ -179,6 +179,7 @@ class _QuranAyatDisplayTagsWidgetState
           title: const Text(
             'Select Tag',
           ),
+          backgroundColor: QuranDS.screenBackgroundLittleDarker,
           content: _addDialogTagSelectorField(),
           actions: <Widget>[
             TextButton(
@@ -210,6 +211,9 @@ class _QuranAyatDisplayTagsWidgetState
       items: _fetchAllTags(),
       popupProps: PopupPropsMultiSelection.menu(
         showSearchBox: true,
+        menuProps: const MenuProps(
+          backgroundColor: QuranDS.screenBackgroundLittleDarker,
+        ),
         emptyBuilder: (
           context,
           searchEntry,
@@ -294,6 +298,7 @@ class _QuranAyatDisplayTagsWidgetState
           title: const Text(
             'Remove Tag?',
           ),
+          backgroundColor: QuranDS.screenBackgroundLittleDarker,
           content: Text(
             "Are you sure that you want to remove - \"$selectedTag\"?",
           ),

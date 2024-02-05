@@ -44,6 +44,7 @@ class QuranAnswersListWidget extends StatelessWidget {
         int index,
       ) {
         return Card(
+          color: QuranDS.screenBackgroundLittleDarker,
           child: ListTile(
             onTap: () => _onAnswerTapped(
               context,
