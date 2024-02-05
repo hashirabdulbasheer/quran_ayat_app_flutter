@@ -35,8 +35,8 @@ class QuranSocialLoginButtons extends StatelessWidget {
 
   Future<UserCredential?> signInWithGoogle() async {
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
-    UserCredential _ =
-        await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    // UserCredential _ =
+    //     await FirebaseAuth.instance.signInWithPopup(googleProvider);
     await FirebaseAuth.instance.signInWithRedirect(googleProvider);
 
     return await FirebaseAuth.instance.getRedirectResult();
