@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/design/design_system.dart';
 import '../../../utils/logger_utils.dart';
 import '../../bookmark/data/bookmarks_local_impl.dart';
 import '../../bookmark/domain/bookmarks_manager.dart';
@@ -62,12 +63,14 @@ class _QuranHomeScreenState extends State<QuranHomeScreen> {
 
           /// BOTTOM TABS
           bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: QuranDS.screenBackground,
+            elevation: null,
             type: BottomNavigationBarType.fixed,
             currentIndex: store.state.challenge.selectedHomeScreenTab ==
                     QuranHomeScreenBottomTabsEnum.reader
                 ? 0
                 : 1,
-            selectedItemColor: Colors.blueGrey,
+            selectedItemColor: QuranDS.primaryColor,
             unselectedItemColor: Colors.black38,
             onTap: (value) => setState(() {
               if (value == 0) {

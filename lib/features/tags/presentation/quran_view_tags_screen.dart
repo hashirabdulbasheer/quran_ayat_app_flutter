@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../misc/design/design_system.dart';
 import '../../../misc/router/router_utils.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/utils.dart';
@@ -123,7 +124,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
               onPressed: () => Navigator.of(context).pop(),
             ),
             MaterialButton(
-              color: Colors.blueGrey,
+              color: QuranDS.primaryColor,
               textColor: Colors.white,
               child: const Text(
                 'Save',
