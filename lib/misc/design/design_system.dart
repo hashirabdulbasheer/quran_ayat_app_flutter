@@ -128,6 +128,13 @@ class QuranDS {
     color: QuranDS.veryLightTextColor,
     borderRadius: BorderRadius.all(Radius.circular(5)),
   );
+  static const BoxDecoration boxDecorationVeryLightBorderWithScreenBackground =
+      BoxDecoration(
+    border:
+        Border.fromBorderSide(BorderSide(color: QuranDS.veryLightTextColor)),
+    color: QuranDS.screenBackground,
+    borderRadius: BorderRadius.all(Radius.circular(5)),
+  );
 
   /// Color
   static const Color screenBackground = Color(0xFFEFFFE2);

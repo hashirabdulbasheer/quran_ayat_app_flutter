@@ -16,6 +16,7 @@ class QuranFullTextFieldBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: QuranDS.boxDecorationVeryLightBorderWithScreenBackground,
       height: MediaQuery.of(context).size.height - 50,
       padding: const EdgeInsets.only(
         left: 20,
