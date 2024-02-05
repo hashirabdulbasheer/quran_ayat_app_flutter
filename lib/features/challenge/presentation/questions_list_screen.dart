@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import '../../../misc/design/design_system.dart';
 import '../../../misc/router/router_utils.dart';
 import '../../../utils/logger_utils.dart';
 import '../../core/domain/app_state/app_state.dart';
@@ -30,7 +31,7 @@ class QuranQuestionsListScreen extends StatelessWidget {
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  color: Colors.black26,
+                  color: QuranDS.screenBackgroundLittleDarker,
                   child: const Text(
                     "Questions",
                     style: TextStyle(

@@ -16,6 +16,7 @@ class QuranFullTextFieldBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: QuranDS.boxDecorationVeryLightBorderWithScreenBackground,
       height: MediaQuery.of(context).size.height - 50,
       padding: const EdgeInsets.only(
         left: 20,
@@ -31,6 +32,10 @@ class QuranFullTextFieldBottomSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Text(
+                title,
+                style: QuranDS.textTitleLargeBold,
+              ),
               TextButton(
                 onPressed: () => {
                   Navigator.of(context).pop(),
@@ -39,10 +44,6 @@ class QuranFullTextFieldBottomSheet extends StatelessWidget {
                   "Save",
                   style: QuranDS.textTitleLargeBold,
                 ),
-              ),
-              Text(
-                title,
-                style: QuranDS.textTitleLargeBold,
               ),
             ],
           ),

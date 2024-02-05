@@ -66,6 +66,14 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
         store.dispatch(PreviousAyaAction());
       } else if (key == "Arrow Left" || key == " ") {
         store.dispatch(NextAyaAction());
+      } else if (key == 'Audio Volume Up') {
+        store.dispatch(PreviousAyaAction());
+      } else if (key == 'Audio Volume Down') {
+        store.dispatch(NextAyaAction());
+      } else if (key == 'Media Track Previous') {
+        store.dispatch(PreviousAyaAction());
+      } else if (key == 'Media Track Next') {
+        store.dispatch(NextAyaAction());
       }
     }
 
@@ -165,12 +173,15 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      TextButton(
-                        onPressed: () =>
-                            store.dispatch(ToggleHeaderVisibilityAction()),
-                        child: Text(
-                          "${currentIndex.human.sura}:${currentIndex.human.aya}", // RTL
-                          style: QuranDS.textTitleSmallLight,
+                      Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: TextButton(
+                          onPressed: () =>
+                              store.dispatch(ToggleHeaderVisibilityAction()),
+                          child: Text(
+                            "${currentIndex.human.sura}:${currentIndex.human.aya}", // RTL
+                            style: QuranDS.textTitleSmallLight,
+                          ),
                         ),
                       ),
                       IconButton(

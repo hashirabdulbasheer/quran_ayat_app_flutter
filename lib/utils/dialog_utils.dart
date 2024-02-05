@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../misc/design/design_system.dart';
+
 class DialogUtils {
   static Future<void> confirmationDialog(
     BuildContext context,
@@ -26,7 +28,7 @@ class DialogUtils {
               onPressed: () => Navigator.of(context).pop(),
             ),
             MaterialButton(
-              color: Colors.blueGrey,
+              color: QuranDS.primaryColor,
               textColor: Colors.white,
               child: Text(
                 actionButtonText,

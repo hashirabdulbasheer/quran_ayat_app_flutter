@@ -188,7 +188,7 @@ class _QuranAyatDisplayNotesWidgetState
         widget.currentIndex.sura,
         widget.currentIndex.aya,
       );
-      QuranNavigator.of(context).routeToCreateNote().then((value) {
+      QuranNavigator.of(context).routeToCreateNote(arguments: args).then((value) {
         setState(() {});
       });
       QuranLogger.logAnalytics("add_note");

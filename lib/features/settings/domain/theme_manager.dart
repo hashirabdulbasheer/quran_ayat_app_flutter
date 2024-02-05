@@ -3,25 +3,30 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../misc/design/design_system.dart';
+import '../../../utils/color_utils.dart';
+
 class QuranThemeManager {
   static final QuranThemeManager instance =
       QuranThemeManager._privateConstructor();
 
   ThemeData lightTheme = ThemeData(
-    primarySwatch: Colors.blueGrey,
-    primaryColor: Colors.blueGrey,
+    primarySwatch: MaterialColorGenerator.from(QuranDS.primaryColor),
+    primaryColor: QuranDS.appBarBackground,
+    scaffoldBackgroundColor: QuranDS.screenBackground,
     dividerColor: Colors.black26,
-    shadowColor: Colors.transparent,
+    shadowColor: QuranDS.appBarBackground,
+    dialogBackgroundColor: QuranDS.screenBackground,
     textSelectionTheme: TextSelectionThemeData(
-      selectionColor: Colors.blueGrey.withOpacity(0.5),
-      cursorColor: Colors.blueGrey,
-      selectionHandleColor: Colors.blueGrey,
+      selectionColor: QuranDS.appBarBackground.withOpacity(0.5),
+      cursorColor: QuranDS.appBarBackground,
+      selectionHandleColor: QuranDS.appBarBackground,
     ),
     appBarTheme: const AppBarTheme(
-      color: Colors.blueGrey,
+      color: Color(0xFF1E5A06),
       systemOverlayStyle: SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.blueGrey,
-        statusBarColor: Colors.blueGrey,
+        systemNavigationBarColor: QuranDS.appBarBackground,
+        statusBarColor: QuranDS.appBarBackground,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.light,
       ),

@@ -2,6 +2,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+import '../../../misc/design/design_system.dart';
 import '../../../misc/router/router_utils.dart';
 import '../../../models/qr_user_model.dart';
 import '../../auth/domain/auth_factory.dart';
@@ -178,6 +179,7 @@ class _QuranAyatDisplayTagsWidgetState
           title: const Text(
             'Select Tag',
           ),
+          backgroundColor: QuranDS.screenBackgroundLittleDarker,
           content: _addDialogTagSelectorField(),
           actions: <Widget>[
             TextButton(
@@ -185,7 +187,7 @@ class _QuranAyatDisplayTagsWidgetState
               onPressed: () => Navigator.of(context).pop(),
             ),
             MaterialButton(
-              color: Colors.blueGrey,
+              color: QuranDS.primaryColor,
               textColor: Colors.white,
               child: const Text(
                 'Save',
@@ -209,6 +211,9 @@ class _QuranAyatDisplayTagsWidgetState
       items: _fetchAllTags(),
       popupProps: PopupPropsMultiSelection.menu(
         showSearchBox: true,
+        menuProps: const MenuProps(
+          backgroundColor: QuranDS.screenBackgroundLittleDarker,
+        ),
         emptyBuilder: (
           context,
           searchEntry,
@@ -293,6 +298,7 @@ class _QuranAyatDisplayTagsWidgetState
           title: const Text(
             'Remove Tag?',
           ),
+          backgroundColor: QuranDS.screenBackgroundLittleDarker,
           content: Text(
             "Are you sure that you want to remove - \"$selectedTag\"?",
           ),
@@ -302,7 +308,7 @@ class _QuranAyatDisplayTagsWidgetState
               onPressed: () => Navigator.of(context).pop(),
             ),
             MaterialButton(
-              color: Colors.blueGrey,
+              color: QuranDS.primaryColor,
               textColor: Colors.white,
               child: const Text(
                 'Delete',

@@ -41,6 +41,9 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                   "(${title.number}) ${title.transliterationEn}",
               popupProps: PopupPropsMultiSelection.dialog(
                 showSearchBox: true,
+                dialogProps: const DialogProps(
+                  backgroundColor: QuranDS.screenBackgroundLittleDarker,
+                ),
                 itemBuilder: _customItem,
                 searchFieldProps: const TextFieldProps(
                   style: QuranDS.textTitleSmall,
@@ -80,6 +83,9 @@ class QuranAyatHeaderWidget extends StatelessWidget {
                   popupProps: PopupPropsMultiSelection.dialog(
                     showSearchBox: true,
                     itemBuilder: _customAyaItem,
+                    dialogProps: const DialogProps(
+                      backgroundColor: QuranDS.screenBackgroundLittleDarker,
+                    ),
                     searchFieldProps: const TextFieldProps(
                       style: QuranDS.textTitleSmall,
                     ),

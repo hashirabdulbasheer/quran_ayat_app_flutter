@@ -4,6 +4,7 @@ import 'package:redux/redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../misc/configs/app_config.dart';
+import '../../../misc/design/design_system.dart';
 import '../../../models/qr_response_model.dart';
 import '../../../models/qr_user_model.dart';
 import '../../../utils/utils.dart';
@@ -46,7 +47,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
     if (userParam != null) {
       /// Logged In
       return Theme(
-        data: Theme.of(context).copyWith(canvasColor: Colors.white),
+        data: Theme.of(context).copyWith(canvasColor: QuranDS.screenBackground),
         child: Drawer(
           child: QuranNavDrawerItemsWidget(
             items: [
@@ -134,7 +135,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
 
     /// Logged out
     return Theme(
-      data: Theme.of(context).copyWith(canvasColor: Colors.white),
+      data: Theme.of(context).copyWith(canvasColor: QuranDS.screenBackground),
       child: Drawer(
         child: QuranNavDrawerItemsWidget(
           items: [

@@ -34,7 +34,8 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
 
     return Directionality(
       textDirection: textDirection,
-      child: Padding(
+      child: Container(
+        color: QuranDS.screenBackground,
         padding: const EdgeInsets.fromLTRB(
           10,
           10,
