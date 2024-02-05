@@ -14,8 +14,7 @@ import 'misc/url/url_strategy.dart';
 const String appVersion = "v3.0.3";
 
 bool isChallengeBetaModeEnabled = RemoteConfigManager.instance
-        .get(RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled) &&
-    QuranAuthFactory.engine.getUser() != null;
+        .get(RemoteConfigFeatureFlagEnum.isChallengeScreenEnabled);
 
 void main() async {
   usePathUrlStrategy();
