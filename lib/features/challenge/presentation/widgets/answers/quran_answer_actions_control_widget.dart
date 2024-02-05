@@ -84,7 +84,8 @@ class _QuranAnswerActionControlWidgetState
 
   bool _isLikeButtonEnable() {
     // do not show like button if the answer was submitted by logged in user
-    if (widget.currentUser?.uid == widget.answer.userId) {
+    if (widget.currentUser?.uid == null ||
+        widget.currentUser?.uid == widget.answer.userId) {
       return false;
     }
 
