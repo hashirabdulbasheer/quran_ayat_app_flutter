@@ -1,5 +1,6 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
+import 'package:quran_ayat/misc/constants/string_constants.dart';
 
 import '../constants/feature_flag_constants.dart';
 import '../enums/quran_feature_flag_enum.dart';
@@ -17,6 +18,7 @@ class RemoteConfigManager {
   // Remote Flags
   bool isChallengesFeatureEnabled = false;
   bool isSocialMediaLoginEnabled = false;
+  String challengesHelpMessage = QuranStrings.defaultChallengeHelpMessage;
 
   Future<void> init() async {
     try {
@@ -45,6 +47,19 @@ class RemoteConfigManager {
 
       case RemoteConfigFeatureFlagEnum.isSocialMediaLoginEnabled:
         return isSocialMediaLoginEnabled;
+
+      default:
+        return false;
+    }
+  }
+
+  String getString(RemoteConfigFeatureFlagEnum flag) {
+    switch (flag) {
+      case RemoteConfigFeatureFlagEnum.challengesHelpMessage:
+        return challengesHelpMessage;
+
+      default:
+        return "";
     }
   }
 
@@ -54,9 +69,14 @@ class RemoteConfigManager {
         _remoteConfig.getBool(kEnableChallengesFeatureKey);
     isSocialMediaLoginEnabled =
         _remoteConfig.getBool(kEnableSocialMediaLoginKey);
+    print("\n\n\n$challengesHelpMessage");
+    challengesHelpMessage = _remoteConfig.getString(kChallengesHelpMessageKey).replaceAll("\$", '\n',);
+    print("\n\n\n$challengesHelpMessage");
   }
 
   Future<void> _setDefaultConfigs() async {
-    return _remoteConfig.setDefaults(<String, dynamic>{});
+    return _remoteConfig.setDefaults(<String, dynamic>{
+      kChallengesHelpMessageKey: challengesHelpMessage,
+    });
   }
 }
