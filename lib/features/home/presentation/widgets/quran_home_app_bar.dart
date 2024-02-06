@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
+import '../../../../misc/configs/remote_config_manager.dart';
 import '../../../../misc/router/router_utils.dart';
 import '../../../bookmark/presentation/bookmark_icon_widget.dart';
 import '../../../challenge/domain/redux/actions/actions.dart';
@@ -69,10 +70,7 @@ class QuranHomeAppBarWidget extends StatelessWidget
   }
 
   void _help(BuildContext context) {
-    String message =
-        "Challenges feature occasional questions posted for you to explore. Your task is to discover answers within the Noble Quran. Each response requires a verse that addresses the question, along with reflections on how the verse answers it."
-        "\n\n\nKeep in mind, **there's no right or wrong answer**. Each response represents a personal perspective or interpretation of how a verse might address the question.\n\n\nAlso, please note that the reflection should match the meaning of the verse."
-        "\n\n\nDisclaimer: These are personal reflections from ordinary people. So, please do not consider them as official tafsir of the verses.";
+    String message = RemoteConfigManager.instance.challengesHelpMessage;
     QuranNavigator.of(context).routeToMessage({
       'title': "Help",
       'message': message,
