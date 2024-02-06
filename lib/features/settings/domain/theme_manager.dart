@@ -40,6 +40,12 @@ class QuranThemeManager {
     ),
     fontFamily: "default",
     brightness: Brightness.light,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(QuranDS.appBarBackground),
+        foregroundColor: MaterialStateProperty.all(Colors.white),
+      ),
+    ),
   );
 
   ThemeData darkTheme = ThemeData(
