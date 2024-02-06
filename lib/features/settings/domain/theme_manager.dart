@@ -11,6 +11,7 @@ class QuranThemeManager {
       QuranThemeManager._privateConstructor();
 
   ThemeData lightTheme = ThemeData(
+    useMaterial3: false,
     primarySwatch: MaterialColorGenerator.from(QuranDS.primaryColor),
     primaryColor: QuranDS.appBarBackground,
     scaffoldBackgroundColor: QuranDS.screenBackground,
