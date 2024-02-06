@@ -46,120 +46,52 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
     QuranUser? userParam = widget.user;
     if (userParam != null) {
       /// Logged In
-      return Theme(
-        data: Theme.of(context).copyWith(canvasColor: QuranDS.screenBackground),
-        child: Drawer(
-          child: QuranNavDrawerItemsWidget(
-            items: [
-              const QuranNavDrawerHeaderWidget(),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Profile',
-                icon: Icons.account_circle,
-                destination: QuranProfileScreen(
-                  user: userParam,
-                  onLogOutTapped: () => {_onLogout(store)},
-                ),
-              ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Bookmark',
-                icon: Icons.bookmark,
-                onSelected: () => _goToBookmark(store),
-              ),
-
-              /// Approvals screen for admin user
-              if (store.state.isAdminUser)
-                QuranNavDrawerRowWidget(
-                  context: context,
-                  title: 'Approvals',
-                  icon: Icons.admin_panel_settings_rounded,
-                  destination: const QuranChallengesApprovalScreen(),
-                ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Submissions',
-                icon: Icons.assignment_outlined,
-                destination: const QuranMyChallengeSubmissionsScreen(),
-              ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Notes',
-                icon: Icons.edit_note_sharp,
-                destination: QuranViewNotesScreen(user: userParam),
-              ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Tags',
-                icon: Icons.tag,
-                destination: QuranViewTagsScreen(user: userParam),
-              ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Blog',
-                icon: Icons.comment_outlined,
-                onSelected: () => _goToBlog(),
-              ),
-              // TODO: Search in menu disabled, enable when fixed - Logged IN
-              // QuranNavDrawerRowWidget(
-              //   context: context,
-              //   title: 'Search',
-              //   icon: Icons.search_rounded,
-              //   destination: const QuranSearchScreen(),
-              // ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Mobile Apps',
-                icon: Icons.install_mobile,
-                onSelected: () => _goToMobileApps(),
-              ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Settings',
-                icon: Icons.settings,
-                destination: const QuranSettingsScreen(),
-              ),
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Feedback',
-                icon: Icons.email,
-                onSelected: () => _launchUrl(Uri.parse(
-                  QuranSettingsConstants.feedbackEmailUrl,
-                )),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    /// Logged out
-    return Theme(
-      data: Theme.of(context).copyWith(canvasColor: QuranDS.screenBackground),
-      child: Drawer(
+      return Drawer(
+        backgroundColor: QuranDS.screenBackground,
         child: QuranNavDrawerItemsWidget(
           items: [
             const QuranNavDrawerHeaderWidget(),
-
             QuranNavDrawerRowWidget(
               context: context,
-              title: 'Login',
-              icon: Icons.account_circle_outlined,
-              destination: const QuranLoginScreen(),
+              title: 'Profile',
+              icon: Icons.account_circle,
+              destination: QuranProfileScreen(
+                user: userParam,
+                onLogOutTapped: () => {_onLogout(store)},
+              ),
             ),
-
-            // TODO: Search in menu disabled, enable when fixed - Logged OUT
-            // QuranNavDrawerRowWidget(
-            //   context: context,
-            //   title: 'Search',
-            //   icon: Icons.search_rounded,
-            //   destination: const QuranSearchScreen(),
-            // ),
             QuranNavDrawerRowWidget(
               context: context,
               title: 'Bookmark',
               icon: Icons.bookmark,
               onSelected: () => _goToBookmark(store),
+            ),
+
+            /// Approvals screen for admin user
+            if (store.state.isAdminUser)
+              QuranNavDrawerRowWidget(
+                context: context,
+                title: 'Approvals',
+                icon: Icons.admin_panel_settings_rounded,
+                destination: const QuranChallengesApprovalScreen(),
+              ),
+            QuranNavDrawerRowWidget(
+              context: context,
+              title: 'Submissions',
+              icon: Icons.assignment_outlined,
+              destination: const QuranMyChallengeSubmissionsScreen(),
+            ),
+            QuranNavDrawerRowWidget(
+              context: context,
+              title: 'Notes',
+              icon: Icons.edit_note_sharp,
+              destination: QuranViewNotesScreen(user: userParam),
+            ),
+            QuranNavDrawerRowWidget(
+              context: context,
+              title: 'Tags',
+              icon: Icons.tag,
+              destination: QuranViewTagsScreen(user: userParam),
             ),
             QuranNavDrawerRowWidget(
               context: context,
@@ -167,6 +99,13 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               icon: Icons.comment_outlined,
               onSelected: () => _goToBlog(),
             ),
+            // TODO: Search in menu disabled, enable when fixed - Logged IN
+            // QuranNavDrawerRowWidget(
+            //   context: context,
+            //   title: 'Search',
+            //   icon: Icons.search_rounded,
+            //   destination: const QuranSearchScreen(),
+            // ),
             QuranNavDrawerRowWidget(
               context: context,
               title: 'Mobile Apps',
@@ -189,6 +128,63 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
             ),
           ],
         ),
+      );
+    }
+
+    /// Logged out
+    return Drawer(
+      backgroundColor: QuranDS.screenBackground,
+      child: QuranNavDrawerItemsWidget(
+        items: [
+          const QuranNavDrawerHeaderWidget(),
+
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Login',
+            icon: Icons.account_circle_outlined,
+            destination: const QuranLoginScreen(),
+          ),
+
+          // TODO: Search in menu disabled, enable when fixed - Logged OUT
+          // QuranNavDrawerRowWidget(
+          //   context: context,
+          //   title: 'Search',
+          //   icon: Icons.search_rounded,
+          //   destination: const QuranSearchScreen(),
+          // ),
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Bookmark',
+            icon: Icons.bookmark,
+            onSelected: () => _goToBookmark(store),
+          ),
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Blog',
+            icon: Icons.comment_outlined,
+            onSelected: () => _goToBlog(),
+          ),
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Mobile Apps',
+            icon: Icons.install_mobile,
+            onSelected: () => _goToMobileApps(),
+          ),
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Settings',
+            icon: Icons.settings,
+            destination: const QuranSettingsScreen(),
+          ),
+          QuranNavDrawerRowWidget(
+            context: context,
+            title: 'Feedback',
+            icon: Icons.email,
+            onSelected: () => _launchUrl(Uri.parse(
+              QuranSettingsConstants.feedbackEmailUrl,
+            )),
+          ),
+        ],
       ),
     );
   }
