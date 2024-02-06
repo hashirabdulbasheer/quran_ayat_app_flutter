@@ -161,9 +161,12 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
               ),
 
               /// surah progress
-              QuranAyatDisplaySurahProgressWidget(
-                currentlySelectedSurah: currentSurahDetails,
-                currentIndex: currentIndex,
+              Directionality(
+                textDirection: TextDirection.rtl,
+                child: QuranAyatDisplaySurahProgressWidget(
+                  currentlySelectedSurah: currentSurahDetails,
+                  currentIndex: currentIndex,
+                ),
               ),
 
               Directionality(
