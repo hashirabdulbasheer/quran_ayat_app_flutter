@@ -23,12 +23,11 @@ class QuranThemeManager {
       selectionHandleColor: QuranDS.appBarBackground,
     ),
     appBarTheme: const AppBarTheme(
-      color: Color(0xFF1E5A06),
+      foregroundColor: Colors.white,
+      color: QuranDS.appBarBackground,
       systemOverlayStyle: SystemUiOverlayStyle(
         systemNavigationBarColor: QuranDS.appBarBackground,
-        statusBarColor: QuranDS.appBarBackground,
         statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light,
       ),
     ),
     textTheme: const TextTheme(
