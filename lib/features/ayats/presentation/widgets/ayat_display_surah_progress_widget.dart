@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noble_quran/models/surah_title.dart';
 
+import '../../../../misc/design/design_system.dart';
 import '../../../newAyat/data/surah_index.dart';
 
 class QuranAyatDisplaySurahProgressWidget extends StatelessWidget {
@@ -27,6 +28,7 @@ class QuranAyatDisplaySurahProgressWidget extends StatelessWidget {
         ),
         child: LinearProgressIndicator(
           backgroundColor: Colors.black12,
+          color: QuranDS.appBarBackground,
           value: progress,
         ),
       );
