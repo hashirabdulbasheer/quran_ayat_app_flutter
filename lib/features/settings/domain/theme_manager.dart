@@ -29,6 +29,7 @@ class QuranThemeManager {
       systemOverlayStyle: SystemUiOverlayStyle(
         systemNavigationBarColor: QuranDS.appBarBackground,
         statusBarIconBrightness: Brightness.light,
+        statusBarColor: QuranDS.appBarBackground,
       ),
     ),
     textTheme: const TextTheme(
@@ -49,42 +50,11 @@ class QuranThemeManager {
     ),
   );
 
-  ThemeData darkTheme = ThemeData(
-    primarySwatch: Colors.grey,
-    primaryColor: Colors.black,
-    brightness: Brightness.dark,
-    fontFamily: "default",
-    dividerColor: Colors.white60,
-    appBarTheme: const AppBarTheme(
-      color: Colors.black,
-      systemOverlayStyle: SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.black,
-        statusBarColor: Colors.black,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light,
-      ),
-    ),
-    backgroundColor: const Color(0xFF212121),
-    cardColor: Colors.black54,
-    textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white),
-      titleMedium: TextStyle(color: Colors.white),
-      titleSmall: TextStyle(
-        color: Colors.white60,
-        fontSize: 12,
-      ),
-    ),
-    cardTheme: const CardTheme(color: Colors.grey),
-    buttonTheme: const ButtonThemeData(buttonColor: Colors.black38),
-  );
-
   ThemeMode _appTheme = ThemeMode.light;
 
   final StreamController<String> _themeStream = StreamController.broadcast();
 
-  ThemeData? get theme => _appTheme == ThemeMode.light
-      ? QuranThemeManager.instance.lightTheme
-      : QuranThemeManager.instance.darkTheme;
+  ThemeData? get theme => QuranThemeManager.instance.lightTheme;
 
   ThemeMode get currentAppThemeMode => _appTheme;
 
@@ -92,23 +62,6 @@ class QuranThemeManager {
 
   /// loads the current theme and notify listeners about the theme change
   void loadThemeAndNotifyListeners() async {
-    /*
-    if (isSystemDarkMode()) {
-      // respect system dark mode
-      _appTheme = ThemeMode.dark;
-    } else {
-      // load saved theme
-      final prefs = await SharedPreferences.getInstance();
-      String? themeString = prefs.getString(QuranSettingsConstants.themeId);
-      if (themeString == null ||
-          themeString == QuranAppTheme.light.rawString()) {
-        _appTheme = ThemeMode.light;
-      } else {
-        _appTheme = ThemeMode.dark;
-      }
-    }
-    */
-
     // forcing dark theme for now
     _appTheme = ThemeMode.light;
 
@@ -129,25 +82,5 @@ class QuranThemeManager {
   /// called when theme changes
   void themeChanged() {
     loadThemeAndNotifyListeners();
-  }
-
-  /// is the current system in dark mode - respect that
-  bool isSystemDarkMode() {
-    final darkMode = WidgetsBinding.instance.window.platformBrightness;
-    if (darkMode == Brightness.dark) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /// is the current app theme in dark mode
-  /// if system is dark mode then app theme respects that and will be dark mode
-  bool isDarkMode() {
-    if (_appTheme == ThemeMode.dark) {
-      return true;
-    }
-
-    return false;
   }
 }

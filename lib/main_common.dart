@@ -84,7 +84,6 @@ class MyAppState extends State<MyApp> {
           ),
           debugShowCheckedModeBanner: false,
           theme: QuranThemeManager.instance.theme,
-          darkTheme: QuranThemeManager.instance.darkTheme,
           themeMode: QuranThemeManager.instance.currentAppThemeMode,
           navigatorObservers: [
             FirebaseAnalyticsObserver(
