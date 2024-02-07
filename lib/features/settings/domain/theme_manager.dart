@@ -27,9 +27,9 @@ class QuranThemeManager {
       foregroundColor: Colors.white,
       color: QuranDS.appBarBackground,
       systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: QuranDS.appBarBackground,
         systemNavigationBarColor: QuranDS.appBarBackground,
         statusBarIconBrightness: Brightness.light,
-        statusBarColor: QuranDS.appBarBackground,
       ),
     ),
     textTheme: const TextTheme(
