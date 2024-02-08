@@ -128,14 +128,26 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
               const SizedBox(
                 height: 30,
               ),
-              const QuranSocialLoginButtons(
+              QuranSocialLoginButtons(
                 isSignUp: false,
+                onStarted: () => _showLoadingProgress(true),
+                onComplete: () => _onLoggedInAction(),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _onLoggedInAction() {
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      StoreProvider.of<AppState>(context).dispatch(AppStateInitializeAction());
+      Navigator.of(context).pop();
+      _showMessage("Logged in 👍");
+    }
+    _showLoadingProgress(false);
   }
 
   void _passwordVisibilityTogglePressed() {
@@ -158,13 +170,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
           .then((response) {
         _showLoadingProgress(false);
         if (response.isSuccessful) {
-          QuranUser? user = QuranAuthFactory.engine.getUser();
-          if (user != null) {
-            StoreProvider.of<AppState>(context)
-                .dispatch(AppStateInitializeAction());
-            Navigator.of(context).pop();
-            _showMessage("Logged in 👍");
-          }
+          _onLoggedInAction();
         } else {
           _showMessage("Sorry 😔, ${response.message}");
         }

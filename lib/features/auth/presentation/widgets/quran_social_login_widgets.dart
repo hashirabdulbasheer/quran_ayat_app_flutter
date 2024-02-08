@@ -6,10 +6,14 @@ import '../../../../misc/configs/remote_config_manager.dart';
 
 class QuranSocialLoginButtons extends StatelessWidget {
   final bool isSignUp;
+  final Function onStarted;
+  final Function onComplete;
 
   const QuranSocialLoginButtons({
     Key? key,
     required this.isSignUp,
+    required this.onStarted,
+    required this.onComplete,
   }) : super(key: key);
 
   @override
@@ -34,11 +38,15 @@ class QuranSocialLoginButtons extends StatelessWidget {
   }
 
   Future<UserCredential?> signInWithGoogle() async {
+    onStarted();
     GoogleAuthProvider googleProvider = GoogleAuthProvider();
-    // UserCredential _ =
-    //     await FirebaseAuth.instance.signInWithPopup(googleProvider);
-    await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    UserCredential credential =
+        await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    // await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+    if(credential.user != null) {
+      onComplete();
+    }
 
-    return await FirebaseAuth.instance.getRedirectResult();
+    return credential;
   }
 }

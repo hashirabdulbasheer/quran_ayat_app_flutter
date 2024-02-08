@@ -123,14 +123,25 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
               const SizedBox(
                 height: 50,
               ),
-              const QuranSocialLoginButtons(
+              QuranSocialLoginButtons(
                 isSignUp: true,
+                onStarted: () => _showLoadingProgress(true),
+                onComplete: () => _onSignedUpAction(),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _onSignedUpAction() {
+    QuranUser? user = QuranAuthFactory.engine.getUser();
+    if (user != null) {
+      Navigator.of(context).pop(true);
+      _showMessage("Success 👍. Ahlan wa sahlan!");
+    }
+    _showLoadingProgress(false);
   }
 
   Future<UserCredential?> signInWithGoogle() async {
@@ -159,11 +170,7 @@ class _QuranSignUpScreenState extends State<QuranSignUpScreen> {
           .then((response) {
         _showLoadingProgress(false);
         if (response.isSuccessful) {
-          QuranUser? user = QuranAuthFactory.engine.getUser();
-          if (user != null) {
-            Navigator.of(context).pop(true);
-            _showMessage("Success 👍. Ahlan wa sahlan!");
-          }
+          _onSignedUpAction();
         } else {
           _showMessage("Sorry 😔, ${response.message}");
         }
