@@ -16,7 +16,7 @@ class QuranThemeManager {
     primaryColor: QuranDS.appBarBackground,
     scaffoldBackgroundColor: QuranDS.screenBackground,
     dividerColor: Colors.black26,
-    shadowColor: QuranDS.appBarBackground,
+    shadowColor: Colors.black26,
     dialogBackgroundColor: QuranDS.screenBackground,
     textSelectionTheme: TextSelectionThemeData(
       selectionColor: QuranDS.appBarBackground.withOpacity(0.5),
