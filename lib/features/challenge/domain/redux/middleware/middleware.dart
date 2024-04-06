@@ -33,7 +33,7 @@ void _initializeMiddleware(
     a,
     b,
   ) =>
-      b.createdOn.compareTo(a.createdOn));
+      a.createdOn.compareTo(b.createdOn));
   action = InitializeChallengeScreenAction(questions: questions);
   next(action);
 }
