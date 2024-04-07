@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/noble_quran.dart';
+import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
 
-import '../../../utils/logger_utils.dart';
+import '../../../misc/router/router_utils.dart';
+import '../../challenge/domain/redux/actions/actions.dart';
+import '../../home/presentation/quran_home_screen.dart';
+import '../../newAyat/data/surah_index.dart';
+import '../../newAyat/domain/redux/actions/actions.dart';
 import '../../settings/domain/settings_manager.dart';
 import '../domain/entities/quran_index.dart';
 import '../domain/entities/quran_tag.dart';
@@ -43,7 +49,12 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
               ),
             );
           } else {
-            List<QuranIndex> indices = snapshot.data as List<QuranIndex>;
+            List<QuranIndex>? indices = snapshot.data;
+            if (indices == null) {
+              return const Center(
+                child: Text("No tags saved"),
+              );
+            }
 
             return ListView.separated(
               itemBuilder: (
@@ -52,10 +63,7 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
               ) {
                 return ListTile(
                   title: _listRow(indices[index]),
-                  onTap: () => {
-                    // TODO: Fix navigation to ayat screen
-                    QuranLogger.log("Not implemented"),
-                  },
+                  onTap: () => _onIndexTapped(indices[index]),
                 );
               },
               separatorBuilder: (
@@ -124,5 +132,22 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
     }
 
     return updatedIndices;
+  }
+
+  _onIndexTapped(
+    QuranIndex index,
+  ) {
+    StoreProvider.of<AppState>(context).dispatch(SelectParticularAyaAction(
+      index: SurahIndex.fromHuman(
+        sura: index.surahIndex,
+        aya: index.ayaIndex,
+      ),
+    ));
+    StoreProvider.of<AppState>(context).dispatch(
+      SelectHomeScreenTabAction(
+        tab: QuranHomeScreenBottomTabsEnum.reader,
+      ),
+    );
+    QuranNavigator.of(context).routeToHome();
   }
 }

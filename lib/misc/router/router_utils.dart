@@ -100,4 +100,12 @@ class QuranNavigator {
       arguments: args,
     );
   }
+
+  Future<void> routeToHome() async {
+    return await _route(
+      QuranScreen.home,
+      arguments: null,
+    );
+  }
+
 }
