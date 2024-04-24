@@ -91,12 +91,12 @@ class ChallengeScreenState extends Equatable {
         question.copyWith(answers: answers),
       );
     }
-    // latest on top
+    // oldest on top
     filteredQuestions.sort((
       a,
       b,
     ) =>
-        b.createdOn.compareTo(a.createdOn));
+        a.createdOn.compareTo(b.createdOn));
 
     return filteredQuestions;
   }
