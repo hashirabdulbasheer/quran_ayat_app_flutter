@@ -137,9 +137,9 @@ class QuranDS {
   );
 
   /// Color
-  static const Color screenBackgroundLittleDarker = Color(0xFFE4F1DA);
-  static const Color screenBackground = Color(0xFFF6FDF1);
-  static const Color appBarBackground = Color(0xFF1E5A06);
+  static const Color screenBackgroundLittleDarker = Color(0x77F9FAF8);
+  static const Color screenBackground = Color(0xFFF9FAF8);
+  static const Color appBarBackground = Color(0xFF297863);
   static const Color primaryColor = appBarBackground;
   static const Color veryLightColor = Colors.black12;
   static const Color textColor = Colors.black;
