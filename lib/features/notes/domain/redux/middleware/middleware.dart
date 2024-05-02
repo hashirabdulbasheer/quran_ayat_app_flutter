@@ -10,7 +10,7 @@ import '../actions/actions.dart';
 List<Middleware<AppState>> createNotesMiddleware() {
   return [
     TypedMiddleware<AppState, InitializeNotesAction>(
-        _initializeNotesMiddleware),
+        _initializeNotesMiddleware,),
     TypedMiddleware<AppState, FetchNotesAction>(_fetchNotesMiddleware),
     TypedMiddleware<AppState, CreateNoteAction>(_createNoteMiddleware),
     TypedMiddleware<AppState, UpdateNoteAction>(_updateNoteMiddleware),

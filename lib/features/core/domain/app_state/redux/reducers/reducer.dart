@@ -71,7 +71,7 @@ AppState _initializeAppStateReducer(
       state.notes,
       action,
     ),
-    user: QuranAuthFactory.engine?.getUser(),
+    user: QuranAuthFactory.engine.getUser(),
   );
 }
 

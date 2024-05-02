@@ -30,8 +30,9 @@ import 'quran_router_enum.dart';
 class QuranRoutes {
   static PageRoute<dynamic> getPageRoute(
     RouteSettings settings,
-    bool isChallengeEnabled,
   ) {
+
+    bool isChallengeEnabled = true;
     /// check for url params
     /// if params present then display home or aya
     if (settings.name == "/" && _isQueryParamsPresentInUrl()) {

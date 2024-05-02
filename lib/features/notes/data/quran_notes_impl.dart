@@ -109,10 +109,10 @@ class QuranNotesEngine implements QuranNotesDataSource {
           notesList as Map,
         );
         // an aya can have multiple notes
-        notesListMap.forEach((aya, dynamic notes) {
+        notesListMap.forEach((aya, dynamic notes,) {
           Map<String, dynamic> ayaNotes =
               Map<String, dynamic>.from(notes as Map);
-          ayaNotes.forEach((k, dynamic note) {
+          ayaNotes.forEach((k, dynamic note,) {
             Map<String, dynamic> noteMap =
                 Map<String, dynamic>.from(note as Map);
             try {
@@ -154,35 +154,33 @@ class QuranNotesEngine implements QuranNotesDataSource {
 
     for (int surahIndex = 1; surahIndex < 115; surahIndex++) {
       for (int ayaIndex = 1; ayaIndex < 300; ayaIndex++) {
-        if (resultList != null && resultList.isNotEmpty) {
+        if (resultList.isNotEmpty) {
           try {
             Map<String, dynamic>? notesList = Map<String, dynamic>.from(
-                resultList["$surahIndex"]["$ayaIndex"] as Map);
-            if (notesList != null) {
-              for (String notesId in notesList.keys) {
-                // print("$surahIndex:$ayaIndex : ${notesList[notesId]["note"]}");
-                // print("******");
-                try {
-                  QuranNote note = QuranNote(
-                    suraIndex: surahIndex,
-                    ayaIndex: ayaIndex,
-                    note: "${notesList[notesId]["note"]}",
-                    createdOn: notesList[notesId]["createdOn"] as int,
-                    id: notesId,
-                    localId: "${notesList[notesId]["localId"] ?? ""}",
-                    status: QuranUtils.statusFromString(
-                      "${notesList[notesId]["status"] ?? ""}",
-                    ),
-                  );
-                  notes.add(note);
-                } catch (error) {
-                  QuranLogger.logE(
-                    error,
-                  );
-                }
+                resultList["$surahIndex"]["$ayaIndex"] as Map,);
+            for (String notesId in notesList.keys) {
+              // print("$surahIndex:$ayaIndex : ${notesList[notesId]["note"]}");
+              // print("******");
+              try {
+                QuranNote note = QuranNote(
+                  suraIndex: surahIndex,
+                  ayaIndex: ayaIndex,
+                  note: "${notesList[notesId]["note"]}",
+                  createdOn: notesList[notesId]["createdOn"] as int,
+                  id: notesId,
+                  localId: "${notesList[notesId]["localId"] ?? ""}",
+                  status: QuranUtils.statusFromString(
+                    "${notesList[notesId]["status"] ?? ""}",
+                  ),
+                );
+                notes.add(note);
+              } catch (error) {
+                QuranLogger.logE(
+                  error,
+                );
               }
             }
-          } catch (_) {
+                    } catch (_) {
             // do not add any exception handling here as there will be many exceptions thrown
             // for invalid indexes.
           }

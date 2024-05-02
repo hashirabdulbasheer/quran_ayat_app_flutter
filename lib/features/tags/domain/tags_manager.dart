@@ -28,7 +28,7 @@ class QuranTagsManager {
       QuranTag masterTag = QuranTag(
         id: "${DateTime.now().millisecondsSinceEpoch}",
         name: tag,
-        ayas: [],
+        ayas: const [],
         createdOn: DateTime.now().millisecondsSinceEpoch,
         status: QuranStatusEnum.created.rawString(),
       );

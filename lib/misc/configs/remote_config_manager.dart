@@ -69,9 +69,7 @@ class RemoteConfigManager {
         _remoteConfig.getBool(kEnableChallengesFeatureKey);
     isSocialMediaLoginEnabled =
         _remoteConfig.getBool(kEnableSocialMediaLoginKey);
-    print("\n\n\n$challengesHelpMessage");
     challengesHelpMessage = _remoteConfig.getString(kChallengesHelpMessageKey).replaceAll("\$", '\n',);
-    print("\n\n\n$challengesHelpMessage");
   }
 
   Future<void> _setDefaultConfigs() async {

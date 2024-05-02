@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/noble_quran.dart';
 
-import '../../../main.dart';
 import '../../../misc/configs/app_config.dart';
 import '../../../misc/enums/quran_app_mode_enum.dart';
 import '../data/repository/settings_repository_impl.dart';
@@ -21,16 +20,16 @@ class QuranSettingsManager {
 
   final StreamController<String> _settingsStream = StreamController.broadcast();
 
-  final QuranSetting _themeSettings = QuranSetting(
-    name: "App Theme",
-    description: "select the app color theme",
-    id: QuranSettingsConstants.themeId,
-    possibleValues:
-        QuranDropdownValuesFactory.createValues(QuranSettingsConstants.themeId),
-    defaultValue:
-        QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.themeId),
-    type: QuranSettingType.dropdown,
-  );
+  // final QuranSetting _themeSettings = QuranSetting(
+  //   name: "App Theme",
+  //   description: "select the app color theme",
+  //   id: QuranSettingsConstants.themeId,
+  //   possibleValues:
+  //       QuranDropdownValuesFactory.createValues(QuranSettingsConstants.themeId),
+  //   defaultValue:
+  //       QuranDropdownValuesFactory.defaultValue(QuranSettingsConstants.themeId),
+  //   type: QuranSettingType.dropdown,
+  // );
 
   final QuranSetting _transliterationSettings = QuranSetting(
     name: "Transliteration",
@@ -140,9 +139,7 @@ class QuranSettingsManager {
       _audioReciterSetting,
     ];
 
-    if (isChallengeBetaModeEnabled) {
-      settings.add(_challengeFeatureSettings);
-    }
+    settings.add(_challengeFeatureSettings);
 
     return settings;
   }

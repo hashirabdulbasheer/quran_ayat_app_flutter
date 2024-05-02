@@ -37,7 +37,7 @@ class QuranNotesTextFieldWidget extends StatelessWidget {
               hintText: hint,
               labelText: title,
               helperText: "",
-              contentPadding: EdgeInsets.all(0.0),
+              contentPadding: const EdgeInsets.all(0.0),
               hintStyle: const TextStyle(
                 height: 2.0, // sets the distance between label and input
               ),

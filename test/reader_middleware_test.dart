@@ -76,7 +76,7 @@ class MockStore implements Store<AppState> {
       );
 
   @override
-  Future teardown() {
+  Future<bool> teardown() {
     return Future<bool>.value(true);
   }
 }

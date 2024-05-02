@@ -23,11 +23,9 @@ import 'utils/logger_utils.dart';
 ///
 
 class MyApp extends StatefulWidget {
-  final bool isChallengeEnabled;
 
   const MyApp({
     Key? key,
-    required this.isChallengeEnabled,
   }) : super(key: key);
 
   @override
@@ -77,10 +75,9 @@ class MyAppState extends State<MyApp> {
         ) =>
             MaterialApp(
           title: 'Quran',
-          initialRoute: widget.isChallengeEnabled ? '/home' : '/',
+          initialRoute: '/home',
           onGenerateRoute: (settings) => QuranRoutes.getPageRoute(
             settings,
-            widget.isChallengeEnabled,
           ),
           debugShowCheckedModeBanner: false,
           theme: QuranThemeManager.instance.theme,
