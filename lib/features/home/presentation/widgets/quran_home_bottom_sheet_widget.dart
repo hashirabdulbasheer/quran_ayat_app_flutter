@@ -50,29 +50,22 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
                 Expanded(
                   child: Tooltip(
                     message: previousTooltip,
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
+                      iconAlignment: IconAlignment.start,
+                      icon: const Icon(
+                        Icons.navigate_before,
+                        color: QuranDS.primaryColor,
+                        size: 20,
+                      ),
+                      label: const Text(
+                        "Back",
+                        style: TextStyle(
+                          color: QuranDS.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       style: QuranDS.elevatedButtonStyle,
                       onPressed: () => _moveToPreviousAction(store),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.navigate_before,
-                            color: QuranDS.primaryColor,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 0,
-                          ),
-                          Text(
-                            "back",
-                            style: TextStyle(
-                              color: QuranDS.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
@@ -80,29 +73,22 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
                 Expanded(
                   child: Tooltip(
                     message: nextTooltip,
-                    child: ElevatedButton(
+                    child: ElevatedButton.icon(
+                      iconAlignment: IconAlignment.end,
+                      icon: const Icon(
+                        Icons.navigate_next,
+                        color: QuranDS.primaryColor,
+                        size: 20,
+                      ),
+                      label: const Text(
+                        "Next",
+                        style: TextStyle(
+                          color: QuranDS.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       style: QuranDS.elevatedButtonStyle,
                       onPressed: () => _moveToNextAction(store),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "next",
-                            style: TextStyle(
-                              color: QuranDS.primaryColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 0,
-                          ),
-                          Icon(
-                            Icons.navigate_next,
-                            color: QuranDS.primaryColor,
-                            size: 20,
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
