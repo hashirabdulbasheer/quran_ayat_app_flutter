@@ -262,6 +262,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                 QuranAIDisplayWidget(
                   aiEngine: GeminiAI(apiKey: _aiApiKey),
                   translation: translations[NQTranslation.wahiduddinkhan] ?? "",
+                  currentIndex: currentIndex,
                 )
               ],
 
