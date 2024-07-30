@@ -61,7 +61,7 @@ class QuranDropdownValuesFactory {
         return QuranDropdownValue.sameValues(QuranAppMode.basic.rawString());
 
       case QuranSettingsConstants.challengedFeatureId:
-        return QuranDropdownValue.sameValues(QuranSettingOnOff.on.rawString());
+        return QuranDropdownValue.sameValues(QuranSettingOnOff.off.rawString());
 
       case QuranSettingsConstants.audioReciterId:
 
