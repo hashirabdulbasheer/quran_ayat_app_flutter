@@ -20,7 +20,7 @@ import 'widgets/quran_home_content_body_widget.dart';
 enum QuranHomeScreenBottomTabsEnum { reader, challenge }
 
 class QuranHomeScreen extends StatefulWidget {
-  const QuranHomeScreen({Key? key}) : super(key: key);
+  const QuranHomeScreen({super.key});
 
   @override
   State<QuranHomeScreen> createState() => _QuranHomeScreenState();
