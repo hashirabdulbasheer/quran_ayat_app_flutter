@@ -131,32 +131,30 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               // Surah title
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  !store.state.reader.isHeaderVisible
-                      ? Expanded(
-                          child: SizedBox(
-                            height: 30,
-                            child: TextButton(
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
-                                  style: QuranDS.textTitleSmallLight,
-                                  textAlign: TextAlign.start,
-                                ),
-                              ),
-                              onPressed: () => store
-                                  .dispatch(ToggleHeaderVisibilityAction()),
+                  SizedBox(
+                    height: 30,
+                    child: TextButton(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          children: [
+                            store.state.reader.isHeaderVisible
+                                ? const Icon(Icons.arrow_drop_up)
+                                : const Icon(Icons.arrow_drop_down),
+                            Text(
+                              "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
+                              style: QuranDS.textTitleSmallLight,
+                              textAlign: TextAlign.start,
                             ),
-                          ),
-                        )
-                      : IconButton(
-                          tooltip: "Close header",
-                          onPressed: () =>
-                              store.dispatch(ToggleHeaderVisibilityAction()),
-                          icon: QuranDS.closeIconVerySmall,
+                          ],
                         ),
+                      ),
+                      onPressed: () =>
+                          store.dispatch(ToggleHeaderVisibilityAction()),
+                    ),
+                  ),
                 ],
               ),
 
