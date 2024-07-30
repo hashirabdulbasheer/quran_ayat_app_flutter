@@ -4,9 +4,9 @@ class QuranNotesCreateControlsWidget extends StatelessWidget {
   final Function onConfirmation;
 
   const QuranNotesCreateControlsWidget({
-    Key? key,
+    super.key,
     required this.onConfirmation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,10 +8,10 @@ class QuranViewNoteItemWidget extends StatelessWidget {
   final QuranNote note;
 
   const QuranViewNoteItemWidget({
-    Key? key,
+    super.key,
     required this.context,
     required this.note,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

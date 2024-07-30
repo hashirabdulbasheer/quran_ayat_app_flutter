@@ -15,6 +15,7 @@ class ReaderScreenState extends Equatable {
   final SurahIndex currentIndex;
   final bool isLoading;
   final bool isHeaderVisible;
+  final bool isAIResponseVisible;
   final BookmarkState? bookmarkState;
   final QuranData data;
 
@@ -23,6 +24,7 @@ class ReaderScreenState extends Equatable {
     this.currentIndex = SurahIndex.defaultIndex,
     this.isLoading = false,
     this.isHeaderVisible = false,
+    this.isAIResponseVisible = false,
     this.bookmarkState,
     this.data = const QuranData(),
   });
@@ -32,6 +34,7 @@ class ReaderScreenState extends Equatable {
     SurahIndex? currentIndex,
     bool? isLoading,
     bool? isHeaderVisible,
+    bool? isAIResponseVisible,
     BookmarkState? bookmarkState,
     QuranData? data,
   }) {
@@ -40,6 +43,7 @@ class ReaderScreenState extends Equatable {
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,
       isHeaderVisible: isHeaderVisible ?? this.isHeaderVisible,
+      isAIResponseVisible: isAIResponseVisible ?? this.isAIResponseVisible,
       bookmarkState: bookmarkState ?? this.bookmarkState,
       data: data ?? this.data,
     );
@@ -81,7 +85,8 @@ class ReaderScreenState extends Equatable {
   String toString() {
     return "{surah: ${currentIndex.toString()}, titles: ${surahTitles.length}, "
         "isLoading: $isLoading,"
-        "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words?.length}, "
+        "isAIResponseVisible: $isAIResponseVisible,"
+        "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words.length}, "
         "translation len: ${data.translationMap.keys.length}, transliteration: ${data.transliteration?.name}}";
   }
 
@@ -92,6 +97,7 @@ class ReaderScreenState extends Equatable {
         isHeaderVisible,
         currentIndex,
         bookmarkState,
+        isAIResponseVisible,
         data,
       ];
 }

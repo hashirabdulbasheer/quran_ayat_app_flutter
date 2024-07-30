@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../domain/notes_manager.dart';
 
 class QuranOfflineHeaderWidget extends StatelessWidget {
-  const QuranOfflineHeaderWidget({Key? key}) : super(key: key);
+  const QuranOfflineHeaderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -26,10 +26,10 @@ class QuranCreateNotesScreen extends StatefulWidget {
   final QuranNote? note;
 
   const QuranCreateNotesScreen({
-    Key? key,
+    super.key,
     required this.index,
     this.note,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranCreateNotesScreen> createState() => _QuranCreateNotesScreenState();
