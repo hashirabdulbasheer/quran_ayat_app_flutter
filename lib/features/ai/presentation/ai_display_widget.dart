@@ -6,6 +6,7 @@ import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/misc/design/design_system.dart';
+import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -35,6 +36,7 @@ class QuranAIDisplayWidget extends StatelessWidget {
       if (isAiResponseDisplay) {
         return FutureBuilder<String?>(
             future: aiEngine.getResponse(
+              currentIndex: currentIndex,
               question: "Help me think about and reflect on the $translation.",
             ),
             builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
@@ -98,6 +100,7 @@ class QuranAIDisplayWidget extends StatelessWidget {
             IconButton(
                 onPressed: () {
                   store.dispatch(ShowAIResponseAction());
+                  QuranLogger.logAnalytics("ai-tapped");
                 },
                 icon: const Icon(
                   Icons.assistant,
