@@ -29,7 +29,7 @@ jobs:
       - name: Create Firebase options file
         run: echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
       - name: Run Build Web
-        run: flutter build web --release --base-href="/" --web-renderer=canvaskit
+        run: flutter build web --release --base-href="/" --web-renderer=canvaskit --dart-define=AI_API_KEY=${{secrets.AI_API_KEY}}
       - name: Deploy Server
         uses: appleboy/scp-action@v0.1.7
         with:
