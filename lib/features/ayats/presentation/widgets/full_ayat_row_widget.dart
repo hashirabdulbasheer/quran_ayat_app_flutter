@@ -9,10 +9,10 @@ class QuranFullAyatRowWidget extends StatelessWidget {
   final String? fontFamily;
 
   const QuranFullAyatRowWidget({
-    Key? key,
+    super.key,
     required this.text,
     this.fontFamily,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

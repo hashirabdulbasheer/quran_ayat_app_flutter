@@ -16,10 +16,10 @@ class QuranHomeAppBarWidget extends StatelessWidget
   final QuranHomeScreenBottomTabsEnum selectedTab;
 
   const QuranHomeAppBarWidget({
-    Key? key,
+    super.key,
     required this.store,
     required this.selectedTab,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

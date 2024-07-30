@@ -5,6 +5,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
+import 'package:quran_ayat/features/ai/domain/gemini_ai_engine.dart';
+import 'package:quran_ayat/features/ai/presentation/ai_display_widget.dart';
 import 'package:redux/redux.dart';
 
 import '../../../misc/design/design_system.dart';
@@ -24,7 +26,7 @@ import '../data/surah_index.dart';
 import '../domain/redux/actions/actions.dart';
 
 class QuranNewAyatReaderWidget extends StatefulWidget {
-  const QuranNewAyatReaderWidget({Key? key}) : super(key: key);
+  const QuranNewAyatReaderWidget({super.key});
 
   @override
   State<QuranNewAyatReaderWidget> createState() =>
@@ -32,6 +34,8 @@ class QuranNewAyatReaderWidget extends StatefulWidget {
 }
 
 class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
+  final String _aiApiKey = const String.fromEnvironment('AI_API_KEY');
+
   @override
   void initState() {
     super.initState();
@@ -180,7 +184,8 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           onPressed: () =>
                               store.dispatch(ToggleHeaderVisibilityAction()),
                           child: Text(
-                            "${currentIndex.human.sura}:${currentIndex.human.aya}", // RTL
+                            "${currentIndex.human.sura}:${currentIndex.human.aya}",
+                            // RTL
                             style: QuranDS.textTitleSmallLight,
                           ),
                         ),
@@ -251,6 +256,14 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                   translation: translations[type] ?? "",
                   translationType: type,
                 ),
+
+              /// AI
+              if (_aiApiKey.isNotEmpty) ...[
+                QuranAIDisplayWidget(
+                  aiEngine: GeminiAI(apiKey: _aiApiKey),
+                  translation: translations[NQTranslation.wahiduddinkhan] ?? "",
+                )
+              ],
 
               /// audio controls
               QuranAyatDisplayAudioControlsWidget(

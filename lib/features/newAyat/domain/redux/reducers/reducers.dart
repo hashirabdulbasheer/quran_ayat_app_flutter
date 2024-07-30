@@ -49,6 +49,9 @@ Reducer<ReaderScreenState> readerScreenReducer =
   TypedReducer<ReaderScreenState, ToggleHeaderVisibilityAction>(
     _toggleHeaderVisibilityReducer,
   ),
+  TypedReducer<ReaderScreenState, ShowAIResponseAction>(
+    _showAIResponseReducer,
+  ),
   TypedReducer<ReaderScreenState, dynamic>(
     _allOtherReaderReducer,
   ),
@@ -89,10 +92,12 @@ ReaderScreenState _surahSelectedReducer(
   if (suraIndex >= 0 && suraIndex < 114) {
     return newState.copyWith(
       currentIndex: action.index,
+      isAIResponseVisible: false,
     );
   } else {
     return newState.copyWith(
       currentIndex: SurahIndex.defaultIndex,
+      isAIResponseVisible: false,
     );
   }
 }
@@ -105,10 +110,12 @@ ReaderScreenState _ayaSelectedReducer(
   if (ayaIndex < state.currentSurahDetails().totalVerses) {
     return state.copyWith(
       currentIndex: state.currentIndex.copyWith(aya: ayaIndex),
+      isAIResponseVisible: false,
     );
   } else {
     return state.copyWith(
       currentIndex: state.currentIndex.copyWith(aya: 1),
+      isAIResponseVisible: false,
     );
   }
 }
@@ -125,13 +132,17 @@ ReaderScreenState _particularAyaSelectedReducer(
   if (suraIndex > 114) {
     return newState.copyWith(
       currentIndex: SurahIndex.defaultIndex,
+      isAIResponseVisible: false,
     );
   } else if (ayaIndex >= state.surahTitles[suraIndex].totalVerses) {
-    return newState;
+    return newState.copyWith(
+      isAIResponseVisible: false,
+    );
   }
 
   return newState.copyWith(
     currentIndex: action.index,
+    isAIResponseVisible: false,
   );
 }
 
@@ -163,6 +174,7 @@ ReaderScreenState _nextAyaReducer(
     return state.copyWith(
       currentIndex: state.currentIndex.next(),
       isHeaderVisible: false,
+      isAIResponseVisible: false,
     );
   }
 
@@ -177,6 +189,7 @@ ReaderScreenState _previousAyaReducer(
   return state.copyWith(
     currentIndex: state.currentIndex.previous(),
     isHeaderVisible: false,
+    isAIResponseVisible: false,
   );
 }
 
@@ -205,11 +218,21 @@ ReaderScreenState _initBookmarkReducer(
   );
 }
 
+ReaderScreenState _showAIResponseReducer(
+  ReaderScreenState state,
+  ShowAIResponseAction action,
+) {
+  return state.copyWith(
+    isAIResponseVisible: true,
+  );
+}
+
 ReaderScreenState _toggleHeaderVisibilityReducer(
   ReaderScreenState state,
   ToggleHeaderVisibilityAction action,
 ) {
   return state.copyWith(
     isHeaderVisible: !state.isHeaderVisible,
+    isAIResponseVisible: false,
   );
 }

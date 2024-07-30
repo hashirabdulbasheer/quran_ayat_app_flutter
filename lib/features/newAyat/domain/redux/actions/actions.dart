@@ -114,3 +114,5 @@ class ShareAyaAction extends AppStateAction {}
 class RandomAyaAction extends AppStateAction {}
 
 class ToggleHeaderVisibilityAction extends AppStateAction {}
+
+class ShowAIResponseAction extends AppStateAction {}

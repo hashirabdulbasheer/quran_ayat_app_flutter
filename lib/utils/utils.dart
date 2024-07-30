@@ -55,10 +55,10 @@ class QuranUtils {
 
   static Future<bool> isOffline() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile ||
-        connectivityResult == ConnectivityResult.wifi ||
-        connectivityResult == ConnectivityResult.bluetooth ||
-        connectivityResult == ConnectivityResult.ethernet) {
+    if (connectivityResult.contains(ConnectivityResult.mobile) ||
+        connectivityResult.contains(ConnectivityResult.wifi) ||
+        connectivityResult.contains(ConnectivityResult.bluetooth) ||
+        connectivityResult.contains(ConnectivityResult.ethernet)) {
       return false;
     }
 
