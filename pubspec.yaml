@@ -20,7 +20,7 @@ dependencies:
       url: https://github.com/hashirabdulbasheer/noble_quran_flutter_package.git
       ref: master
 
-  firebase_core: ^3.2.0
+  firebase_core: ^3.0.0
   firebase_auth: ^5.1.2
   firebase_database: ^11.0.3
   intl: ^0.19.0
