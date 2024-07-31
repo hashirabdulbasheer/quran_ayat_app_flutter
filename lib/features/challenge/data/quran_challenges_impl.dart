@@ -24,7 +24,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
       if (resultList == null) {
         return [];
       }
-      for (Map<String, dynamic> questionMap in resultList) {
+      for (Map<dynamic, dynamic> questionMap in resultList) {
         QuranQuestion question = QuranQuestion(
           id: questionMap['id'] as int,
           title: questionMap['title'] as String,
