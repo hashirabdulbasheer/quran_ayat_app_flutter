@@ -139,33 +139,30 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                   : Container(),
 
               // Surah title
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: 30,
-                    child: TextButton(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            store.state.reader.isHeaderVisible
-                                ? const Icon(Icons.arrow_drop_up)
-                                : const Icon(Icons.arrow_drop_down),
-                            Text(
-                              "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
-                              style: QuranDS.textTitleSmallLight,
-                              textAlign: TextAlign.start,
-                            ),
-                          ],
-                        ),
+              SizedBox(
+                height: 30,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          store.state.reader.isHeaderVisible
+                              ? QuranDS.arrowUp
+                              : QuranDS.arrowDown,
+                          Text(
+                            "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
+                            style: QuranDS.textTitleSmallLight,
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
                       ),
                       onPressed: () =>
                           store.dispatch(ToggleHeaderVisibilityAction()),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
               /// surah progress
