@@ -30,10 +30,10 @@ class QuranNavDrawer extends StatefulWidget {
   final QuranBookmarksManager bookmarksManager;
 
   const QuranNavDrawer({
-    Key? key,
+    super.key,
     required this.user,
     required this.bookmarksManager,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranNavDrawer> createState() => _QuranNavDrawerState();

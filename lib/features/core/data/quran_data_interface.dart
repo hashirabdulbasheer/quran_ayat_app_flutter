@@ -6,7 +6,7 @@ abstract class QuranDataSource {
     Map<String, dynamic> item,
   );
 
-  Future<Map<String, dynamic>?> fetch(
+  Future<Map<dynamic, dynamic>?> fetch(
     String path,
   );
 

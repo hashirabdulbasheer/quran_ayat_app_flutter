@@ -231,7 +231,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     QuranQuestion question,
   ) async {
     try {
-      Map<String, dynamic>? configs = await dataSource.fetch("config");
+      Map<dynamic, dynamic>? configs = await dataSource.fetch("config");
       if (configs == null) {
         return false;
       }

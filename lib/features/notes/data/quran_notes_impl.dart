@@ -38,7 +38,7 @@ class QuranNotesEngine implements QuranNotesDataSource {
     int ayaIndex,
   ) async {
     List<QuranNote> notes = [];
-    Map<String, dynamic>? resultList = await dataSource.fetch(
+    Map<dynamic, dynamic>? resultList = await dataSource.fetch(
       "notes/$userId/$suraIndex/$ayaIndex",
     );
     if (resultList != null) {
