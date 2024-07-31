@@ -1,3 +1,4 @@
+import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../models/qr_user_model.dart';
@@ -27,14 +28,19 @@ void _initializeMiddleware(
   InitializeChallengeScreenAction action,
   NextDispatcher next,
 ) async {
-  List<QuranQuestion> questions =
-      await QuranChallengeManager.instance.fetchQuestions();
-  questions.sort((
-    a,
-    b,
-  ) =>
-      a.createdOn.compareTo(b.createdOn));
-  action = InitializeChallengeScreenAction(questions: questions);
+  bool isEnabled =
+      await QuranSettingsManager.instance.isChallengesFeatureEnabled();
+  if (isEnabled) {
+    // only fetch questions and details if challenge is enabled
+    List<QuranQuestion> questions =
+        await QuranChallengeManager.instance.fetchQuestions();
+    questions.sort((
+      a,
+      b,
+    ) =>
+        a.createdOn.compareTo(b.createdOn));
+    action = InitializeChallengeScreenAction(questions: questions);
+  }
   next(action);
 }
 

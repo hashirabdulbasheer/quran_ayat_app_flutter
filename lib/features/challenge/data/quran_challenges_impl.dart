@@ -24,7 +24,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
       if (resultList == null) {
         return [];
       }
-      for (Map<String, dynamic> questionMap in resultList) {
+      for (Map<dynamic, dynamic> questionMap in resultList) {
         QuranQuestion question = QuranQuestion(
           id: questionMap['id'] as int,
           title: questionMap['title'] as String,
@@ -231,7 +231,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     QuranQuestion question,
   ) async {
     try {
-      Map<String, dynamic>? configs = await dataSource.fetch("config");
+      Map<dynamic, dynamic>? configs = await dataSource.fetch("config");
       if (configs == null) {
         return false;
       }

@@ -124,18 +124,28 @@ class QuranDS {
     Icons.assistant,
     color: QuranDS.primaryColor,
   );
+  static const Icon arrowUp = Icon(
+    Icons.arrow_drop_up,
+    size: 30,
+    color: QuranDS.lightTextColor,
+  );
+  static const Icon arrowDown = Icon(
+    Icons.arrow_drop_down,
+    size: 30,
+    color: QuranDS.lightTextColor,
+  );
 
   /// Decorations
   static const BoxDecoration boxDecorationVeryLightBorder = BoxDecoration(
     border:
-        Border.fromBorderSide(BorderSide(color: QuranDS.veryLightTextColor)),
+    Border.fromBorderSide(BorderSide(color: QuranDS.veryLightTextColor)),
     color: QuranDS.veryLightTextColor,
     borderRadius: BorderRadius.all(Radius.circular(5)),
   );
   static const BoxDecoration boxDecorationVeryLightBorderWithScreenBackground =
-      BoxDecoration(
+  BoxDecoration(
     border:
-        Border.fromBorderSide(BorderSide(color: QuranDS.veryLightTextColor)),
+    Border.fromBorderSide(BorderSide(color: QuranDS.veryLightTextColor)),
     color: QuranDS.screenBackground,
     borderRadius: BorderRadius.all(Radius.circular(5)),
   );
@@ -146,6 +156,7 @@ class QuranDS {
   static const Color appBarBackground = Color(0xFF297863);
   static const Color primaryColor = appBarBackground;
   static const Color veryLightColor = Colors.black12;
+  static const Color veryVeryLightColor = Colors.white10;
   static const Color textColor = Colors.black;
   static const Color lightTextColor = Colors.black54;
   static const Color veryLightTextColor = Colors.black12;

@@ -27,13 +27,13 @@ class QuranFirebaseEngine implements QuranDataSource {
   }
 
   @override
-  Future<Map<String, dynamic>?> fetch(
+  Future<Map<dynamic, dynamic>?> fetch(
     String path,
   ) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref(path);
     final snapshot = await ref.get();
 
-    return snapshot.value as Map<String, dynamic>?;
+    return snapshot.value as Map<dynamic, dynamic>?;
   }
 
   @override
