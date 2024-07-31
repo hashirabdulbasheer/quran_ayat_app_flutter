@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
 import 'package:redux/redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,20 +68,6 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               onSelected: () => _goToBookmark(store),
             ),
 
-            /// Approvals screen for admin user
-            if (store.state.isAdminUser)
-              QuranNavDrawerRowWidget(
-                context: context,
-                title: 'Approvals',
-                icon: Icons.admin_panel_settings_rounded,
-                destination: const QuranChallengesApprovalScreen(),
-              ),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Submissions',
-              icon: Icons.assignment_outlined,
-              destination: const QuranMyChallengeSubmissionsScreen(),
-            ),
             QuranNavDrawerRowWidget(
               context: context,
               title: 'Notes',
@@ -118,14 +105,55 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
               icon: Icons.settings,
               destination: const QuranSettingsScreen(),
             ),
-            QuranNavDrawerRowWidget(
-              context: context,
-              title: 'Feedback',
-              icon: Icons.email,
-              onSelected: () => _launchUrl(Uri.parse(
-                QuranSettingsConstants.feedbackEmailUrl,
-              )),
-            ),
+
+            FutureBuilder<bool>(
+                future:
+                    QuranSettingsManager.instance.isChallengesFeatureEnabled(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData && snapshot.data != null) {
+                    bool isEnabled = snapshot.data as bool;
+                    if (isEnabled) {
+                      return Column(
+                        children: [
+                          /// Approvals screen for admin user
+                          if (store.state.isAdminUser)
+                            QuranNavDrawerRowWidget(
+                              context: context,
+                              title: 'Approvals',
+                              icon: Icons.admin_panel_settings_rounded,
+                              destination:
+                                  const QuranChallengesApprovalScreen(),
+                            ),
+                          const Divider(color: QuranDS.veryVeryLightColor,),
+                          QuranNavDrawerRowWidget(
+                            context: context,
+                            title: 'Submissions',
+                            icon: Icons.assignment_outlined,
+                            destination:
+                                const QuranMyChallengeSubmissionsScreen(),
+                          ),
+                          const Divider(color: QuranDS.veryVeryLightColor,),
+                          QuranNavDrawerRowWidget(
+                            context: context,
+                            title: 'Feedback',
+                            icon: Icons.email,
+                            onSelected: () => _launchUrl(Uri.parse(
+                              QuranSettingsConstants.feedbackEmailUrl,
+                            )),
+                          ),
+                        ],
+                      );
+                    }
+                  }
+                  return QuranNavDrawerRowWidget(
+                    context: context,
+                    title: 'Feedback',
+                    icon: Icons.email,
+                    onSelected: () => _launchUrl(Uri.parse(
+                      QuranSettingsConstants.feedbackEmailUrl,
+                    )),
+                  );
+                }),
           ],
         ),
       );

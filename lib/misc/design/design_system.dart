@@ -156,6 +156,7 @@ class QuranDS {
   static const Color appBarBackground = Color(0xFF297863);
   static const Color primaryColor = appBarBackground;
   static const Color veryLightColor = Colors.black12;
+  static const Color veryVeryLightColor = Colors.white10;
   static const Color textColor = Colors.black;
   static const Color lightTextColor = Colors.black54;
   static const Color veryLightTextColor = Colors.black12;
