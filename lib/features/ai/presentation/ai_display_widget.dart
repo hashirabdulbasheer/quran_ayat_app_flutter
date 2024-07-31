@@ -65,7 +65,7 @@ class QuranAIDisplayWidget extends StatelessWidget {
       // there isn't any cached response, fetch it
       response = await aiEngine.getResponse(
         currentIndex: currentIndex,
-        question: "Help me think about and reflect on the $translation.",
+        question: "Help me think about and reflect on this verse from Quran - $translation.",
       );
 
       // save in cache for future use
