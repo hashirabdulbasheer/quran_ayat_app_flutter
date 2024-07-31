@@ -5,6 +5,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
+import 'package:quran_ayat/features/ai/domain/ai_cache.dart';
+import 'package:quran_ayat/features/ai/domain/ai_engine.dart';
 import 'package:quran_ayat/features/ai/domain/gemini_ai_engine.dart';
 import 'package:quran_ayat/features/ai/presentation/ai_display_widget.dart';
 import 'package:redux/redux.dart';
@@ -35,10 +37,13 @@ class QuranNewAyatReaderWidget extends StatefulWidget {
 
 class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
   final String _aiApiKey = const String.fromEnvironment('AI_API_KEY');
+  final AICache _aiCache = AILocalCache();
+  late QuranAIEngine _aiEngine;
 
   @override
   void initState() {
     super.initState();
+    _aiEngine = GeminiAI(apiKey: _aiApiKey);
     if (kIsWeb) {
       ServicesBinding.instance.keyboard.addHandler(_onKey);
     }
@@ -143,6 +148,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             store.state.reader.isHeaderVisible
                                 ? const Icon(Icons.arrow_drop_up)
@@ -260,7 +266,8 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
               /// AI
               if (_aiApiKey.isNotEmpty) ...[
                 QuranAIDisplayWidget(
-                  aiEngine: GeminiAI(apiKey: _aiApiKey),
+                  aiEngine: _aiEngine,
+                  aiCache: _aiCache,
                   translation: translations[NQTranslation.wahiduddinkhan] ?? "",
                   currentIndex: currentIndex,
                 )

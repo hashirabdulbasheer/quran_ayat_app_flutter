@@ -120,6 +120,10 @@ class QuranDS {
     Icons.report_problem_outlined,
     color: QuranDS.primaryColor,
   );
+  static const Icon aiIcon = Icon(
+    Icons.assistant,
+    color: QuranDS.primaryColor,
+  );
 
   /// Decorations
   static const BoxDecoration boxDecorationVeryLightBorder = BoxDecoration(
