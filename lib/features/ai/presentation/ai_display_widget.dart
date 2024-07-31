@@ -86,20 +86,21 @@ class _AITriggerIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        IconButton(
+    return SizedBox(
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
             onPressed: () {
               StoreProvider.of<AppState>(context)
                   .dispatch(ShowAIResponseAction());
               QuranLogger.logAnalytics("ai-tapped");
             },
-            icon: const Icon(
-              Icons.assistant,
-              color: QuranDS.primaryColor,
-            )),
-      ],
+            icon: QuranDS.aiIcon,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -164,14 +165,17 @@ class _AIWaitingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Text(
-          "thinking, please wait...",
-          style: QuranDS.textTitleMediumItalic,
-        ),
-      ],
+    return const SizedBox(
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            "thinking, please wait...",
+            style: QuranDS.textTitleMediumItalic,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -181,21 +185,24 @@ class _AIErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {
-        StoreProvider.of<AppState>(context).dispatch(ShowLoadingAction());
-        StoreProvider.of<AppState>(context).dispatch(HideLoadingAction());
-        QuranLogger.logAnalytics("ai-retry-tapped");
-      },
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Icon(Icons.refresh, color: QuranDS.primaryColor),
-          Text(
-            "Sorry, there is a problem using AI at the moment, try again.",
-            style: QuranDS.textTitleMediumItalic,
-          ),
-        ],
+    return SizedBox(
+      height: 50,
+      child: TextButton(
+        onPressed: () {
+          StoreProvider.of<AppState>(context).dispatch(ShowLoadingAction());
+          StoreProvider.of<AppState>(context).dispatch(HideLoadingAction());
+          QuranLogger.logAnalytics("ai-retry-tapped");
+        },
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            QuranDS.refreshIconLightSmall,
+            Text(
+              "Sorry, there is a problem using AI at the moment, try again.",
+              style: QuranDS.textTitleMediumItalic,
+            ),
+          ],
+        ),
       ),
     );
   }

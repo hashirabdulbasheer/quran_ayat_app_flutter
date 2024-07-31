@@ -148,6 +148,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             store.state.reader.isHeaderVisible
                                 ? const Icon(Icons.arrow_drop_up)

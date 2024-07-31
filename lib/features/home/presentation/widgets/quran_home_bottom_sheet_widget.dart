@@ -32,69 +32,72 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
       previousTooltip = "Previous challenge";
     }
 
-    return Directionality(
-      textDirection: textDirection,
-      child: Container(
-        color: QuranDS.screenBackground,
-        padding: const EdgeInsets.fromLTRB(
-          10,
-          10,
-          10,
-          10,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Tooltip(
-                    message: previousTooltip,
-                    child: ElevatedButton.icon(
-                      iconAlignment: IconAlignment.start,
-                      icon: const Icon(
-                        Icons.navigate_before,
-                        color: QuranDS.primaryColor,
-                        size: 20,
-                      ),
-                      label: const Text(
-                        "Back",
-                        style: TextStyle(
+    return SafeArea(
+      bottom: true,
+      child: Directionality(
+        textDirection: textDirection,
+        child: Container(
+          color: QuranDS.screenBackground,
+          padding: const EdgeInsets.fromLTRB(
+            10,
+            10,
+            10,
+            30,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Tooltip(
+                      message: previousTooltip,
+                      child: ElevatedButton.icon(
+                        iconAlignment: IconAlignment.start,
+                        icon: const Icon(
+                          Icons.navigate_before,
                           color: QuranDS.primaryColor,
-                          fontWeight: FontWeight.bold,
+                          size: 20,
                         ),
+                        label: const Text(
+                          "Back",
+                          style: TextStyle(
+                            color: QuranDS.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: QuranDS.elevatedButtonStyle,
+                        onPressed: () => _moveToPreviousAction(store),
                       ),
-                      style: QuranDS.elevatedButtonStyle,
-                      onPressed: () => _moveToPreviousAction(store),
                     ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Tooltip(
-                    message: nextTooltip,
-                    child: ElevatedButton.icon(
-                      iconAlignment: IconAlignment.end,
-                      icon: const Icon(
-                        Icons.navigate_next,
-                        color: QuranDS.primaryColor,
-                        size: 20,
-                      ),
-                      label: const Text(
-                        "Next",
-                        style: TextStyle(
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Tooltip(
+                      message: nextTooltip,
+                      child: ElevatedButton.icon(
+                        iconAlignment: IconAlignment.end,
+                        icon: const Icon(
+                          Icons.navigate_next,
                           color: QuranDS.primaryColor,
-                          fontWeight: FontWeight.bold,
+                          size: 20,
                         ),
+                        label: const Text(
+                          "Next",
+                          style: TextStyle(
+                            color: QuranDS.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: QuranDS.elevatedButtonStyle,
+                        onPressed: () => _moveToNextAction(store),
                       ),
-                      style: QuranDS.elevatedButtonStyle,
-                      onPressed: () => _moveToNextAction(store),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
