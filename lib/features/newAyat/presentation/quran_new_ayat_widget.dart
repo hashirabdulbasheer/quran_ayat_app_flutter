@@ -139,29 +139,18 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                   : Container(),
 
               // Surah title
-              SizedBox(
-                height: 30,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          store.state.reader.isHeaderVisible
-                              ? QuranDS.arrowUp
-                              : QuranDS.arrowDown,
-                          Text(
-                            "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
-                            style: QuranDS.textTitleSmallLight,
-                            textAlign: TextAlign.start,
-                          ),
-                        ],
-                      ),
-                      onPressed: () =>
-                          store.dispatch(ToggleHeaderVisibilityAction()),
-                    ),
-                  ],
+              Container(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  icon: store.state.reader.isHeaderVisible
+                      ? QuranDS.arrowUp
+                      : QuranDS.arrowDown,
+                  label: Text(
+                    "${currentSurahDetails.transliterationEn} / ${currentSurahDetails.translationEn}",
+                    style: QuranDS.textTitleSmallLight,
+                    textAlign: TextAlign.start,
+                  ),
+                  onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
                 ),
               ),
 

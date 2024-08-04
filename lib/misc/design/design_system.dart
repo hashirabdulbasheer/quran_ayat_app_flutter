@@ -126,12 +126,10 @@ class QuranDS {
   );
   static const Icon arrowUp = Icon(
     Icons.arrow_drop_up,
-    size: 30,
     color: QuranDS.lightTextColor,
   );
   static const Icon arrowDown = Icon(
     Icons.arrow_drop_down,
-    size: 30,
     color: QuranDS.lightTextColor,
   );
 
