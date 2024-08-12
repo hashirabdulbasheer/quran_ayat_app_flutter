@@ -3,7 +3,7 @@ description: App to quickly view the word by word meaning of an ayat
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 3.2.5+1
+version: 3.2.6+1
 
 environment:
   sdk: '>=2.17.0 <5.7.3'
@@ -40,6 +40,7 @@ dependencies:
   flutter_markdown: ^0.7.3
   social_login_buttons: ^1.0.7
   google_generative_ai: ^0.4.3
+  flip_widget: ^0.1.11
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +49,9 @@ dev_dependencies:
   hive_generator: ^2.0.1
   flutter_lints: ^4.0.0
   test: ^1.24.3
+
+dependency_overrides:
+  ffi: ^2.0.1
 
 flutter:
   uses-material-design: true
