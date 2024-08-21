@@ -263,12 +263,12 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                       children: [
                         if (!_isAILoading(store, QuranAIType.reflection) &&
                             !_isAILoading(
-                                store, QuranAIType.poeticInterpretation)) ...[
+                                store, QuranAIType.poeticReflection)) ...[
                           const Tooltip(
                             message: "AI Poetry",
                             child: QuranAITriggerWidget(
                               icon: QuranDS.aiPoetryIcon,
-                              type: QuranAIType.poeticInterpretation,
+                              type: QuranAIType.poeticReflection,
                             ),
                           ),
                           const Tooltip(
@@ -292,11 +292,11 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                               translations[NQTranslation.wahiduddinkhan] ?? "")
                     ],
                     if (_isAILoading(
-                        store, QuranAIType.poeticInterpretation)) ...[
+                        store, QuranAIType.poeticReflection)) ...[
                       QuranAIResponseWidget(
                           engine: _aiEngine,
                           cache: _aiCache,
-                          type: QuranAIType.poeticInterpretation,
+                          type: QuranAIType.poeticReflection,
                           currentIndex: currentIndex,
                           translation:
                               translations[NQTranslation.wahiduddinkhan] ?? "")

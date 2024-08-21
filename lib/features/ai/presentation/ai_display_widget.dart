@@ -237,7 +237,7 @@ class _AIEngineResponseWidget extends StatelessWidget {
     switch (type) {
       case QuranAIType.reflection:
         return "Help me think about and reflect on this verse from Quran - $translation.";
-      case QuranAIType.poeticInterpretation:
+      case QuranAIType.poeticReflection:
         return "Write a short poem to reflect on this verse fom the Quran - $translation.";
     }
   }
