@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/ai/domain/ai_cache.dart';
@@ -92,13 +93,24 @@ class _AIDataWidget extends StatelessWidget {
               "AI Generated",
               style: QuranDS.textTitleMediumLight,
             ),
-            IconButton(
-                onPressed: () =>
-                    _shareResponse(currentIndex, translation, response),
-                icon: const Icon(
-                  Icons.share,
-                  color: QuranDS.primaryColor,
-                )),
+            Row(
+              children: [
+                IconButton(
+                    onPressed: () => _copyResponse(
+                        context, currentIndex, translation, response),
+                    icon: const Icon(
+                      Icons.copy,
+                      color: QuranDS.primaryColor,
+                    )),
+                IconButton(
+                    onPressed: () =>
+                        _shareResponse(currentIndex, translation, response),
+                    icon: const Icon(
+                      Icons.share,
+                      color: QuranDS.primaryColor,
+                    )),
+              ],
+            ),
           ],
         ),
         Padding(
@@ -117,8 +129,18 @@ class _AIDataWidget extends StatelessWidget {
 
   void _shareResponse(SurahIndex index, String translation, String response) {
     String shareString =
-        "${index.human.sura}:${index.human.aya} $translation\n\n$response\n\nhttps://uxquran.com";
+        "${index.human.sura}:${index.human.aya} $translation\n\n$response\n\nhttps://uxquran.com/${index.human.sura}/${index.human.aya}";
     Share.share(shareString);
+  }
+
+  void _copyResponse(BuildContext context, SurahIndex index, String translation,
+      String response) {
+    String shareString =
+        "${index.human.sura}:${index.human.aya} $translation\n\n$response\n\nhttps://uxquran.com/${index.human.sura}/${index.human.aya}";
+    Clipboard.setData(ClipboardData(text: shareString)).then((_) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Copied to clipboard")));
+    });
   }
 }
 
