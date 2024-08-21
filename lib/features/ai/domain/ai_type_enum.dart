@@ -1,1 +1,1 @@
-enum QuranAIType { think, poem }
+enum QuranAIType { reflection, poeticInterpretation }

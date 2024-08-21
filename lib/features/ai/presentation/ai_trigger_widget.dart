@@ -22,7 +22,9 @@ class QuranAITriggerWidget extends StatelessWidget {
         StoreProvider.of<AppState>(context).dispatch(ShowAIResponseAction(
           type: type,
         ));
-        QuranLogger.logAnalytics("ai-tapped");
+        QuranLogger.logAnalyticsWithParams("ai-tapped", {
+          'type': type.toString(),
+        });
       },
       icon: icon,
     );

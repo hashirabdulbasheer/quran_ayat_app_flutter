@@ -254,14 +254,14 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// AI
               if (_aiApiKey.isNotEmpty) ...[
-                if (!_isAILoading(store,  QuranAIType.think)) ...[
+                if (!_isAILoading(store,  QuranAIType.reflection)) ...[
                   const QuranAITriggerWidget(
-                      icon: QuranDS.aiIcon, type: QuranAIType.think)
+                      icon: QuranDS.aiIcon, type: QuranAIType.reflection)
                 ] else ...[
                   QuranAIResponseWidget(
                       engine: _aiEngine,
                       cache: _aiCache,
-                      type: QuranAIType.think,
+                      type: QuranAIType.reflection,
                       currentIndex: currentIndex,
                       translation:
                           translations[NQTranslation.wahiduddinkhan] ?? "")

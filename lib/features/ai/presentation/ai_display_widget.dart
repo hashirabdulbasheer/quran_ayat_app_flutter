@@ -208,9 +208,9 @@ class _AIEngineResponseWidget extends StatelessWidget {
 
   String _getPromptFromType(QuranAIType type, String translation) {
     switch (type) {
-      case QuranAIType.think:
+      case QuranAIType.reflection:
         return "Help me think about and reflect on this verse from Quran - $translation.";
-      case QuranAIType.poem:
+      case QuranAIType.poeticInterpretation:
         return "";
     }
   }
