@@ -4,7 +4,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import '../../../../misc/router/router_utils.dart';
 import '../../../../models/qr_user_model.dart';
 import '../../../../utils/logger_utils.dart';
-import '../../../../utils/utils.dart';
 import '../../../auth/domain/auth_factory.dart';
 import '../../../core/domain/app_state/app_state.dart';
 import '../../../core/presentation/shimmer.dart';
@@ -120,11 +119,6 @@ class _QuranAyatDisplayNotesWidgetState
           BuildContext context,
           int index,
         ) {
-          TextDirection textDirection = TextDirection.ltr;
-          if (!QuranUtils.isEnglish(notes[index].note)) {
-            textDirection = TextDirection.rtl;
-          }
-
           return ListTile(
             onTap: () => {
               _goToCreateNoteScreen(
@@ -168,11 +162,6 @@ class _QuranAyatDisplayNotesWidgetState
     );
   }
 
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
-
   void _goToLoginScreen() {
     QuranNavigator.of(context).routeToLogin().then((value) => setState(() {}));
   }
@@ -188,7 +177,9 @@ class _QuranAyatDisplayNotesWidgetState
         widget.currentIndex.sura,
         widget.currentIndex.aya,
       );
-      QuranNavigator.of(context).routeToCreateNote(arguments: args).then((value) {
+      QuranNavigator.of(context)
+          .routeToCreateNote(arguments: args)
+          .then((value) {
         setState(() {});
       });
       QuranLogger.logAnalytics("add_note");
