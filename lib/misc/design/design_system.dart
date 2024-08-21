@@ -128,6 +128,10 @@ class QuranDS {
     Icons.auto_stories_rounded,
     color: QuranDS.primaryColor,
   );
+  static const Icon aiChildrenIcon = Icon(
+    Icons.child_care_rounded,
+    color: QuranDS.primaryColor,
+  );
   static const Icon arrowUp = Icon(
     Icons.arrow_drop_up,
     color: QuranDS.lightTextColor,

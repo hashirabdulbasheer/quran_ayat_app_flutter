@@ -1,1 +1,1 @@
-enum QuranAIType { reflection, poeticReflection }
+enum QuranAIType { reflection, poeticReflection, childReflection }

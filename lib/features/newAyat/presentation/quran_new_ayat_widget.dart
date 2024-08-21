@@ -261,9 +261,14 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        if (!_isAILoading(store, QuranAIType.reflection) &&
-                            !_isAILoading(
-                                store, QuranAIType.poeticReflection)) ...[
+                        if (!_isAnyAILoading(store)) ...[
+                          const Tooltip(
+                            message: "AI Children",
+                            child: QuranAITriggerWidget(
+                              icon: QuranDS.aiChildrenIcon,
+                              type: QuranAIType.childReflection,
+                            ),
+                          ),
                           const Tooltip(
                             message: "AI Poetry",
                             child: QuranAITriggerWidget(
@@ -273,7 +278,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           ),
                           const Tooltip(
                             message: "AI Reflections",
-                            child: const QuranAITriggerWidget(
+                            child: QuranAITriggerWidget(
                               icon: QuranDS.aiReflectionIcon,
                               type: QuranAIType.reflection,
                             ),
@@ -291,8 +296,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           translation:
                               translations[NQTranslation.wahiduddinkhan] ?? "")
                     ],
-                    if (_isAILoading(
-                        store, QuranAIType.poeticReflection)) ...[
+                    if (_isAILoading(store, QuranAIType.poeticReflection)) ...[
                       QuranAIResponseWidget(
                           engine: _aiEngine,
                           cache: _aiCache,
@@ -300,7 +304,16 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           currentIndex: currentIndex,
                           translation:
                               translations[NQTranslation.wahiduddinkhan] ?? "")
-                    ]
+                    ],
+                    if (_isAILoading(store, QuranAIType.childReflection)) ...[
+                      QuranAIResponseWidget(
+                          engine: _aiEngine,
+                          cache: _aiCache,
+                          type: QuranAIType.childReflection,
+                          currentIndex: currentIndex,
+                          translation:
+                              translations[NQTranslation.wahiduddinkhan] ?? "")
+                    ],
                   ],
                 )
               ],
@@ -369,6 +382,10 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
   bool _isAILoading(Store<AppState> store, QuranAIType type) {
     return store.state.reader.aiResponseVisibility[type] == true;
+  }
+
+  bool _isAnyAILoading(Store<AppState> store) {
+    return store.state.reader.aiResponseVisibility.keys.isNotEmpty;
   }
 
   ///

@@ -239,6 +239,8 @@ class _AIEngineResponseWidget extends StatelessWidget {
         return "Help me think about and reflect on this verse from Quran - $translation.";
       case QuranAIType.poeticReflection:
         return "Write a short poem to reflect on this verse fom the Quran - $translation.";
+      case QuranAIType.childReflection:
+        return "Make this verse from the quran easier to understand for children - $translation.";
     }
   }
 }
