@@ -254,18 +254,55 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// AI
               if (_aiApiKey.isNotEmpty) ...[
-                if (!_isAILoading(store,  QuranAIType.reflection)) ...[
-                  const QuranAITriggerWidget(
-                      icon: QuranDS.aiIcon, type: QuranAIType.reflection)
-                ] else ...[
-                  QuranAIResponseWidget(
-                      engine: _aiEngine,
-                      cache: _aiCache,
-                      type: QuranAIType.reflection,
-                      currentIndex: currentIndex,
-                      translation:
-                          translations[NQTranslation.wahiduddinkhan] ?? "")
-                ]
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // ai triggers
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (!_isAILoading(store, QuranAIType.reflection) &&
+                            !_isAILoading(
+                                store, QuranAIType.poeticInterpretation)) ...[
+                          const Tooltip(
+                            message: "AI Poetry",
+                            child: QuranAITriggerWidget(
+                              icon: QuranDS.aiPoetryIcon,
+                              type: QuranAIType.poeticInterpretation,
+                            ),
+                          ),
+                          const Tooltip(
+                            message: "AI Reflections",
+                            child: const QuranAITriggerWidget(
+                              icon: QuranDS.aiReflectionIcon,
+                              type: QuranAIType.reflection,
+                            ),
+                          )
+                        ],
+                      ],
+                    ),
+                    // ai responses
+                    if (_isAILoading(store, QuranAIType.reflection)) ...[
+                      QuranAIResponseWidget(
+                          engine: _aiEngine,
+                          cache: _aiCache,
+                          type: QuranAIType.reflection,
+                          currentIndex: currentIndex,
+                          translation:
+                              translations[NQTranslation.wahiduddinkhan] ?? "")
+                    ],
+                    if (_isAILoading(
+                        store, QuranAIType.poeticInterpretation)) ...[
+                      QuranAIResponseWidget(
+                          engine: _aiEngine,
+                          cache: _aiCache,
+                          type: QuranAIType.poeticInterpretation,
+                          currentIndex: currentIndex,
+                          translation:
+                              translations[NQTranslation.wahiduddinkhan] ?? "")
+                    ]
+                  ],
+                )
               ],
 
               /// audio controls

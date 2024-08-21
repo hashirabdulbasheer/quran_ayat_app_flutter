@@ -83,6 +83,7 @@ class _AIDataWidget extends StatelessWidget {
       return const SizedBox.shrink();
     }
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,6 +105,7 @@ class _AIDataWidget extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: MarkdownBody(
             selectable: true,
+            softLineBreak: true,
             data: response,
             styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context))
                 .copyWith(p: QuranDS.textTitleLarge),
@@ -214,7 +216,7 @@ class _AIEngineResponseWidget extends StatelessWidget {
       case QuranAIType.reflection:
         return "Help me think about and reflect on this verse from Quran - $translation.";
       case QuranAIType.poeticInterpretation:
-        return "";
+        return "Write a short poem to reflect on this verse fom the Quran - $translation.";
     }
   }
 }
