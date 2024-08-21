@@ -146,7 +146,7 @@ class QuranChallengesEngine implements QuranChallengesDataSource {
     }
 
     try {
-      if (question.answers == null || question.answers.isEmpty) {
+      if (question.answers.isEmpty) {
         question = question.copyWith(answers: [answer]);
       } else {
         question.answers.add(answer);

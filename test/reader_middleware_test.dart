@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:noble_quran/models/surah_title.dart';
 import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
@@ -31,21 +30,21 @@ void main() {
   );
 }
 
-Store<AppState> _mockStore({
-  int sura = 0,
-  int aya = 1,
-}) {
-  NQSurahTitle surahTitle = NQSurahTitle(
-    number: 0,
-    name: "hashir1",
-    translationEn: "Test1",
-    transliterationEn: "Test1",
-    totalVerses: 200,
-    revelationType: RevelationType.MECCAN,
-  );
-
-  return MockStore();
-}
+// Store<AppState> _mockStore({
+//   int sura = 0,
+//   int aya = 1,
+// }) {
+//   NQSurahTitle surahTitle = NQSurahTitle(
+//     number: 0,
+//     name: "hashir1",
+//     translationEn: "Test1",
+//     transliterationEn: "Test1",
+//     totalVerses: 200,
+//     revelationType: RevelationType.MECCAN,
+//   );
+//
+//   return MockStore();
+// }
 
 class MockStore implements Store<AppState> {
   List<dynamic> dispatchedActions = List<dynamic>.empty();

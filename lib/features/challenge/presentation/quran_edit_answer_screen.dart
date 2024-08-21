@@ -119,12 +119,12 @@ class _QuranEditAnswerScreenState extends State<QuranEditAnswerScreen> {
                 title: "Select a verse that could answer the question",
                 currentIndex: currentIndex ?? SurahIndex.defaultIndex,
                 currentSurahDetails: currentSurahDetails,
-                onSuraSelected: (surah) => setState(() => {
-                      currentSurahDetails = surah,
+                onSuraSelected: (surah) => setState(() {
+                      currentSurahDetails = surah;
                       currentIndex = SurahIndex(
                         surah.number - 1,
                         0,
-                      ),
+                      );
                     }),
                 onAyaSelected: (aya) => setState(
                   () => currentIndex = SurahIndex(

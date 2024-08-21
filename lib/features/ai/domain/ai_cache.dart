@@ -1,23 +1,40 @@
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract class AICache {
-  Future<String?> getResponse(SurahIndex currentIndex);
+import 'ai_type_enum.dart';
 
-  void saveResponse(SurahIndex currentIndex, String response);
+abstract class AICache {
+  Future<String?> getResponse({
+    required SurahIndex index,
+    required QuranAIType type,
+  });
+
+  void saveResponse({
+    required SurahIndex index,
+    required QuranAIType type,
+    required String response,
+  });
 }
 
 /// Simple caching mechanism to store ai response so that it can be reused
 class AILocalCache implements AICache {
   @override
-  Future<String?> getResponse(SurahIndex currentIndex) async {
+  Future<String?> getResponse({
+    required SurahIndex index,
+    required QuranAIType type,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString("ai:${currentIndex.toString()}");
+    return prefs.getString("ai:${type.toString()}:${index.toString()}");
   }
 
   @override
-  void saveResponse(SurahIndex currentIndex, String response) async {
+  void saveResponse({
+    required SurahIndex index,
+    required QuranAIType type,
+    required String response,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("ai:${currentIndex.toString()}", response);
+    await prefs.setString(
+        "ai:${type.toString()}:${index.toString()}", response);
   }
 }

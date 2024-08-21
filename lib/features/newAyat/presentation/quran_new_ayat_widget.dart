@@ -7,8 +7,10 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/ai/domain/ai_cache.dart';
 import 'package:quran_ayat/features/ai/domain/ai_engine.dart';
+import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
 import 'package:quran_ayat/features/ai/domain/gemini_ai_engine.dart';
 import 'package:quran_ayat/features/ai/presentation/ai_display_widget.dart';
+import 'package:quran_ayat/features/ai/presentation/ai_trigger_widget.dart';
 import 'package:redux/redux.dart';
 
 import '../../../misc/design/design_system.dart';
@@ -150,7 +152,8 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                     style: QuranDS.textTitleSmallLight,
                     textAlign: TextAlign.start,
                   ),
-                  onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
+                  onPressed: () =>
+                      store.dispatch(ToggleHeaderVisibilityAction()),
                 ),
               ),
 
@@ -251,11 +254,54 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// AI
               if (_aiApiKey.isNotEmpty) ...[
-                QuranAIDisplayWidget(
-                  aiEngine: _aiEngine,
-                  aiCache: _aiCache,
-                  translation: translations[NQTranslation.wahiduddinkhan] ?? "",
-                  currentIndex: currentIndex,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // ai triggers
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        if (!_isAILoading(store, QuranAIType.reflection) &&
+                            !_isAILoading(
+                                store, QuranAIType.poeticInterpretation)) ...[
+                          const Tooltip(
+                            message: "AI Poetry",
+                            child: QuranAITriggerWidget(
+                              icon: QuranDS.aiPoetryIcon,
+                              type: QuranAIType.poeticInterpretation,
+                            ),
+                          ),
+                          const Tooltip(
+                            message: "AI Reflections",
+                            child: const QuranAITriggerWidget(
+                              icon: QuranDS.aiReflectionIcon,
+                              type: QuranAIType.reflection,
+                            ),
+                          )
+                        ],
+                      ],
+                    ),
+                    // ai responses
+                    if (_isAILoading(store, QuranAIType.reflection)) ...[
+                      QuranAIResponseWidget(
+                          engine: _aiEngine,
+                          cache: _aiCache,
+                          type: QuranAIType.reflection,
+                          currentIndex: currentIndex,
+                          translation:
+                              translations[NQTranslation.wahiduddinkhan] ?? "")
+                    ],
+                    if (_isAILoading(
+                        store, QuranAIType.poeticInterpretation)) ...[
+                      QuranAIResponseWidget(
+                          engine: _aiEngine,
+                          cache: _aiCache,
+                          type: QuranAIType.poeticInterpretation,
+                          currentIndex: currentIndex,
+                          translation:
+                              translations[NQTranslation.wahiduddinkhan] ?? "")
+                    ]
+                  ],
                 )
               ],
 
@@ -319,6 +365,10 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
     Store<AppState> store,
   ) {
     store.dispatch(ResetFontSizeAction());
+  }
+
+  bool _isAILoading(Store<AppState> store, QuranAIType type) {
+    return store.state.reader.aiResponseVisibility[type] == true;
   }
 
   ///

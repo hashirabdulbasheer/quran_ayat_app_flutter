@@ -116,12 +116,12 @@ class _QuranCreateChallengeScreenState
                 title: "Select a verse that could answer the question",
                 currentIndex: _currentIndex ?? SurahIndex.defaultIndex,
                 currentSurahDetails: _currentSurahDetails,
-                onSuraSelected: (surah) => setState(() => {
-                      _currentSurahDetails = surah,
+                onSuraSelected: (surah) => setState(() {
+                      _currentSurahDetails = surah;
                       _currentIndex = SurahIndex(
                         surah.number - 1,
                         0,
-                      ),
+                      );
                     }),
                 onAyaSelected: (aya) => setState(
                   () => _currentIndex = SurahIndex(

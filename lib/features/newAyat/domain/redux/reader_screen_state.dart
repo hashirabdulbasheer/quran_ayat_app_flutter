@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
+import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
 
 import '../../data/quran_data.dart';
 import '../../data/surah_index.dart';
@@ -15,7 +16,7 @@ class ReaderScreenState extends Equatable {
   final SurahIndex currentIndex;
   final bool isLoading;
   final bool isHeaderVisible;
-  final bool isAIResponseVisible;
+  final Map<QuranAIType, bool> aiResponseVisibility;
   final BookmarkState? bookmarkState;
   final QuranData data;
 
@@ -24,7 +25,7 @@ class ReaderScreenState extends Equatable {
     this.currentIndex = SurahIndex.defaultIndex,
     this.isLoading = false,
     this.isHeaderVisible = false,
-    this.isAIResponseVisible = false,
+    this.aiResponseVisibility = const {},
     this.bookmarkState,
     this.data = const QuranData(),
   });
@@ -34,7 +35,7 @@ class ReaderScreenState extends Equatable {
     SurahIndex? currentIndex,
     bool? isLoading,
     bool? isHeaderVisible,
-    bool? isAIResponseVisible,
+    Map<QuranAIType, bool>? aiResponseVisibility,
     BookmarkState? bookmarkState,
     QuranData? data,
   }) {
@@ -43,7 +44,7 @@ class ReaderScreenState extends Equatable {
       currentIndex: currentIndex ?? this.currentIndex,
       isLoading: isLoading ?? this.isLoading,
       isHeaderVisible: isHeaderVisible ?? this.isHeaderVisible,
-      isAIResponseVisible: isAIResponseVisible ?? this.isAIResponseVisible,
+      aiResponseVisibility: aiResponseVisibility ?? this.aiResponseVisibility,
       bookmarkState: bookmarkState ?? this.bookmarkState,
       data: data ?? this.data,
     );
@@ -85,7 +86,7 @@ class ReaderScreenState extends Equatable {
   String toString() {
     return "{surah: ${currentIndex.toString()}, titles: ${surahTitles.length}, "
         "isLoading: $isLoading,"
-        "isAIResponseVisible: $isAIResponseVisible,"
+        "aiVisibility: $aiResponseVisibility,"
         "bookmark: ${bookmarkState.toString()}, suraWords Len: ${data.words.length}, "
         "translation len: ${data.translationMap.keys.length}, transliteration: ${data.transliteration?.name}}";
   }
@@ -97,7 +98,7 @@ class ReaderScreenState extends Equatable {
         isHeaderVisible,
         currentIndex,
         bookmarkState,
-        isAIResponseVisible,
+        aiResponseVisibility,
         data,
       ];
 }

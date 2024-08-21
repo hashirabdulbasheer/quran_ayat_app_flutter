@@ -120,8 +120,12 @@ class QuranDS {
     Icons.report_problem_outlined,
     color: QuranDS.primaryColor,
   );
-  static const Icon aiIcon = Icon(
+  static const Icon aiReflectionIcon = Icon(
     Icons.assistant,
+    color: QuranDS.primaryColor,
+  );
+  static const Icon aiPoetryIcon = Icon(
+    Icons.auto_stories_rounded,
     color: QuranDS.primaryColor,
   );
   static const Icon arrowUp = Icon(
