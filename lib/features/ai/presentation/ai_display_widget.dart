@@ -30,7 +30,7 @@ class QuranAIResponseWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String?>(
-        future: cache.getResponse(currentIndex),
+        future: cache.getResponse(index: currentIndex, type: type),
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const _AIWaitingWidget();
@@ -50,7 +50,11 @@ class QuranAIResponseWidget extends StatelessWidget {
             translation: translation,
             type: type,
             onResponse: (response) {
-              cache.saveResponse(currentIndex, response);
+              cache.saveResponse(
+                index: currentIndex,
+                type: type,
+                response: response,
+              );
             },
           );
         });
@@ -172,7 +176,6 @@ class _AIEngineResponseWidget extends StatelessWidget {
   final Function(String)? onResponse;
 
   const _AIEngineResponseWidget({
-    super.key,
     required this.engine,
     required this.type,
     required this.translation,
