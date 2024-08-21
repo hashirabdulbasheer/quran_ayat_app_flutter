@@ -7,8 +7,10 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/ai/domain/ai_cache.dart';
 import 'package:quran_ayat/features/ai/domain/ai_engine.dart';
+import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
 import 'package:quran_ayat/features/ai/domain/gemini_ai_engine.dart';
 import 'package:quran_ayat/features/ai/presentation/ai_display_widget.dart';
+import 'package:quran_ayat/features/ai/presentation/ai_trigger_widget.dart';
 import 'package:redux/redux.dart';
 
 import '../../../misc/design/design_system.dart';
@@ -150,7 +152,8 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                     style: QuranDS.textTitleSmallLight,
                     textAlign: TextAlign.start,
                   ),
-                  onPressed: () => store.dispatch(ToggleHeaderVisibilityAction()),
+                  onPressed: () =>
+                      store.dispatch(ToggleHeaderVisibilityAction()),
                 ),
               ),
 
@@ -251,12 +254,18 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// AI
               if (_aiApiKey.isNotEmpty) ...[
-                QuranAIDisplayWidget(
-                  aiEngine: _aiEngine,
-                  aiCache: _aiCache,
-                  translation: translations[NQTranslation.wahiduddinkhan] ?? "",
-                  currentIndex: currentIndex,
-                )
+                if (!_isAILoading(store,  QuranAIType.think)) ...[
+                  const QuranAITriggerWidget(
+                      icon: QuranDS.aiIcon, type: QuranAIType.think)
+                ] else ...[
+                  QuranAIResponseWidget(
+                      engine: _aiEngine,
+                      cache: _aiCache,
+                      type: QuranAIType.think,
+                      currentIndex: currentIndex,
+                      translation:
+                          translations[NQTranslation.wahiduddinkhan] ?? "")
+                ]
               ],
 
               /// audio controls
@@ -319,6 +328,10 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
     Store<AppState> store,
   ) {
     store.dispatch(ResetFontSizeAction());
+  }
+
+  bool _isAILoading(Store<AppState> store, QuranAIType type) {
+    return store.state.reader.aiResponseVisibility[type] == true;
   }
 
   ///

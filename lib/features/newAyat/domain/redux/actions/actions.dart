@@ -1,4 +1,5 @@
 import 'package:noble_quran/models/surah_title.dart';
+import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
 
 import '../../../../core/domain/app_state/redux/actions/actions.dart';
 import '../../../data/quran_data.dart';
@@ -115,4 +116,15 @@ class RandomAyaAction extends AppStateAction {}
 
 class ToggleHeaderVisibilityAction extends AppStateAction {}
 
-class ShowAIResponseAction extends AppStateAction {}
+class ShowAIResponseAction extends AppStateAction {
+  final QuranAIType type;
+
+  ShowAIResponseAction({
+    required this.type,
+  });
+
+  @override
+  String toString() {
+    return '{action: ${super.toString()}, type: $type';
+  }
+}

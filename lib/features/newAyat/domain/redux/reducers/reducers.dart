@@ -92,12 +92,12 @@ ReaderScreenState _surahSelectedReducer(
   if (suraIndex >= 0 && suraIndex < 114) {
     return newState.copyWith(
       currentIndex: action.index,
-      isAIResponseVisible: false,
+      aiResponseVisibility: const {},
     );
   } else {
     return newState.copyWith(
       currentIndex: SurahIndex.defaultIndex,
-      isAIResponseVisible: false,
+      aiResponseVisibility: const {},
     );
   }
 }
@@ -110,12 +110,12 @@ ReaderScreenState _ayaSelectedReducer(
   if (ayaIndex < state.currentSurahDetails().totalVerses) {
     return state.copyWith(
       currentIndex: state.currentIndex.copyWith(aya: ayaIndex),
-      isAIResponseVisible: false,
+      aiResponseVisibility: const {},
     );
   } else {
     return state.copyWith(
       currentIndex: state.currentIndex.copyWith(aya: 1),
-      isAIResponseVisible: false,
+      aiResponseVisibility: const {},
     );
   }
 }
@@ -132,17 +132,17 @@ ReaderScreenState _particularAyaSelectedReducer(
   if (suraIndex > 114) {
     return newState.copyWith(
       currentIndex: SurahIndex.defaultIndex,
-      isAIResponseVisible: false,
+      aiResponseVisibility: const {},
     );
   } else if (ayaIndex >= state.surahTitles[suraIndex].totalVerses) {
     return newState.copyWith(
-      isAIResponseVisible: false,
+      aiResponseVisibility: const {},
     );
   }
 
   return newState.copyWith(
     currentIndex: action.index,
-    isAIResponseVisible: false,
+    aiResponseVisibility: const {},
   );
 }
 
@@ -174,7 +174,7 @@ ReaderScreenState _nextAyaReducer(
     return state.copyWith(
       currentIndex: state.currentIndex.next(),
       isHeaderVisible: false,
-      isAIResponseVisible: false,
+      aiResponseVisibility: const {},
     );
   }
 
@@ -189,7 +189,7 @@ ReaderScreenState _previousAyaReducer(
   return state.copyWith(
     currentIndex: state.currentIndex.previous(),
     isHeaderVisible: false,
-    isAIResponseVisible: false,
+    aiResponseVisibility: const {},
   );
 }
 
@@ -223,7 +223,7 @@ ReaderScreenState _showAIResponseReducer(
   ShowAIResponseAction action,
 ) {
   return state.copyWith(
-    isAIResponseVisible: true,
+    aiResponseVisibility: {action.type: true},
   );
 }
 
@@ -233,6 +233,6 @@ ReaderScreenState _toggleHeaderVisibilityReducer(
 ) {
   return state.copyWith(
     isHeaderVisible: !state.isHeaderVisible,
-    isAIResponseVisible: false,
+    aiResponseVisibility: const {},
   );
 }

@@ -1,0 +1,1 @@
+enum QuranAIType { think, poem }

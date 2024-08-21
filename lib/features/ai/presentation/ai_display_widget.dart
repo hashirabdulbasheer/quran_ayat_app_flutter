@@ -3,107 +3,63 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/ai/domain/ai_cache.dart';
 import 'package:quran_ayat/features/ai/domain/ai_engine.dart';
+import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
 import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
 import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/actions.dart';
 import 'package:quran_ayat/misc/design/design_system.dart';
 import 'package:quran_ayat/utils/logger_utils.dart';
-import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
 
-class QuranAIDisplayWidget extends StatelessWidget {
-  final QuranAIEngine aiEngine;
-  final AICache? aiCache;
+class QuranAIResponseWidget extends StatelessWidget {
+  final QuranAIEngine engine;
+  final AICache cache;
+  final QuranAIType type;
   final SurahIndex currentIndex;
   final String translation;
 
-  const QuranAIDisplayWidget({
+  const QuranAIResponseWidget({
     super.key,
-    required this.aiEngine,
+    required this.engine,
+    required this.cache,
+    required this.type,
     required this.currentIndex,
     required this.translation,
-    this.aiCache,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (translation.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return StoreBuilder<AppState>(builder: (
-      BuildContext context,
-      Store<AppState> store,
-    ) {
-      if (!store.state.reader.isAIResponseVisible) {
-        return const _AITriggerIcon();
-      }
-      return FutureBuilder<String?>(
-          future: _getAIResponse(),
-          builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const _AIWaitingWidget();
-            } else if (snapshot.hasData) {
-              String? aiResponse = snapshot.data;
+    return FutureBuilder<String?>(
+        future: cache.getResponse(currentIndex),
+        builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const _AIWaitingWidget();
+          } else if (snapshot.hasData) {
+            String? cacheResponse = snapshot.data;
+            if (cacheResponse != null && cacheResponse.isNotEmpty) {
               return _AIDataWidget(
                 currentIndex: currentIndex,
                 translation: translation,
-                aiResponse: aiResponse,
+                aiResponse: cacheResponse,
               );
-            } else {
-              return const _AIErrorWidget();
             }
-          });
-    });
-  }
-
-  Future<String?> _getAIResponse() async {
-    String? response;
-    // try cache
-    response = await aiCache?.getResponse(currentIndex);
-    if (response == null || response.isEmpty) {
-      // there isn't any cached response, fetch it
-      response = await aiEngine.getResponse(
-        currentIndex: currentIndex,
-        question: "Help me think about and reflect on this verse from Quran - $translation.",
-      );
-
-      // save in cache for future use
-      if (response != null && response.isNotEmpty) {
-        aiCache?.saveResponse(currentIndex, response);
-      }
-    }
-    return response;
+          }
+          return _AIEngineResponseWidget(
+            engine: engine,
+            currentIndex: currentIndex,
+            translation: translation,
+            type: type,
+            onResponse: (response) {
+              cache.saveResponse(currentIndex, response);
+            },
+          );
+        });
   }
 }
 
 ///
 /// Local Widgets
 ///
-
-class _AITriggerIcon extends StatelessWidget {
-  const _AITriggerIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IconButton(
-            onPressed: () {
-              StoreProvider.of<AppState>(context)
-                  .dispatch(ShowAIResponseAction());
-              QuranLogger.logAnalytics("ai-tapped");
-            },
-            icon: QuranDS.aiIcon,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _AIDataWidget extends StatelessWidget {
   final SurahIndex currentIndex;
@@ -205,5 +161,57 @@ class _AIErrorWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _AIEngineResponseWidget extends StatelessWidget {
+  final QuranAIEngine engine;
+  final QuranAIType type;
+  final SurahIndex currentIndex;
+  final String translation;
+  final Function(String)? onResponse;
+
+  const _AIEngineResponseWidget({
+    super.key,
+    required this.engine,
+    required this.type,
+    required this.translation,
+    required this.currentIndex,
+    this.onResponse,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String prompt = _getPromptFromType(type, translation);
+    return FutureBuilder<String?>(
+        future: engine.getResponse(
+          currentIndex: currentIndex,
+          question: prompt,
+        ),
+        builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const _AIWaitingWidget();
+          } else if (snapshot.hasData) {
+            String? aiResponse = snapshot.data;
+            if (aiResponse != null) {
+              onResponse?.call(aiResponse);
+              return _AIDataWidget(
+                currentIndex: currentIndex,
+                translation: translation,
+                aiResponse: aiResponse,
+              );
+            }
+          }
+          return const _AIErrorWidget();
+        });
+  }
+
+  String _getPromptFromType(QuranAIType type, String translation) {
+    switch (type) {
+      case QuranAIType.think:
+        return "Help me think about and reflect on this verse from Quran - $translation.";
+      case QuranAIType.poem:
+        return "";
+    }
   }
 }
