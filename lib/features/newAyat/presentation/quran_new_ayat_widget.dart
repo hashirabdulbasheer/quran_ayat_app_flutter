@@ -261,29 +261,37 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        if (!_isAnyAILoading(store)) ...[
-                          const Tooltip(
-                            message: "AI Children",
-                            child: QuranAITriggerWidget(
-                              icon: QuranDS.aiChildrenIcon,
-                              type: QuranAIType.childReflection,
+                        Tooltip(
+                          message: "AI Children",
+                          child: QuranAITriggerWidget(
+                            icon: QuranDS.aiChildrenIcon,
+                            type: QuranAIType.childReflection,
+                            isEnabled: !_isAILoading(
+                                store, QuranAIType.childReflection),
+                          ),
+                        ),
+                        Tooltip(
+                          message: "AI Poetry",
+                          child: QuranAITriggerWidget(
+                            icon: QuranDS.aiPoetryIcon,
+                            type: QuranAIType.poeticReflection,
+                            isEnabled: !_isAILoading(
+                              store,
+                              QuranAIType.poeticReflection,
                             ),
                           ),
-                          const Tooltip(
-                            message: "AI Poetry",
-                            child: QuranAITriggerWidget(
-                              icon: QuranDS.aiPoetryIcon,
-                              type: QuranAIType.poeticReflection,
+                        ),
+                        Tooltip(
+                          message: "AI Reflections",
+                          child: QuranAITriggerWidget(
+                            icon: QuranDS.aiReflectionIcon,
+                            type: QuranAIType.reflection,
+                            isEnabled: !_isAILoading(
+                              store,
+                              QuranAIType.reflection,
                             ),
                           ),
-                          const Tooltip(
-                            message: "AI Reflections",
-                            child: QuranAITriggerWidget(
-                              icon: QuranDS.aiReflectionIcon,
-                              type: QuranAIType.reflection,
-                            ),
-                          )
-                        ],
+                        )
                       ],
                     ),
                     // ai responses
@@ -379,10 +387,6 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
   bool _isAILoading(Store<AppState> store, QuranAIType type) {
     return store.state.reader.aiResponseVisibility[type] == true;
-  }
-
-  bool _isAnyAILoading(Store<AppState> store) {
-    return store.state.reader.aiResponseVisibility.keys.isNotEmpty;
   }
 
   ///
