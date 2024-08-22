@@ -8,25 +8,33 @@ import 'package:quran_ayat/utils/logger_utils.dart';
 class QuranAITriggerWidget extends StatelessWidget {
   final Icon icon;
   final QuranAIType type;
+  final bool? isEnabled;
 
   const QuranAITriggerWidget({
     super.key,
     required this.icon,
     required this.type,
+    this.isEnabled = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        StoreProvider.of<AppState>(context).dispatch(ShowAIResponseAction(
-          type: type,
-        ));
-        QuranLogger.logAnalyticsWithParams("ai-tapped", {
-          'type': type.toString(),
-        });
-      },
-      icon: icon,
+    return Opacity(
+      opacity: isEnabled == true ? 1.0 : 0.5,
+      child: IconButton(
+        onPressed: () {
+          if (isEnabled == false) {
+            return;
+          }
+          StoreProvider.of<AppState>(context).dispatch(ShowAIResponseAction(
+            type: type,
+          ));
+          QuranLogger.logAnalyticsWithParams("ai-tapped", {
+            'type': type.toString(),
+          });
+        },
+        icon: icon,
+      ),
     );
   }
 }
