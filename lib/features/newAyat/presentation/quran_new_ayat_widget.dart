@@ -293,8 +293,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           cache: _aiCache,
                           type: QuranAIType.reflection,
                           currentIndex: currentIndex,
-                          translation:
-                              translations[NQTranslation.wahiduddinkhan] ?? "")
+                          translation: store.state.reader.lastThreeTranslations)
                     ],
                     if (_isAILoading(store, QuranAIType.poeticReflection)) ...[
                       QuranAIResponseWidget(
@@ -302,8 +301,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           cache: _aiCache,
                           type: QuranAIType.poeticReflection,
                           currentIndex: currentIndex,
-                          translation:
-                              translations[NQTranslation.wahiduddinkhan] ?? "")
+                          translation: store.state.reader.lastThreeTranslations)
                     ],
                     if (_isAILoading(store, QuranAIType.childReflection)) ...[
                       QuranAIResponseWidget(
@@ -311,8 +309,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                           cache: _aiCache,
                           type: QuranAIType.childReflection,
                           currentIndex: currentIndex,
-                          translation:
-                              translations[NQTranslation.wahiduddinkhan] ?? "")
+                          translation: store.state.reader.lastThreeTranslations)
                     ],
                   ],
                 )
