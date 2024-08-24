@@ -19,6 +19,7 @@ class QuranAIResponseWidget extends StatelessWidget {
   final SurahIndex currentIndex;
   final String translation;
   final List<String>? contextVerses;
+  final Function onReload;
 
   const QuranAIResponseWidget({
     super.key,
@@ -28,6 +29,7 @@ class QuranAIResponseWidget extends StatelessWidget {
     required this.currentIndex,
     required this.translation,
     required this.contextVerses,
+    required this.onReload,
   });
 
   @override
@@ -44,6 +46,7 @@ class QuranAIResponseWidget extends StatelessWidget {
                 currentIndex: currentIndex,
                 translation: translation,
                 aiResponse: cacheResponse,
+                onReload: () => onReload(),
               );
             }
           }
@@ -73,11 +76,13 @@ class _AIDataWidget extends StatelessWidget {
   final SurahIndex currentIndex;
   final String translation;
   final String? aiResponse;
+  final Function? onReload;
 
   const _AIDataWidget({
     required this.currentIndex,
     required this.translation,
     required this.aiResponse,
+    this.onReload,
   });
 
   @override
@@ -98,6 +103,14 @@ class _AIDataWidget extends StatelessWidget {
             ),
             Row(
               children: [
+                if (onReload != null) ...[
+                  IconButton(
+                      onPressed: () => onReload!(),
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: QuranDS.primaryColor,
+                      )),
+                ],
                 IconButton(
                     onPressed: () => _copyResponse(
                         context, currentIndex, translation, response),

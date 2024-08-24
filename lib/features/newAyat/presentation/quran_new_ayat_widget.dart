@@ -307,6 +307,13 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                         translation:
                             translations[NQTranslation.wahiduddinkhan] ?? "",
                         contextVerses: recentTranslations,
+                        onReload: () {
+                          _aiCache.removeResponse(
+                            index: currentIndex,
+                            type: QuranAIType.reflection,
+                          );
+                          setState(() {});
+                        },
                       )
                     ],
                     if (_isAILoading(store, QuranAIType.poeticReflection)) ...[
@@ -319,6 +326,13 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                             translations[NQTranslation.wahiduddinkhan] ?? "",
                         // not passing any context for poetry
                         contextVerses: null,
+                        onReload: () {
+                          _aiCache.removeResponse(
+                            index: currentIndex,
+                            type: QuranAIType.poeticReflection,
+                          );
+                          setState(() {});
+                        },
                       )
                     ],
                     if (_isAILoading(store, QuranAIType.childReflection)) ...[
@@ -330,6 +344,13 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                         translation:
                             translations[NQTranslation.wahiduddinkhan] ?? "",
                         contextVerses: recentTranslations,
+                        onReload: () {
+                          _aiCache.removeResponse(
+                            index: currentIndex,
+                            type: QuranAIType.childReflection,
+                          );
+                          setState(() {});
+                        },
                       )
                     ],
                   ],
