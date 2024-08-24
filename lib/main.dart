@@ -6,7 +6,7 @@ import 'main_common.dart';
 import 'misc/url/url_strategy.dart';
 
 // TODO: Update before release
-const String appVersion = "v3.2.9";
+const String appVersion = "v3.3.0";
 
 void main() async {
   usePathUrlStrategy();

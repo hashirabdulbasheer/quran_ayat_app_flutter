@@ -14,6 +14,11 @@ abstract class AICache {
     required QuranAIType type,
     required String response,
   });
+
+  void removeResponse({
+    required SurahIndex index,
+    required QuranAIType type,
+  });
 }
 
 /// Simple caching mechanism to store ai response so that it can be reused
@@ -36,5 +41,14 @@ class AILocalCache implements AICache {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(
         "ai:${type.toString()}:${index.toString()}", response);
+  }
+
+  @override
+  void removeResponse({
+    required SurahIndex index,
+    required QuranAIType type,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("ai:${type.toString()}:${index.toString()}");
   }
 }

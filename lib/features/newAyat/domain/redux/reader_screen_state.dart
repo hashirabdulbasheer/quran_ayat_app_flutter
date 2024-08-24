@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:noble_quran/enums/translations.dart';
-import 'package:noble_quran/models/surah.dart';
 import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
@@ -74,17 +73,17 @@ class ReaderScreenState extends Equatable {
   }
 
   // returns translations of first selected translation type
-  String get lastThreeTranslations  {
-    List<NQAyat>? translations = data.translationMap.isNotEmpty
-        ? data.translationMap[data.translationMap.keys.first]?.aya
-        : [];
+  // excluding the current one
+  List<String>? getRecentAyaTranslations(int n) {
+    if (data.translationMap.isEmpty) {
+      return [];
+    }
 
-    // last three indices
-    final int startIndex = max(0, currentIndex.aya - 2);
-    final List<NQAyat>? lastThreeAyas =
-        translations?.sublist(startIndex, currentIndex.aya + 1);
+    final translations = data.translationMap.values.first?.aya;
+    final startIndex = max(0, currentIndex.aya - n);
+    final lastNAyas = translations?.sublist(startIndex, currentIndex.aya);
 
-    return lastThreeAyas?.map((e) => e.text).toList().join('\n') ?? "";
+    return lastNAyas?.map((aya) => aya.text).toList();
   }
 
   String? currentTransliteration() =>

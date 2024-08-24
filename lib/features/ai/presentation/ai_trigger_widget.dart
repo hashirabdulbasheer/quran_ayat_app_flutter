@@ -21,19 +21,22 @@ class QuranAITriggerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Opacity(
       opacity: isEnabled == true ? 1.0 : 0.5,
-      child: IconButton(
-        onPressed: () {
-          if (isEnabled == false) {
-            return;
-          }
-          StoreProvider.of<AppState>(context).dispatch(ShowAIResponseAction(
-            type: type,
-          ));
-          QuranLogger.logAnalyticsWithParams("ai-tapped", {
-            'type': type.toString(),
-          });
-        },
-        icon: icon,
+      child: IgnorePointer(
+        ignoring: isEnabled == false,
+        child: IconButton(
+          onPressed: () {
+            if (isEnabled == false) {
+              return;
+            }
+            StoreProvider.of<AppState>(context).dispatch(ShowAIResponseAction(
+              type: type,
+            ));
+            QuranLogger.logAnalyticsWithParams("ai-tapped", {
+              'type': type.toString(),
+            });
+          },
+          icon: icon,
+        ),
       ),
     );
   }

@@ -18,6 +18,8 @@ class QuranAIResponseWidget extends StatelessWidget {
   final QuranAIType type;
   final SurahIndex currentIndex;
   final String translation;
+  final List<String>? contextVerses;
+  final Function onReload;
 
   const QuranAIResponseWidget({
     super.key,
@@ -26,6 +28,8 @@ class QuranAIResponseWidget extends StatelessWidget {
     required this.type,
     required this.currentIndex,
     required this.translation,
+    required this.contextVerses,
+    required this.onReload,
   });
 
   @override
@@ -42,6 +46,7 @@ class QuranAIResponseWidget extends StatelessWidget {
                 currentIndex: currentIndex,
                 translation: translation,
                 aiResponse: cacheResponse,
+                onReload: () => onReload(),
               );
             }
           }
@@ -49,6 +54,7 @@ class QuranAIResponseWidget extends StatelessWidget {
             engine: engine,
             currentIndex: currentIndex,
             translation: translation,
+            contextVerses: contextVerses,
             type: type,
             onResponse: (response) {
               cache.saveResponse(
@@ -70,11 +76,13 @@ class _AIDataWidget extends StatelessWidget {
   final SurahIndex currentIndex;
   final String translation;
   final String? aiResponse;
+  final Function? onReload;
 
   const _AIDataWidget({
     required this.currentIndex,
     required this.translation,
     required this.aiResponse,
+    this.onReload,
   });
 
   @override
@@ -95,6 +103,14 @@ class _AIDataWidget extends StatelessWidget {
             ),
             Row(
               children: [
+                if (onReload != null) ...[
+                  IconButton(
+                      onPressed: () => onReload!(),
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: QuranDS.primaryColor,
+                      )),
+                ],
                 IconButton(
                     onPressed: () => _copyResponse(
                         context, currentIndex, translation, response),
@@ -197,6 +213,7 @@ class _AIEngineResponseWidget extends StatelessWidget {
   final QuranAIType type;
   final SurahIndex currentIndex;
   final String translation;
+  final List<String>? contextVerses;
   final Function(String)? onResponse;
 
   const _AIEngineResponseWidget({
@@ -204,12 +221,13 @@ class _AIEngineResponseWidget extends StatelessWidget {
     required this.type,
     required this.translation,
     required this.currentIndex,
+    required this.contextVerses,
     this.onResponse,
   });
 
   @override
   Widget build(BuildContext context) {
-    String prompt = _getPromptFromType(type, translation);
+    String prompt = _generatePrompt(type, translation, contextVerses);
     return FutureBuilder<String?>(
         future: engine.getResponse(
           currentIndex: currentIndex,
@@ -233,14 +251,21 @@ class _AIEngineResponseWidget extends StatelessWidget {
         });
   }
 
-  String _getPromptFromType(QuranAIType type, String translation) {
+  String _generatePrompt(
+    QuranAIType type,
+    String translation,
+    List<String>? contextVerses,
+  ) {
+    String context = contextVerses?.isNotEmpty == true
+        ? "The previous verses for context are:\n${contextVerses?.join('\n')}"
+        : "";
     switch (type) {
       case QuranAIType.reflection:
-        return "Help me think about and reflect on this verse from Quran - $translation.";
+        return "Help me think about and reflect on this verse from Quran - $translation.\n\n$context";
       case QuranAIType.poeticReflection:
-        return "Write a short poem to reflect on this verse fom the Quran - $translation.";
+        return "Write a short poem reflecting on this Quran verse:\n$translation.\n\n$context";
       case QuranAIType.childReflection:
-        return "Make this verse from the quran easier to understand for children - $translation.";
+        return "Make this verse from the quran easier to understand for children:\n$translation.\n\n$context";
     }
   }
 }
