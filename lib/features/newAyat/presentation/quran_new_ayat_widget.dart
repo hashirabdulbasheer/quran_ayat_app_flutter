@@ -110,6 +110,9 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
         return const Center(child: CircularProgressIndicator());
       }
 
+      List<String>? recentTranslations =
+          store.state.reader.getRecentAyaTranslations(2);
+
       return SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(
@@ -297,27 +300,37 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
                     // ai responses
                     if (_isAILoading(store, QuranAIType.reflection)) ...[
                       QuranAIResponseWidget(
-                          engine: _aiEngine,
-                          cache: _aiCache,
-                          type: QuranAIType.reflection,
-                          currentIndex: currentIndex,
-                          translation: store.state.reader.lastThreeTranslations)
+                        engine: _aiEngine,
+                        cache: _aiCache,
+                        type: QuranAIType.reflection,
+                        currentIndex: currentIndex,
+                        translation:
+                            translations[NQTranslation.wahiduddinkhan] ?? "",
+                        contextVerses: recentTranslations,
+                      )
                     ],
                     if (_isAILoading(store, QuranAIType.poeticReflection)) ...[
                       QuranAIResponseWidget(
-                          engine: _aiEngine,
-                          cache: _aiCache,
-                          type: QuranAIType.poeticReflection,
-                          currentIndex: currentIndex,
-                          translation: store.state.reader.lastThreeTranslations)
+                        engine: _aiEngine,
+                        cache: _aiCache,
+                        type: QuranAIType.poeticReflection,
+                        currentIndex: currentIndex,
+                        translation:
+                            translations[NQTranslation.wahiduddinkhan] ?? "",
+                        // not passing any context for poetry
+                        contextVerses: null,
+                      )
                     ],
                     if (_isAILoading(store, QuranAIType.childReflection)) ...[
                       QuranAIResponseWidget(
-                          engine: _aiEngine,
-                          cache: _aiCache,
-                          type: QuranAIType.childReflection,
-                          currentIndex: currentIndex,
-                          translation: store.state.reader.lastThreeTranslations)
+                        engine: _aiEngine,
+                        cache: _aiCache,
+                        type: QuranAIType.childReflection,
+                        currentIndex: currentIndex,
+                        translation:
+                            translations[NQTranslation.wahiduddinkhan] ?? "",
+                        contextVerses: recentTranslations,
+                      )
                     ],
                   ],
                 )
