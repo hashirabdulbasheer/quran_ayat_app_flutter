@@ -19,7 +19,7 @@ class QuranAIResponseWidget extends StatelessWidget {
   final SurahIndex currentIndex;
   final String translation;
   final List<String>? contextVerses;
-  final Function onReload;
+  final void Function() onReload;
 
   const QuranAIResponseWidget({
     super.key,
@@ -46,7 +46,7 @@ class QuranAIResponseWidget extends StatelessWidget {
                 currentIndex: currentIndex,
                 translation: translation,
                 aiResponse: cacheResponse,
-                onReload: () => onReload(),
+                onReload: onReload,
               );
             }
           }
@@ -56,6 +56,7 @@ class QuranAIResponseWidget extends StatelessWidget {
             translation: translation,
             contextVerses: contextVerses,
             type: type,
+            onReload: onReload,
             onResponse: (response) {
               cache.saveResponse(
                 index: currentIndex,
@@ -76,13 +77,13 @@ class _AIDataWidget extends StatelessWidget {
   final SurahIndex currentIndex;
   final String translation;
   final String? aiResponse;
-  final Function? onReload;
+  final void Function() onReload;
 
   const _AIDataWidget({
     required this.currentIndex,
     required this.translation,
     required this.aiResponse,
-    this.onReload,
+    required this.onReload,
   });
 
   @override
@@ -103,14 +104,12 @@ class _AIDataWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                if (onReload != null) ...[
-                  IconButton(
-                      onPressed: () => onReload!(),
-                      icon: const Icon(
-                        Icons.refresh,
-                        color: QuranDS.primaryColor,
-                      )),
-                ],
+                IconButton(
+                    onPressed: onReload,
+                    icon: const Icon(
+                      Icons.refresh,
+                      color: QuranDS.primaryColor,
+                    )),
                 IconButton(
                     onPressed: () => _copyResponse(
                         context, currentIndex, translation, response),
@@ -215,6 +214,7 @@ class _AIEngineResponseWidget extends StatelessWidget {
   final String translation;
   final List<String>? contextVerses;
   final Function(String)? onResponse;
+  final void Function() onReload;
 
   const _AIEngineResponseWidget({
     required this.engine,
@@ -222,6 +222,7 @@ class _AIEngineResponseWidget extends StatelessWidget {
     required this.translation,
     required this.currentIndex,
     required this.contextVerses,
+    required this.onReload,
     this.onResponse,
   });
 
@@ -244,6 +245,7 @@ class _AIEngineResponseWidget extends StatelessWidget {
                 currentIndex: currentIndex,
                 translation: translation,
                 aiResponse: aiResponse,
+                onReload: onReload,
               );
             }
           }
