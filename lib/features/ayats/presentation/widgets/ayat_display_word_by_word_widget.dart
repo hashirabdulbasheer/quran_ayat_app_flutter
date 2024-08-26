@@ -68,8 +68,8 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                left: 8,
-                                right: 8,
+                                left: 4,
+                                right: 4,
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,12 +91,11 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
-                                  const SizedBox(height: 2),
                                   Container(
                                     padding: const EdgeInsets.all(5),
                                     decoration: const BoxDecoration(
                                       border: Border.fromBorderSide(
-                                        BorderSide(color: Colors.black26),
+                                        BorderSide(color: Colors.black12),
                                       ),
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(1),
