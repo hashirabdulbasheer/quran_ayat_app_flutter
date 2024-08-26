@@ -107,6 +107,7 @@ class _QuranProfileScreenState extends State<QuranProfileScreen> {
               TextButton(
                 onPressed: () => {
                   _signOutButtonPressed().then((bool value) {
+                    if (!context.mounted) return;
                     Navigator.of(context).pop();
                   }),
                 },

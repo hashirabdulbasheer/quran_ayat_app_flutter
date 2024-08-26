@@ -116,6 +116,7 @@ class _QuranLoginScreenState extends State<QuranLoginScreen> {
                 onPressed: () => {
                   QuranNavigator.of(context).routeToSignUp().then((value) {
                     if (value != null && value) {
+                      if (!context.mounted) return;
                       Navigator.of(context).pop();
                     }
                   }),

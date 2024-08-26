@@ -153,6 +153,7 @@ class _AIDataWidget extends StatelessWidget {
     String shareString =
         "${index.human.sura}:${index.human.aya} $translation\n\n$response\n\nhttps://uxquran.com/${index.human.sura}/${index.human.aya}";
     Clipboard.setData(ClipboardData(text: shareString)).then((_) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Copied to clipboard")));
     });
