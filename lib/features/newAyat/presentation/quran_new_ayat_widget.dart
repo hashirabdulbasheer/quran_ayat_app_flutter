@@ -11,6 +11,8 @@ import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
 import 'package:quran_ayat/features/ai/domain/gemini_ai_engine.dart';
 import 'package:quran_ayat/features/ai/presentation/ai_display_widget.dart';
 import 'package:quran_ayat/features/ai/presentation/ai_trigger_widget.dart';
+import 'package:quran_ayat/features/newAyat/domain/redux/actions/bookmark_actions.dart';
+import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
 
 import '../../../misc/design/design_system.dart';
@@ -70,21 +72,30 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
     // left arrow key - next
     // space bar key - next
     // others ignore
-    final key = event.logicalKey.keyLabel;
+    final key = event.logicalKey;
     var store = StoreProvider.of<AppState>(context);
     if (event is KeyDownEvent) {
-      if (key == "Arrow Right") {
+      if (key == LogicalKeyboardKey.arrowRight) {
         store.dispatch(PreviousAyaAction());
-      } else if (key == "Arrow Left" || key == " ") {
+      } else if (key == LogicalKeyboardKey.arrowLeft ||
+          key == LogicalKeyboardKey.space) {
         store.dispatch(NextAyaAction());
-      } else if (key == 'Audio Volume Up') {
+      } else if (key == LogicalKeyboardKey.audioVolumeUp) {
         store.dispatch(PreviousAyaAction());
-      } else if (key == 'Audio Volume Down') {
+      } else if (key == LogicalKeyboardKey.audioVolumeDown) {
         store.dispatch(NextAyaAction());
-      } else if (key == 'Media Track Previous') {
+      } else if (key == LogicalKeyboardKey.mediaTrackPrevious) {
         store.dispatch(PreviousAyaAction());
-      } else if (key == 'Media Track Next') {
+      } else if (key == LogicalKeyboardKey.mediaTrackNext) {
         store.dispatch(NextAyaAction());
+      } else if ((HardwareKeyboard.instance.isControlPressed ||
+              HardwareKeyboard.instance.isMetaPressed) &&
+          key == LogicalKeyboardKey.keyB) {
+        SurahIndex currentIndex = store.state.reader.currentIndex;
+        StoreProvider.of<AppState>(context).dispatch(SaveBookmarkAction(
+          index: currentIndex,
+        ));
+        QuranUtils.showMessage(context, "Saved bookmark ✅");
       }
     }
 
