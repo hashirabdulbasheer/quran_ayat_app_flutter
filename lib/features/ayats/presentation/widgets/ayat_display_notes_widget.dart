@@ -133,7 +133,7 @@ class _QuranAyatDisplayNotesWidgetState
                 children: [
                   Text(
                     notes[index].note,
-                    textScaleFactor: fontScale,
+                    textScaler: TextScaler.linear(fontScale),
                     style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(

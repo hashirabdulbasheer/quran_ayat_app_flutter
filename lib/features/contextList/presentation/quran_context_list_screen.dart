@@ -82,7 +82,7 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
         children: [
           Text(
             "${index + 1} ",
-            textScaleFactor: fontScale,
+            textScaler: TextScaler.linear(fontScale),
             style: TextStyle(
               fontSize: 12,
               color: Theme.of(context)
@@ -104,7 +104,7 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
                 Flexible(
                   child: Text(
                     _ayaText(index),
-                    textScaleFactor: fontScale,
+                    textScaler: TextScaler.linear(fontScale),
                     style: TextStyle(
                       fontSize: 25,
                       fontFamily: QuranFontFamily.arabic.rawString,
@@ -119,7 +119,7 @@ class _QuranContextListScreenState extends State<QuranContextListScreen> {
           ),
           Text(
             _translation?.aya[index].text ?? "",
-            textScaleFactor: fontScale,
+            textScaler: TextScaler.linear(fontScale),
             style: const TextStyle(
               fontSize: 16,
               height: 1.5,

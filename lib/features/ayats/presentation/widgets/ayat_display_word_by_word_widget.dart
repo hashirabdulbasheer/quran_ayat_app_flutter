@@ -81,7 +81,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                       e.ar,
                                       softWrap: false,
                                       maxLines: 1,
-                                      textScaleFactor: fontScale,
+                                      textScaler: TextScaler.linear(fontScale),
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 30,
@@ -104,7 +104,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                     ),
                                     child: Text(
                                       e.tr,
-                                      textScaleFactor: fontScale,
+                                      textScaler: TextScaler.linear(fontScale),
                                       style: const TextStyle(
                                         color: Colors.black54,
                                         fontSize: 14,

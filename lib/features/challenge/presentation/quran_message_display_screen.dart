@@ -31,7 +31,7 @@ class QuranMessageDisplayScreen extends StatelessWidget {
         child: Markdown(
           data: message,
           styleSheet: MarkdownStyleSheet(
-            textScaleFactor: 1.2,
+            textScaler: const TextScaler.linear(1.2),
           ),
         ),
       ),
