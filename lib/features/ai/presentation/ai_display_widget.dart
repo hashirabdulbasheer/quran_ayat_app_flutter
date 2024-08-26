@@ -170,7 +170,7 @@ class _AIWaitingWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
-            "thinking, please wait...",
+            "ai ai o... please wait...",
             style: QuranDS.textTitleMediumItalic,
           ),
         ],
