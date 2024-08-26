@@ -19,9 +19,9 @@ class QuranResultsScreen extends StatefulWidget {
   final QuranTag tag;
 
   const QuranResultsScreen({
-    Key? key,
+    super.key,
     required this.tag,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranResultsScreen> createState() => _QuranResultsScreenState();

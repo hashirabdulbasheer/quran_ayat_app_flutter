@@ -10,11 +10,11 @@ class QuranSocialLoginButtons extends StatelessWidget {
   final Function onComplete;
 
   const QuranSocialLoginButtons({
-    Key? key,
+    super.key,
     required this.isSignUp,
     required this.onStarted,
     required this.onComplete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

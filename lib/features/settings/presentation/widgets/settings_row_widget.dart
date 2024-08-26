@@ -12,10 +12,10 @@ class QuranSettingsRowWidget extends StatelessWidget {
   final Function onChanged;
 
   const QuranSettingsRowWidget({
-    Key? key,
+    super.key,
     required this.setting,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

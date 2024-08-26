@@ -11,25 +11,25 @@ import '../notes_state.dart';
 Reducer<NotesState> notesReducer = combineReducers<NotesState>([
   TypedReducer<NotesState, FetchNotesSucceededAction>(
     _fetchNotesReducer,
-  ),
+  ).call,
   TypedReducer<NotesState, ResetNotesStatusAction>(
     _resetNotesStatusReducer,
-  ),
+  ).call,
   TypedReducer<NotesState, CreateNoteSucceededAction>(
     _createSucceededActionNotesReducer,
-  ),
+  ).call,
   TypedReducer<NotesState, UpdateNoteSucceededAction>(
     _updateSucceededActionNotesReducer,
-  ),
+  ).call,
   TypedReducer<NotesState, DeleteNoteSucceededAction>(
     _deleteSucceededActionNotesReducer,
-  ),
+  ).call,
   TypedReducer<NotesState, NotesFailureAction>(
     _failureActionNotesReducer,
-  ),
+  ).call,
   TypedReducer<NotesState, NotesLoadingAction>(
     _loadingNotesStatusReducer,
-  ),
+  ).call,
 ]);
 
 NotesState _fetchNotesReducer(

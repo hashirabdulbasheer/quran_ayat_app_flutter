@@ -12,13 +12,13 @@ class QuranAnswerLikeButtonWidget extends StatelessWidget {
   final Function onLikeTapped;
 
   const QuranAnswerLikeButtonWidget({
-    Key? key,
+    super.key,
     required this.numLikes,
     required this.isLiked,
     required this.isLoading,
     required this.isEnabled,
     required this.onLikeTapped,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

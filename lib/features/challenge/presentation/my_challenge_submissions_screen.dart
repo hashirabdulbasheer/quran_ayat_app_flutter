@@ -11,7 +11,7 @@ import 'widgets/answers/quran_reload_button_widget.dart';
 import 'widgets/submissions/quran_submission_question_item_widget.dart';
 
 class QuranMyChallengeSubmissionsScreen extends StatelessWidget {
-  const QuranMyChallengeSubmissionsScreen({Key? key}) : super(key: key);
+  const QuranMyChallengeSubmissionsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

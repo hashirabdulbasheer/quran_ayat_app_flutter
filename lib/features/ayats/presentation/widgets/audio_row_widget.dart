@@ -14,10 +14,10 @@ class QuranAudioRowWidget extends StatefulWidget {
   final void Function(QuranAudioEventsEnum)? onAudioEventsListener;
 
   const QuranAudioRowWidget({
-    Key? key,
+    super.key,
     required this.currentIndex,
     this.onAudioEventsListener,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranAudioRowWidget> createState() => _QuranAudioRowWidgetState();

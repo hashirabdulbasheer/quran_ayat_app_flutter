@@ -17,9 +17,9 @@ class QuranAyatDisplayNotesWidget extends StatefulWidget {
   final SurahIndex currentIndex;
 
   const QuranAyatDisplayNotesWidget({
-    Key? key,
+    super.key,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranAyatDisplayNotesWidget> createState() =>

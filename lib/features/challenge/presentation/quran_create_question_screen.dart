@@ -8,7 +8,7 @@ import '../domain/models/quran_question.dart';
 import 'widgets/create/quran_single_action_button_widget.dart';
 
 class QuranCreateQuestionScreen extends StatefulWidget {
-  const QuranCreateQuestionScreen({Key? key}) : super(key: key);
+  const QuranCreateQuestionScreen({super.key});
 
   @override
   State<QuranCreateQuestionScreen> createState() =>

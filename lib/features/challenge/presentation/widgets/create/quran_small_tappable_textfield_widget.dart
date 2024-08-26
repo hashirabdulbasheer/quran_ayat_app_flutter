@@ -8,10 +8,10 @@ class QuranTappableSmallTextFieldWidget extends StatelessWidget {
   final String title;
 
   const QuranTappableSmallTextFieldWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

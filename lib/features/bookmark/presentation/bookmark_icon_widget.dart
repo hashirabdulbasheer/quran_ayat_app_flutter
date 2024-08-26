@@ -11,9 +11,9 @@ class QuranBookmarkIconWidget extends StatefulWidget {
   final SurahIndex currentIndex;
 
   const QuranBookmarkIconWidget({
-    Key? key,
+    super.key,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranBookmarkIconWidget> createState() =>

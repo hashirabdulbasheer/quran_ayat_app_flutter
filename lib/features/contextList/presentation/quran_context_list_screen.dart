@@ -14,10 +14,10 @@ class QuranContextListScreen extends StatefulWidget {
   final SurahIndex index;
 
   const QuranContextListScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranContextListScreen> createState() => _QuranContextListScreenState();

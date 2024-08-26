@@ -16,9 +16,9 @@ class QuranAnswersWidget extends StatefulWidget {
   final QuranQuestion? question;
 
   const QuranAnswersWidget({
-    Key? key,
+    super.key,
     required this.question,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranAnswersWidget> createState() => _QuranAnswersWidgetState();

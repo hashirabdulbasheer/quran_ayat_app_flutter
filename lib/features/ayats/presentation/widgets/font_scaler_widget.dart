@@ -9,9 +9,9 @@ class QuranFontScalerWidget extends StatelessWidget {
   ) body;
 
   const QuranFontScalerWidget({
-    Key? key,
+    super.key,
     required this.body,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

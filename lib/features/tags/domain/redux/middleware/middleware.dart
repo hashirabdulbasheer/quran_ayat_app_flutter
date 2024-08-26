@@ -11,12 +11,12 @@ import '../actions/actions.dart';
 
 List<Middleware<AppState>> createTagOperationsMiddleware() {
   return [
-    TypedMiddleware<AppState, InitializeTagsAction>(_initializeTagsMiddleware),
-    TypedMiddleware<AppState, FetchTagsAction>(_fetchTagsMiddleware),
-    TypedMiddleware<AppState, CreateTagAction>(_createTagMiddleware),
-    TypedMiddleware<AppState, DeleteTagAction>(_deleteTagMiddleware),
-    TypedMiddleware<AppState, AddTagAction>(_addTagMiddleware),
-    TypedMiddleware<AppState, RemoveTagAction>(_removeTagMiddleware),
+    TypedMiddleware<AppState, InitializeTagsAction>(_initializeTagsMiddleware).call,
+    TypedMiddleware<AppState, FetchTagsAction>(_fetchTagsMiddleware).call,
+    TypedMiddleware<AppState, CreateTagAction>(_createTagMiddleware).call,
+    TypedMiddleware<AppState, DeleteTagAction>(_deleteTagMiddleware).call,
+    TypedMiddleware<AppState, AddTagAction>(_addTagMiddleware).call,
+    TypedMiddleware<AppState, RemoveTagAction>(_removeTagMiddleware).call,
   ];
 }
 

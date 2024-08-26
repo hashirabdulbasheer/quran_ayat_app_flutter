@@ -19,11 +19,11 @@ class QuranAnswersListWidget extends StatelessWidget {
   final List<QuranAnswer> answers;
 
   const QuranAnswersListWidget({
-    Key? key,
+    super.key,
     required this.user,
     required this.questionId,
     required this.answers,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

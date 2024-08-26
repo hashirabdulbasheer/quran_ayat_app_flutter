@@ -7,12 +7,12 @@ class QuranNotesTextFieldWidget extends StatelessWidget {
   final TextEditingController textEditingController;
 
   const QuranNotesTextFieldWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.hint,
     required this.isEnabled,
     required this.textEditingController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

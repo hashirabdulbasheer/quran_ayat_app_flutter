@@ -12,10 +12,10 @@ class QuranHomeBottomSheetWidget extends StatelessWidget {
   final QuranHomeScreenBottomTabsEnum selectedTab;
 
   const QuranHomeBottomSheetWidget({
-    Key? key,
+    super.key,
     required this.store,
     required this.selectedTab,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

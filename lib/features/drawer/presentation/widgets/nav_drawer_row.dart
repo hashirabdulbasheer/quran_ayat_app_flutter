@@ -10,13 +10,13 @@ class QuranNavDrawerRowWidget extends StatelessWidget {
   final Function? onSelected;
 
   const QuranNavDrawerRowWidget({
-    Key? key,
+    super.key,
     required this.context,
     required this.title,
     required this.icon,
     this.destination,
     this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

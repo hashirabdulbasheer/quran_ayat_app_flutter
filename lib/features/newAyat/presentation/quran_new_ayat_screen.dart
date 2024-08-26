@@ -14,7 +14,7 @@ import '../domain/redux/actions/actions.dart';
 import 'quran_new_ayat_widget.dart';
 
 class QuranNewAyatScreen extends StatefulWidget {
-  const QuranNewAyatScreen({Key? key}) : super(key: key);
+  const QuranNewAyatScreen({super.key});
 
   @override
   State<QuranNewAyatScreen> createState() => _QuranNewAyatScreenState();

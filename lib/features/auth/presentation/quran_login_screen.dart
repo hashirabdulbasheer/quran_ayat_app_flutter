@@ -9,7 +9,7 @@ import '../domain/auth_factory.dart';
 import 'widgets/quran_social_login_widgets.dart';
 
 class QuranLoginScreen extends StatefulWidget {
-  const QuranLoginScreen({Key? key}) : super(key: key);
+  const QuranLoginScreen({super.key});
 
   @override
   State<QuranLoginScreen> createState() => _QuranLoginScreenState();

@@ -4,9 +4,9 @@ class QuranReloadButtonWidget extends StatefulWidget {
   final Function action;
 
   const QuranReloadButtonWidget({
-    Key? key,
+    super.key,
     required this.action,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranReloadButtonWidget> createState() =>

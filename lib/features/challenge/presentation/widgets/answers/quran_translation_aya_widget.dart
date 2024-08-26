@@ -10,9 +10,9 @@ class QuranTranslationForAyaWidget extends StatelessWidget {
   final SurahIndex index;
 
   const QuranTranslationForAyaWidget({
-    Key? key,
+    super.key,
     required this.index,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

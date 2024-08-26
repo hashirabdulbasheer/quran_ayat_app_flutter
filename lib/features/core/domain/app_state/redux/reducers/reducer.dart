@@ -12,25 +12,25 @@ import '../../app_state.dart';
 Reducer<AppState> appStateReducer = combineReducers<AppState>([
   TypedReducer<AppState, AppStateInitializeAction>(
     _initializeAppStateReducer,
-  ),
+  ).call,
   TypedReducer<AppState, AppStateResetAction>(
     _resetAppStateReducer,
-  ),
+  ).call,
   TypedReducer<AppState, AppStateLoadingAction>(
     _loadingAppStateReducer,
-  ),
+  ).call,
   TypedReducer<AppState, AppStateResetStatusAction>(
     _resetAppStateStatusReducer,
-  ),
+  ).call,
   TypedReducer<AppState, AppStateSelectAppModeAction>(
     _selectAppModeReducer,
-  ),
+  ).call,
   TypedReducer<AppState, AppStateUserRoleAction>(
     _setAppStateUserRoleReducer,
-  ),
+  ).call,
   TypedReducer<AppState, dynamic>(
     _allOtherReducer,
-  ),
+  ).call,
 ]);
 
 // redirect everything else to child states

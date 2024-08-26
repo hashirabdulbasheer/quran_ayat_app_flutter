@@ -20,11 +20,11 @@ class QuranAnswerActionControlWidget extends StatefulWidget {
   final QuranAnswer answer;
 
   const QuranAnswerActionControlWidget({
-    Key? key,
+    super.key,
     required this.currentUser,
     required this.questionId,
     required this.answer,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranAnswerActionControlWidget> createState() =>

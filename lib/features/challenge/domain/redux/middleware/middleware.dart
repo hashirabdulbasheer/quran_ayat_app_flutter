@@ -13,13 +13,13 @@ List<Middleware<AppState>> createChallengeScreenMiddleware() {
   return [
     TypedMiddleware<AppState, InitializeChallengeScreenAction>(
       _initializeMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, LikeAnswerAction>(
       _likeAnswerMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, UnlikeAnswerAction>(
       _unlikeAnswerMiddleware,
-    ),
+    ).call,
   ];
 }
 

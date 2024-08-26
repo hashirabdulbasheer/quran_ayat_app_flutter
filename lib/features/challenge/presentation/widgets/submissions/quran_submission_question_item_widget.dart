@@ -9,9 +9,9 @@ class QuranSubmissionQuestionItemWidget extends StatelessWidget {
   final QuranQuestion question;
 
   const QuranSubmissionQuestionItemWidget({
-    Key? key,
+    super.key,
     required this.question,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

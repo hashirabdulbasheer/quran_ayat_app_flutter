@@ -8,9 +8,9 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
   final List<NQWord> words;
 
   const QuranAyatDisplayWordByWordWidget({
-    Key? key,
+    super.key,
     required this.words,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

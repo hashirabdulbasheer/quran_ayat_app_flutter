@@ -11,11 +11,11 @@ class QuranAnswerBodyWidget extends StatefulWidget {
   final Function onSubmitTapped;
 
   const QuranAnswerBodyWidget({
-    Key? key,
+    super.key,
     required this.user,
     required this.question,
     required this.onSubmitTapped,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranAnswerBodyWidget> createState() => _QuranAnswerBodyWidgetState();

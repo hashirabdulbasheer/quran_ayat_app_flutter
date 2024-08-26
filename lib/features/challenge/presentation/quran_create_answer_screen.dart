@@ -30,9 +30,9 @@ class QuranCreateChallengeScreen extends StatefulWidget {
   final QuranQuestion question;
 
   const QuranCreateChallengeScreen({
-    Key? key,
+    super.key,
     required this.question,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranCreateChallengeScreen> createState() =>

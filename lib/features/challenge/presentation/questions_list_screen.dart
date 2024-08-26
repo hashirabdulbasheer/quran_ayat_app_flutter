@@ -10,7 +10,7 @@ import '../domain/models/quran_question.dart';
 import '../domain/redux/actions/actions.dart';
 
 class QuranQuestionsListScreen extends StatelessWidget {
-  const QuranQuestionsListScreen({Key? key}) : super(key: key);
+  const QuranQuestionsListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
