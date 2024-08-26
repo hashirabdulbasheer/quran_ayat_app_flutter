@@ -117,12 +117,12 @@ class _QuranCreateChallengeScreenState
                 currentIndex: _currentIndex ?? SurahIndex.defaultIndex,
                 currentSurahDetails: _currentSurahDetails,
                 onSuraSelected: (surah) => setState(() {
-                      _currentSurahDetails = surah;
-                      _currentIndex = SurahIndex(
-                        surah.number - 1,
-                        0,
-                      );
-                    }),
+                  _currentSurahDetails = surah;
+                  _currentIndex = SurahIndex(
+                    surah.number - 1,
+                    0,
+                  );
+                }),
                 onAyaSelected: (aya) => setState(
                   () => _currentIndex = SurahIndex(
                     _currentSurahDetails.number - 1,
@@ -260,22 +260,23 @@ class _QuranCreateChallengeScreenState
     /// Move to next screen after a delay to show a loading state
     Future.delayed(
       const Duration(milliseconds: 500),
-      () => {
+      () {
         /// Fetch the questions again
+        if (!mounted) return;
         StoreProvider.of<AppState>(context)
-            .dispatch(InitializeChallengeScreenAction(questions: const [])),
+            .dispatch(InitializeChallengeScreenAction(questions: const []));
 
-        StoreProvider.of<AppState>(context).dispatch(FetchNotesAction()),
+        StoreProvider.of<AppState>(context).dispatch(FetchNotesAction());
 
         setState(() {
           _isLoading = true;
-        }),
+        });
 
         /// Dismiss screen
-        Navigator.of(context).pop(),
+        Navigator.of(context).pop();
 
         /// Display confirmation screen
-        QuranNavigator.of(context).routeToConfirmation(answerId),
+        QuranNavigator.of(context).routeToConfirmation(answerId);
       },
     );
 
