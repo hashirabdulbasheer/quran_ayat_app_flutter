@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quran_ayat/features/settings/domain/settings_manager.dart';
+import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -124,7 +125,9 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                               destination:
                                   const QuranChallengesApprovalScreen(),
                             ),
-                          const Divider(color: QuranDS.veryVeryLightColor,),
+                          const Divider(
+                            color: QuranDS.veryVeryLightColor,
+                          ),
                           QuranNavDrawerRowWidget(
                             context: context,
                             title: 'Submissions',
@@ -132,7 +135,9 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
                             destination:
                                 const QuranMyChallengeSubmissionsScreen(),
                           ),
-                          const Divider(color: QuranDS.veryVeryLightColor,),
+                          const Divider(
+                            color: QuranDS.veryVeryLightColor,
+                          ),
                           QuranNavDrawerRowWidget(
                             context: context,
                             title: 'Feedback',
@@ -226,7 +231,7 @@ class _QuranNavDrawerState extends State<QuranNavDrawer> {
 
   Future<void> _launchUrl(Uri uri) async {
     if (!await launchUrl(uri)) {
-      print('Could not launch $uri');
+      QuranLogger.log('Could not launch $uri');
     }
   }
 

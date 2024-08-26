@@ -1,28 +1,26 @@
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+
 class QuranIndex {
-  final int surahIndex;
-  final int ayaIndex;
+  final SurahIndex index;
   final String? arabicAya;
   final String? translationAya;
   final String? surahTitle;
 
   QuranIndex({
-    required this.surahIndex,
-    required this.ayaIndex,
+    required this.index,
     this.arabicAya,
     this.translationAya,
     this.surahTitle,
   });
 
   QuranIndex copyWith({
-    int? surahIndex,
-    int? ayaIndex,
+    SurahIndex? index,
     String? arabicAya,
     String? translationAya,
     String? surahTitle,
   }) {
     return QuranIndex(
-      surahIndex: surahIndex ?? this.surahIndex,
-      ayaIndex: ayaIndex ?? this.ayaIndex,
+      index: index ?? this.index,
       arabicAya: arabicAya ?? this.arabicAya,
       translationAya: translationAya ?? this.translationAya,
       surahTitle: surahTitle ?? this.surahTitle,

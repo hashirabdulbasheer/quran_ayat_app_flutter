@@ -174,8 +174,8 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     if (tag.ayas.length == 1) {
       StoreProvider.of<AppState>(context).dispatch(SelectParticularAyaAction(
         index: SurahIndex(
-          tag.ayas.first.suraIndex,
-          tag.ayas.first.ayaIndex,
+          tag.ayas.first.index.sura,
+          tag.ayas.first.index.aya,
         ),
       ));
 
@@ -195,7 +195,7 @@ class _QuranViewTagsScreenState extends State<QuranViewTagsScreen> {
     for (QuranTag tag in allTags) {
       String tagString = "${tag.name}: ";
       tagString +=
-          tag.ayas.map((val) => "${val.suraIndex}:${val.ayaIndex}").join(',');
+          tag.ayas.map((val) => "${val.index.sura}:${val.index.aya}").join(',');
       exported += "$tagString\n";
     }
 

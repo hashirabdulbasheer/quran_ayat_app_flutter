@@ -1,3 +1,4 @@
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 import 'package:redux/redux.dart';
 
 import '../../../../../../models/qr_user_model.dart';
@@ -11,7 +12,8 @@ import '../actions/actions.dart';
 
 List<Middleware<AppState>> createTagOperationsMiddleware() {
   return [
-    TypedMiddleware<AppState, InitializeTagsAction>(_initializeTagsMiddleware).call,
+    TypedMiddleware<AppState, InitializeTagsAction>(_initializeTagsMiddleware)
+        .call,
     TypedMiddleware<AppState, FetchTagsAction>(_fetchTagsMiddleware).call,
     TypedMiddleware<AppState, CreateTagAction>(_createTagMiddleware).call,
     TypedMiddleware<AppState, DeleteTagAction>(_deleteTagMiddleware).call,
@@ -104,11 +106,10 @@ void _addTagMiddleware(
       QuranTag masterTag = store.state.tags.originalTags
           .firstWhere((element) => element.name == action.tag);
       masterTag.ayas.removeWhere((element) =>
-          element.suraIndex == action.surahIndex &&
-          element.ayaIndex == action.ayaIndex);
+          element.index.sura == action.surahIndex &&
+          element.index.aya == action.ayaIndex);
       masterTag.ayas.add(QuranTagAya(
-        suraIndex: action.surahIndex,
-        ayaIndex: action.ayaIndex,
+        index: SurahIndex(action.surahIndex, action.ayaIndex),
       ));
       QuranTagsManager.instance
           .update(
@@ -150,8 +151,8 @@ void _removeTagMiddleware(
       QuranTag masterTag = store.state.tags.originalTags
           .firstWhere((element) => element.name == action.tag);
       masterTag.ayas.removeWhere((element) =>
-          element.suraIndex == action.surahIndex &&
-          element.ayaIndex == action.ayaIndex);
+          element.index.sura == action.surahIndex &&
+          element.index.aya == action.ayaIndex);
 
       QuranTagsManager.instance
           .update(
