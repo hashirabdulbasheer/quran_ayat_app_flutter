@@ -7,28 +7,28 @@ Reducer<ChallengeScreenState> challengeScreenReducer =
     combineReducers<ChallengeScreenState>([
   TypedReducer<ChallengeScreenState, InitializeChallengeScreenAction>(
     _initializeChallengeScreenReducer,
-  ),
+  ).call,
   TypedReducer<ChallengeScreenState, NextChallengeScreenAction>(
     _nextChallengeScreenReducer,
-  ),
+  ).call,
   TypedReducer<ChallengeScreenState, PreviousChallengeScreenAction>(
     _previousChallengeScreenReducer,
-  ),
+  ).call,
   TypedReducer<ChallengeScreenState, ToggleLoadingScreenAction>(
     _toggleLoadingScreenReducer,
-  ),
+  ).call,
   TypedReducer<ChallengeScreenState, SelectHomeScreenTabAction>(
     _selectHomeScreenTabReducer,
-  ),
+  ).call,
   TypedReducer<ChallengeScreenState, LikeAnswerAction>(
     _likeActionReducer,
-  ),
+  ).call,
   TypedReducer<ChallengeScreenState, UnlikeAnswerAction>(
     _unlikeActionReducer,
-  ),
+  ).call,
   TypedReducer<ChallengeScreenState, SelectCurrentQuestionAction>(
     _selectCurrentQuestionActionReducer,
-  ),
+  ).call,
 ]);
 
 ChallengeScreenState _initializeChallengeScreenReducer(

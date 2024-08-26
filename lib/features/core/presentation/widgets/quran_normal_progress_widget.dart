@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../misc/design/design_system.dart';
 
 class QuranNormalProgressIndicatorWidget extends StatelessWidget {
-  const QuranNormalProgressIndicatorWidget({Key? key}) : super(key: key);
+  const QuranNormalProgressIndicatorWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

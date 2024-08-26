@@ -5,10 +5,10 @@ class QuranTitleWithBackground extends StatelessWidget {
   final Color? background;
 
   const QuranTitleWithBackground({
-    Key? key,
+    super.key,
     required this.title,
     this.background = Colors.black12,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -10,10 +10,10 @@ class QuranAyatDisplayAudioControlsWidget extends StatelessWidget {
   final Function(QuranAudioEventsEnum) onAudioPlayStatusChanged;
 
   const QuranAyatDisplayAudioControlsWidget({
-    Key? key,
+    super.key,
     required this.currentIndex,
     required this.onAudioPlayStatusChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

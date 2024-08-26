@@ -1,3 +1,5 @@
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
+
 import '../../../models/qr_response_model.dart';
 import '../../../utils/logger_utils.dart';
 import '../../core/data/quran_data_interface.dart';
@@ -63,8 +65,7 @@ class QuranTagsEngine implements QuranTagsDataSource {
           ayas: tag["ayas"] != null
               ? (tag["ayas"] as List<dynamic>)
                   .map((dynamic e) => QuranTagAya(
-                        suraIndex: e["sura"] as int,
-                        ayaIndex: e["aya"] as int,
+                        index: SurahIndex(e["sura"], e["aya"]),
                       ))
                   .toList()
               : [],

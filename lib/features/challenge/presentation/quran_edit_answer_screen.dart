@@ -34,10 +34,10 @@ class QuranEditAnswerScreen extends StatefulWidget {
   final QuranAnswer answer;
 
   const QuranEditAnswerScreen({
-    Key? key,
+    super.key,
     required this.questionId,
     required this.answer,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranEditAnswerScreen> createState() => _QuranEditAnswerScreenState();

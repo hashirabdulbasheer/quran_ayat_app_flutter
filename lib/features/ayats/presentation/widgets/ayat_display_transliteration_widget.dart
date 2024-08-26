@@ -7,9 +7,9 @@ class QuranAyatDisplayTransliterationWidget extends StatelessWidget {
   final String transliteration;
 
   const QuranAyatDisplayTransliterationWidget({
-    Key? key,
+    super.key,
     required this.transliteration,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -7,10 +7,10 @@ class QuranAnswerLikeThumbsUpWidget extends StatelessWidget {
   final bool isEnabled;
 
   const QuranAnswerLikeThumbsUpWidget({
-    Key? key,
+    super.key,
     required this.isLiked,
     required this.isEnabled,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

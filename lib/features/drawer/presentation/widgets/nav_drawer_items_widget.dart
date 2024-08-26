@@ -4,9 +4,9 @@ class QuranNavDrawerItemsWidget extends StatelessWidget {
   final List<Widget> items;
 
   const QuranNavDrawerItemsWidget({
-    Key? key,
+    super.key,
     required this.items,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

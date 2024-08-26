@@ -25,8 +25,8 @@ import 'utils/logger_utils.dart';
 class MyApp extends StatefulWidget {
 
   const MyApp({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<MyApp> createState() => MyAppState();
@@ -39,7 +39,7 @@ class MyAppState extends State<MyApp> {
     initialState: const AppState(),
     middleware: [
       appStateMiddleware,
-      LoggerMiddleware<AppState>(),
+      LoggerMiddleware<AppState>().call,
       ...createTagOperationsMiddleware(),
       ...createNotesMiddleware(),
       ...createReaderScreenMiddleware(),

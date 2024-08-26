@@ -16,14 +16,14 @@ class QuranAyatSelectionWidget extends StatelessWidget {
   final Function(int) onAyaSelected;
 
   const QuranAyatSelectionWidget({
-    Key? key,
+    super.key,
     required this.store,
     required this.title,
     required this.currentSurahDetails,
     required this.currentIndex,
     required this.onSuraSelected,
     required this.onAyaSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

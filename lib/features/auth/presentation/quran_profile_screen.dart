@@ -11,10 +11,10 @@ class QuranProfileScreen extends StatefulWidget {
   final Function onLogOutTapped;
 
   const QuranProfileScreen({
-    Key? key,
+    super.key,
     required this.user,
     required this.onLogOutTapped,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranProfileScreen> createState() => _QuranProfileScreenState();

@@ -11,10 +11,10 @@ class QuranHomeBodyContentWidget extends StatelessWidget {
   final QuranHomeScreenBottomTabsEnum selectedTab;
 
   const QuranHomeBodyContentWidget({
-    Key? key,
+    super.key,
     required this.store,
     required this.selectedTab,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

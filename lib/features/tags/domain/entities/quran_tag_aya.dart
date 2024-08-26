@@ -1,29 +1,27 @@
 import 'package:equatable/equatable.dart';
+import 'package:quran_ayat/features/newAyat/data/surah_index.dart';
 
 class QuranTagAya extends Equatable {
-  final int suraIndex;
-  final int ayaIndex;
+  final SurahIndex index;
 
   const QuranTagAya({
-    required this.suraIndex,
-    required this.ayaIndex,
+    required this.index,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      "sura": suraIndex,
-      "aya": ayaIndex,
+      "sura": index.sura,
+      "aya": index.aya,
     };
   }
 
   @override
   String toString() {
-    return 'QuranTagAya{suraIndex: $suraIndex, ayaIndex: $ayaIndex}';
+    return 'QuranTagAya{suraIndex: ${index.human.sura}, ayaIndex: ${index.human.aya}';
   }
 
   @override
   List<Object> get props => [
-        suraIndex,
-        ayaIndex,
+        index,
       ];
 }

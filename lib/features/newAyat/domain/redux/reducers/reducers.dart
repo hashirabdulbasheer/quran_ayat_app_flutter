@@ -12,49 +12,49 @@ Reducer<ReaderScreenState> readerScreenReducer =
     combineReducers<ReaderScreenState>([
   TypedReducer<ReaderScreenState, InitializeReaderScreenAction>(
     _initReaderScreenReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, SetSurahListAction>(
     _setSurahTitlesReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, SelectSurahAction>(
     _surahSelectedReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, SelectAyaAction>(
     _ayaSelectedReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, ShowLoadingAction>(
     _showLoadingReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, HideLoadingAction>(
     _hideLoadingReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, NextAyaAction>(
     _nextAyaReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, PreviousAyaAction>(
     _previousAyaReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, SetAudioContinuousPlayMode>(
     _audioContinuousModeReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, SelectParticularAyaAction>(
     _particularAyaSelectedReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, SaveBookmarkAction>(
     _saveBookmarkReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, InitBookmarkAction>(
     _initBookmarkReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, ToggleHeaderVisibilityAction>(
     _toggleHeaderVisibilityReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, ShowAIResponseAction>(
     _showAIResponseReducer,
-  ),
+  ).call,
   TypedReducer<ReaderScreenState, dynamic>(
     _allOtherReaderReducer,
-  ),
+  ).call,
 ]);
 
 ReaderScreenState _allOtherReaderReducer(

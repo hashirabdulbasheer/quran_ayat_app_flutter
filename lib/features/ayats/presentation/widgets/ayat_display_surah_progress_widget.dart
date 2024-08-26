@@ -9,10 +9,10 @@ class QuranAyatDisplaySurahProgressWidget extends StatelessWidget {
   final SurahIndex currentIndex;
 
   const QuranAyatDisplaySurahProgressWidget({
-    Key? key,
+    super.key,
     required this.currentlySelectedSurah,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

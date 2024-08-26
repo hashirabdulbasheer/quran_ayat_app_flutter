@@ -8,7 +8,7 @@ import '../../domain/models/quran_question.dart';
 import 'answers/quran_answers_widget.dart';
 
 class QuranChallengeDisplayWidget extends StatelessWidget {
-  const QuranChallengeDisplayWidget({Key? key}) : super(key: key);
+  const QuranChallengeDisplayWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

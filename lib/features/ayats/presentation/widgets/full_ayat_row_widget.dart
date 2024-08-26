@@ -31,7 +31,7 @@ class QuranFullAyatRowWidget extends StatelessWidget {
             child: SelectableText(
               _stripHtmlIfNeeded(text),
               textAlign: TextAlign.start,
-              textScaleFactor: fontScale,
+              textScaler: TextScaler.linear(fontScale),
               style: _textStyleForFont(fontFamily),
             ),
           ),

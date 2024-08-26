@@ -23,37 +23,37 @@ List<Middleware<AppState>> createReaderScreenMiddleware() {
   return [
     TypedMiddleware<AppState, InitializeReaderScreenAction>(
       _initializeMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, IncreaseFontSizeAction>(
       _increaseFontSizeMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, DecreaseFontSizeAction>(
       _decreaseFontSizeMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, ResetFontSizeAction>(
       _resetFontSizeMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, NextAyaAction>(
       _nextAyaMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, PreviousAyaAction>(
       _previousAyaMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, ShareAyaAction>(
       _shareAyaReaderMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, RandomAyaAction>(
       _randomAyaReaderMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, SelectParticularAyaAction>(
       _selectParticularAyaReaderMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, SelectSurahAction>(
       _selectSurahReaderMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, dynamic>(
       _allOtherReaderMiddleware,
-    ),
+    ).call,
   ];
 }
 

@@ -14,14 +14,14 @@ class QuranUpdateControlsWidget extends StatelessWidget {
   final bool? isNegativeActionRunning;
 
   const QuranUpdateControlsWidget({
-    Key? key,
+    super.key,
     required this.positiveActionText,
     required this.onPositiveAction,
     this.isPositiveActionRunning = false,
     required this.negativeActionText,
     required this.onNegativeAction,
     this.isNegativeActionRunning = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

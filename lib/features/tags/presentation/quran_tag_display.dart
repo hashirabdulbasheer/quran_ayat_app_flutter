@@ -16,9 +16,9 @@ class QuranAyatDisplayTagsWidget extends StatefulWidget {
   final SurahIndex currentIndex;
 
   const QuranAyatDisplayTagsWidget({
-    Key? key,
+    super.key,
     required this.currentIndex,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranAyatDisplayTagsWidget> createState() =>
@@ -118,8 +118,8 @@ class _QuranAyatDisplayTagsWidgetState
         message: "Remove tag",
         child: TextButton.icon(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.black12),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            backgroundColor: WidgetStateProperty.all<Color>(Colors.black12),
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
               const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),

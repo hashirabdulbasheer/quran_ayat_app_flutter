@@ -11,11 +11,11 @@ class QuranDropdownSettingsTileWidget extends StatefulWidget {
   final void Function(QuranDropdownValue)? onChanged;
 
   const QuranDropdownSettingsTileWidget({
-    Key? key,
+    super.key,
     required this.setting,
     this.showSearchBox,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranDropdownSettingsTileWidget> createState() =>

@@ -9,7 +9,7 @@ import '../domain/settings_manager.dart';
 import 'widgets/settings_row_widget.dart';
 
 class QuranSettingsScreen extends StatefulWidget {
-  const QuranSettingsScreen({Key? key}) : super(key: key);
+  const QuranSettingsScreen({super.key});
 
   @override
   State<QuranSettingsScreen> createState() => _QuranSettingsScreenState();

@@ -8,9 +8,9 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
   final List<NQWord> words;
 
   const QuranAyatDisplayWordByWordWidget({
-    Key? key,
+    super.key,
     required this.words,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +68,8 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                left: 8,
-                                right: 8,
+                                left: 4,
+                                right: 4,
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,7 +81,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                       e.ar,
                                       softWrap: false,
                                       maxLines: 1,
-                                      textScaleFactor: fontScale,
+                                      textScaler: TextScaler.linear(fontScale),
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 30,
@@ -91,12 +91,11 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
-                                  const SizedBox(height: 2),
                                   Container(
                                     padding: const EdgeInsets.all(5),
                                     decoration: const BoxDecoration(
                                       border: Border.fromBorderSide(
-                                        BorderSide(color: Colors.black26),
+                                        BorderSide(color: Colors.black12),
                                       ),
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(1),
@@ -104,7 +103,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                     ),
                                     child: Text(
                                       e.tr,
-                                      textScaleFactor: fontScale,
+                                      textScaler: TextScaler.linear(fontScale),
                                       style: const TextStyle(
                                         color: Colors.black54,
                                         fontSize: 14,

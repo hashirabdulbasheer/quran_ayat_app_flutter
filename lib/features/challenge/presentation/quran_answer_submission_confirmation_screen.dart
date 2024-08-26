@@ -7,9 +7,9 @@ class QuranAnswerSubmissionConfirmationScreen extends StatelessWidget {
   final String answerId;
 
   const QuranAnswerSubmissionConfirmationScreen({
-    Key? key,
+    super.key,
     required this.answerId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

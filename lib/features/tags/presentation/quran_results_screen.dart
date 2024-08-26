@@ -8,7 +8,6 @@ import 'package:quran_ayat/features/core/domain/app_state/app_state.dart';
 import '../../../misc/router/router_utils.dart';
 import '../../challenge/domain/redux/actions/actions.dart';
 import '../../home/presentation/quran_home_screen.dart';
-import '../../newAyat/data/surah_index.dart';
 import '../../newAyat/domain/redux/actions/actions.dart';
 import '../../settings/domain/settings_manager.dart';
 import '../domain/entities/quran_index.dart';
@@ -19,9 +18,9 @@ class QuranResultsScreen extends StatefulWidget {
   final QuranTag tag;
 
   const QuranResultsScreen({
-    Key? key,
+    super.key,
     required this.tag,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranResultsScreen> createState() => _QuranResultsScreenState();
@@ -90,7 +89,7 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "${index.surahIndex}: ${index.ayaIndex}",
+              "${index.index.human.sura}: ${index.index.human.aya}",
               style: const TextStyle(
                 color: Colors.black54,
               ),
@@ -116,17 +115,17 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
 
   Future<List<QuranIndex>> _fetchDetails() async {
     List<QuranIndex> updatedIndices = [];
-    List<NQTranslation> translations = await QuranSettingsManager.instance.getTranslations();
+    List<NQTranslation> translations =
+        await QuranSettingsManager.instance.getTranslations();
     for (QuranTagAya aya in widget.tag.ayas) {
       NQSurah translationSurah = await NobleQuran.getTranslationString(
-        aya.suraIndex,
+        aya.index.sura,
         translations.first, // TODO: fix later to handle multiple translations
       );
       updatedIndices.add(QuranIndex(
-        surahIndex: aya.suraIndex,
-        ayaIndex: aya.ayaIndex,
+        index: aya.index,
         surahTitle: translationSurah.name,
-        translationAya: translationSurah.aya[aya.ayaIndex].text,
+        translationAya: translationSurah.aya[aya.index.aya].text,
       ));
     }
 
@@ -137,10 +136,7 @@ class _QuranResultsScreenState extends State<QuranResultsScreen> {
     QuranIndex index,
   ) {
     StoreProvider.of<AppState>(context).dispatch(SelectParticularAyaAction(
-      index: SurahIndex.fromHuman(
-        sura: index.surahIndex,
-        aya: index.ayaIndex,
-      ),
+      index: index.index,
     ));
     StoreProvider.of<AppState>(context).dispatch(
       SelectHomeScreenTabAction(

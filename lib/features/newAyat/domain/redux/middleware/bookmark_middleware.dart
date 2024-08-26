@@ -14,10 +14,10 @@ List<Middleware<AppState>> createBookmarkMiddleware() {
   return [
     TypedMiddleware<AppState, SaveBookmarkAction>(
       _saveBookmarkMiddleware,
-    ),
+    ).call,
     TypedMiddleware<AppState, InitBookmarkAction>(
       _initBookmarkMiddleware,
-    ),
+    ).call,
   ];
 }
 

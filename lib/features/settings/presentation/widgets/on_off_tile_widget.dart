@@ -11,11 +11,11 @@ class QuranOnOffSettingsTileWidget extends StatefulWidget {
   final void Function(bool)? onChanged;
 
   const QuranOnOffSettingsTileWidget({
-    Key? key,
+    super.key,
     required this.setting,
     required this.defaultValue,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<QuranOnOffSettingsTileWidget> createState() =>

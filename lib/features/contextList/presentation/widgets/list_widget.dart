@@ -9,11 +9,11 @@ class ListWidget extends StatefulWidget {
   ) itemContent;
 
   const ListWidget({
-    Key? key,
+    super.key,
     this.initialIndex,
     required this.itemContent,
     required this.itemsCount,
-  }) : super(key: key);
+  });
 
   @override
   State<ListWidget> createState() => _ListWidgetState();

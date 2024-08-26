@@ -10,10 +10,10 @@ class QuranAyatDisplayTranslationWidget extends StatelessWidget {
   final NQTranslation translationType;
 
   const QuranAyatDisplayTranslationWidget({
-    Key? key,
+    super.key,
     required this.translation,
     required this.translationType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

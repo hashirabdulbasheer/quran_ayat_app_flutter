@@ -44,8 +44,8 @@ class QuranThemeManager {
     brightness: Brightness.light,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(QuranDS.appBarBackground),
-        foregroundColor: MaterialStateProperty.all(Colors.white),
+        backgroundColor: WidgetStateProperty.all(QuranDS.appBarBackground),
+        foregroundColor: WidgetStateProperty.all(Colors.white),
       ),
     ),
   );

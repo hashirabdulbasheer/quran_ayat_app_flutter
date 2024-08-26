@@ -10,9 +10,9 @@ class QuranChallengeDisplayScreen extends StatelessWidget {
   final Store<AppState> store;
 
   const QuranChallengeDisplayScreen({
-    Key? key,
+    super.key,
     required this.store,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

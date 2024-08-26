@@ -6,10 +6,10 @@ class QuranMessageDisplayScreen extends StatelessWidget {
   final String message;
 
   const QuranMessageDisplayScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.message,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class QuranMessageDisplayScreen extends StatelessWidget {
         child: Markdown(
           data: message,
           styleSheet: MarkdownStyleSheet(
-            textScaleFactor: 1.2,
+            textScaler: const TextScaler.linear(1.2),
           ),
         ),
       ),

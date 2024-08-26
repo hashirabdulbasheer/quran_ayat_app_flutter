@@ -8,10 +8,10 @@ class QuranFullTextFieldBottomSheet extends StatelessWidget {
   final TextEditingController controller;
 
   const QuranFullTextFieldBottomSheet({
-    Key? key,
+    super.key,
     required this.title,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

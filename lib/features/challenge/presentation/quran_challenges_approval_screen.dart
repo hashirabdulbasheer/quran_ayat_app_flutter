@@ -14,7 +14,7 @@ import 'widgets/answers/quran_reload_button_widget.dart';
 import 'widgets/submissions/quran_submission_question_item_widget.dart';
 
 class QuranChallengesApprovalScreen extends StatefulWidget {
-  const QuranChallengesApprovalScreen({Key? key}) : super(key: key);
+  const QuranChallengesApprovalScreen({super.key});
 
   @override
   State<QuranChallengesApprovalScreen> createState() =>

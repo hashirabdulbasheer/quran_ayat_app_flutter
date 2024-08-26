@@ -8,11 +8,11 @@ class QuranSingleActionButtonWidget extends StatelessWidget {
   final Function onPressed;
 
   const QuranSingleActionButtonWidget({
-    Key? key,
+    super.key,
     required this.buttonText,
     this.isLoading = false,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

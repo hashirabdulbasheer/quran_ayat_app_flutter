@@ -11,22 +11,22 @@ import '../tag_state.dart';
 Reducer<TagState> tagReducer = combineReducers<TagState>([
   TypedReducer<TagState, FetchTagsSucceededAction>(
     _fetchTagsSuccessReducer,
-  ),
+  ).call,
   TypedReducer<TagState, AddTagSucceededAction>(
     _addTagsSuccessReducer,
-  ),
+  ).call,
   TypedReducer<TagState, AddTagFailureAction>(
     _addTagsFailureReducer,
-  ),
+  ).call,
   TypedReducer<TagState, ResetTagsStatusAction>(
     _resetTagsStatusReducer,
-  ),
+  ).call,
   TypedReducer<TagState, CreateTagSucceededAction>(
     _createTagsSuccessReducer,
-  ),
+  ).call,
   TypedReducer<TagState, CreateTagFailureAction>(
     _createTagsFailureReducer,
-  ),
+  ).call,
 ]);
 
 TagState _fetchTagsSuccessReducer(
@@ -36,7 +36,7 @@ TagState _fetchTagsSuccessReducer(
   Map<String, List<String>> stateTags = {};
   for (QuranTag tag in action.fetchedTags) {
     for (QuranTagAya aya in tag.ayas) {
-      String key = "${aya.suraIndex}_${aya.ayaIndex}";
+      String key = "${aya.index.sura}_${aya.index.aya}";
       if (stateTags[key] == null) {
         stateTags[key] = [];
       }
