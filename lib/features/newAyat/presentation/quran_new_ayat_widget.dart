@@ -95,7 +95,7 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
         StoreProvider.of<AppState>(context).dispatch(SaveBookmarkAction(
           index: currentIndex,
         ));
-        QuranUtils.showMessage(context, "Saved bookmark ✅");
+        QuranUtils.showMessage(context, "Bookmark saved ✅");
       }
     }
 
