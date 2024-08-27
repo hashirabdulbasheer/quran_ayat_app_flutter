@@ -13,14 +13,13 @@ import 'package:quran_ayat/misc/design/design_system.dart';
 import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:share_plus/share_plus.dart';
 
-class QuranAIResponseWidget extends StatelessWidget {
+class QuranAIResponseWidget extends StatefulWidget {
   final QuranAIEngine engine;
   final AICache cache;
   final QuranAIType type;
   final SurahIndex currentIndex;
   final String translation;
   final List<String>? contextVerses;
-  final void Function() onReload;
 
   const QuranAIResponseWidget({
     super.key,
@@ -30,13 +29,18 @@ class QuranAIResponseWidget extends StatelessWidget {
     required this.currentIndex,
     required this.translation,
     required this.contextVerses,
-    required this.onReload,
   });
 
   @override
+  State<QuranAIResponseWidget> createState() => _QuranAIResponseWidgetState();
+}
+
+class _QuranAIResponseWidgetState extends State<QuranAIResponseWidget> {
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<String?>(
-        future: cache.getResponse(index: currentIndex, type: type),
+        future: widget.cache
+            .getResponse(index: widget.currentIndex, type: widget.type),
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const _AIWaitingWidget();
@@ -44,24 +48,32 @@ class QuranAIResponseWidget extends StatelessWidget {
             String? cacheResponse = snapshot.data;
             if (cacheResponse != null && cacheResponse.isNotEmpty) {
               return _AIDataWidget(
-                currentIndex: currentIndex,
-                translation: translation,
+                currentIndex: widget.currentIndex,
+                translation: widget.translation,
                 aiResponse: cacheResponse,
-                onReload: onReload,
+                onReload: () async {
+                  await widget.cache.removeResponse(
+                      index: widget.currentIndex, type: widget.type);
+                  setState(() {});
+                },
               );
             }
           }
           return _AIEngineResponseWidget(
-            engine: engine,
-            currentIndex: currentIndex,
-            translation: translation,
-            contextVerses: contextVerses,
-            type: type,
-            onReload: onReload,
+            engine: widget.engine,
+            currentIndex: widget.currentIndex,
+            translation: widget.translation,
+            contextVerses: widget.contextVerses,
+            type: widget.type,
+            onReload: () async {
+              await widget.cache.removeResponse(
+                  index: widget.currentIndex, type: widget.type);
+              setState(() {});
+            },
             onResponse: (response) {
-              cache.saveResponse(
-                index: currentIndex,
-                type: type,
+              widget.cache.saveResponse(
+                index: widget.currentIndex,
+                type: widget.type,
                 response: response,
               );
             },
