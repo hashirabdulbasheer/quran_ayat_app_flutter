@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/common/presentation/widgets/header_widget.dart';
 
 import '../../../misc/design/design_system.dart';
 import '../../../misc/router/router_utils.dart';
@@ -41,21 +42,7 @@ class _QuranAyatDisplayTagsWidgetState
         const SizedBox(
           height: 20,
         ),
-        Container(
-          height: 50,
-          decoration: const BoxDecoration(
-            border: Border.fromBorderSide(
-              BorderSide(color: Colors.black12),
-            ),
-            color: Colors.black12,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          padding: const EdgeInsets.fromLTRB(
-            10,
-            0,
-            10,
-            0,
-          ),
+        QuranHeaderWidget(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

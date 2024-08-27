@@ -15,7 +15,7 @@ abstract class AICache {
     required String response,
   });
 
-  void removeResponse({
+  Future<void> removeResponse({
     required SurahIndex index,
     required QuranAIType type,
   });
@@ -44,7 +44,7 @@ class AILocalCache implements AICache {
   }
 
   @override
-  void removeResponse({
+  Future<void> removeResponse({
     required SurahIndex index,
     required QuranAIType type,
   }) async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/common/presentation/widgets/header_widget.dart';
 
 import '../../../../misc/router/router_utils.dart';
 import '../../../../models/qr_user_model.dart';
@@ -10,7 +11,6 @@ import '../../../core/presentation/shimmer.dart';
 import '../../../newAyat/data/surah_index.dart';
 import '../../../notes/domain/entities/quran_note.dart';
 import '../../../notes/domain/notes_manager.dart';
-import '../../../notes/presentation/widgets/offline_header_widget.dart';
 import 'font_scaler_widget.dart';
 
 class QuranAyatDisplayNotesWidget extends StatefulWidget {
@@ -48,25 +48,10 @@ class _QuranAyatDisplayNotesWidgetState
         const SizedBox(
           height: 20,
         ),
-        const QuranOfflineHeaderWidget(),
         const SizedBox(
           height: 10,
         ),
-        Container(
-          height: 50,
-          decoration: const BoxDecoration(
-            border: Border.fromBorderSide(
-              BorderSide(color: Colors.black12),
-            ),
-            color: Colors.black12,
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-          ),
-          padding: const EdgeInsets.fromLTRB(
-            10,
-            0,
-            10,
-            0,
-          ),
+        QuranHeaderWidget(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

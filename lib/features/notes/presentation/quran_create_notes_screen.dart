@@ -19,7 +19,6 @@ import '../domain/entities/quran_note.dart';
 import '../domain/redux/actions/actions.dart';
 import 'widgets/notes_create_controls_widget.dart';
 import 'widgets/notes_update_controls_widget.dart';
-import 'widgets/offline_header_widget.dart';
 
 class QuranCreateNotesScreen extends StatefulWidget {
   final SurahIndex index;
@@ -57,7 +56,6 @@ class _QuranCreateNotesScreenState extends State<QuranCreateNotesScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const QuranOfflineHeaderWidget(),
               Padding(
                 padding: const EdgeInsets.only(
                   top: 0,

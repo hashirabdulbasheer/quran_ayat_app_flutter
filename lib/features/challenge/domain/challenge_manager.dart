@@ -14,21 +14,11 @@ class QuranChallengeManager {
       QuranChallengesEngine(dataSource: QuranFirebaseEngine.instance);
 
   Future<void> initialize() async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return;
-    }
-
     /// ONLINE
     return _challengesEngine.initialize();
   }
 
   Future<List<QuranQuestion>> fetchQuestions() async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return [];
-    }
-
     return await _challengesEngine.fetchQuestions();
   }
 
@@ -37,11 +27,6 @@ class QuranChallengeManager {
     int questionId,
     QuranAnswer answer,
   ) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return false;
-    }
-
     return await _challengesEngine.submitAnswer(
       userId,
       questionId,
@@ -54,11 +39,6 @@ class QuranChallengeManager {
     int questionId,
     QuranAnswer answer,
   ) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return false;
-    }
-
     return await _challengesEngine.editAnswer(
       userId,
       questionId,
@@ -71,20 +51,11 @@ class QuranChallengeManager {
     int questionId,
     QuranAnswer answer,
   ) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return false;
-    }
-
     return await _challengesEngine.deleteAnswer(
       userId,
       questionId,
       answer,
     );
-  }
-
-  Future<bool> isOffline() async {
-    return QuranUtils.isOffline();
   }
 
   String formattedDate(int timeMs) {
@@ -94,11 +65,6 @@ class QuranChallengeManager {
   Future<bool> createQuestion(
     QuranQuestion question,
   ) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return false;
-    }
-
     return await _challengesEngine.createQuestion(question);
   }
 }

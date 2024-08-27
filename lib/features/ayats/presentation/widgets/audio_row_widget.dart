@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 import '../../../../utils/logger_utils.dart';
-import '../../../../utils/utils.dart';
 import '../../../newAyat/data/surah_index.dart';
 import '../../domain/audio/audio_cache_manager.dart';
 import '../../domain/enums/audio_events_enum.dart';
@@ -106,14 +105,6 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
       widget.currentIndex.human.sura,
       widget.currentIndex.human.aya,
     );
-    if (source is UriAudioSource) {
-      bool offline = await QuranUtils.isOffline();
-      if (offline) {
-        _showMessage("Unable to connect to the internet 😞");
-
-        return;
-      }
-    }
     await _player.setAudioSource(source);
     await _player.play();
     QuranLogger.logAnalytics("media-play");
@@ -126,14 +117,5 @@ class _QuranAudioRowWidgetState extends State<QuranAudioRowWidget> {
     }
     // inform the main UI of the stopped event
     _audioEventsStream.add(QuranAudioEventsEnum.stopped);
-  }
-
-  ///
-  /// Utils
-  ///
-
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 }

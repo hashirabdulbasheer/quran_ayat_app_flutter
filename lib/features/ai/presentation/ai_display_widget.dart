@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/common/presentation/widgets/header_widget.dart';
 import 'package:quran_ayat/features/ai/domain/ai_cache.dart';
 import 'package:quran_ayat/features/ai/domain/ai_engine.dart';
 import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
@@ -12,14 +13,13 @@ import 'package:quran_ayat/misc/design/design_system.dart';
 import 'package:quran_ayat/utils/logger_utils.dart';
 import 'package:share_plus/share_plus.dart';
 
-class QuranAIResponseWidget extends StatelessWidget {
+class QuranAIResponseWidget extends StatefulWidget {
   final QuranAIEngine engine;
   final AICache cache;
   final QuranAIType type;
   final SurahIndex currentIndex;
   final String translation;
   final List<String>? contextVerses;
-  final void Function() onReload;
 
   const QuranAIResponseWidget({
     super.key,
@@ -29,13 +29,18 @@ class QuranAIResponseWidget extends StatelessWidget {
     required this.currentIndex,
     required this.translation,
     required this.contextVerses,
-    required this.onReload,
   });
 
   @override
+  State<QuranAIResponseWidget> createState() => _QuranAIResponseWidgetState();
+}
+
+class _QuranAIResponseWidgetState extends State<QuranAIResponseWidget> {
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<String?>(
-        future: cache.getResponse(index: currentIndex, type: type),
+        future: widget.cache
+            .getResponse(index: widget.currentIndex, type: widget.type),
         builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const _AIWaitingWidget();
@@ -43,24 +48,32 @@ class QuranAIResponseWidget extends StatelessWidget {
             String? cacheResponse = snapshot.data;
             if (cacheResponse != null && cacheResponse.isNotEmpty) {
               return _AIDataWidget(
-                currentIndex: currentIndex,
-                translation: translation,
+                currentIndex: widget.currentIndex,
+                translation: widget.translation,
                 aiResponse: cacheResponse,
-                onReload: onReload,
+                onReload: () async {
+                  await widget.cache.removeResponse(
+                      index: widget.currentIndex, type: widget.type);
+                  setState(() {});
+                },
               );
             }
           }
           return _AIEngineResponseWidget(
-            engine: engine,
-            currentIndex: currentIndex,
-            translation: translation,
-            contextVerses: contextVerses,
-            type: type,
-            onReload: onReload,
+            engine: widget.engine,
+            currentIndex: widget.currentIndex,
+            translation: widget.translation,
+            contextVerses: widget.contextVerses,
+            type: widget.type,
+            onReload: () async {
+              await widget.cache.removeResponse(
+                  index: widget.currentIndex, type: widget.type);
+              setState(() {});
+            },
             onResponse: (response) {
-              cache.saveResponse(
-                index: currentIndex,
-                type: type,
+              widget.cache.saveResponse(
+                index: widget.currentIndex,
+                type: widget.type,
                 response: response,
               );
             },
@@ -95,41 +108,43 @@ class _AIDataWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "AI Generated",
-              style: QuranDS.textTitleMediumLight,
-            ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: onReload,
-                    icon: const Icon(
-                      Icons.refresh,
-                      color: QuranDS.primaryColor,
-                    )),
-                IconButton(
-                    onPressed: () => _copyResponse(
-                        context, currentIndex, translation, response),
-                    icon: const Icon(
-                      Icons.copy,
-                      color: QuranDS.primaryColor,
-                    )),
-                IconButton(
-                    onPressed: () =>
-                        _shareResponse(currentIndex, translation, response),
-                    icon: const Icon(
-                      Icons.share,
-                      color: QuranDS.primaryColor,
-                    )),
-              ],
-            ),
-          ],
+        QuranHeaderWidget(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "AI Generated",
+                style: QuranDS.textTitleMediumLight,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: onReload,
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: QuranDS.primaryColor,
+                      )),
+                  IconButton(
+                      onPressed: () => _copyResponse(
+                          context, currentIndex, translation, response),
+                      icon: const Icon(
+                        Icons.copy,
+                        color: QuranDS.primaryColor,
+                      )),
+                  IconButton(
+                      onPressed: () =>
+                          _shareResponse(currentIndex, translation, response),
+                      icon: const Icon(
+                        Icons.share,
+                        color: QuranDS.primaryColor,
+                      )),
+                ],
+              ),
+            ],
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
           child: MarkdownBody(
             selectable: true,
             softLineBreak: true,

@@ -12,7 +12,6 @@ import '../../core/domain/app_state/app_state.dart';
 import '../../newAyat/data/surah_index.dart';
 import '../domain/entities/quran_note.dart';
 import 'widgets/notes_view_note_item_widget.dart';
-import 'widgets/offline_header_widget.dart';
 
 class QuranViewNotesScreen extends StatefulWidget {
   final QuranUser user;
@@ -70,7 +69,6 @@ class _QuranViewNotesScreenState extends State<QuranViewNotesScreen> {
       ),
       body: Column(
         children: [
-          const QuranOfflineHeaderWidget(),
           _suraTitles.isNotEmpty
               ? Padding(
                   padding: const EdgeInsets.fromLTRB(
