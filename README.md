@@ -4,7 +4,7 @@
 
 App to quickly view the word by word meaning of an ayat
 
-<img src="https://raw.githubusercontent.com/hashirabdulbasheer/my_assets/master/quran_ayat_screenshot.png" width="25%">
+<img src="https://raw.githubusercontent.com/hashirabdulbasheer/my_assets/master/quran_ayat_screenshot.png" width="25%" alt="app screenshot">
 
 [Click here to access online](https://uxquran.com/apps/quran-ayat/)
 
