@@ -7,10 +7,8 @@ import 'package:noble_quran/models/surah_title.dart';
 import 'package:noble_quran/models/word.dart';
 import 'package:quran_ayat/features/ai/domain/ai_cache.dart';
 import 'package:quran_ayat/features/ai/domain/ai_engine.dart';
-import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
 import 'package:quran_ayat/features/ai/domain/gemini_ai_engine.dart';
-import 'package:quran_ayat/features/ai/presentation/ai_display_widget.dart';
-import 'package:quran_ayat/features/ai/presentation/ai_trigger_widget.dart';
+import 'package:quran_ayat/features/ai/presentation/ai_actions_row_widget.dart';
 import 'package:quran_ayat/features/newAyat/domain/redux/actions/bookmark_actions.dart';
 import 'package:quran_ayat/utils/utils.dart';
 import 'package:redux/redux.dart';
@@ -120,9 +118,6 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
         // still loading
         return const Center(child: CircularProgressIndicator());
       }
-
-      List<String>? recentTranslations =
-          store.state.reader.getRecentAyaTranslations(2);
 
       return SingleChildScrollView(
         child: Padding(
@@ -268,83 +263,11 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
 
               /// AI
               if (_aiApiKey.isNotEmpty) ...[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    // ai triggers
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Tooltip(
-                          message: "AI Children",
-                          child: QuranAITriggerWidget(
-                            icon: QuranDS.aiChildrenIcon,
-                            type: QuranAIType.childReflection,
-                            isEnabled: !_isAILoading(
-                                store, QuranAIType.childReflection),
-                          ),
-                        ),
-                        Tooltip(
-                          message: "AI Poetry",
-                          child: QuranAITriggerWidget(
-                            icon: QuranDS.aiPoetryIcon,
-                            type: QuranAIType.poeticReflection,
-                            isEnabled: !_isAILoading(
-                              store,
-                              QuranAIType.poeticReflection,
-                            ),
-                          ),
-                        ),
-                        Tooltip(
-                          message: "AI Reflections",
-                          child: QuranAITriggerWidget(
-                            icon: QuranDS.aiReflectionIcon,
-                            type: QuranAIType.reflection,
-                            isEnabled: !_isAILoading(
-                              store,
-                              QuranAIType.reflection,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    // ai responses
-                    if (_isAILoading(store, QuranAIType.reflection)) ...[
-                      QuranAIResponseWidget(
-                        engine: _aiEngine,
-                        cache: _aiCache,
-                        type: QuranAIType.reflection,
-                        currentIndex: currentIndex,
-                        translation:
-                            translations[NQTranslation.wahiduddinkhan] ?? "",
-                        contextVerses: recentTranslations,
-                      )
-                    ],
-                    if (_isAILoading(store, QuranAIType.poeticReflection)) ...[
-                      QuranAIResponseWidget(
-                        engine: _aiEngine,
-                        cache: _aiCache,
-                        type: QuranAIType.poeticReflection,
-                        currentIndex: currentIndex,
-                        translation:
-                            translations[NQTranslation.wahiduddinkhan] ?? "",
-                        // not passing any context for poetry
-                        contextVerses: null,
-                      )
-                    ],
-                    if (_isAILoading(store, QuranAIType.childReflection)) ...[
-                      QuranAIResponseWidget(
-                        engine: _aiEngine,
-                        cache: _aiCache,
-                        type: QuranAIType.childReflection,
-                        currentIndex: currentIndex,
-                        translation:
-                            translations[NQTranslation.wahiduddinkhan] ?? "",
-                        contextVerses: recentTranslations,
-                      )
-                    ],
-                  ],
-                )
+                QuranAIActionsRowWidget(
+                  store: store,
+                  engine: _aiEngine,
+                  cache: _aiCache,
+                ),
               ],
 
               /// audio controls
@@ -407,10 +330,6 @@ class _QuranNewAyatReaderWidgetState extends State<QuranNewAyatReaderWidget> {
     Store<AppState> store,
   ) {
     store.dispatch(ResetFontSizeAction());
-  }
-
-  bool _isAILoading(Store<AppState> store, QuranAIType type) {
-    return store.state.reader.aiResponseVisibility[type] == true;
   }
 
   ///
