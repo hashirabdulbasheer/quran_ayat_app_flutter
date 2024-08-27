@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quran_ayat/common/presentation/widgets/header_widget.dart';
 import 'package:quran_ayat/features/ai/domain/ai_cache.dart';
 import 'package:quran_ayat/features/ai/domain/ai_engine.dart';
 import 'package:quran_ayat/features/ai/domain/ai_type_enum.dart';
@@ -95,41 +96,43 @@ class _AIDataWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "AI Generated",
-              style: QuranDS.textTitleMediumLight,
-            ),
-            Row(
-              children: [
-                IconButton(
-                    onPressed: onReload,
-                    icon: const Icon(
-                      Icons.refresh,
-                      color: QuranDS.primaryColor,
-                    )),
-                IconButton(
-                    onPressed: () => _copyResponse(
-                        context, currentIndex, translation, response),
-                    icon: const Icon(
-                      Icons.copy,
-                      color: QuranDS.primaryColor,
-                    )),
-                IconButton(
-                    onPressed: () =>
-                        _shareResponse(currentIndex, translation, response),
-                    icon: const Icon(
-                      Icons.share,
-                      color: QuranDS.primaryColor,
-                    )),
-              ],
-            ),
-          ],
+        QuranHeaderWidget(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "AI Generated",
+                style: QuranDS.textTitleMediumLight,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: onReload,
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: QuranDS.primaryColor,
+                      )),
+                  IconButton(
+                      onPressed: () => _copyResponse(
+                          context, currentIndex, translation, response),
+                      icon: const Icon(
+                        Icons.copy,
+                        color: QuranDS.primaryColor,
+                      )),
+                  IconButton(
+                      onPressed: () =>
+                          _shareResponse(currentIndex, translation, response),
+                      icon: const Icon(
+                        Icons.share,
+                        color: QuranDS.primaryColor,
+                      )),
+                ],
+              ),
+            ],
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8, 20, 8, 8),
           child: MarkdownBody(
             selectable: true,
             softLineBreak: true,
