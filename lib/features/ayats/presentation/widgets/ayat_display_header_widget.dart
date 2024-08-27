@@ -30,90 +30,80 @@ class QuranAyatHeaderWidget extends StatelessWidget {
       children: [
         Expanded(
           flex: 2,
-          child: Semantics(
+          child: DropdownSearch<NQSurahTitle>(
+            items: surahTitles,
             enabled: true,
-            excludeSemantics: true,
-            label: 'dropdown to select surah',
-            child: DropdownSearch<NQSurahTitle>(
-              items: surahTitles,
-              enabled: true,
-              itemAsString: (NQSurahTitle title) =>
-                  "(${title.number}) ${title.transliterationEn}",
-              popupProps: PopupPropsMultiSelection.dialog(
-                showSearchBox: true,
-                dialogProps: const DialogProps(
-                  backgroundColor: QuranDS.screenBackgroundLittleDarker,
-                ),
-                itemBuilder: _customItem,
-                searchFieldProps: const TextFieldProps(
-                  style: QuranDS.textTitleSmall,
-                ),
+            itemAsString: (NQSurahTitle title) =>
+                "(${title.number}) ${title.transliterationEn}",
+            popupProps: PopupPropsMultiSelection.dialog(
+              showSearchBox: true,
+              dialogProps: const DialogProps(
+                backgroundColor: QuranDS.screenBackgroundLittleDarker,
               ),
-              dropdownDecoratorProps: const DropDownDecoratorProps(
-                baseStyle: QuranDS.textTitleSmall,
-                dropdownSearchDecoration: InputDecoration(
-                  labelText: "Surah",
-                  hintText: "select surah",
-                ),
-                textAlign: TextAlign.start,
+              itemBuilder: _customItem,
+              searchFieldProps: const TextFieldProps(
+                style: QuranDS.textTitleSmall,
               ),
-              onChanged: (value) => onSurahSelected(
-                value ?? surahTitles.first,
-              ),
-              selectedItem: currentlySelectedSurah,
             ),
+            dropdownDecoratorProps: const DropDownDecoratorProps(
+              baseStyle: QuranDS.textTitleSmall,
+              dropdownSearchDecoration: InputDecoration(
+                labelText: "Surah",
+                hintText: "select surah",
+              ),
+              textAlign: TextAlign.start,
+            ),
+            onChanged: (value) => onSurahSelected(
+              value ?? surahTitles.first,
+            ),
+            selectedItem: currentlySelectedSurah,
           ),
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: Semantics(
-            enabled: true,
-            excludeSemantics: true,
-            label: 'dropdown to select ayat number',
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(
-                8,
-                8,
-                8,
-                8,
-              ),
-              child: SizedBox(
-                width: 100,
-                child: DropdownSearch<int>(
-                  popupProps: PopupPropsMultiSelection.dialog(
-                    showSearchBox: true,
-                    itemBuilder: _customAyaItem,
-                    dialogProps: const DialogProps(
-                      backgroundColor: QuranDS.screenBackgroundLittleDarker,
-                    ),
-                    searchFieldProps: const TextFieldProps(
-                      style: QuranDS.textTitleSmall,
-                    ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              8,
+              8,
+              8,
+              8,
+            ),
+            child: SizedBox(
+              width: 100,
+              child: DropdownSearch<int>(
+                popupProps: PopupPropsMultiSelection.dialog(
+                  showSearchBox: true,
+                  itemBuilder: _customAyaItem,
+                  dialogProps: const DialogProps(
+                    backgroundColor: QuranDS.screenBackgroundLittleDarker,
                   ),
-                  filterFn: (
-                    item,
-                    filter,
-                  ) =>
-                      _ayatNumberDropdownSearchFilterFn(
-                    filter,
-                    item,
+                  searchFieldProps: const TextFieldProps(
+                    style: QuranDS.textTitleSmall,
                   ),
-                  enabled: true,
-                  dropdownDecoratorProps: const DropDownDecoratorProps(
-                    baseStyle: QuranDS.textTitleSmall,
-                    dropdownSearchDecoration: InputDecoration(
-                      labelText: "Ayat",
-                      hintText: "ayat index",
-                    ),
-                  ),
-                  items: List<int>.generate(
-                    currentlySelectedSurah?.totalVerses ?? 0,
-                    (i) => i + 1,
-                  ),
-                  onChanged: (value) =>
-                      onAyaNumberSelected(value != null ? value - 1 : 0),
-                  selectedItem: currentIndex.human.aya,
                 ),
+                filterFn: (
+                  item,
+                  filter,
+                ) =>
+                    _ayatNumberDropdownSearchFilterFn(
+                  filter,
+                  item,
+                ),
+                enabled: true,
+                dropdownDecoratorProps: const DropDownDecoratorProps(
+                  baseStyle: QuranDS.textTitleSmall,
+                  dropdownSearchDecoration: InputDecoration(
+                    labelText: "Ayat",
+                    hintText: "ayat index",
+                  ),
+                ),
+                items: List<int>.generate(
+                  currentlySelectedSurah?.totalVerses ?? 0,
+                  (i) => i + 1,
+                ),
+                onChanged: (value) =>
+                    onAyaNumberSelected(value != null ? value - 1 : 0),
+                selectedItem: currentIndex.human.aya,
               ),
             ),
           ),
