@@ -95,7 +95,7 @@ class QuranAyatDisplayWordByWordWidget extends StatelessWidget {
                                     padding: const EdgeInsets.all(5),
                                     decoration: const BoxDecoration(
                                       border: Border.fromBorderSide(
-                                        BorderSide(color: Colors.black12),
+                                        BorderSide(color: Colors.black26),
                                       ),
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(1),
