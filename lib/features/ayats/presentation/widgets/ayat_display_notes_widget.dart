@@ -11,7 +11,6 @@ import '../../../core/presentation/shimmer.dart';
 import '../../../newAyat/data/surah_index.dart';
 import '../../../notes/domain/entities/quran_note.dart';
 import '../../../notes/domain/notes_manager.dart';
-import '../../../notes/presentation/widgets/offline_header_widget.dart';
 import 'font_scaler_widget.dart';
 
 class QuranAyatDisplayNotesWidget extends StatefulWidget {
@@ -49,7 +48,6 @@ class _QuranAyatDisplayNotesWidgetState
         const SizedBox(
           height: 20,
         ),
-        const QuranOfflineHeaderWidget(),
         const SizedBox(
           height: 10,
         ),

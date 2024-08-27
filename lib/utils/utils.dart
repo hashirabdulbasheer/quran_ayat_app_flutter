@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:noble_quran/enums/translations.dart';
@@ -51,18 +50,6 @@ class QuranUtils {
         content: Text(message),
       ));
     }
-  }
-
-  static Future<bool> isOffline() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult.contains(ConnectivityResult.mobile) ||
-        connectivityResult.contains(ConnectivityResult.wifi) ||
-        connectivityResult.contains(ConnectivityResult.bluetooth) ||
-        connectivityResult.contains(ConnectivityResult.ethernet)) {
-      return false;
-    }
-
-    return true;
   }
 
   static String getAudioUrl(

@@ -27,19 +27,10 @@ class QuranNotesManager implements QuranNotesDataSource {
     String userId,
     QuranNote note,
   ) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return await _offlineEngine.create(
-        userId,
-        note,
-      );
-    } else {
-      /// ONLINE
-      return await _notesEngine.create(
-        userId,
-        note,
-      );
-    }
+    return await _notesEngine.create(
+      userId,
+      note,
+    );
   }
 
   @override
@@ -47,16 +38,7 @@ class QuranNotesManager implements QuranNotesDataSource {
     String userId,
     QuranNote note,
   ) async {
-    /// Supporting delete for online only
-    if (!await isOffline()) {
-      return _notesEngine.delete(
-        userId,
-        note,
-      );
-    }
-
-    /// OFFLINE
-    return _offlineEngine.delete(
+    return _notesEngine.delete(
       userId,
       note,
     );
@@ -68,31 +50,15 @@ class QuranNotesManager implements QuranNotesDataSource {
     int suraIndex,
     int ayaIndex,
   ) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return await _offlineEngine.fetch(
-        userId,
-        suraIndex,
-        ayaIndex,
-      );
-    } else {
-      /// ONLINE
-      return await _notesEngine.fetch(
-        userId,
-        suraIndex,
-        ayaIndex,
-      );
-    }
+    return await _notesEngine.fetch(
+      userId,
+      suraIndex,
+      ayaIndex,
+    );
   }
 
   @override
   Future<void> initialize() async {
-    if (await isOffline()) {
-      /// OFFLINE
-      await _offlineEngine.initialize();
-    }
-
-    /// ONLINE
     return _notesEngine.initialize();
   }
 
@@ -101,48 +67,31 @@ class QuranNotesManager implements QuranNotesDataSource {
     String userId,
     QuranNote note,
   ) async {
-    if (!await isOffline()) {
-      /// ONLINE
-      return _notesEngine.update(
-        userId,
-        note,
-      );
-    }
-
-    /// OFFLINE
-    return _offlineEngine.update(
+    return _notesEngine.update(
       userId,
       note,
     );
   }
 
   Future<void> uploadLocalNotesIfAny(String userId) async {
-    if (!await isOffline()) {
-      // ONLINE -> Upload all local notes if any
-      List<QuranNote> localNotes = await fetchAllLocal(userId);
-      for (QuranNote note in localNotes) {
-        // create online copy
-        create(
-          userId,
-          note,
-        );
-        // delete local copy
-        deleteLocal(
-          userId,
-          note,
-        );
-      }
+    // ONLINE -> Upload all local notes if any
+    List<QuranNote> localNotes = await fetchAllLocal(userId);
+    for (QuranNote note in localNotes) {
+      // create online copy
+      create(
+        userId,
+        note,
+      );
+      // delete local copy
+      deleteLocal(
+        userId,
+        note,
+      );
     }
   }
 
   @override
   Future<List<QuranNote>> fetchAll(String userId) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return await _offlineEngine.fetchAll(userId);
-    }
-
-    /// ONLINE
     return _notesEngine.fetchAll(userId);
   }
 
@@ -158,10 +107,6 @@ class QuranNotesManager implements QuranNotesDataSource {
       userId,
       note,
     );
-  }
-
-  Future<bool> isOffline() async {
-    return QuranUtils.isOffline();
   }
 
   String formattedDate(int timeMs) {

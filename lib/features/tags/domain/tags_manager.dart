@@ -18,35 +18,21 @@ class QuranTagsManager {
     String userId,
     String tag,
   ) async {
-    if (await isOffline()) {
-      return QuranResponse(
-        isSuccessful: false,
-        message: "No internet",
-      );
-    } else {
-      /// ONLINE
-      QuranTag masterTag = QuranTag(
-        id: "${DateTime.now().millisecondsSinceEpoch}",
-        name: tag,
-        ayas: const [],
-        createdOn: DateTime.now().millisecondsSinceEpoch,
-        status: QuranStatusEnum.created.rawString(),
-      );
+    QuranTag masterTag = QuranTag(
+      id: "${DateTime.now().millisecondsSinceEpoch}",
+      name: tag,
+      ayas: const [],
+      createdOn: DateTime.now().millisecondsSinceEpoch,
+      status: QuranStatusEnum.created.rawString(),
+    );
 
-      return await _tagsEngine.create(
-        userId,
-        masterTag,
-      );
-    }
+    return await _tagsEngine.create(
+      userId,
+      masterTag,
+    );
   }
 
   Future<void> initialize() async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return;
-    }
-
-    /// ONLINE
     return _tagsEngine.initialize();
   }
 
@@ -54,32 +40,17 @@ class QuranTagsManager {
     String userId,
     QuranTag? tag,
   ) async {
-    if (!await isOffline()) {
-      /// ONLINE
-      if (tag != null) {
-        return _tagsEngine.update(
-          userId,
-          tag,
-        );
-      }
+    if (tag != null) {
+      return _tagsEngine.update(
+        userId,
+        tag,
+      );
     }
-
-    /// OFFLINE
     return false;
   }
 
   Future<List<QuranTag>> fetchAll(String userId) async {
-    if (await isOffline()) {
-      /// OFFLINE
-      return [];
-    }
-
-    /// ONLINE
     return _tagsEngine.fetchAll(userId);
-  }
-
-  Future<bool> isOffline() async {
-    return QuranUtils.isOffline();
   }
 
   String formattedDate(int timeMs) {
