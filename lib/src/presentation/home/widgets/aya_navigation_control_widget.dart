@@ -18,59 +18,58 @@ class AyaNavigationControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QPageData>(
-      stream: context.read<HomeBloc>().currentPageData$,
-      builder: (context, snapshot) {
-        if(snapshot.data == null) {
-          return const SizedBox.shrink();
-        }
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: SafeArea(
-            bottom: true,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(
-                10,
-                5,
-                10,
-                5,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          iconAlignment: IconAlignment.start,
-                          icon: const Icon(Icons.navigate_before, size: 20),
-                          label: const Text(
-                            "Back",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+        stream: context.read<HomeBloc>().currentPageData$,
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return const SizedBox.shrink();
+          }
+          return Directionality(
+            textDirection: TextDirection.rtl,
+            child: SafeArea(
+              bottom: true,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(
+                  10,
+                  5,
+                  10,
+                  5,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(appVersion, style: TextStyle(fontSize: 10)),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            iconAlignment: IconAlignment.start,
+                            icon: const Icon(Icons.navigate_before, size: 20),
+                            label: const Text(
+                              "Back",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: onPrevious,
                           ),
-                          onPressed: onPrevious,
                         ),
-                      ),
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          iconAlignment: IconAlignment.end,
-                          icon: const Icon(Icons.navigate_next, size: 20),
-                          label: const Text(
-                            "Next",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            iconAlignment: IconAlignment.end,
+                            icon: const Icon(Icons.navigate_next, size: 20),
+                            label: const Text(
+                              "Next",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            onPressed: onNext,
                           ),
-                          onPressed: onNext,
                         ),
-                      ),
-                    ].spacerDirectional(width: 10),
-                  ),
-                  const Text(appVersion, style: TextStyle(fontSize: 10),)
-                ].spacerDirectional(height: 5),
+                      ].spacerDirectional(width: 10),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 }
