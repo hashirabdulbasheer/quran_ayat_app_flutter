@@ -53,12 +53,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GoToBookmarkEvent>(_onGoToBookmark);
     on<AddBookmarkEvent>(_onAddBookmark);
 
-    registerListeners();
+    _registerListeners();
   }
 
   @override
   Future<void> close() async {
-    await unregisterListeners();
+    await _unregisterListeners();
     return super.close();
   }
 
@@ -173,10 +173,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     settings$.add(newValue);
   }
 
-  void registerListeners() {}
+  void _registerListeners() {}
 
-  Future unregisterListeners() async {
+  Future _unregisterListeners() async {
     await currentPageData$.close();
     await settings$.close();
+  }
+
+  double getReadingProgress(HomeLoadedState state) {
+    final page = currentPageData$.value.page;
+    final lastAya = page.firstAyaIndex.aya + page.numberOfAya;
+    final title = state.suraTitles?[page.firstAyaIndex.sura];
+
+    return title == null ? 0.0 : lastAya / title.totalVerses;
   }
 }

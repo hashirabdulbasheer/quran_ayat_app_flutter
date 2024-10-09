@@ -5,6 +5,7 @@ import 'package:ayat_app/src/domain/models/surah_index.dart';
 import 'package:ayat_app/src/presentation/home/widgets/aya_list.dart';
 import 'package:ayat_app/src/presentation/home/widgets/aya_navigation_control_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/controls_widget.dart';
+import 'package:ayat_app/src/presentation/home/widgets/home_loading_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/page_header_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/text_scale_widget.dart';
 import 'package:ayat_app/src/presentation/widgets/base_screen.dart';
@@ -141,7 +142,7 @@ class _Header extends StatelessWidget {
           return Column(
             children: [
               PageHeader(
-                readingProgress: 0,
+                readingProgress: bloc.getReadingProgress(loadedState),
                 surahTitles: loadedState.suraTitles ?? [],
                 onSelection: (index) =>
                     bloc.add(HomeSelectSuraAyaEvent(index: index)),
@@ -177,14 +178,14 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<HomeBloc>();
     if (bloc.state is! HomeLoadedState) {
-      return const Center(child: CircularProgressIndicator());
+      return const LoadingWidget();
     }
 
     return StreamBuilder<QPageData?>(
         stream: bloc.currentPageData$,
         builder: (context, snapshot) {
           QPageData? data = snapshot.data;
-          if (data == null) return const SizedBox.shrink();
+          if (data == null) return const LoadingWidget();
 
           return Column(
             children: [
