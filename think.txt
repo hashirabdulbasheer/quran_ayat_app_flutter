@@ -1,0 +1,167 @@
+
+
+now if i have a list of rukus
+
+{
+	index:
+	sura:
+	aya:
+}
+
+
+page number
+-----------
+
+1
+
+
+if we have the current page and we have the entire data for a sura, how can we extract the page data from it?
+
+for that, we will need to define what a page is
+
+page is not just a number but contains a number of verses
+
+when number of verses is set then we should use that
+
+when ruku is set then the number of verses is the number of verses in the ruku
+
+
+Now, imagine having pages. What is the current page and how can we map a verse to a page?
+
+A page contains a page number, the start aya index and the number of verses in that page.
+{
+	pageNumber
+	startAya
+	numberOfAya
+}
+
+We start with { 1, 1:1, 1}
+
+the numberOfAya defaults to 1 aya per page. Or can be set the kNumOfAyasPerPage constant. or can be the number of ayas in the ruku.
+
+how can we map an aya to a page
+
+mapping an aya to page depends on the numberOfAyaPerPage
+
+if(numberOfAyaPerPage == 1) {
+	then the aya number = page number
+} else if(numberOfAyaPerPage > 1) {
+	page number = aya number / numberOfAyaPerPage
+} else if(numberOfAyaPerPage = number of aya in a ruku) {
+	figure out which ruku the aya belongs to
+	page number = ruku number/index
+}
+
+the currentPage is added to the currentPageStream
+
+How to get the currentPageData for a page?
+
+The the screen is initialized, the state contains the entire data for the sura
+
+and then we slice through this data for each page
+
+To make it easier, what if we store only the current page data in the state. This way, the state only has the required data in it.
+When navigation buttons are used to move to next/previous page then we refresh the state with the new data.
+
+what does it mean by data
+
+the word the word translations for the page
+the translations for the page
+the transliterations for the page
+the current ruku
+
+this would require a rewrite of the fetching usecases for word by word translation, translation etc.
+now the fetching usecase will have a parameter for page number
+
+for eg. give me the word by word translations for page number 1
+
+from the startIndex of a page, we get the suraIndex and ayaIndex
+then using that we fetch the numberOfAyas required or till length of the sura if its lesser
+
+so tasks
+
+1) rewrite the fetch usecases, repositories, data sources to use page numbers
+2) in the homebloc use a currentPage stream
+3) remote the currentpage data stream
+4) store the current page data in the state
+
+
+now lets think about the different scenarios in which the current data needs to be loaded.
+
+1) When a page loads with default page -> load first page of the quran
+2) When a page loads with a sura index -> create a page for the sura and aya, but whats the page number?
+    - page number depends on the numberOfAya
+3) When a page loads with a sura index and aya index
+4) When a sura is selected from dropdown
+5) When a aya is seleced from dropdown
+6) when navigation button next and previous are used
+
+
+getPageNumber
+if(numberOfAyaPerPage == 1) {
+	then the aya number = page number
+} else if(numberOfAyaPerPage > 1) {
+	page number = aya number / numberOfAyaPerPage
+} else if(numberOfAyaPerPage = number of aya in a ruku) {
+	figure out which ruku the aya belongs to
+	page number = ruku number/index
+}
+
+AppMode {
+	PageNumber, Ruku
+}
+
+Do we need an AppMode, Can we just the numberOfAyaPerPage variable and then use that. The numberOfAyaPerPage can be initialized with the number of aya in the Ruku
+
+This leads to the complexity to decide if we have to show a ruku or any other page. We could fetch it from the settings.
+FetchNumberOfAya. So let keep it aside for now.
+
+For now, lets have a constant for AppMode and it can be NumberOfAyaPerPage or Ruku.
+
+Ruku mode
+---------
+ When ruku is fetched for a page number it returns the index, start index and number of ayas in that ruku
+ The current page is calculated using those details and added to currentPage Stream
+
+
+What about data like suraTitles, it has to be loaded everytime. We could use state to save long persisting details like
+suraTitle, app modes etc.
+
+Then use a stream for the quran data as its used now.
+
+getRukuIndexFromAya
+    Go through the list of ruku
+    check if index falls in it
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
