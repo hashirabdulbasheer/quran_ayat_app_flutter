@@ -1,7 +1,7 @@
 import 'package:ayat_app/src/core/di/service_locator.dart';
 import 'package:ayat_app/src/core/navigator/app_router.dart';
-import 'package:ayat_app/src/core/theme/theme.dart';
 import 'package:ayat_app/src/core/utils/app_bloc_observer.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Quran',
-      theme: QTheme.lightTheme,
+      theme: FlexThemeData.light(scheme: FlexScheme.green),
+      darkTheme: FlexThemeData.dark(scheme: FlexScheme.green),
       themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
       routerConfig: AppRouter.router,
