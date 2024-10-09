@@ -25,6 +25,7 @@ class TextRow extends StatelessWidget {
             child: SelectableText(
               _stripHtmlIfNeeded(text),
               textAlign: TextAlign.start,
+              style: const TextStyle(height: 1.5),
               textScaler: TextScaler.linear(textScaleFactor),
             ),
           ),

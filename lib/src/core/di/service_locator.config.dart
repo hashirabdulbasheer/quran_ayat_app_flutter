@@ -26,10 +26,13 @@ import '../../domain/usecases/fetch_font_scale_usecase.dart' as _i38;
 import '../../domain/usecases/fetch_ruku_index_usecase.dart' as _i961;
 import '../../domain/usecases/fetch_sura_data_usecase.dart' as _i1048;
 import '../../domain/usecases/fetch_sura_titles_usecase.dart' as _i154;
+import '../../domain/usecases/fetch_theme_mode_usecase.dart' as _i468;
 import '../../domain/usecases/save_bookmark_usecase.dart' as _i400;
+import '../../domain/usecases/save_theme_mode_usecase.dart' as _i646;
 import '../../domain/usecases/set_font_scale_usecase.dart' as _i734;
 import '../../presentation/context/bloc/context_bloc.dart' as _i537;
 import '../../presentation/home/bloc/home_bloc.dart' as _i315;
+import '../bloc/app_bloc.dart' as _i406;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -58,8 +61,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i415.SettingsRepository>(() =>
         _i622.SettingsRepositoryImpl(
             dataSource: gh<_i42.SettingsDataSource>()));
+    gh.factory<_i468.FetchThemeModeUseCase>(
+        () => _i468.FetchThemeModeUseCase(gh<_i415.SettingsRepository>()));
     gh.factory<_i734.SetFontScaleUseCase>(
         () => _i734.SetFontScaleUseCase(gh<_i415.SettingsRepository>()));
+    gh.factory<_i646.SaveThemeModeUseCase>(
+        () => _i646.SaveThemeModeUseCase(gh<_i415.SettingsRepository>()));
     gh.factory<_i38.FetchFontScaleUseCase>(
         () => _i38.FetchFontScaleUseCase(gh<_i415.SettingsRepository>()));
     gh.factory<_i154.FetchSuraTitlesUseCase>(
@@ -81,6 +88,10 @@ extension GetItInjectableX on _i174.GetIt {
           fetchRukuIndexUseCase: gh<_i961.FetchRukuIndexUseCase>(),
           fetchBookmarkUseCase: gh<_i510.FetchBookmarkUseCase>(),
           saveBookmarkUseCase: gh<_i400.SaveBookmarkUseCase>(),
+        ));
+    gh.lazySingleton<_i406.AppBloc>(() => _i406.AppBloc(
+          fetchThemeModeUseCase: gh<_i468.FetchThemeModeUseCase>(),
+          saveThemeModeUseCase: gh<_i646.SaveThemeModeUseCase>(),
         ));
     return this;
   }

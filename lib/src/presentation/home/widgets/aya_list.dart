@@ -1,5 +1,4 @@
 import 'package:ayat_app/src/core/constants/app_constants.dart';
-import 'package:ayat_app/src/core/extensions/widget_spacer_extension.dart';
 import 'package:ayat_app/src/domain/models/qdata.dart';
 import 'package:ayat_app/src/domain/models/surah_index.dart';
 import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
@@ -84,13 +83,15 @@ class AyaList extends StatelessWidget {
                     textScaleFactor: textScaleFactor,
                   ),
 
+                  const SizedBox(height: 20),
+
                   /// translation
                   TranslationDisplay(
                     translation: translations.$2[index].text,
                     translationType: translations.$1,
                     textScaleFactor: textScaleFactor,
                   ),
-                ].spacerDirectional(height: 10),
+                ],
               ),
             );
           }),

@@ -8,6 +8,7 @@ import 'package:ayat_app/src/presentation/home/widgets/controls_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/home_loading_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/page_header_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/text_scale_widget.dart';
+import 'package:ayat_app/src/presentation/home/widgets/theme_mode_button_widget.dart';
 import 'package:ayat_app/src/presentation/widgets/base_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: const Text("Bookmark",
                 style: TextStyle(fontWeight: FontWeight.bold))),
+        const ThemeModeButton(),
         const SizedBox(
           width: 30,
         )
