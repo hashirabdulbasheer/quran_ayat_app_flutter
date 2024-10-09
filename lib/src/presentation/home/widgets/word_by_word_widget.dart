@@ -28,7 +28,7 @@ class WordByWord extends StatelessWidget {
           text: word.tr,
           textScaleFactor: textScaleFactor,
         ),
-      ].spacerDirectional(height: 3),
+      ],
     );
   }
 }
