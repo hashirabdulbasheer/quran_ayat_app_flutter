@@ -20,7 +20,7 @@ class SuraAyaSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 60,
+      height: 80,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -56,7 +56,7 @@ class SuraAyaSelector extends StatelessWidget {
                 aya: value ?? 1,
               )),
               dropdownBuilder: (context, aya) => SizedBox(
-                  height: 60,
+                  height: 80,
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
