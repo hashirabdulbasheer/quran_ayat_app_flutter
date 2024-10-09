@@ -21,9 +21,9 @@ class AyaNavigationControl extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.fromLTRB(
             10,
+            5,
             10,
-            10,
-            30,
+            5,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -56,7 +56,7 @@ class AyaNavigationControl extends StatelessWidget {
                 ].spacerDirectional(width: 10),
               ),
               const Text(appVersion, style: TextStyle(fontSize: 10),)
-            ].spacerDirectional(height: 10),
+            ].spacerDirectional(height: 5),
           ),
         ),
       ),
