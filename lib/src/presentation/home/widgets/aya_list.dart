@@ -1,3 +1,4 @@
+import 'package:ayat_app/src/core/constants/app_constants.dart';
 import 'package:ayat_app/src/core/extensions/widget_spacer_extension.dart';
 import 'package:ayat_app/src/domain/models/qdata.dart';
 import 'package:ayat_app/src/domain/models/surah_index.dart';
@@ -54,7 +55,7 @@ class AyaList extends StatelessWidget {
                           onMore: () {
                             launchUrl(
                                 Uri.parse(
-                                    "https://uxquran.com/legacy/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
+                                    "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
                                 mode: LaunchMode.inAppBrowserView);
                           },
                           onBookmarked: () {
