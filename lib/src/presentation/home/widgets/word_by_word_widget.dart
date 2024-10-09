@@ -1,4 +1,3 @@
-import 'package:ayat_app/src/core/extensions/widget_spacer_extension.dart';
 import 'package:ayat_app/src/domain/models/qword.dart';
 import 'package:ayat_app/src/presentation/home/widgets/arabic_text_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/boxed_text_widget.dart';

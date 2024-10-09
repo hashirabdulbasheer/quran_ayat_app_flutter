@@ -1,3 +1,4 @@
+import 'package:ayat_app/src/core/bloc/app_bloc.dart';
 import 'package:ayat_app/src/core/di/service_locator.dart';
 import 'package:ayat_app/src/core/navigator/app_router.dart';
 import 'package:ayat_app/src/core/utils/app_bloc_observer.dart';
@@ -15,7 +16,9 @@ void main() {
   configDependencies();
   setupServicesLocator();
   if (kDebugMode) Bloc.observer = AppBlocObserver();
-  runApp(const MyApp());
+  runApp(BlocProvider(
+      create: (context) => getIt<AppBloc>()..add(AppInitializeEvent()),
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -23,13 +26,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Quran',
-      theme: FlexThemeData.light(scheme: FlexScheme.green),
-      darkTheme: FlexThemeData.dark(scheme: FlexScheme.green),
-      themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
-    );
+    return StreamBuilder<ThemeMode>(
+        stream: context.read<AppBloc>().currentThemeMode$,
+        builder: (context, snapshot) {
+          return MaterialApp.router(
+            title: 'Quran',
+            theme: FlexThemeData.light(scheme: FlexScheme.green),
+            darkTheme: FlexThemeData.dark(scheme: FlexScheme.green),
+            themeMode: snapshot.data,
+            debugShowCheckedModeBanner: false,
+            routerConfig: AppRouter.router,
+          );
+        });
   }
 }

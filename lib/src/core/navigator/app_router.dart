@@ -1,3 +1,4 @@
+import 'package:ayat_app/src/core/bloc/app_bloc.dart';
 import 'package:ayat_app/src/core/constants/app_constants.dart';
 import 'package:ayat_app/src/core/constants/route_constants.dart';
 import 'package:ayat_app/src/core/di/service_locator.dart';
@@ -35,7 +36,10 @@ class AppRouter {
                 ..add(HomeInitializeEvent(
                   numberOfAyaPerPage: kNumAyaPerPage,
                 ));
-            })
+            }),
+            BlocProvider(create: (context) {
+              return getIt<AppBloc>();
+            }),
           ], child: const HomeScreen()));
         },
       ),
@@ -55,7 +59,10 @@ class AppRouter {
                 ..add(HomeInitializeEvent(
                     numberOfAyaPerPage: kNumAyaPerPage,
                     index: SurahIndex.fromHuman(sura: sura, aya: 1)));
-            })
+            }),
+            BlocProvider(create: (context) {
+              return getIt<AppBloc>();
+            }),
           ], child: const HomeScreen()));
         },
       ),
@@ -76,7 +83,10 @@ class AppRouter {
                 ..add(HomeInitializeEvent(
                     numberOfAyaPerPage: kNumAyaPerPage,
                     index: SurahIndex.fromHuman(sura: sura, aya: aya)));
-            })
+            }),
+            BlocProvider(create: (context) {
+              return getIt<AppBloc>();
+            }),
           ], child: const HomeScreen()));
         },
       ),
