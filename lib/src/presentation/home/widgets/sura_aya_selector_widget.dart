@@ -20,7 +20,7 @@ class SuraAyaSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80,
+      height: 40,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -32,12 +32,9 @@ class SuraAyaSelector extends StatelessWidget {
               compareFn: (item, selectedItem) =>
                   item.number == selectedItem.number,
               itemAsString: (SuraTitle title) =>
-                  "(${title.number}) ${title.transliterationEn}",
+                  "(${title.number}) ${title.transliterationEn} / ${title.translationEn}",
               popupProps: const PopupProps.menu(showSearchBox: true),
-              dropdownBuilder: (context, title) => ListTile(
-                title: Text("${title?.number}. ${title?.transliterationEn}"),
-                subtitle: Text("${title?.translationEn}"),
-              ),
+              dropdownBuilder: (context, title) => Text("${title?.number}. ${title?.transliterationEn}"),
               onChanged: (value) => onSelection(SurahIndex.fromHuman(
                 sura: value?.number ?? 1,
                 aya: 1,
@@ -56,7 +53,7 @@ class SuraAyaSelector extends StatelessWidget {
                 aya: value ?? 1,
               )),
               dropdownBuilder: (context, aya) => SizedBox(
-                  height: 80,
+                  height: 40,
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
