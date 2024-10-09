@@ -141,7 +141,7 @@ class _Header extends StatelessWidget {
           return Column(
             children: [
               PageHeader(
-                readingProgress: 0,
+                readingProgress: bloc.getReadingProgress(loadedState),
                 surahTitles: loadedState.suraTitles ?? [],
                 onSelection: (index) =>
                     bloc.add(HomeSelectSuraAyaEvent(index: index)),
