@@ -16,14 +16,12 @@ class AyaList extends StatelessWidget {
   final QPageData pageData;
   final double textScaleFactor;
   final VoidCallback onNext;
-  final VoidCallback onPrevious;
 
   const AyaList({
     super.key,
     required this.pageData,
     required this.selectableAya,
     required this.onNext,
-    required this.onPrevious,
     this.textScaleFactor = 1.0,
   });
 
@@ -50,8 +48,7 @@ class AyaList extends StatelessWidget {
               // we are at the last index, show controls
               return Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: AyaNavigationControl(
-                    onNext: onNext, onPrevious: onPrevious),
+                child: AyaNavigationControl(onNext: onNext),
               );
             }
             return Padding(

@@ -161,6 +161,7 @@ class _Header extends StatelessWidget {
                     .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
                 onTextSizeResetPressed: () =>
                     bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
+                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
               ),
             ],
           );
@@ -189,14 +190,12 @@ class _Content extends StatelessWidget {
               TextSizeAdjuster(
                 settings$: bloc.settings$,
                 child: (context, scale) => AyaList(
-                  selectableAya:
-                      bloc.currentPageData$.value.selectedIndex?.aya ??
-                          bloc.currentPageData$.value.page.firstAyaIndex.aya,
-                  pageData: data,
-                  textScaleFactor: scale,
-                  onNext: () => bloc.add(HomeNextPageEvent()),
-                  onPrevious: () => bloc.add(HomePreviousPageEvent()),
-                ),
+                    selectableAya:
+                        bloc.currentPageData$.value.selectedIndex?.aya ??
+                            bloc.currentPageData$.value.page.firstAyaIndex.aya,
+                    pageData: data,
+                    textScaleFactor: scale,
+                    onNext: () => bloc.add(HomeNextPageEvent())),
               ),
             ],
           );
