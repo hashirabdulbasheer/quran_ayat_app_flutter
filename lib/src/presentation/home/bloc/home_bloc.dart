@@ -53,15 +53,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // fetch settings
     settings$.add(fetchFontScaleUseCase.call());
 
+    // auto bookmark loading
+    SurahIndex indexToLoad = event.index ?? fetchBookmarkUseCase.call();
+
     // fetch data
     await suraTitlesResponse.fold((left) async {
       emit(HomeErrorState(message: (left as GeneralFailure).message));
     }, (right) async {
       emit(HomeLoadedState(suraTitles: right));
-      add(HomeFetchQuranDataEvent(
-        pageNo: 0,
-        selectedIndex: event.index,
-      ));
+      add(HomeFetchQuranDataEvent(pageNo: 0, selectedIndex: indexToLoad));
     });
   }
 

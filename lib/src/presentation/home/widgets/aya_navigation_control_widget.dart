@@ -31,27 +31,25 @@ class AyaNavigationControl extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(appVersion, style: TextStyle(fontSize: 10)),
-                    ),
                     Row(
                       children: [
                         Expanded(
                           child: SizedBox(
                             height: 50,
-                            child: ElevatedButton.icon(
-                              iconAlignment: IconAlignment.end,
-                              icon: const Icon(Icons.navigate_next, size: 20),
-                              label: const Text(
+                            child: ElevatedButton(
+                              onPressed: onNext,
+                              child: const Text(
                                 "Next",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              onPressed: onNext,
                             ),
                           ),
                         ),
                       ].spacerDirectional(width: 10),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      child: Text(kAppVersion, style: TextStyle(fontSize: 10)),
                     ),
                   ],
                 ),

@@ -1,3 +1,5 @@
+import 'package:ayat_app/src/presentation/widgets/error_widget.dart';
+
 import 'home.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,8 +29,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<HomeBloc>();
-    if (bloc.state is! HomeLoadedState) {
-      return const Center(child: CircularProgressIndicator());
+    if (bloc.state is HomeErrorState) {
+      HomeErrorState errorState = bloc.state as HomeErrorState;
+      return _ErrorScreen(message: errorState.message);
+    } else if (bloc.state is! HomeLoadedState) {
+      return const LoadingWidget();
     }
 
     return QBaseScreen(
@@ -182,5 +187,46 @@ class _Content extends StatelessWidget {
             ],
           );
         });
+  }
+}
+
+class _ErrorScreen extends StatelessWidget {
+  final String? message;
+
+  const _ErrorScreen({this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+
+    return QBaseScreen(
+      title: "Noble Quran",
+      navBarActions: [
+        TextButton(
+            onPressed: () async {
+              if (!await launchUrl(Uri.parse(kBlogUrl))) {
+                throw Exception('Could not launch $kBlogUrl');
+              }
+            },
+            child: const Text("Blog",
+                style: TextStyle(fontWeight: FontWeight.bold))),
+        TextButton(
+            onPressed: () {
+              bloc.add(GoToBookmarkEvent());
+            },
+            child: const Text("Bookmark",
+                style: TextStyle(fontWeight: FontWeight.bold))),
+        const ThemeModeButton(),
+        const SizedBox(
+          width: 30,
+        )
+      ],
+      child: Center(
+        child: QErrorWidget(
+          message: message ?? "Some error occurred. Please retry.",
+          onRetry: () => context.replace(Uri.base.path),
+        ),
+      ),
+    );
   }
 }
