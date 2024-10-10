@@ -3,7 +3,6 @@ import 'package:ayat_app/src/domain/enums/text_size_control_type_enum.dart';
 import 'package:ayat_app/src/domain/models/qdata.dart';
 import 'package:ayat_app/src/domain/models/surah_index.dart';
 import 'package:ayat_app/src/presentation/home/widgets/aya_list.dart';
-import 'package:ayat_app/src/presentation/home/widgets/aya_navigation_control_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/controls_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/home_loading_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/page_header_widget.dart';
@@ -72,10 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 30,
         )
       ],
-      bottomSheet: AyaNavigationControl(
-        onNext: () => bloc.add(HomeNextPageEvent()),
-        onPrevious: () => bloc.add(HomePreviousPageEvent()),
-      ),
       child: const SingleChildScrollView(
         child: Column(
           children: [
@@ -199,6 +194,8 @@ class _Content extends StatelessWidget {
                           bloc.currentPageData$.value.page.firstAyaIndex.aya,
                   pageData: data,
                   textScaleFactor: scale,
+                  onNext: () => bloc.add(HomeNextPageEvent()),
+                  onPrevious: () => bloc.add(HomePreviousPageEvent()),
                 ),
               ),
             ],

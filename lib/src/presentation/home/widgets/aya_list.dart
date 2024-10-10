@@ -3,6 +3,7 @@ import 'package:ayat_app/src/domain/models/qdata.dart';
 import 'package:ayat_app/src/domain/models/surah_index.dart';
 import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
 import 'package:ayat_app/src/presentation/home/widgets/aya_control_widget.dart';
+import 'package:ayat_app/src/presentation/home/widgets/aya_navigation_control_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/translation_display_widget.dart';
 import 'package:ayat_app/src/presentation/home/widgets/word_by_word_aya_widget.dart';
 import 'package:ayat_app/src/presentation/widgets/scrollable_list_widget.dart';
@@ -14,11 +15,15 @@ class AyaList extends StatelessWidget {
   final int selectableAya;
   final QPageData pageData;
   final double textScaleFactor;
+  final VoidCallback onNext;
+  final VoidCallback onPrevious;
 
   const AyaList({
     super.key,
     required this.pageData,
     required this.selectableAya,
+    required this.onNext,
+    required this.onPrevious,
     this.textScaleFactor = 1.0,
   });
 
@@ -36,11 +41,19 @@ class AyaList extends StatelessWidget {
 
     return SizedBox(
       // max value other than infinity
-      height: MediaQuery.of(context).size.height - 300,
+      height: MediaQuery.of(context).size.height - 200,
       child: ScrollableListWidget(
           initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
-          itemsCount: pageData.page.numberOfAya,
+          itemsCount: pageData.page.numberOfAya + 1,
           itemContent: (index) {
+            if (index == pageData.page.numberOfAya) {
+              // we are at the last index, show controls
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: AyaNavigationControl(
+                    onNext: onNext, onPrevious: onPrevious),
+              );
+            }
             return Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 30),
               child: Column(
