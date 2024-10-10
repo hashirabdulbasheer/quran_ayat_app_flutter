@@ -40,14 +40,12 @@ class AyaNavigationControl extends StatelessWidget {
                         Expanded(
                           child: SizedBox(
                             height: 50,
-                            child: ElevatedButton.icon(
-                              iconAlignment: IconAlignment.end,
-                              icon: const Icon(Icons.navigate_next, size: 20),
-                              label: const Text(
+                            child: ElevatedButton(
+                              onPressed: onNext,
+                              child: const Text(
                                 "Next",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              onPressed: onNext,
                             ),
                           ),
                         ),
