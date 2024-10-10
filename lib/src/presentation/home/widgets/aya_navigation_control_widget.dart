@@ -31,10 +31,6 @@ class AyaNavigationControl extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(kAppVersion, style: TextStyle(fontSize: 10)),
-                    ),
                     Row(
                       children: [
                         Expanded(
@@ -50,6 +46,10 @@ class AyaNavigationControl extends StatelessWidget {
                           ),
                         ),
                       ].spacerDirectional(width: 10),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      child: Text(kAppVersion, style: TextStyle(fontSize: 10)),
                     ),
                   ],
                 ),
