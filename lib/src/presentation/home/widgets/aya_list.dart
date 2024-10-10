@@ -26,8 +26,7 @@ class AyaList extends StatelessWidget {
     final firstAyaIndex = pageData.page.firstAyaIndex;
     final bookmarkIndex = pageData.bookmarkIndex;
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height - 100,
+    return Expanded(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: ScrollableListWidget(
