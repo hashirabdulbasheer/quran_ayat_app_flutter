@@ -60,7 +60,7 @@ dev_dependencies:
   ## https://pub.dev/packages/golden_toolkit/
   golden_toolkit: ^0.15.0
   ## https://pub.dev/packages/hrk_flutter_test_batteries
-  hrk_flutter_test_batteries: ^1.0.2
+  hrk_flutter_test_batteries: ^1.1.0
 
 flutter:
   uses-material-design: true

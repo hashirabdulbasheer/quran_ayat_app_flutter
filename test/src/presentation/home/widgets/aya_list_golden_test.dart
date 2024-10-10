@@ -54,6 +54,7 @@ void main() {
                 numberOfAya: 1,
               )),
           selectableAya: 0,
+          onNext: () {},
         ),
       ));
       final builder = GoldenBuilder.column()

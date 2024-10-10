@@ -1,4 +1,4 @@
-import 'package:ayat_app/main.dart';
+import 'package:ayat_app/src/core/constants/app_constants.dart';
 import 'package:ayat_app/src/core/extensions/widget_spacer_extension.dart';
 import 'package:ayat_app/src/domain/models/qdata.dart';
 import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
