@@ -34,6 +34,7 @@ class _ListWidgetState extends State<ScrollableListWidget> {
   Widget _body() {
     return ScrollablePositionedList.separated(
       itemScrollController: _itemScrollController,
+      initialScrollIndex: 0,
       itemCount: widget.itemsCount,
       itemBuilder: (context, index) => widget.itemContent(index),
       separatorBuilder: (context, index) => const Divider(thickness: 0.2),

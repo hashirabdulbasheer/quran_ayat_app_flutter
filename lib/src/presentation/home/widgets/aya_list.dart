@@ -39,7 +39,7 @@ class AyaList extends StatelessWidget {
       height: MediaQuery.of(context).size.height - 300,
       child: ScrollableListWidget(
           initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
-          itemsCount: pageData.ayaWords.length,
+          itemsCount: pageData.page.numberOfAya,
           itemContent: (index) {
             return Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 30),
