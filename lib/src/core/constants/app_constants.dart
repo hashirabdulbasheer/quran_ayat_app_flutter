@@ -1,6 +1,6 @@
 
 // TODO: Update before release
-const String appVersion = "v4.0.3";
+const String appVersion = "v4.0.4";
 
 const kNumAyaPerPage = 1;
 
