@@ -42,6 +42,8 @@ class _ListWidgetState extends State<ScrollableListWidget> {
   }
 
   void _scrollToAyat() {
-    _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
+    });
   }
 }
