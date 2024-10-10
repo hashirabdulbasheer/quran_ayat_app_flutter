@@ -1,12 +1,6 @@
-import 'package:ayat_app/src/core/errors/general_exception.dart';
-import 'package:ayat_app/src/core/errors/general_failure.dart';
-import 'package:ayat_app/src/core/usecases/usecases.dart';
-import 'package:ayat_app/src/domain/enums/qtranslation_enum.dart';
-import 'package:ayat_app/src/domain/models/qdata.dart';
-import 'package:ayat_app/src/domain/repositories/quran_repository.dart';
+import 'package:ayat_app/src/core/core.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 import 'package:dartz/dartz.dart';
-import 'package:equatable/equatable.dart';
-import 'package:injectable/injectable.dart';
 
 @injectable
 class FetchSuraUseCase extends UseCase<QPageData, FetchSuraUseCaseParams> {

@@ -1,7 +1,6 @@
-import 'package:ayat_app/src/core/mapper/mapper.dart';
-import 'package:ayat_app/src/domain/models/ruku.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:noble_quran/noble_quran.dart';
+import 'package:ayat_app/src/core/core.dart';
+import 'package:ayat_app/src/data/models/local/data_local_models.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 class NQRukuToRukuMapper implements Mapper<NQRuku, Ruku> {
   @override

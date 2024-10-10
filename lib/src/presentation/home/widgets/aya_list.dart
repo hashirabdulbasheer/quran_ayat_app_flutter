@@ -1,15 +1,4 @@
-import 'package:ayat_app/src/core/constants/app_constants.dart';
-import 'package:ayat_app/src/domain/models/qdata.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
-import 'package:ayat_app/src/presentation/home/widgets/aya_control_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/aya_navigation_control_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/translation_display_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/word_by_word_aya_widget.dart';
-import 'package:ayat_app/src/presentation/widgets/scrollable_list_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class AyaList extends StatelessWidget {
   final int selectableAya;

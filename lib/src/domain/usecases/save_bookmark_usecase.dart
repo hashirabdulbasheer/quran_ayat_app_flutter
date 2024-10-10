@@ -1,7 +1,5 @@
-import 'package:ayat_app/src/core/usecases/usecases.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/domain/repositories/bookmark_repository.dart';
-import 'package:injectable/injectable.dart';
+import 'package:ayat_app/src/core/core.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 @injectable
 class SaveBookmarkUseCase extends UseCaseAsync<void, SurahIndex> {

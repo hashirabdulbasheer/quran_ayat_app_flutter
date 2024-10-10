@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class TextSizeAdjuster extends StatelessWidget {
   final BehaviorSubject<double> settings$;

@@ -1,8 +1,5 @@
-import 'package:ayat_app/src/data/local/bookmark_local_data_source.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/domain/repositories/bookmark_repository.dart';
-import 'package:injectable/injectable.dart';
-import 'package:noble_quran/noble_quran.dart';
+import 'package:ayat_app/src/data/models/local/data_local_models.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 @LazySingleton(as: BookmarkRepository)
 class BookmarkRepositoryImpl extends BookmarkRepository {

@@ -1,9 +1,4 @@
-import 'package:ayat_app/src/domain/enums/qtranslation_enum.dart';
-import 'package:ayat_app/src/domain/models/page.dart';
-import 'package:ayat_app/src/domain/models/qaya.dart';
-import 'package:ayat_app/src/domain/models/qword.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:equatable/equatable.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 class QPageData extends Equatable {
   final List<List<QWord>> ayaWords;

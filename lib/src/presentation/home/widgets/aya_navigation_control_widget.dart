@@ -1,9 +1,4 @@
-import 'package:ayat_app/src/core/constants/app_constants.dart';
-import 'package:ayat_app/src/core/extensions/widget_spacer_extension.dart';
-import 'package:ayat_app/src/domain/models/qdata.dart';
-import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class AyaNavigationControl extends StatelessWidget {
   final VoidCallback onNext;

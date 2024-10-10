@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class BoxedText extends StatelessWidget {
   final String text;

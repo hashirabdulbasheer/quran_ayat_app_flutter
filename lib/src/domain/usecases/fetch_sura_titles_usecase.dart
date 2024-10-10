@@ -1,10 +1,6 @@
-import 'package:ayat_app/src/core/errors/general_exception.dart';
-import 'package:ayat_app/src/core/errors/general_failure.dart';
-import 'package:ayat_app/src/core/usecases/usecases.dart';
-import 'package:ayat_app/src/domain/models/sura_title.dart';
-import 'package:ayat_app/src/domain/repositories/quran_repository.dart';
+import 'package:ayat_app/src/core/core.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 import 'package:dartz/dartz.dart';
-import 'package:injectable/injectable.dart';
 
 @injectable
 class FetchSuraTitlesUseCase extends UseCase<List<SuraTitle>, NoParams> {

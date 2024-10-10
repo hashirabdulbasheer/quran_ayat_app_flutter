@@ -1,9 +1,5 @@
-import 'package:ayat_app/src/core/extensions/widget_spacer_extension.dart';
-import 'package:ayat_app/src/domain/models/sura_title.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/presentation/home/widgets/reading_progress_indicator_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/sura_aya_selector_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
+
 
 class PageHeader extends StatelessWidget {
   final double readingProgress;

@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 class QWord extends Equatable {
   final int word;
