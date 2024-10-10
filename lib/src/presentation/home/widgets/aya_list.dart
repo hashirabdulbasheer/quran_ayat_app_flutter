@@ -1,24 +1,16 @@
-import 'package:ayat_app/src/core/constants/app_constants.dart';
-import 'package:ayat_app/src/domain/models/qdata.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
-import 'package:ayat_app/src/presentation/home/widgets/aya_control_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/translation_display_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/word_by_word_aya_widget.dart';
-import 'package:ayat_app/src/presentation/widgets/scrollable_list_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class AyaList extends StatelessWidget {
   final int selectableAya;
   final QPageData pageData;
   final double textScaleFactor;
+  final VoidCallback onNext;
 
   const AyaList({
     super.key,
     required this.pageData,
     required this.selectableAya,
+    required this.onNext,
     this.textScaleFactor = 1.0,
   });
 
@@ -36,11 +28,18 @@ class AyaList extends StatelessWidget {
 
     return SizedBox(
       // max value other than infinity
-      height: MediaQuery.of(context).size.height - 300,
+      height: MediaQuery.of(context).size.height - 200,
       child: ScrollableListWidget(
           initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
-          itemsCount: pageData.ayaWords.length,
+          itemsCount: pageData.page.numberOfAya + 1,
           itemContent: (index) {
+            if (index == pageData.page.numberOfAya) {
+              // we are at the last index, show controls
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: AyaNavigationControl(onNext: onNext),
+              );
+            }
             return Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 30),
               child: Column(

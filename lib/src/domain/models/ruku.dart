@@ -1,5 +1,4 @@
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:equatable/equatable.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 class Ruku extends Equatable {
   final int id;

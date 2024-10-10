@@ -1,7 +1,6 @@
-import 'package:ayat_app/src/core/usecases/usecases.dart';
-import 'package:ayat_app/src/domain/repositories/settings_repository.dart';
+import 'package:ayat_app/src/core/core.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
 
 @injectable
 class SaveThemeModeUseCase extends UseCaseAsync<void, ThemeMode> {

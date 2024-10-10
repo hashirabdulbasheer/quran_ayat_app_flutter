@@ -1,23 +1,4 @@
-import 'package:ayat_app/src/core/constants/app_constants.dart';
-import 'package:ayat_app/src/domain/enums/text_size_control_type_enum.dart';
-import 'package:ayat_app/src/domain/models/qdata.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/presentation/home/widgets/aya_list.dart';
-import 'package:ayat_app/src/presentation/home/widgets/aya_navigation_control_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/controls_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/home_loading_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/page_header_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/text_scale_widget.dart';
-import 'package:ayat_app/src/presentation/home/widgets/theme_mode_button_widget.dart';
-import 'package:ayat_app/src/presentation/widgets/base_screen.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'bloc/home_bloc.dart';
+import 'home.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -72,10 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 30,
         )
       ],
-      bottomSheet: AyaNavigationControl(
-        onNext: () => bloc.add(HomeNextPageEvent()),
-        onPrevious: () => bloc.add(HomePreviousPageEvent()),
-      ),
       child: const SingleChildScrollView(
         child: Column(
           children: [
@@ -166,6 +143,7 @@ class _Header extends StatelessWidget {
                     .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
                 onTextSizeResetPressed: () =>
                     bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
+                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
               ),
             ],
           );
@@ -194,12 +172,12 @@ class _Content extends StatelessWidget {
               TextSizeAdjuster(
                 settings$: bloc.settings$,
                 child: (context, scale) => AyaList(
-                  selectableAya:
-                      bloc.currentPageData$.value.selectedIndex?.aya ??
-                          bloc.currentPageData$.value.page.firstAyaIndex.aya,
-                  pageData: data,
-                  textScaleFactor: scale,
-                ),
+                    selectableAya:
+                        bloc.currentPageData$.value.selectedIndex?.aya ??
+                            bloc.currentPageData$.value.page.firstAyaIndex.aya,
+                    pageData: data,
+                    textScaleFactor: scale,
+                    onNext: () => bloc.add(HomeNextPageEvent())),
               ),
             ],
           );

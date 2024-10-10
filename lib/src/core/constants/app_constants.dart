@@ -1,4 +1,7 @@
 
+// TODO: Update before release
+const String appVersion = "v4.0.4";
+
 const kNumAyaPerPage = 1;
 
 const kFontScaleFactor = 0.2;

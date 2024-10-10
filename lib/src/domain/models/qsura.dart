@@ -1,5 +1,4 @@
-import 'package:ayat_app/src/domain/models/qaya.dart';
-import 'package:equatable/equatable.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 class QSura extends Equatable {
   final List<QAya> aya;

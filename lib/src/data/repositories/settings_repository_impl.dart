@@ -1,8 +1,6 @@
-import 'package:ayat_app/src/data/local/settings_local_data_source.dart';
-import 'package:ayat_app/src/data/models/local/enums/local_theme_mode_enum.dart';
-import 'package:ayat_app/src/domain/repositories/settings_repository.dart';
+import 'package:ayat_app/src/data/models/local/data_local_models.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: SettingsRepository)
 class SettingsRepositoryImpl extends SettingsRepository {

@@ -1,5 +1,4 @@
-import 'package:ayat_app/src/domain/enums/font_family_enum.dart';
-import 'package:flutter/material.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class ArabicText extends StatelessWidget {
   final String text;
@@ -18,9 +17,7 @@ class ArabicText extends StatelessWidget {
       softWrap: true,
       maxLines: 1,
       textScaler: TextScaler.linear(textScaleFactor),
-      style: TextStyle(
-          fontSize: 30,
-          fontFamily: QFontFamily.arabic.rawString),
+      style: TextStyle(fontSize: 30, fontFamily: QFontFamily.arabic.rawString),
       textAlign: TextAlign.center,
     );
   }

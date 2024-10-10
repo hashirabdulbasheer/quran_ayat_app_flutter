@@ -1,23 +1,4 @@
-import 'package:ayat_app/src/core/errors/general_failure.dart';
-import 'package:ayat_app/src/core/usecases/usecases.dart';
-import 'package:ayat_app/src/domain/enums/qtranslation_enum.dart';
-import 'package:ayat_app/src/domain/enums/text_size_control_type_enum.dart';
-import 'package:ayat_app/src/domain/models/qdata.dart';
-import 'package:ayat_app/src/domain/models/sura_title.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/domain/usecases/fetch_bookmark_usecase.dart';
-import 'package:ayat_app/src/domain/usecases/fetch_font_scale_usecase.dart';
-import 'package:ayat_app/src/domain/usecases/fetch_ruku_index_usecase.dart';
-import 'package:ayat_app/src/domain/usecases/fetch_sura_data_usecase.dart';
-import 'package:ayat_app/src/domain/usecases/fetch_sura_titles_usecase.dart';
-import 'package:ayat_app/src/domain/usecases/save_bookmark_usecase.dart';
-import 'package:ayat_app/src/domain/usecases/set_font_scale_usecase.dart';
-import 'package:ayat_app/src/presentation/home/bloc/extensions/home_bloc_utils_extension.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:injectable/injectable.dart';
-import 'package:rxdart/rxdart.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';

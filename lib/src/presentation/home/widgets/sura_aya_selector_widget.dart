@@ -1,8 +1,5 @@
-import 'package:ayat_app/src/core/extensions/widget_spacer_extension.dart';
-import 'package:ayat_app/src/domain/models/sura_title.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
 
 class SuraAyaSelector extends StatelessWidget {
   final List<SuraTitle> surahTitles;
@@ -34,7 +31,8 @@ class SuraAyaSelector extends StatelessWidget {
               itemAsString: (SuraTitle title) =>
                   "(${title.number}) ${title.transliterationEn} / ${title.translationEn}",
               popupProps: const PopupProps.menu(showSearchBox: true),
-              dropdownBuilder: (context, title) => Text("${title?.number}. ${title?.transliterationEn}"),
+              dropdownBuilder: (context, title) =>
+                  Text("${title?.number}. ${title?.transliterationEn}"),
               onChanged: (value) => onSelection(SurahIndex.fromHuman(
                 sura: value?.number ?? 1,
                 aya: 1,

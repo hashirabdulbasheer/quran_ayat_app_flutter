@@ -1,6 +1,4 @@
-import 'package:ayat_app/src/domain/enums/qtranslation_enum.dart';
-import 'package:ayat_app/src/presentation/home/widgets/text_row_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class TranslationDisplay extends StatelessWidget {
   final String translation;

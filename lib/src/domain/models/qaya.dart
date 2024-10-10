@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+import 'domain_models.dart';
 
 class QAya extends Equatable {
   final String index;

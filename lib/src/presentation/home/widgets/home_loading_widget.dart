@@ -1,6 +1,4 @@
-import 'package:ayat_app/src/core/extensions/widget_spacer_extension.dart';
-import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({super.key});

@@ -1,4 +1,4 @@
-import 'package:ayat_app/src/domain/models/surah_index.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 abstract class BookmarkRepository {
   SurahIndex getBookmark();

@@ -1,16 +1,6 @@
+import 'package:ayat_app/src/core/core.dart';
 import 'package:ayat_app/src/data/local/quran_local_data_source.dart';
-import 'package:ayat_app/src/domain/enums/qtranslation_enum.dart';
-import 'package:ayat_app/src/domain/mappers/localpage_to_page_mapper.dart';
-import 'package:ayat_app/src/domain/mappers/localruku_to_ruku_mapper.dart';
-import 'package:ayat_app/src/domain/mappers/nqayatlist_to_ayalist_mapper.dart';
-import 'package:ayat_app/src/domain/mappers/nqwordlistlist_to_qwordlistlist_mapper.dart';
-import 'package:ayat_app/src/domain/mappers/qtranslation_to_nqtranslation_mapper.dart';
-import 'package:ayat_app/src/domain/models/qdata.dart';
-import 'package:ayat_app/src/domain/models/ruku.dart';
-import 'package:ayat_app/src/domain/models/sura_title.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/domain/repositories/quran_repository.dart';
-import 'package:injectable/injectable.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 @LazySingleton(as: QuranRepository)
 class QuranRepositoryImpl extends QuranRepository {

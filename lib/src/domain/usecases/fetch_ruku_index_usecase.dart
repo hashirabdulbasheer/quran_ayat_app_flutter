@@ -1,9 +1,5 @@
-import 'package:ayat_app/src/core/usecases/usecases.dart';
-import 'package:ayat_app/src/domain/models/ruku.dart';
-import 'package:ayat_app/src/domain/models/surah_index.dart';
-import 'package:ayat_app/src/domain/repositories/quran_repository.dart';
-import 'package:equatable/equatable.dart';
-import 'package:injectable/injectable.dart';
+import 'package:ayat_app/src/core/core.dart';
+import 'package:ayat_app/src/domain/models/domain_models.dart';
 
 @injectable
 class FetchRukuIndexUseCase

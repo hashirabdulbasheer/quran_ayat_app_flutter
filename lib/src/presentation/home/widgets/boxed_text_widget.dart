@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class BoxedText extends StatelessWidget {
   final String text;
@@ -14,13 +14,14 @@ class BoxedText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(5),
-      decoration: const BoxDecoration(
-        border: Border.fromBorderSide(BorderSide()),
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+      decoration: BoxDecoration(
+        border: Border.fromBorderSide(
+            BorderSide(color: Theme.of(context).disabledColor)),
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
       child: Text(
         text,
-        style: const TextStyle(fontSize: 14),
+        style: TextStyle(fontSize: 14, color: Theme.of(context).disabledColor),
         textScaler: TextScaler.linear(textScaleFactor),
       ),
     );

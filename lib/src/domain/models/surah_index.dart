@@ -1,6 +1,6 @@
 import 'dart:math';
+
 import 'package:equatable/equatable.dart';
-import 'package:noble_quran/noble_quran.dart';
 
 class SurahIndex extends Equatable {
   final int sura;
@@ -10,10 +10,6 @@ class SurahIndex extends Equatable {
     this.sura,
     this.aya,
   );
-
-  SurahIndex.fromBookmark(NQBookmark bookmark)
-      : sura = bookmark.surah,
-        aya = bookmark.ayat;
 
   // construct a surah index from a human sura index that starts with 1
   const SurahIndex.fromHuman({

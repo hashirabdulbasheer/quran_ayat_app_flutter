@@ -1,6 +1,4 @@
-import 'package:ayat_app/src/domain/models/qword.dart';
-import 'package:ayat_app/src/presentation/home/widgets/word_by_word_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class WordByWordAya extends StatelessWidget {
   final List<QWord> words;

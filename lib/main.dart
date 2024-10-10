@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-// TODO: Update before release
-const String appVersion = "v4.0.3";
 
 void main() {
   usePathUrlStrategy();

@@ -1,6 +1,4 @@
-import 'package:ayat_app/src/data/models/local_page.dart';
-import 'package:equatable/equatable.dart';
-import 'package:noble_quran/noble_quran.dart';
+import 'package:ayat_app/src/data/models/local/data_local_models.dart';
 
 class QuranLocalData extends Equatable {
   final List<List<NQWord>> words;

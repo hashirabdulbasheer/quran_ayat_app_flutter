@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:ayat_app/src/presentation/home/home.dart';
 
 class AyaControlWidget extends StatelessWidget {
   final bool isBookmarked;
@@ -16,8 +16,7 @@ class AyaControlWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        IconButton(
-            onPressed: onMore, icon: const Icon(Icons.more_outlined)),
+        IconButton(onPressed: onMore, icon: const Icon(Icons.more_outlined)),
         IconButton(
           onPressed: onBookmarked,
           icon: isBookmarked

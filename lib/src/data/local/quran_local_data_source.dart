@@ -1,9 +1,5 @@
-import 'package:ayat_app/src/data/models/local/local_sura_title.dart';
-import 'package:ayat_app/src/data/models/local_page.dart';
+import 'package:ayat_app/src/data/models/local/data_local_models.dart';
 import 'package:injectable/injectable.dart';
-import 'package:noble_quran/noble_quran.dart';
-
-import '../models/local/quran_local_data.dart';
 
 abstract class QuranDataSource {
   Future<QuranLocalData> getPageQuranData({
