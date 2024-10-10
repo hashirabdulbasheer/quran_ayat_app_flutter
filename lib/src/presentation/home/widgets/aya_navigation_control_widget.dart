@@ -48,7 +48,7 @@ class AyaNavigationControl extends StatelessWidget {
                       ].spacerDirectional(width: 10),
                     ),
                     const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       child: Text(kAppVersion, style: TextStyle(fontSize: 10)),
                     ),
                   ],

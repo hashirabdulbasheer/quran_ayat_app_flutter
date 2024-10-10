@@ -26,74 +26,81 @@ class AyaList extends StatelessWidget {
     final firstAyaIndex = pageData.page.firstAyaIndex;
     final bookmarkIndex = pageData.bookmarkIndex;
 
-    return SizedBox(
-      // max value other than infinity
-      height: MediaQuery.of(context).size.height - 200,
-      child: ScrollableListWidget(
-          initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
-          itemsCount: pageData.page.numberOfAya + 1,
-          itemContent: (index) {
-            if (index == pageData.page.numberOfAya) {
-              // we are at the last index, show controls
+    return Expanded(
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: ScrollableListWidget(
+            initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
+            itemsCount: pageData.page.numberOfAya + 1,
+            itemContent: (index) {
+              if (index == pageData.page.numberOfAya) {
+                // we are at the last index, show controls
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: AyaNavigationControl(onNext: onNext),
+                );
+              }
+
               return Padding(
-                padding: const EdgeInsets.only(bottom: 20),
-                child: AyaNavigationControl(onNext: onNext),
-              );
-            }
-            return Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 30),
-              child: Column(
-                children: [
-                  /// index
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      /// aya controls
-                      AyaControlWidget(
-                          onMore: () {
-                            launchUrl(
-                                Uri.parse(
-                                    "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
-                                mode: LaunchMode.inAppBrowserView);
-                          },
-                          onBookmarked: () {
-                            context.read<HomeBloc>().add(
-                                  AddBookmarkEvent(
-                                      index: _currentSuraIndex(index)),
-                                );
-                            _showMessage(context, "Bookmark saved");
-                          },
-                          isBookmarked: _isBookmarked(
-                              _currentSuraIndex(index), bookmarkIndex)),
-
-                      /// index
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
-                            style: const TextStyle(fontSize: 12),
-                          )),
+                padding: const EdgeInsets.only(top: 10, bottom: 30),
+                child: Column(
+                  children: [
+                    if (index == 0) ...[
+                      // added header before one item
+                      const _Header(),
                     ],
-                  ),
 
-                  /// word by word
-                  WordByWordAya(
-                    words: ayaWords[index],
-                    textScaleFactor: textScaleFactor,
-                  ),
+                    /// index
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        /// aya controls
+                        AyaControlWidget(
+                            onMore: () {
+                              launchUrl(
+                                  Uri.parse(
+                                      "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
+                                  mode: LaunchMode.inAppBrowserView);
+                            },
+                            onBookmarked: () {
+                              context.read<HomeBloc>().add(
+                                    AddBookmarkEvent(
+                                        index: _currentSuraIndex(index)),
+                                  );
+                              _showMessage(context, "Bookmark saved");
+                            },
+                            isBookmarked: _isBookmarked(
+                                _currentSuraIndex(index), bookmarkIndex)),
 
-                  const SizedBox(height: 20),
+                        /// index
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
+                              style: const TextStyle(fontSize: 12),
+                            )),
+                      ],
+                    ),
 
-                  /// translation
-                  TranslationDisplay(
-                    translation: translations.$2[index].text,
-                    translationType: translations.$1,
-                    textScaleFactor: textScaleFactor,
-                  ),
-                ],
-              ),
-            );
-          }),
+                    /// word by word
+                    WordByWordAya(
+                      words: ayaWords[index],
+                      textScaleFactor: textScaleFactor,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    /// translation
+                    TranslationDisplay(
+                      translation: translations.$2[index].text,
+                      translationType: translations.$1,
+                      textScaleFactor: textScaleFactor,
+                    ),
+                  ],
+                ),
+              );
+            }),
+      ),
     );
   }
 
@@ -109,5 +116,56 @@ class AyaList extends StatelessWidget {
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    return StreamBuilder<QPageData>(
+        stream: bloc.currentPageData$,
+        builder: (context, snapshot) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return const SizedBox.shrink();
+          }
+
+          HomeLoadedState loadedState = bloc.state as HomeLoadedState;
+          if (loadedState.suraTitles?.isEmpty == true) {
+            return const CircularProgressIndicator();
+          }
+
+          return Column(
+            children: [
+              PageHeader(
+                readingProgress: bloc.getReadingProgress(loadedState),
+                surahTitles: loadedState.suraTitles ?? [],
+                onSelection: (index) =>
+                    bloc.add(HomeSelectSuraAyaEvent(index: index)),
+                currentIndex: snapshot.data?.page.firstAyaIndex ??
+                    SurahIndex.defaultIndex,
+              ),
+              DisplayControls(
+                onContextPressed: () => context.pushNamed(
+                  "context",
+                  pathParameters: {
+                    'sura':
+                        "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
+                    'aya': "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
+                  },
+                ),
+                onTextSizeIncreasePressed: () => bloc
+                    .add(TextSizeControlEvent(type: TextSizeControl.increase)),
+                onTextSizeDecreasePressed: () => bloc
+                    .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
+                onTextSizeResetPressed: () =>
+                    bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
+                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
+              ),
+            ],
+          );
+        });
   }
 }

@@ -20,9 +20,12 @@ class WordByWord extends StatelessWidget {
           text: word.ar,
           textScaleFactor: textScaleFactor,
         ),
-        BoxedText(
-          text: word.tr,
-          textScaleFactor: textScaleFactor,
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: BoxedText(
+            text: word.tr,
+            textScaleFactor: textScaleFactor,
+          ),
         ),
       ],
     );
