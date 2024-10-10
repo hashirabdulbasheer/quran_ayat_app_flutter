@@ -58,14 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 30,
         )
       ],
-      child: const SingleChildScrollView(
-        child: Column(
-          children: [
-            _Header(),
-            _Content(),
-          ],
-        ),
-      ),
+      child: const _Content(),
     );
   }
 
@@ -102,57 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return false;
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = context.read<HomeBloc>();
-    return StreamBuilder<QPageData>(
-        stream: bloc.currentPageData$,
-        builder: (context, snapshot) {
-          if (snapshot.hasError || snapshot.data == null) {
-            return const SizedBox.shrink();
-          }
-
-          HomeLoadedState loadedState = bloc.state as HomeLoadedState;
-          if (loadedState.suraTitles?.isEmpty == true) {
-            return const CircularProgressIndicator();
-          }
-
-          return Column(
-            children: [
-              PageHeader(
-                readingProgress: bloc.getReadingProgress(loadedState),
-                surahTitles: loadedState.suraTitles ?? [],
-                onSelection: (index) =>
-                    bloc.add(HomeSelectSuraAyaEvent(index: index)),
-                currentIndex: snapshot.data?.page.firstAyaIndex ??
-                    SurahIndex.defaultIndex,
-              ),
-              DisplayControls(
-                onContextPressed: () => context.pushNamed(
-                  "context",
-                  pathParameters: {
-                    'sura':
-                        "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
-                    'aya': "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
-                  },
-                ),
-                onTextSizeIncreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.increase)),
-                onTextSizeDecreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
-                onTextSizeResetPressed: () =>
-                    bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
-                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
-              ),
-            ],
-          );
-        });
   }
 }
 
