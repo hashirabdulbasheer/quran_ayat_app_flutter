@@ -4,12 +4,12 @@ part of 'home_bloc.dart';
 abstract class HomeEvent extends Equatable {}
 
 class HomeInitializeEvent extends HomeEvent {
-  final SurahIndex index;
+  final SurahIndex? index;
   final int numberOfAyaPerPage;
 
   HomeInitializeEvent({
     required this.numberOfAyaPerPage,
-    this.index = SurahIndex.defaultIndex,
+    this.index,
   });
 
   @override
