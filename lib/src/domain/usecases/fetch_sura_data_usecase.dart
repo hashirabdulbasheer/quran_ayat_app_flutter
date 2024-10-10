@@ -18,7 +18,7 @@ class FetchSuraUseCase extends UseCase<QPageData, FetchSuraUseCaseParams> {
       return Right(response);
     } catch (e) {
       return Left(GeneralFailure.fromGeneralException(
-        e as GeneralException,
+        GeneralException(e.toString()),
       ));
     }
   }
