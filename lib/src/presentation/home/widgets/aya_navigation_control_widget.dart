@@ -33,7 +33,7 @@ class AyaNavigationControl extends StatelessWidget {
                   children: [
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(appVersion, style: TextStyle(fontSize: 10)),
+                      child: Text(kAppVersion, style: TextStyle(fontSize: 10)),
                     ),
                     Row(
                       children: [
