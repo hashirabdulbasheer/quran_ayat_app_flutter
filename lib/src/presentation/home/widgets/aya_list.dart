@@ -56,6 +56,20 @@ class AyaList extends StatelessWidget {
                       children: [
                         /// aya controls
                         AyaControlWidget(
+                            onCopy: () {
+                              String shareableString = _getShareableString(
+                                context,
+                                _currentSuraIndex(index),
+                                translations.$2[index].text,
+                              );
+                              Clipboard.setData(
+                                ClipboardData(text: shareableString),
+                              ).then((_) {
+                                if (context.mounted) {
+                                  _showMessage(context, "Copied to clipboard");
+                                }
+                              });
+                            },
                             onMore: () {
                               launchUrl(
                                   Uri.parse(
@@ -116,6 +130,22 @@ class AyaList extends StatelessWidget {
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  String _getShareableString(
+    BuildContext context,
+    SurahIndex index,
+    String translationText,
+  ) {
+    final bloc = context.read<HomeBloc>();
+    final suraName =
+        (bloc.state as HomeLoadedState).suraTitles?[index.sura].translationEn;
+    StringBuffer response = StringBuffer();
+    response.write("Sura $suraName - ${index.human.sura}:${index.human.aya}\n");
+    response.write("$translationText\n");
+    response
+        .write("https://uxquran.com/${index.human.sura}/${index.human.aya}\n");
+    return response.toString();
   }
 }
 
