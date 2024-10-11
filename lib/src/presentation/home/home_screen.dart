@@ -112,6 +112,7 @@ class _Content extends StatelessWidget {
     if (bloc.state is! HomeLoadedState) {
       return const LoadingWidget();
     }
+    HomeLoadedState loadedState = bloc.state as HomeLoadedState;
 
     return StreamBuilder<QPageData?>(
         stream: bloc.currentPageData$,
@@ -124,6 +125,7 @@ class _Content extends StatelessWidget {
               TextSizeAdjuster(
                 settings$: bloc.settings$,
                 child: (context, scale) => AyaList(
+                    bookmarkIndex: loadedState.bookmarkIndex,
                     selectableAya:
                         bloc.currentPageData$.value.selectedIndex?.aya ??
                             bloc.currentPageData$.value.page.firstAyaIndex.aya,

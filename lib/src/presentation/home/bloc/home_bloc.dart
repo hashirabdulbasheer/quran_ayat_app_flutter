@@ -47,20 +47,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // reset
     emit(HomeLoadedState(suraTitles: const []));
 
-    // fetch titles
-    final suraTitlesResponse = await fetchSuraTitlesUseCase.call(NoParams());
-
     // fetch settings
     settings$.add(fetchFontScaleUseCase.call());
 
     // auto bookmark loading
-    SurahIndex indexToLoad = event.index ?? fetchBookmarkUseCase.call();
+    SurahIndex? bookmarkIndex = fetchBookmarkUseCase.call();
+    SurahIndex indexToLoad = event.index ?? bookmarkIndex;
+
+    // fetch titles
+    final suraTitlesResponse = await fetchSuraTitlesUseCase.call(NoParams());
 
     // fetch data
     await suraTitlesResponse.fold((left) async {
       emit(HomeErrorState(message: (left as GeneralFailure).message));
     }, (right) async {
-      emit(HomeLoadedState(suraTitles: right));
+      emit(HomeLoadedState(suraTitles: right, bookmarkIndex: bookmarkIndex));
       add(HomeFetchQuranDataEvent(pageNo: 0, selectedIndex: indexToLoad));
     });
   }
@@ -77,6 +78,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 ?.id ??
             event.pageNo
         : event.pageNo;
+
     final suraDataResponse = await fetchSuraUseCase.call(
       FetchSuraUseCaseParams(
         pageNo: pageNo,
@@ -135,7 +137,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) {
     saveBookmarkUseCase.call(event.index);
-    add(HomeFetchQuranDataEvent(pageNo: 0, selectedIndex: event.index));
+    emit((state as HomeLoadedState).copyWith(bookmarkIndex: event.index));
   }
 
   void _onTextSizeControl(

@@ -6,23 +6,24 @@ abstract class HomeState extends Equatable {}
 class HomeLoadedState extends HomeState {
   // TODO: can be changed to map to improve performance, if required
   final List<SuraTitle>? suraTitles;
+  final SurahIndex? bookmarkIndex;
 
-  HomeLoadedState({
-    this.suraTitles,
-  });
+  HomeLoadedState({this.suraTitles, this.bookmarkIndex});
 
   HomeLoadedState copyWith({
     List<SuraTitle>? suraTitles,
-    int? numberOfAyaPerPage,
+    SurahIndex? bookmarkIndex,
   }) {
     return HomeLoadedState(
       suraTitles: suraTitles ?? this.suraTitles,
+      bookmarkIndex: bookmarkIndex ?? this.bookmarkIndex,
     );
   }
 
   @override
   List<Object?> get props => [
         suraTitles,
+        bookmarkIndex,
       ];
 }
 

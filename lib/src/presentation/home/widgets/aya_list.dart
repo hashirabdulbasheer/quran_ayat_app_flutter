@@ -5,6 +5,7 @@ class AyaList extends StatelessWidget {
   final QPageData pageData;
   final double textScaleFactor;
   final VoidCallback onNext;
+  final SurahIndex? bookmarkIndex;
 
   const AyaList({
     super.key,
@@ -12,6 +13,7 @@ class AyaList extends StatelessWidget {
     required this.selectableAya,
     required this.onNext,
     this.textScaleFactor = 1.0,
+    this.bookmarkIndex,
   });
 
   @override
@@ -24,7 +26,6 @@ class AyaList extends StatelessWidget {
     }
 
     final firstAyaIndex = pageData.page.firstAyaIndex;
-    final bookmarkIndex = pageData.bookmarkIndex;
 
     return Expanded(
       child: ScrollConfiguration(
@@ -55,36 +56,10 @@ class AyaList extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         /// aya controls
-                        AyaControlWidget(
-                            onCopy: () {
-                              String shareableString = _getShareableString(
-                                context,
-                                _currentSuraIndex(index),
-                                translations.$2[index].text,
-                              );
-                              Clipboard.setData(
-                                ClipboardData(text: shareableString),
-                              ).then((_) {
-                                if (context.mounted) {
-                                  _showMessage(context, "Copied to clipboard");
-                                }
-                              });
-                            },
-                            onMore: () {
-                              launchUrl(
-                                  Uri.parse(
-                                      "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
-                                  mode: LaunchMode.inAppBrowserView);
-                            },
-                            onBookmarked: () {
-                              context.read<HomeBloc>().add(
-                                    AddBookmarkEvent(
-                                        index: _currentSuraIndex(index)),
-                                  );
-                              _showMessage(context, "Bookmark saved");
-                            },
-                            isBookmarked: _isBookmarked(
-                                _currentSuraIndex(index), bookmarkIndex)),
+                        _AyaControls(
+                          pageData: pageData,
+                          index: index,
+                        ),
 
                         /// index
                         Align(
@@ -116,36 +91,6 @@ class AyaList extends StatelessWidget {
             }),
       ),
     );
-  }
-
-  SurahIndex _currentSuraIndex(int index) {
-    return SurahIndex(pageData.page.firstAyaIndex.sura,
-        pageData.page.firstAyaIndex.aya + index);
-  }
-
-  bool _isBookmarked(SurahIndex current, SurahIndex? bookmark) {
-    return current == bookmark;
-  }
-
-  void _showMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
-  }
-
-  String _getShareableString(
-    BuildContext context,
-    SurahIndex index,
-    String translationText,
-  ) {
-    final bloc = context.read<HomeBloc>();
-    final suraName =
-        (bloc.state as HomeLoadedState).suraTitles?[index.sura].translationEn;
-    StringBuffer response = StringBuffer();
-    response.write("Sura $suraName - ${index.human.sura}:${index.human.aya}\n");
-    response.write("$translationText\n");
-    response
-        .write("https://uxquran.com/${index.human.sura}/${index.human.aya}\n");
-    return response.toString();
   }
 }
 
@@ -197,5 +142,87 @@ class _Header extends StatelessWidget {
             ],
           );
         });
+  }
+}
+
+class _AyaControls extends StatelessWidget {
+  final QPageData pageData;
+  final int index;
+
+  const _AyaControls({
+    required this.index,
+    required this.pageData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        final translations = pageData.translations.first;
+        final firstAyaIndex = pageData.page.firstAyaIndex;
+
+        return AyaControlWidget(
+            onCopy: () {
+              String shareableString = _getShareableString(
+                context,
+                _currentSuraIndex(index),
+                translations.$2[index].text,
+              );
+              Clipboard.setData(
+                ClipboardData(text: shareableString),
+              ).then((_) {
+                if (context.mounted) {
+                  _showMessage(context, "Copied to clipboard");
+                }
+              });
+            },
+            onMore: () {
+              launchUrl(
+                  Uri.parse(
+                      "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
+                  mode: LaunchMode.inAppBrowserView);
+            },
+            onBookmarked: () {
+              context.read<HomeBloc>().add(
+                    AddBookmarkEvent(index: _currentSuraIndex(index)),
+                  );
+              _showMessage(context, "Bookmark saved");
+            },
+            isBookmarked: _isBookmarked(
+              _currentSuraIndex(index),
+              (state as HomeLoadedState).bookmarkIndex,
+            ));
+      },
+    );
+  }
+
+  SurahIndex _currentSuraIndex(int index) {
+    return SurahIndex(pageData.page.firstAyaIndex.sura,
+        pageData.page.firstAyaIndex.aya + index);
+  }
+
+  bool _isBookmarked(SurahIndex current, SurahIndex? bookmark) {
+    return current == bookmark;
+  }
+
+  void _showMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  String _getShareableString(
+    BuildContext context,
+    SurahIndex index,
+    String translationText,
+  ) {
+    final bloc = context.read<HomeBloc>();
+    final suraName =
+        (bloc.state as HomeLoadedState).suraTitles?[index.sura].translationEn;
+    StringBuffer response = StringBuffer();
+    response.write("Sura $suraName - ${index.human.sura}:${index.human.aya}\n");
+    response.write("$translationText\n");
+    response
+        .write("https://uxquran.com/${index.human.sura}/${index.human.aya}\n");
+    return response.toString();
   }
 }
