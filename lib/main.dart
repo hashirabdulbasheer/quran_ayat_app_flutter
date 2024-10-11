@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             title: 'Quran',
             theme: FlexThemeData.light(scheme: FlexScheme.green),
             darkTheme: FlexThemeData.dark(scheme: FlexScheme.green),
-            themeMode: snapshot.data,
+            themeMode: snapshot.data ?? ThemeMode.light,
             debugShowCheckedModeBanner: false,
             routerConfig: AppRouter.router,
           );
