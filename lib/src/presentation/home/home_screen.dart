@@ -36,6 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
       return const LoadingWidget();
     }
 
+    if (bloc.currentPageData$.hasValue &&
+        bloc.currentPageData$.value.ayaWords.isEmpty) {
+      return const _ErrorScreen(message: null);
+    }
+
     return QBaseScreen(
       title: "Noble Quran",
       navBarActions: [
