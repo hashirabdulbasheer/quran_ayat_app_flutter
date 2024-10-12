@@ -117,16 +117,11 @@ class _ToggleHeader extends StatelessWidget {
     return StreamBuilder<bool>(
         stream: bloc.topOfListIndicator$.distinct(),
         builder: (context, snapshot) {
-          return Visibility(
-            visible: snapshot.data ?? false,
-            maintainAnimation: true,
-            maintainState: true,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.fastOutSlowIn,
-              opacity: snapshot.data ?? false ? 1 : 0,
-              child: const _Header(),
-            ),
+          return AnimatedSize(
+            duration: const Duration(milliseconds: 500),
+            child: snapshot.data == true
+                ? const _Header()
+                : const SizedBox.shrink(),
           );
         });
   }
