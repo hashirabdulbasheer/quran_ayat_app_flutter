@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _ToggleHeader extends StatelessWidget {
-  const _ToggleHeader({super.key});
+  const _ToggleHeader();
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ class _ToggleHeader extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({super.key});
+  const _Header();
 
   @override
   Widget build(BuildContext context) {
