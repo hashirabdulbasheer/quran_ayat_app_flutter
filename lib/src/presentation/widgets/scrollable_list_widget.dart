@@ -50,7 +50,7 @@ class _ListWidgetState extends State<ScrollableListWidget> {
       itemCount: widget.itemsCount,
       itemPositionsListener: _itemPositionsListener,
       itemBuilder: (context, index) => widget.itemContent(index),
-      separatorBuilder: (context, index) => const Divider(thickness: 0.2),
+      separatorBuilder: (context, index) => const Divider(thickness: 1),
     );
   }
 
