@@ -55,6 +55,7 @@ void main() {
               )),
           selectableAya: 0,
           onNext: () {},
+          onScroll: (isTop) {},
         ),
       ));
       final builder = GoldenBuilder.column()

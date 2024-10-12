@@ -80,3 +80,12 @@ class AddBookmarkEvent extends HomeEvent {
   @override
   List<Object?> get props => [index];
 }
+
+class ScrollTopReachedEvent extends HomeEvent {
+  final bool isTop;
+
+  ScrollTopReachedEvent({required this.isTop});
+
+  @override
+  List<Object?> get props => [isTop];
+}

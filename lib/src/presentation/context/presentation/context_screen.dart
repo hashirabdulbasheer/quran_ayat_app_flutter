@@ -41,7 +41,7 @@ class ContextScreen extends StatelessWidget {
                 ),
               ].spacerDirectional(height: 10),
             ),
-          ),),
+          ), onTopReached: (isTop) {  },),
         ),
       );
     });

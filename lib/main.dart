@@ -10,6 +10,7 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   configDependencies();
   setupServicesLocator();
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
             title: 'Quran',
             theme: FlexThemeData.light(scheme: FlexScheme.green),
             darkTheme: FlexThemeData.dark(scheme: FlexScheme.green),
-            themeMode: snapshot.data,
+            themeMode: snapshot.data ?? ThemeMode.light,
             debugShowCheckedModeBanner: false,
             routerConfig: AppRouter.router,
           );

@@ -5,13 +5,17 @@ class AyaList extends StatelessWidget {
   final QPageData pageData;
   final double textScaleFactor;
   final VoidCallback onNext;
+  final SurahIndex? bookmarkIndex;
+  final Function(bool) onScroll;
 
   const AyaList({
     super.key,
     required this.pageData,
     required this.selectableAya,
     required this.onNext,
+    required this.onScroll,
     this.textScaleFactor = 1.0,
+    this.bookmarkIndex,
   });
 
   @override
@@ -24,83 +28,124 @@ class AyaList extends StatelessWidget {
     }
 
     final firstAyaIndex = pageData.page.firstAyaIndex;
-    final bookmarkIndex = pageData.bookmarkIndex;
 
     return Expanded(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: ScrollableListWidget(
-            initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
-            itemsCount: pageData.page.numberOfAya + 1,
-            itemContent: (index) {
-              if (index == pageData.page.numberOfAya) {
-                // we are at the last index, show controls
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: AyaNavigationControl(onNext: onNext),
-                );
-              }
-
+          initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
+          itemsCount: pageData.page.numberOfAya + 1,
+          itemContent: (index) {
+            if (index == pageData.page.numberOfAya) {
+              // we are at the last index, show controls
               return Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 30),
-                child: Column(
-                  children: [
-                    if (index == 0) ...[
-                      // added header before one item
-                      const _Header(),
-                    ],
-
-                    /// index
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        /// aya controls
-                        AyaControlWidget(
-                            onMore: () {
-                              launchUrl(
-                                  Uri.parse(
-                                      "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
-                                  mode: LaunchMode.inAppBrowserView);
-                            },
-                            onBookmarked: () {
-                              context.read<HomeBloc>().add(
-                                    AddBookmarkEvent(
-                                        index: _currentSuraIndex(index)),
-                                  );
-                              _showMessage(context, "Bookmark saved");
-                            },
-                            isBookmarked: _isBookmarked(
-                                _currentSuraIndex(index), bookmarkIndex)),
-
-                        /// index
-                        Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
-                              style: const TextStyle(fontSize: 12),
-                            )),
-                      ],
-                    ),
-
-                    /// word by word
-                    WordByWordAya(
-                      words: ayaWords[index],
-                      textScaleFactor: textScaleFactor,
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// translation
-                    TranslationDisplay(
-                      translation: translations.$2[index].text,
-                      translationType: translations.$1,
-                      textScaleFactor: textScaleFactor,
-                    ),
-                  ],
-                ),
+                padding: const EdgeInsets.only(bottom: 20),
+                child: AyaNavigationControl(onNext: onNext),
               );
-            }),
+            }
+
+            return Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 30),
+              child: Column(
+                children: [
+                  /// index
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      /// aya controls
+                      _AyaControls(
+                        pageData: pageData,
+                        index: index,
+                      ),
+
+                      /// index
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
+                            style: const TextStyle(fontSize: 12),
+                          )),
+                    ],
+                  ),
+
+                  /// word by word
+                  WordByWordAya(
+                    words: ayaWords[index],
+                    textScaleFactor: textScaleFactor,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  /// translation
+                  TranslationDisplay(
+                    translation: translations.$2[index].text,
+                    translationType: translations.$1,
+                    textScaleFactor: textScaleFactor,
+                  ),
+                ],
+              ),
+            );
+          },
+          onTopReached: (isTop) {
+            final bloc = context.read<HomeBloc>();
+            if (bloc.hasScrollTopChanged(isTop)) {
+              onScroll(isTop);
+            }
+          },
+        ),
       ),
+    );
+  }
+}
+
+class _AyaControls extends StatelessWidget {
+  final QPageData pageData;
+  final int index;
+
+  const _AyaControls({
+    required this.index,
+    required this.pageData,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        final translations = pageData.translations.first;
+        final firstAyaIndex = pageData.page.firstAyaIndex;
+
+        return AyaControlWidget(
+            onCopy: () {
+              String shareableString = _getShareableString(
+                context,
+                _currentSuraIndex(index),
+                translations.$2[index].text,
+              );
+              Clipboard.setData(
+                ClipboardData(text: shareableString),
+              ).then((_) {
+                if (context.mounted) {
+                  _showMessage(context, "Copied to clipboard");
+                }
+              });
+            },
+            onMore: () {
+              launchUrl(
+                  Uri.parse(
+                      "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
+                  mode: LaunchMode.inAppBrowserView);
+            },
+            onBookmarked: () {
+              context.read<HomeBloc>().add(
+                    AddBookmarkEvent(index: _currentSuraIndex(index)),
+                  );
+              _showMessage(context, "Bookmark saved");
+            },
+            isBookmarked: _isBookmarked(
+              _currentSuraIndex(index),
+              (state as HomeLoadedState).bookmarkIndex,
+            ));
+      },
     );
   }
 
@@ -117,55 +162,20 @@ class AyaList extends StatelessWidget {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
   }
-}
 
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) {
+  String _getShareableString(
+    BuildContext context,
+    SurahIndex index,
+    String translationText,
+  ) {
     final bloc = context.read<HomeBloc>();
-    return StreamBuilder<QPageData>(
-        stream: bloc.currentPageData$,
-        builder: (context, snapshot) {
-          if (snapshot.hasError || snapshot.data == null) {
-            return const SizedBox.shrink();
-          }
-
-          HomeLoadedState loadedState = bloc.state as HomeLoadedState;
-          if (loadedState.suraTitles?.isEmpty == true) {
-            return const CircularProgressIndicator();
-          }
-
-          return Column(
-            children: [
-              PageHeader(
-                readingProgress: bloc.getReadingProgress(loadedState),
-                surahTitles: loadedState.suraTitles ?? [],
-                onSelection: (index) =>
-                    bloc.add(HomeSelectSuraAyaEvent(index: index)),
-                currentIndex: snapshot.data?.page.firstAyaIndex ??
-                    SurahIndex.defaultIndex,
-              ),
-              DisplayControls(
-                onContextPressed: () => context.pushNamed(
-                  "context",
-                  pathParameters: {
-                    'sura':
-                        "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
-                    'aya': "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
-                  },
-                ),
-                onTextSizeIncreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.increase)),
-                onTextSizeDecreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
-                onTextSizeResetPressed: () =>
-                    bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
-                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
-              ),
-            ],
-          );
-        });
+    final suraName =
+        (bloc.state as HomeLoadedState).suraTitles?[index.sura].translationEn;
+    StringBuffer response = StringBuffer();
+    response.write("Sura $suraName - ${index.human.sura}:${index.human.aya}\n");
+    response.write("$translationText\n");
+    response
+        .write("https://uxquran.com/${index.human.sura}/${index.human.aya}\n");
+    return response.toString();
   }
 }

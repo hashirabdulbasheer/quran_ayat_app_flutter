@@ -18,7 +18,7 @@ class BookmarkDataSourceImpl extends BookmarkDataSource {
 
   @override
   NQBookmark? getBookmark() {
-    String? bookmarkString = sharedPreferences.getString("bookmark");
+    String? bookmarkString = sharedPreferences.getString("quran_bookmark");
     if (bookmarkString == null) {
       return null;
     }
@@ -35,6 +35,6 @@ class BookmarkDataSourceImpl extends BookmarkDataSource {
       seconds: DateTime.now().millisecondsSinceEpoch,
       pixels: 0,
     );
-    sharedPreferences.setString("bookmark", json.encode(bookmark.toJson()));
+    sharedPreferences.setString("quran_bookmark", json.encode(bookmark.toJson()));
   }
 }
