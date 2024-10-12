@@ -6,12 +6,14 @@ class AyaList extends StatelessWidget {
   final double textScaleFactor;
   final VoidCallback onNext;
   final SurahIndex? bookmarkIndex;
+  final Function(bool) onScroll;
 
   const AyaList({
     super.key,
     required this.pageData,
     required this.selectableAya,
     required this.onNext,
+    required this.onScroll,
     this.textScaleFactor = 1.0,
     this.bookmarkIndex,
   });
@@ -31,117 +33,68 @@ class AyaList extends StatelessWidget {
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: ScrollableListWidget(
-            initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
-            itemsCount: pageData.page.numberOfAya + 1,
-            itemContent: (index) {
-              if (index == pageData.page.numberOfAya) {
-                // we are at the last index, show controls
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: AyaNavigationControl(onNext: onNext),
-                );
-              }
-
+          initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
+          itemsCount: pageData.page.numberOfAya + 1,
+          itemContent: (index) {
+            if (index == pageData.page.numberOfAya) {
+              // we are at the last index, show controls
               return Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 30),
-                child: Column(
-                  children: [
-                    if (index == 0) ...[
-                      // added header before one item
-                      const _Header(),
-                    ],
-
-                    /// index
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        /// aya controls
-                        _AyaControls(
-                          pageData: pageData,
-                          index: index,
-                        ),
-
-                        /// index
-                        Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
-                              style: const TextStyle(fontSize: 12),
-                            )),
-                      ],
-                    ),
-
-                    /// word by word
-                    WordByWordAya(
-                      words: ayaWords[index],
-                      textScaleFactor: textScaleFactor,
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// translation
-                    TranslationDisplay(
-                      translation: translations.$2[index].text,
-                      translationType: translations.$1,
-                      textScaleFactor: textScaleFactor,
-                    ),
-                  ],
-                ),
+                padding: const EdgeInsets.only(bottom: 20),
+                child: AyaNavigationControl(onNext: onNext),
               );
-            }),
+            }
+
+            return Padding(
+              padding: const EdgeInsets.only(top: 10, bottom: 30),
+              child: Column(
+                children: [
+                  /// index
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      /// aya controls
+                      _AyaControls(
+                        pageData: pageData,
+                        index: index,
+                      ),
+
+                      /// index
+                      Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
+                            style: const TextStyle(fontSize: 12),
+                          )),
+                    ],
+                  ),
+
+                  /// word by word
+                  WordByWordAya(
+                    words: ayaWords[index],
+                    textScaleFactor: textScaleFactor,
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  /// translation
+                  TranslationDisplay(
+                    translation: translations.$2[index].text,
+                    translationType: translations.$1,
+                    textScaleFactor: textScaleFactor,
+                  ),
+                ],
+              ),
+            );
+          },
+          onTopReached: (isTop) {
+            final bloc = context.read<HomeBloc>();
+            if (bloc.hasScrollTopChanged(isTop)) {
+              onScroll(isTop);
+            }
+          },
+        ),
       ),
     );
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = context.read<HomeBloc>();
-    return StreamBuilder<QPageData>(
-        stream: bloc.currentPageData$,
-        builder: (context, snapshot) {
-          if (snapshot.hasError || snapshot.data == null) {
-            return const SizedBox.shrink();
-          }
-
-          HomeLoadedState loadedState = bloc.state as HomeLoadedState;
-          if (loadedState.suraTitles?.isEmpty == true) {
-            return const CircularProgressIndicator();
-          }
-
-          return Column(
-            children: [
-              PageHeader(
-                readingProgress: bloc.getReadingProgress(loadedState),
-                surahTitles: loadedState.suraTitles ?? [],
-                onSelection: (index) =>
-                    bloc.add(HomeSelectSuraAyaEvent(index: index)),
-                currentIndex: snapshot.data?.page.firstAyaIndex ??
-                    SurahIndex.defaultIndex,
-              ),
-              DisplayControls(
-                onContextPressed: () => context.pushNamed(
-                  "context",
-                  pathParameters: {
-                    'sura':
-                        "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
-                    'aya': "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
-                  },
-                ),
-                onTextSizeIncreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.increase)),
-                onTextSizeDecreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
-                onTextSizeResetPressed: () =>
-                    bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
-                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
-              ),
-            ],
-          );
-        });
   }
 }
 

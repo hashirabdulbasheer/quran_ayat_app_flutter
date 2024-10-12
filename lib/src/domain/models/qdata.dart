@@ -6,6 +6,7 @@ class QPageData extends Equatable {
   final List<(QTranslation, List<QAya>)> translations;
   final QPage page;
   final SurahIndex? selectedIndex;
+  final bool scrollReachedTop;
 
   const QPageData({
     required this.ayaWords,
@@ -13,11 +14,13 @@ class QPageData extends Equatable {
     required this.translations,
     required this.page,
     this.selectedIndex,
+    this.scrollReachedTop = false,
   });
 
   QPageData copyWith({
     SurahIndex? selectedIndex,
     SurahIndex? bookmarkIndex,
+    bool? scrollReachedTop,
   }) {
     return QPageData(
       ayaWords: ayaWords,
@@ -25,6 +28,7 @@ class QPageData extends Equatable {
       translations: translations,
       page: page,
       selectedIndex: selectedIndex ?? this.selectedIndex,
+      scrollReachedTop: scrollReachedTop ?? this.scrollReachedTop,
     );
   }
 
@@ -35,5 +39,6 @@ class QPageData extends Equatable {
         translations,
         page,
         selectedIndex,
+        scrollReachedTop,
       ];
 }

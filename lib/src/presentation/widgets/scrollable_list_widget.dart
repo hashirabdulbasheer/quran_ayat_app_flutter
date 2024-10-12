@@ -5,10 +5,12 @@ class ScrollableListWidget extends StatefulWidget {
   final int itemsCount;
   final int? initialIndex;
   final Widget Function(int) itemContent;
+  final Function(bool) onTopReached;
 
   const ScrollableListWidget({
     super.key,
     this.initialIndex,
+    required this.onTopReached,
     required this.itemContent,
     required this.itemsCount,
   });
@@ -19,10 +21,20 @@ class ScrollableListWidget extends StatefulWidget {
 
 class _ListWidgetState extends State<ScrollableListWidget> {
   final ItemScrollController _itemScrollController = ItemScrollController();
+  final ItemPositionsListener _itemPositionsListener =
+      ItemPositionsListener.create();
 
   @override
   void initState() {
     super.initState();
+    _itemPositionsListener.itemPositions.addListener(_scrollPositionListener);
+  }
+
+  @override
+  void dispose() {
+    _itemPositionsListener.itemPositions
+        .removeListener(_scrollPositionListener);
+    super.dispose();
   }
 
   @override
@@ -36,6 +48,7 @@ class _ListWidgetState extends State<ScrollableListWidget> {
       itemScrollController: _itemScrollController,
       initialScrollIndex: 0,
       itemCount: widget.itemsCount,
+      itemPositionsListener: _itemPositionsListener,
       itemBuilder: (context, index) => widget.itemContent(index),
       separatorBuilder: (context, index) => const Divider(thickness: 0.2),
     );
@@ -43,5 +56,13 @@ class _ListWidgetState extends State<ScrollableListWidget> {
 
   void _scrollToAyat() {
     _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
+  }
+
+  void _scrollPositionListener() {
+    if (_itemPositionsListener.itemPositions.value.first.index <= 0) {
+      widget.onTopReached(true);
+    } else {
+      widget.onTopReached(false);
+    }
   }
 }

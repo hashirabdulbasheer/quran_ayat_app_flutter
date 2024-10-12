@@ -63,7 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
           width: 30,
         )
       ],
-      child: const _Content(),
+      child: const Column(
+        children: [
+          _ToggleHeader(),
+          Expanded(child: _Content()),
+        ],
+      ),
     );
   }
 
@@ -103,6 +108,81 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+class _ToggleHeader extends StatelessWidget {
+  const _ToggleHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    return StreamBuilder<bool>(
+        stream: bloc.topOfListIndicator$.distinct(),
+        builder: (context, snapshot) {
+          return Visibility(
+            visible: snapshot.data ?? false,
+            maintainAnimation: true,
+            maintainState: true,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.fastOutSlowIn,
+              opacity: snapshot.data ?? false ? 1 : 0,
+              child: const _Header(),
+            ),
+          );
+        });
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    return StreamBuilder<QPageData>(
+        stream: bloc.currentPageData$,
+        builder: (context, snapshot) {
+          if (snapshot.hasError || snapshot.data == null) {
+            return const SizedBox.shrink();
+          }
+
+          HomeLoadedState loadedState = bloc.state as HomeLoadedState;
+          if (loadedState.suraTitles?.isEmpty == true) {
+            return const CircularProgressIndicator();
+          }
+
+          return Column(
+            children: [
+              PageHeader(
+                readingProgress: bloc.getReadingProgress(loadedState),
+                surahTitles: loadedState.suraTitles ?? [],
+                onSelection: (index) =>
+                    bloc.add(HomeSelectSuraAyaEvent(index: index)),
+                currentIndex: snapshot.data?.page.firstAyaIndex ??
+                    SurahIndex.defaultIndex,
+              ),
+              DisplayControls(
+                onContextPressed: () => context.pushNamed(
+                  "context",
+                  pathParameters: {
+                    'sura':
+                        "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
+                    'aya': "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
+                  },
+                ),
+                onTextSizeIncreasePressed: () => bloc
+                    .add(TextSizeControlEvent(type: TextSizeControl.increase)),
+                onTextSizeDecreasePressed: () => bloc
+                    .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
+                onTextSizeResetPressed: () =>
+                    bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
+                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
+              ),
+            ],
+          );
+        });
+  }
+}
+
 class _Content extends StatelessWidget {
   const _Content();
 
@@ -125,13 +205,16 @@ class _Content extends StatelessWidget {
               TextSizeAdjuster(
                 settings$: bloc.settings$,
                 child: (context, scale) => AyaList(
-                    bookmarkIndex: loadedState.bookmarkIndex,
-                    selectableAya:
-                        bloc.currentPageData$.value.selectedIndex?.aya ??
-                            bloc.currentPageData$.value.page.firstAyaIndex.aya,
-                    pageData: data,
-                    textScaleFactor: scale,
-                    onNext: () => bloc.add(HomeNextPageEvent())),
+                  bookmarkIndex: loadedState.bookmarkIndex,
+                  selectableAya:
+                      bloc.currentPageData$.value.selectedIndex?.aya ??
+                          bloc.currentPageData$.value.page.firstAyaIndex.aya,
+                  pageData: data,
+                  textScaleFactor: scale,
+                  onNext: () => bloc.add(HomeNextPageEvent()),
+                  onScroll: (isTop) =>
+                      bloc.add(ScrollTopReachedEvent(isTop: isTop)),
+                ),
               ),
             ],
           );
