@@ -15,7 +15,6 @@ void main() {
 
 Future _initialize() async {
   WidgetsFlutterBinding.ensureInitialized();
-  GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
   configDependencies();
   setupServicesLocator();

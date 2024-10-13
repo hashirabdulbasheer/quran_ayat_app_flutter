@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const ThemeModeButton(),
         IconButton(
             tooltip: "About us",
-            onPressed: () => context.pushNamed(AppRoutes.about.name),
+            onPressed: () => context.goNamed(AppRoutes.about.name),
             icon: Icon(
               Icons.info_outline,
               color: Theme.of(context).primaryColor,

@@ -154,7 +154,7 @@ class _LinkButton extends StatelessWidget {
       children: [
         Expanded(
           child: SizedBox(
-            height: 30,
+            height: 40,
             child: TextButton(
                 onPressed: onTapped,
                 child: Align(
