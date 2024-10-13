@@ -72,8 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           _Header(expansionController: _headerExpansionController),
-          const SizedBox(height: 5,),
           const _HeaderControls(),
+          const SizedBox(height: 10,),
           Expanded(child: _Content(
             onNextTapped: () {
               _headerExpansionController.collapse();
@@ -167,10 +167,12 @@ class _Header extends StatelessWidget {
           }
 
           return ExpansionTile(
+            dense: true,
+            minTileHeight: 45,
             controller: expansionController,
             initiallyExpanded: false,
             maintainState: false,
-            collapsedBackgroundColor: Theme.of(context).dividerColor,
+            tilePadding: const EdgeInsets.symmetric(horizontal: 6),
             title: Text(_getTitle(data, loadedState),
                 style: const TextStyle(fontSize: 12)),
             children: [
