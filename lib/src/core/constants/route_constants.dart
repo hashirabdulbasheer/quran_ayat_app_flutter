@@ -34,4 +34,9 @@ class AppRoutes {
     name: 'contextDefault',
     path: '/context',
   );
+
+  static const AppRoute about = AppRoute(
+    name: 'about',
+    path: '/about',
+  );
 }

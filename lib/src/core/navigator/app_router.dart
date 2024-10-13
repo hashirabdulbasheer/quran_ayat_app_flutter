@@ -3,6 +3,7 @@ import 'package:ayat_app/src/core/constants/app_constants.dart';
 import 'package:ayat_app/src/core/constants/route_constants.dart';
 import 'package:ayat_app/src/core/di/service_locator.dart';
 import 'package:ayat_app/src/domain/models/surah_index.dart';
+import 'package:ayat_app/src/presentation/about/presentation/about_screen.dart';
 import 'package:ayat_app/src/presentation/context/bloc/context_bloc.dart';
 import 'package:ayat_app/src/presentation/context/presentation/context_screen.dart';
 import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
@@ -22,6 +23,17 @@ class AppRouter {
       return const NoTransitionPage(child: NotFoundScreen());
     },
     routes: [
+      ///
+      /// About
+      ///
+      GoRoute(
+        path: AppRoutes.about.path,
+        name: AppRoutes.about.name,
+        pageBuilder: (context, state) {
+          return const NoTransitionPage(child: AboutScreen());
+        },
+      ),
+
       ///
       /// Home
       ///

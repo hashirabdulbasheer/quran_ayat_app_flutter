@@ -1,3 +1,4 @@
+import 'package:ayat_app/src/core/constants/route_constants.dart';
 import 'package:ayat_app/src/presentation/widgets/error_widget.dart';
 
 import 'home.dart';
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Text("Blog",
                 style: TextStyle(fontWeight: FontWeight.bold))),
         IconButton(
+          tooltip: "Go to bookmark",
             onPressed: () => bloc.add(GoToBookmarkEvent()),
             icon: Icon(
               Icons.bookmark_border,
@@ -62,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
             )),
         const ThemeModeButton(),
         IconButton(
-            onPressed: () => bloc.add(GoToBookmarkEvent()),
+            tooltip: "About us",
+            onPressed: () => context.pushNamed(AppRoutes.about.name),
             icon: Icon(
               Icons.info_outline,
               color: Theme.of(context).primaryColor,
@@ -73,7 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           _Header(expansionController: _headerExpansionController),
           const _HeaderControls(),
-          const SizedBox(height: 10,),
+          const SizedBox(
+            height: 10,
+          ),
           Expanded(child: _Content(
             onNextTapped: () {
               _headerExpansionController.collapse();
