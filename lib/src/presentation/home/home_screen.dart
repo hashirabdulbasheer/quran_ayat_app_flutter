@@ -54,13 +54,19 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: const Text("Blog",
                 style: TextStyle(fontWeight: FontWeight.bold))),
-        TextButton(
-            onPressed: () {
-              bloc.add(GoToBookmarkEvent());
-            },
-            child: const Text("Bookmark",
-                style: TextStyle(fontWeight: FontWeight.bold))),
+        IconButton(
+            onPressed: () => bloc.add(GoToBookmarkEvent()),
+            icon: Icon(
+              Icons.bookmark_border,
+              color: Theme.of(context).primaryColor,
+            )),
         const ThemeModeButton(),
+        IconButton(
+            onPressed: () => bloc.add(GoToBookmarkEvent()),
+            icon: Icon(
+              Icons.info_outline,
+              color: Theme.of(context).primaryColor,
+            )),
         const SizedBox(width: 30)
       ],
       child: Column(
