@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
       child: const Column(
         children: [
-          _ToggleHeader(),
+          _Header(),
           Expanded(child: _Content()),
         ],
       ),
@@ -105,25 +105,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return false;
-  }
-}
-
-class _ToggleHeader extends StatelessWidget {
-  const _ToggleHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = context.read<HomeBloc>();
-    return StreamBuilder<bool>(
-        stream: bloc.topOfListIndicator$.distinct(),
-        builder: (context, snapshot) {
-          return AnimatedSize(
-            duration: const Duration(milliseconds: 500),
-            child: snapshot.data == true
-                ? const _Header()
-                : const SizedBox.shrink(),
-          );
-        });
   }
 }
 
@@ -207,8 +188,6 @@ class _Content extends StatelessWidget {
                   pageData: data,
                   textScaleFactor: scale,
                   onNext: () => bloc.add(HomeNextPageEvent()),
-                  onScroll: (isTop) =>
-                      bloc.add(ScrollTopReachedEvent(isTop: isTop)),
                 ),
               ),
             ],

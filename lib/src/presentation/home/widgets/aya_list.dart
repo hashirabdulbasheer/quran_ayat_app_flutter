@@ -6,14 +6,12 @@ class AyaList extends StatelessWidget {
   final double textScaleFactor;
   final VoidCallback onNext;
   final SurahIndex? bookmarkIndex;
-  final Function(bool) onScroll;
 
   const AyaList({
     super.key,
     required this.pageData,
     required this.selectableAya,
     required this.onNext,
-    required this.onScroll,
     this.textScaleFactor = 1.0,
     this.bookmarkIndex,
   });
@@ -85,12 +83,6 @@ class AyaList extends StatelessWidget {
                 ],
               ),
             );
-          },
-          onTopReached: (isTop) {
-            final bloc = context.read<HomeBloc>();
-            if (bloc.hasScrollTopChanged(isTop)) {
-              onScroll(isTop);
-            }
           },
         ),
       ),

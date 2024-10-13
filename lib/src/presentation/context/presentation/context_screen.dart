@@ -22,26 +22,27 @@ class ContextScreen extends StatelessWidget {
         child: SafeArea(
           child: ScrollableListWidget(
               initialIndex: state.index.aya,
-              itemsCount: state.data.translations.length, itemContent: (index) =>   ListTile(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  "${index + 1} ",
-                  style: const TextStyle(fontSize: 12),
-                ),
-                ArabicText(
-                  text: _ayaText(state.data.ayaWords, index),
-                  textScaleFactor: state.textScale,
-                ),
-                // TODO: Considering only one translation for now
-                TextRow(
-                  text: state.data.translations[0].$2[index].text,
-                  textScaleFactor: state.textScale,
-                ),
-              ].spacerDirectional(height: 10),
-            ),
-          ), onTopReached: (isTop) {  },),
+              itemsCount: state.data.translations.length,
+              itemContent: (index) => ListTile(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          "${index + 1} ",
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        ArabicText(
+                          text: _ayaText(state.data.ayaWords, index),
+                          textScaleFactor: state.textScale,
+                        ),
+                        // TODO: Considering only one translation for now
+                        TextRow(
+                          text: state.data.translations[0].$2[index].text,
+                          textScaleFactor: state.textScale,
+                        ),
+                      ].spacerDirectional(height: 10),
+                    ),
+                  )),
         ),
       );
     });
