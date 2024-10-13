@@ -10,6 +10,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _headerExpansionController = ExpansionTileController();
+
   @override
   void initState() {
     super.initState();
@@ -59,14 +61,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Text("Bookmark",
                 style: TextStyle(fontWeight: FontWeight.bold))),
         const ThemeModeButton(),
-        const SizedBox(
-          width: 30,
-        )
+        const SizedBox(width: 30)
       ],
-      child: const Column(
+      child: Column(
         children: [
-          _Header(),
-          Expanded(child: _Content()),
+          _Header(expansionController: _headerExpansionController),
+          Expanded(child: _Content(
+            onNextTapped: () {
+              _headerExpansionController.collapse();
+            },
+          )),
         ],
       ),
     );
@@ -109,7 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header();
+  final ExpansionTileController expansionController;
+
+  const _Header({required this.expansionController});
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +123,8 @@ class _Header extends StatelessWidget {
     return StreamBuilder<QPageData>(
         stream: bloc.currentPageData$,
         builder: (context, snapshot) {
-          if (snapshot.hasError || snapshot.data == null) {
+          QPageData? data = snapshot.data;
+          if (snapshot.hasError || data == null) {
             return const SizedBox.shrink();
           }
 
@@ -126,41 +133,62 @@ class _Header extends StatelessWidget {
             return const CircularProgressIndicator();
           }
 
-          return Column(
+          return ExpansionTile(
+            controller: expansionController,
+            initiallyExpanded: false,
+            maintainState: false,
+            collapsedBackgroundColor: Theme.of(context).dividerColor,
+            title: Text(_getTitle(data, loadedState),
+                style: const TextStyle(fontSize: 12)),
             children: [
-              PageHeader(
-                readingProgress: bloc.getReadingProgress(loadedState),
-                surahTitles: loadedState.suraTitles ?? [],
-                onSelection: (index) =>
-                    bloc.add(HomeSelectSuraAyaEvent(index: index)),
-                currentIndex: snapshot.data?.page.firstAyaIndex ??
-                    SurahIndex.defaultIndex,
-              ),
-              DisplayControls(
-                onContextPressed: () => context.pushNamed(
-                  "context",
-                  pathParameters: {
-                    'sura':
-                        "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
-                    'aya': "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
-                  },
-                ),
-                onTextSizeIncreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.increase)),
-                onTextSizeDecreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
-                onTextSizeResetPressed: () =>
-                    bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
-                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
+              Column(
+                children: [
+                  PageHeader(
+                    readingProgress: bloc.getReadingProgress(loadedState),
+                    surahTitles: loadedState.suraTitles ?? [],
+                    onSelection: (index) =>
+                        bloc.add(HomeSelectSuraAyaEvent(index: index)),
+                    currentIndex: snapshot.data?.page.firstAyaIndex ??
+                        SurahIndex.defaultIndex,
+                  ),
+                  DisplayControls(
+                    onContextPressed: () => context.pushNamed(
+                      "context",
+                      pathParameters: {
+                        'sura':
+                            "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
+                        'aya':
+                            "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
+                      },
+                    ),
+                    onTextSizeIncreasePressed: () => bloc.add(
+                        TextSizeControlEvent(type: TextSizeControl.increase)),
+                    onTextSizeDecreasePressed: () => bloc.add(
+                        TextSizeControlEvent(type: TextSizeControl.decrease)),
+                    onTextSizeResetPressed: () => bloc
+                        .add(TextSizeControlEvent(type: TextSizeControl.reset)),
+                    onPreviousPagePressed: () =>
+                        bloc.add(HomePreviousPageEvent()),
+                  ),
+                ],
               ),
             ],
           );
         });
   }
+
+  String _getTitle(QPageData data, HomeLoadedState loadedState) {
+    int currentSura = data.page.firstAyaIndex.sura;
+    SuraTitle suraTitle =
+        loadedState.suraTitles?[currentSura] ?? const SuraTitle.defaultValue();
+    return "${suraTitle.transliterationEn} / ${suraTitle.translationEn}";
+  }
 }
 
 class _Content extends StatelessWidget {
-  const _Content();
+  final VoidCallback onNextTapped;
+
+  const _Content({required this.onNextTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +215,10 @@ class _Content extends StatelessWidget {
                           bloc.currentPageData$.value.page.firstAyaIndex.aya,
                   pageData: data,
                   textScaleFactor: scale,
-                  onNext: () => bloc.add(HomeNextPageEvent()),
+                  onNext: () {
+                    onNextTapped();
+                    bloc.add(HomeNextPageEvent());
+                  },
                 ),
               ),
             ],
