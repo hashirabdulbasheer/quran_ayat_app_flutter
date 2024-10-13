@@ -15,7 +15,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final currentPageData$ = BehaviorSubject<QPageData>();
   final settings$ = BehaviorSubject<double>.seeded(1.0);
-  final topOfListIndicator$ = BehaviorSubject<bool>.seeded(false);
 
   HomeBloc({
     required this.fetchSuraTitlesUseCase,
@@ -34,7 +33,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<TextSizeControlEvent>(_onTextSizeControl);
     on<GoToBookmarkEvent>(_onGoToBookmark);
     on<AddBookmarkEvent>(_onAddBookmark);
-    on<ScrollTopReachedEvent>(_onIsScrollTop);
 
     _registerListeners();
   }
@@ -140,18 +138,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) {
     saveBookmarkUseCase.call(event.index);
     emit((state as HomeLoadedState).copyWith(bookmarkIndex: event.index));
-  }
-
-  void _onIsScrollTop(
-    ScrollTopReachedEvent event,
-    Emitter<HomeState> emit,
-  ) {
-    topOfListIndicator$.add(event.isTop);
-  }
-
-  bool hasScrollTopChanged(bool newIsTop) {
-    final currentValue = topOfListIndicator$.value;
-    return newIsTop != currentValue;
   }
 
   void _onTextSizeControl(

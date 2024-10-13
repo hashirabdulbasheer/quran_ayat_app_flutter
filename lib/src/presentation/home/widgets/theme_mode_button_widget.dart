@@ -13,6 +13,8 @@ class ThemeModeButton extends StatelessWidget {
           ThemeMode mode = snapshot.data ?? ThemeMode.light;
           bool isDarkMode = mode == ThemeMode.dark;
           return IconButton(
+              tooltip:
+                  isDarkMode ? "Light mode" : "Dark mode",
               onPressed: () => appBloc.add(ToggleThemeModeEvent()),
               icon: Icon(
                 isDarkMode ? Icons.light_mode : Icons.dark_mode,

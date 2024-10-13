@@ -34,11 +34,11 @@ class AyaControlWidget extends StatelessWidget {
           onPressed: onBookmarked,
           icon: isBookmarked
               ? Icon(
-                  Icons.bookmark,
+                  Icons.bookmark_added,
                   color: Theme.of(context).primaryColor,
                 )
               : Icon(
-                  Icons.bookmark_border,
+                  Icons.bookmark_add_outlined,
                   color: Theme.of(context).disabledColor,
                 ),
         ),

@@ -1,3 +1,4 @@
+import 'package:ayat_app/src/core/constants/route_constants.dart';
 import 'package:ayat_app/src/presentation/widgets/error_widget.dart';
 
 import 'home.dart';
@@ -10,6 +11,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _headerExpansionController = ExpansionTileController();
+
   @override
   void initState() {
     super.initState();
@@ -52,21 +55,37 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: const Text("Blog",
                 style: TextStyle(fontWeight: FontWeight.bold))),
-        TextButton(
-            onPressed: () {
-              bloc.add(GoToBookmarkEvent());
-            },
-            child: const Text("Bookmark",
-                style: TextStyle(fontWeight: FontWeight.bold))),
+        IconButton(
+            tooltip: "Go to bookmark",
+            onPressed: () => bloc.add(GoToBookmarkEvent()),
+            icon: Icon(
+              Icons.bookmark_border,
+              color: Theme.of(context).primaryColor,
+            )),
         const ThemeModeButton(),
-        const SizedBox(
-          width: 30,
-        )
+        IconButton(
+            tooltip: "About us",
+            onPressed: () => context.pushNamed(AppRoutes.about.name),
+            icon: Icon(
+              Icons.info_outline,
+              color: Theme.of(context).primaryColor,
+            )),
+        const SizedBox(width: 30)
       ],
-      child: const Column(
+      child: Column(
         children: [
-          _ToggleHeader(),
-          Expanded(child: _Content()),
+          // expansion title for selecting sura/aya
+          _Header(expansionController: _headerExpansionController),
+          // reading progress
+          const _ReadingProgressIndicator(),
+          // space
+          const SizedBox(height: 10),
+          // the quran
+          Expanded(child: _Content(
+            onNextTapped: () {
+              _headerExpansionController.collapse();
+            },
+          )),
         ],
       ),
     );
@@ -108,27 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _ToggleHeader extends StatelessWidget {
-  const _ToggleHeader();
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = context.read<HomeBloc>();
-    return StreamBuilder<bool>(
-        stream: bloc.topOfListIndicator$.distinct(),
-        builder: (context, snapshot) {
-          return AnimatedSize(
-            duration: const Duration(milliseconds: 500),
-            child: snapshot.data == true
-                ? const _Header()
-                : const SizedBox.shrink(),
-          );
-        });
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header();
+class _ReadingProgressIndicator extends StatelessWidget {
+  const _ReadingProgressIndicator();
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +136,35 @@ class _Header extends StatelessWidget {
     return StreamBuilder<QPageData>(
         stream: bloc.currentPageData$,
         builder: (context, snapshot) {
-          if (snapshot.hasError || snapshot.data == null) {
+          QPageData? data = snapshot.data;
+          if (snapshot.hasError || data == null) {
+            return const SizedBox.shrink();
+          }
+
+          HomeLoadedState loadedState = bloc.state as HomeLoadedState;
+
+          return Directionality(
+            textDirection: TextDirection.rtl,
+            child: ReadingProgressIndicator(
+                progress: bloc.getReadingProgress(loadedState)),
+          );
+        });
+  }
+}
+
+class _Header extends StatelessWidget {
+  final ExpansionTileController expansionController;
+
+  const _Header({required this.expansionController});
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    return StreamBuilder<QPageData>(
+        stream: bloc.currentPageData$,
+        builder: (context, snapshot) {
+          QPageData? data = snapshot.data;
+          if (snapshot.hasError || data == null) {
             return const SizedBox.shrink();
           }
 
@@ -145,10 +173,17 @@ class _Header extends StatelessWidget {
             return const CircularProgressIndicator();
           }
 
-          return Column(
+          return ExpansionTile(
+            dense: true,
+            minTileHeight: 45,
+            controller: expansionController,
+            initiallyExpanded: false,
+            maintainState: false,
+            tilePadding: const EdgeInsets.symmetric(horizontal: 6),
+            title: Text(_getTitle(data, loadedState),
+                style: const TextStyle(fontSize: 12)),
             children: [
               PageHeader(
-                readingProgress: bloc.getReadingProgress(loadedState),
                 surahTitles: loadedState.suraTitles ?? [],
                 onSelection: (index) =>
                     bloc.add(HomeSelectSuraAyaEvent(index: index)),
@@ -176,10 +211,19 @@ class _Header extends StatelessWidget {
           );
         });
   }
+
+  String _getTitle(QPageData data, HomeLoadedState loadedState) {
+    int currentSura = data.page.firstAyaIndex.sura;
+    SuraTitle suraTitle =
+        loadedState.suraTitles?[currentSura] ?? const SuraTitle.defaultValue();
+    return "${suraTitle.transliterationEn} / ${suraTitle.translationEn}";
+  }
 }
 
 class _Content extends StatelessWidget {
-  const _Content();
+  final VoidCallback onNextTapped;
+
+  const _Content({required this.onNextTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -206,9 +250,10 @@ class _Content extends StatelessWidget {
                           bloc.currentPageData$.value.page.firstAyaIndex.aya,
                   pageData: data,
                   textScaleFactor: scale,
-                  onNext: () => bloc.add(HomeNextPageEvent()),
-                  onScroll: (isTop) =>
-                      bloc.add(ScrollTopReachedEvent(isTop: isTop)),
+                  onNext: () {
+                    onNextTapped();
+                    bloc.add(HomeNextPageEvent());
+                  },
                 ),
               ),
             ],

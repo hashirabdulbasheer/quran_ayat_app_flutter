@@ -15,6 +15,7 @@ class QAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
       foregroundColor: Theme.of(context).primaryColor,
       title: Text(
         title ?? '',
@@ -26,5 +27,5 @@ class QAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(84);
+  Size get preferredSize => const Size.fromHeight(74);
 }
