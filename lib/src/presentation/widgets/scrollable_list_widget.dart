@@ -31,6 +31,12 @@ class _ListWidgetState extends State<ScrollableListWidget> {
   }
 
   @override
+  void didUpdateWidget(covariant ScrollableListWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _itemScrollController.jumpTo(index: 0);
+  }
+
+  @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToAyat());
     return _body();
