@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Text("Blog",
                 style: TextStyle(fontWeight: FontWeight.bold))),
         IconButton(
-          tooltip: "Go to bookmark",
+            tooltip: "Go to bookmark",
             onPressed: () => bloc.add(GoToBookmarkEvent()),
             icon: Icon(
               Icons.bookmark_border,
@@ -74,11 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
       child: Column(
         children: [
+          // expansion title for selecting sura/aya
           _Header(expansionController: _headerExpansionController),
-          const _HeaderControls(),
-          const SizedBox(
-            height: 10,
-          ),
+          // reading progress
+          const _ReadingProgressIndicator(),
+          // space
+          const SizedBox(height: 10),
+          // the quran
           Expanded(child: _Content(
             onNextTapped: () {
               _headerExpansionController.collapse();
@@ -125,8 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _HeaderControls extends StatelessWidget {
-  const _HeaderControls();
+class _ReadingProgressIndicator extends StatelessWidget {
+  const _ReadingProgressIndicator();
 
   @override
   Widget build(BuildContext context) {
