@@ -2,10 +2,12 @@ import 'package:ayat_app/src/presentation/home/home.dart';
 
 class AyaNavigationControl extends StatelessWidget {
   final VoidCallback onNext;
+  final VoidCallback onBack;
 
   const AyaNavigationControl({
     super.key,
     required this.onNext,
+    required this.onBack,
   });
 
   @override
@@ -33,6 +35,13 @@ class AyaNavigationControl extends StatelessWidget {
                   children: [
                     Row(
                       children: [
+                        SizedBox(
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: onBack,
+                            child: const Icon(Icons.arrow_back_ios),
+                          ),
+                        ),
                         Expanded(
                           child: SizedBox(
                             height: 50,

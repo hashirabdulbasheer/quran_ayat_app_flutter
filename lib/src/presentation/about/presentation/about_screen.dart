@@ -36,7 +36,7 @@ class _LogoDisplay extends StatelessWidget {
             width: 150,
             height: 150,
             child: Image.asset(
-              "images/uxquran.png",
+              "assets/images/uxquran.png",
               fit: BoxFit.fitWidth,
             )),
       ),
@@ -154,7 +154,7 @@ class _LinkButton extends StatelessWidget {
       children: [
         Expanded(
           child: SizedBox(
-            height: 30,
+            height: 40,
             child: TextButton(
                 onPressed: onTapped,
                 child: Align(

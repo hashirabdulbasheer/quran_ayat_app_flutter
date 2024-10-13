@@ -5,7 +5,6 @@ class DisplayControls extends StatelessWidget {
   final VoidCallback onTextSizeIncreasePressed;
   final VoidCallback onTextSizeDecreasePressed;
   final VoidCallback onTextSizeResetPressed;
-  final VoidCallback onPreviousPagePressed;
 
   const DisplayControls({
     super.key,
@@ -13,7 +12,6 @@ class DisplayControls extends StatelessWidget {
     required this.onTextSizeIncreasePressed,
     required this.onTextSizeDecreasePressed,
     required this.onTextSizeResetPressed,
-    required this.onPreviousPagePressed,
   });
 
   @override
@@ -37,12 +35,7 @@ class DisplayControls extends StatelessWidget {
           onPressed: onTextSizeResetPressed,
           icon: const Icon(Icons.refresh, size: 15),
         ),
-        const Spacer(),
-        IconButton(
-          tooltip: "Back to previous page",
-          onPressed: onPreviousPagePressed,
-          icon: const Icon(Icons.arrow_forward, size: 20),
-        ),
+        const Spacer()
       ],
     );
   }

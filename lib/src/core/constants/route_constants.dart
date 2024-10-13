@@ -37,6 +37,16 @@ class AppRoutes {
 
   static const AppRoute about = AppRoute(
     name: 'about',
-    path: '/about',
+    path: 'about',
+  );
+
+  static const AppRoute homeSuraAbout = AppRoute(
+    name: 'homeSuraAbout',
+    path: 'about',
+  );
+
+  static const AppRoute homeSuraAyaAbout = AppRoute(
+    name: 'homeSuraAyaAbout',
+    path: 'about',
   );
 }

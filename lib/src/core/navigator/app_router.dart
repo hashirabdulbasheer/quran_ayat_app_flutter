@@ -24,84 +24,106 @@ class AppRouter {
     },
     routes: [
       ///
-      /// About
-      ///
-      GoRoute(
-        path: AppRoutes.about.path,
-        name: AppRoutes.about.name,
-        pageBuilder: (context, state) {
-          return const NoTransitionPage(child: AboutScreen());
-        },
-      ),
-
-      ///
       /// Home
       ///
       GoRoute(
-        path: AppRoutes.home.path,
-        name: AppRoutes.home.name,
-        pageBuilder: (context, state) {
-          return NoTransitionPage(
-              child: MultiBlocProvider(providers: [
-            BlocProvider(create: (context) {
-              return getIt<HomeBloc>()
-                ..add(HomeInitializeEvent(
-                  numberOfAyaPerPage: kNumAyaPerPage,
-                ));
-            }),
-            BlocProvider(create: (context) {
-              return getIt<AppBloc>();
-            }),
-          ], child: const HomeScreen()));
-        },
-      ),
+          path: AppRoutes.home.path,
+          name: AppRoutes.home.name,
+          pageBuilder: (context, state) {
+            return NoTransitionPage(
+                child: MultiBlocProvider(providers: [
+              BlocProvider(create: (context) {
+                return getIt<HomeBloc>()
+                  ..add(HomeInitializeEvent(
+                    numberOfAyaPerPage: kNumAyaPerPage,
+                  ));
+              }),
+              BlocProvider(create: (context) {
+                return getIt<AppBloc>();
+              }),
+            ], child: const HomeScreen()));
+          },
+          routes: [
+            ///
+            /// About
+            ///
+            GoRoute(
+              path: AppRoutes.about.path,
+              name: AppRoutes.about.name,
+              pageBuilder: (context, state) {
+                return const NoTransitionPage(child: AboutScreen());
+              },
+            ),
+          ]),
       GoRoute(
-        path: AppRoutes.homeSura.path,
-        name: AppRoutes.homeSura.name,
-        pageBuilder: (context, state) {
-          int sura = int.parse(state.pathParameters['sura'] ?? '1');
-          if (sura < 1 || sura > 114) {
-            sura = 1;
-          }
+          path: AppRoutes.homeSura.path,
+          name: AppRoutes.homeSura.name,
+          pageBuilder: (context, state) {
+            int sura = int.parse(state.pathParameters['sura'] ?? '1');
+            if (sura < 1 || sura > 114) {
+              sura = 1;
+            }
 
-          return NoTransitionPage(
-              child: MultiBlocProvider(providers: [
-            BlocProvider(create: (context) {
-              return getIt<HomeBloc>()
-                ..add(HomeInitializeEvent(
-                    numberOfAyaPerPage: kNumAyaPerPage,
-                    index: SurahIndex.fromHuman(sura: sura, aya: 1)));
-            }),
-            BlocProvider(create: (context) {
-              return getIt<AppBloc>();
-            }),
-          ], child: const HomeScreen()));
-        },
-      ),
+            return NoTransitionPage(
+                child: MultiBlocProvider(providers: [
+              BlocProvider(create: (context) {
+                return getIt<HomeBloc>()
+                  ..add(HomeInitializeEvent(
+                      numberOfAyaPerPage: kNumAyaPerPage,
+                      index: SurahIndex.fromHuman(sura: sura, aya: 1)));
+              }),
+              BlocProvider(create: (context) {
+                return getIt<AppBloc>();
+              }),
+            ], child: const HomeScreen()));
+          },
+          routes: [
+            ///
+            /// About
+            ///
+            GoRoute(
+              path: AppRoutes.homeSuraAbout.path,
+              name: AppRoutes.homeSuraAbout.name,
+              pageBuilder: (context, state) {
+                return const NoTransitionPage(child: AboutScreen());
+              },
+            ),
+          ]),
       GoRoute(
-        path: AppRoutes.homeSuraAya.path,
-        name: AppRoutes.homeSuraAya.name,
-        pageBuilder: (context, state) {
-          int sura = int.parse(state.pathParameters['sura'] ?? '1');
-          int aya = int.parse(state.pathParameters['aya'] ?? '1');
-          if (sura < 1 || sura > 114) {
-            sura = 1;
-            aya = 1;
-          }
-          return NoTransitionPage(
-              child: MultiBlocProvider(providers: [
-            BlocProvider(create: (context) {
-              return getIt<HomeBloc>()
-                ..add(HomeInitializeEvent(
-                    numberOfAyaPerPage: kNumAyaPerPage,
-                    index: SurahIndex.fromHuman(sura: sura, aya: aya)));
-            }),
-            BlocProvider(create: (context) {
-              return getIt<AppBloc>();
-            }),
-          ], child: const HomeScreen()));
-        },
-      ),
+          path: AppRoutes.homeSuraAya.path,
+          name: AppRoutes.homeSuraAya.name,
+          pageBuilder: (context, state) {
+            int sura = int.parse(state.pathParameters['sura'] ?? '1');
+            int aya = int.parse(state.pathParameters['aya'] ?? '1');
+            if (sura < 1 || sura > 114) {
+              sura = 1;
+              aya = 1;
+            }
+            return NoTransitionPage(
+                child: MultiBlocProvider(providers: [
+              BlocProvider(create: (context) {
+                return getIt<HomeBloc>()
+                  ..add(HomeInitializeEvent(
+                      numberOfAyaPerPage: kNumAyaPerPage,
+                      index: SurahIndex.fromHuman(sura: sura, aya: aya)));
+              }),
+              BlocProvider(create: (context) {
+                return getIt<AppBloc>();
+              }),
+            ], child: const HomeScreen()));
+          },
+          routes: [
+            ///
+            /// About
+            ///
+            GoRoute(
+              path: AppRoutes.homeSuraAyaAbout.path,
+              name: AppRoutes.homeSuraAyaAbout.name,
+              pageBuilder: (context, state) {
+                return const NoTransitionPage(child: AboutScreen());
+              },
+            ),
+          ]),
 
       ///
       ///  Context Screen

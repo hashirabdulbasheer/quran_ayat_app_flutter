@@ -5,6 +5,7 @@ class AyaList extends StatelessWidget {
   final QPageData pageData;
   final double textScaleFactor;
   final VoidCallback onNext;
+  final VoidCallback onBack;
   final SurahIndex? bookmarkIndex;
 
   const AyaList({
@@ -12,6 +13,7 @@ class AyaList extends StatelessWidget {
     required this.pageData,
     required this.selectableAya,
     required this.onNext,
+    required this.onBack,
     this.textScaleFactor = 1.0,
     this.bookmarkIndex,
   });
@@ -38,7 +40,7 @@ class AyaList extends StatelessWidget {
               // we are at the last index, show controls
               return Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: AyaNavigationControl(onNext: onNext),
+                child: AyaNavigationControl(onNext: onNext, onBack: onBack,),
               );
             }
 
