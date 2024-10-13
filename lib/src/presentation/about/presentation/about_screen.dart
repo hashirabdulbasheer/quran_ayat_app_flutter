@@ -36,7 +36,7 @@ class _LogoDisplay extends StatelessWidget {
             width: 150,
             height: 150,
             child: Image.asset(
-              "images/uxquran.png",
+              "assets/images/uxquran.png",
               fit: BoxFit.fitWidth,
             )),
       ),
