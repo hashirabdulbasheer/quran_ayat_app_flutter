@@ -164,7 +164,7 @@ class _AyaControls extends StatelessWidget {
   ) {
     final bloc = context.read<HomeBloc>();
     final suraName =
-        (bloc.state as HomeLoadedState).suraTitles?[index.sura].translationEn;
+        (bloc.state as HomeLoadedState).suraTitles?[index.sura].transliterationEn;
     StringBuffer response = StringBuffer();
     response.write("Sura $suraName - ${index.human.sura}:${index.human.aya}\n");
     response.write("$translationText\n");
