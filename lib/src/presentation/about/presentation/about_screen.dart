@@ -10,7 +10,7 @@ class AboutScreen extends StatelessWidget {
         title: "About us",
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(height: 10),
@@ -36,7 +36,7 @@ class _LogoDisplay extends StatelessWidget {
             width: 150,
             height: 150,
             child: Image.asset(
-              "images/icon.png",
+              "images/uxquran.png",
               fit: BoxFit.fitWidth,
             )),
       ),
