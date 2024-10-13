@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 10),
           // the quran
           Expanded(child: _Content(
-            onNextTapped: () {
+            onNavigationTapped: () {
               _headerExpansionController.collapse();
             },
           )),
@@ -191,22 +191,21 @@ class _Header extends StatelessWidget {
                     SurahIndex.defaultIndex,
               ),
               DisplayControls(
-                onContextPressed: () => context.pushNamed(
-                  "context",
-                  pathParameters: {
-                    'sura':
-                        "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
-                    'aya': "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
-                  },
-                ),
-                onTextSizeIncreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.increase)),
-                onTextSizeDecreasePressed: () => bloc
-                    .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
-                onTextSizeResetPressed: () =>
-                    bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
-                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
-              ),
+                  onContextPressed: () => context.pushNamed(
+                        "context",
+                        pathParameters: {
+                          'sura':
+                              "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
+                          'aya':
+                              "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
+                        },
+                      ),
+                  onTextSizeIncreasePressed: () => bloc.add(
+                      TextSizeControlEvent(type: TextSizeControl.increase)),
+                  onTextSizeDecreasePressed: () => bloc.add(
+                      TextSizeControlEvent(type: TextSizeControl.decrease)),
+                  onTextSizeResetPressed: () => bloc
+                      .add(TextSizeControlEvent(type: TextSizeControl.reset))),
             ],
           );
         });
@@ -221,9 +220,9 @@ class _Header extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  final VoidCallback onNextTapped;
+  final VoidCallback onNavigationTapped;
 
-  const _Content({required this.onNextTapped});
+  const _Content({required this.onNavigationTapped});
 
   @override
   Widget build(BuildContext context) {
@@ -251,8 +250,12 @@ class _Content extends StatelessWidget {
                   pageData: data,
                   textScaleFactor: scale,
                   onNext: () {
-                    onNextTapped();
+                    onNavigationTapped();
                     bloc.add(HomeNextPageEvent());
+                  },
+                  onBack: () {
+                    onNavigationTapped();
+                    bloc.add(HomePreviousPageEvent());
                   },
                 ),
               ),
