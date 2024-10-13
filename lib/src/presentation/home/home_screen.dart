@@ -72,6 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           _Header(expansionController: _headerExpansionController),
+          const SizedBox(height: 5,),
+          const _HeaderControls(),
           Expanded(child: _Content(
             onNextTapped: () {
               _headerExpansionController.collapse();
@@ -118,6 +120,31 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+class _HeaderControls extends StatelessWidget {
+  const _HeaderControls();
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    return StreamBuilder<QPageData>(
+        stream: bloc.currentPageData$,
+        builder: (context, snapshot) {
+          QPageData? data = snapshot.data;
+          if (snapshot.hasError || data == null) {
+            return const SizedBox.shrink();
+          }
+
+          HomeLoadedState loadedState = bloc.state as HomeLoadedState;
+
+          return Directionality(
+            textDirection: TextDirection.rtl,
+            child: ReadingProgressIndicator(
+                progress: bloc.getReadingProgress(loadedState)),
+          );
+        });
+  }
+}
+
 class _Header extends StatelessWidget {
   final ExpansionTileController expansionController;
 
@@ -147,36 +174,29 @@ class _Header extends StatelessWidget {
             title: Text(_getTitle(data, loadedState),
                 style: const TextStyle(fontSize: 12)),
             children: [
-              Column(
-                children: [
-                  PageHeader(
-                    readingProgress: bloc.getReadingProgress(loadedState),
-                    surahTitles: loadedState.suraTitles ?? [],
-                    onSelection: (index) =>
-                        bloc.add(HomeSelectSuraAyaEvent(index: index)),
-                    currentIndex: snapshot.data?.page.firstAyaIndex ??
-                        SurahIndex.defaultIndex,
-                  ),
-                  DisplayControls(
-                    onContextPressed: () => context.pushNamed(
-                      "context",
-                      pathParameters: {
-                        'sura':
-                            "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
-                        'aya':
-                            "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
-                      },
-                    ),
-                    onTextSizeIncreasePressed: () => bloc.add(
-                        TextSizeControlEvent(type: TextSizeControl.increase)),
-                    onTextSizeDecreasePressed: () => bloc.add(
-                        TextSizeControlEvent(type: TextSizeControl.decrease)),
-                    onTextSizeResetPressed: () => bloc
-                        .add(TextSizeControlEvent(type: TextSizeControl.reset)),
-                    onPreviousPagePressed: () =>
-                        bloc.add(HomePreviousPageEvent()),
-                  ),
-                ],
+              PageHeader(
+                surahTitles: loadedState.suraTitles ?? [],
+                onSelection: (index) =>
+                    bloc.add(HomeSelectSuraAyaEvent(index: index)),
+                currentIndex: snapshot.data?.page.firstAyaIndex ??
+                    SurahIndex.defaultIndex,
+              ),
+              DisplayControls(
+                onContextPressed: () => context.pushNamed(
+                  "context",
+                  pathParameters: {
+                    'sura':
+                        "${snapshot.data?.page.firstAyaIndex.human.sura ?? 1}",
+                    'aya': "${snapshot.data?.page.firstAyaIndex.human.aya ?? 1}"
+                  },
+                ),
+                onTextSizeIncreasePressed: () => bloc
+                    .add(TextSizeControlEvent(type: TextSizeControl.increase)),
+                onTextSizeDecreasePressed: () => bloc
+                    .add(TextSizeControlEvent(type: TextSizeControl.decrease)),
+                onTextSizeResetPressed: () =>
+                    bloc.add(TextSizeControlEvent(type: TextSizeControl.reset)),
+                onPreviousPagePressed: () => bloc.add(HomePreviousPageEvent()),
               ),
             ],
           );

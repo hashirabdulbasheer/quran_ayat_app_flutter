@@ -22,7 +22,7 @@ class SuraAyaSelector extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Expanded(
-            flex: 3,
+            flex: 2,
             child: DropdownSearch<SuraTitle>(
               items: (f, cs) => surahTitles,
               enabled: true,
