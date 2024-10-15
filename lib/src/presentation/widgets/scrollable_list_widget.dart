@@ -40,7 +40,6 @@ class _ListWidgetState extends State<ScrollableListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToAyat());
     return _body();
   }
 
@@ -52,9 +51,5 @@ class _ListWidgetState extends State<ScrollableListWidget> {
       itemBuilder: (context, index) => widget.itemContent(index),
       separatorBuilder: (context, index) => const Divider(thickness: 1),
     );
-  }
-
-  void _scrollToAyat() {
-    _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
   }
 }
