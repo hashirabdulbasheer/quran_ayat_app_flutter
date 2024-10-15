@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // reading progress
           const _ReadingProgressIndicator(),
           // space
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           // the quran
           Expanded(child: _Content(
             onNavigationTapped: () {
