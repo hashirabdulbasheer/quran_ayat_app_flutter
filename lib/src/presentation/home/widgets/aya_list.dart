@@ -40,32 +40,46 @@ class AyaList extends StatelessWidget {
               // we are at the last index, show controls
               return Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: AyaNavigationControl(onNext: onNext, onBack: onBack,),
+                child: AyaNavigationControl(
+                  onNext: onNext,
+                  onBack: onBack,
+                ),
               );
             }
 
             return Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 30),
+              padding: const EdgeInsets.only(top: 0, bottom: 30),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  /// index
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      /// aya controls
-                      _AyaControls(
-                        pageData: pageData,
-                        index: index,
-                      ),
+                  if (index == 0) ...[
+                    IconButton(
+                      onPressed: onBack,
+                      icon: const Icon(Icons.arrow_forward),
+                    )
+                  ],
 
-                      /// index
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
-                            style: const TextStyle(fontSize: 12),
-                          )),
-                    ],
+                  /// index
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        /// aya controls
+                        _AyaControls(
+                          pageData: pageData,
+                          index: index,
+                        ),
+
+                        /// index
+                        Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
+                              style: const TextStyle(fontSize: 12),
+                            )),
+                      ],
+                    ),
                   ),
 
                   /// word by word
@@ -163,8 +177,9 @@ class _AyaControls extends StatelessWidget {
     String translationText,
   ) {
     final bloc = context.read<HomeBloc>();
-    final suraName =
-        (bloc.state as HomeLoadedState).suraTitles?[index.sura].transliterationEn;
+    final suraName = (bloc.state as HomeLoadedState)
+        .suraTitles?[index.sura]
+        .transliterationEn;
     StringBuffer response = StringBuffer();
     response.write("Sura $suraName - ${index.human.sura}:${index.human.aya}\n");
     response.write("$translationText\n");

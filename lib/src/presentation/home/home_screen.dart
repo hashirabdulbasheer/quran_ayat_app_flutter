@@ -78,8 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
           _Header(expansionController: _headerExpansionController),
           // reading progress
           const _ReadingProgressIndicator(),
-          // space
-          const SizedBox(height: 10),
           // the quran
           Expanded(child: _Content(
             onNavigationTapped: () {
