@@ -23,19 +23,12 @@ class _ListWidgetState extends State<ScrollableListWidget> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToAyat());
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant ScrollableListWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
-    });
   }
 
   @override
@@ -51,5 +44,9 @@ class _ListWidgetState extends State<ScrollableListWidget> {
       itemBuilder: (context, index) => widget.itemContent(index),
       separatorBuilder: (context, index) => const Divider(thickness: 1),
     );
+  }
+
+  void _scrollToAyat() {
+    _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
   }
 }
