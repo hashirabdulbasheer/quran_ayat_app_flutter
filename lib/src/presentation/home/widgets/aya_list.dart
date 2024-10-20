@@ -1,4 +1,6 @@
 import 'package:ayat_app/src/presentation/home/home.dart';
+import 'package:file_saver/file_saver.dart';
+import 'package:screenshot/screenshot.dart';
 
 class AyaList extends StatelessWidget {
   final int selectableAya;
@@ -124,6 +126,25 @@ class _AyaControls extends StatelessWidget {
         final firstAyaIndex = pageData.page.firstAyaIndex;
 
         return AyaControlWidget(
+            onScreenshot: () async {
+              try {
+                Uint8List? image = await _captureScreenshot(context, pageData);
+                if (image == null) {
+                  if (context.mounted) {
+                    _showMessage(context, "Error capturing screenshot");
+                  }
+                  return;
+                }
+                await _saveScreenshot(image, firstAyaIndex);
+                if (context.mounted) {
+                  _showMessage(context, "Screenshot saved");
+                }
+              } catch (_) {
+                if (context.mounted) {
+                  _showMessage(context, "Error capturing screenshot");
+                }
+              }
+            },
             onCopy: () {
               String shareableString = _getShareableString(
                 context,
@@ -187,5 +208,69 @@ class _AyaControls extends StatelessWidget {
     response
         .write("https://uxquran.com/${index.human.sura}/${index.human.aya}\n");
     return response.toString();
+  }
+
+  Future<Uint8List?> _captureScreenshot(
+    BuildContext context,
+    QPageData pageData,
+  ) async {
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    final widget = _screenshotWidget(pageData);
+    final controller = ScreenshotController();
+    return await controller.captureFromLongWidget(
+      InheritedTheme.captureAll(context, Material(child: widget)),
+      context: context,
+      pixelRatio: pixelRatio,
+      constraints: const BoxConstraints(maxWidth: 600, maxHeight: 3000),
+      delay: const Duration(milliseconds: 100),
+    );
+  }
+
+  Widget _screenshotWidget(QPageData pageData) {
+    final ayaWords = pageData.ayaWords;
+    final translations = pageData.translations[0];
+    final firstAyaIndex = pageData.page.firstAyaIndex;
+    return MediaQuery(
+      data: const MediaQueryData(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            /// index
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
+                    style: const TextStyle(fontSize: 12),
+                  )),
+            ),
+
+            /// word by word
+            WordByWordAya(
+              words: ayaWords[index],
+              textScaleFactor: 1.0,
+            ),
+
+            const SizedBox(height: 20),
+
+            /// translation
+            TranslationDisplay(
+              translation: translations.$2[index].text,
+              translationType: translations.$1,
+              textScaleFactor: 1.0,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future _saveScreenshot(Uint8List image, SurahIndex index) async {
+    await FileSaver.instance.saveFile(
+        bytes: image, name: "quran_${index.human.sura}_${index.human.aya}.png");
   }
 }
