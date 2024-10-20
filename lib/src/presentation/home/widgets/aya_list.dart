@@ -1,7 +1,6 @@
 import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
 
 class AyaList extends StatelessWidget {
   final int selectableAya;
@@ -222,25 +221,7 @@ class _AyaControls extends StatelessWidget {
   }
 
   Future _saveScreenshot(Uint8List image, SurahIndex index) async {
-    // display share option if on mobile
-    // download file if on desktop
-    final isWebMobile = kIsWeb &&
-        (defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.android);
-    if (isWebMobile) {
-      return await _saveScreenshotMobile(image, index);
-    }
-    return await _saveScreenshotDesktop(image, index);
-  }
-
-  Future _saveScreenshotMobile(Uint8List image, SurahIndex index) async {
-    try {
-      return await Share.shareXFiles([
-        XFile.fromData(image, mimeType: 'image/png')
-      ], fileNameOverrides: [
-        "quran_${index.human.sura}_${index.human.aya}.png"
-      ]);
-    } catch (_) {}
+    // TODO: Add shareing on mobile later
     return await _saveScreenshotDesktop(image, index);
   }
 
