@@ -48,6 +48,8 @@ dependencies:
   screenshot: ^3.0.0
   ## https://pub.dev/packages/file_saver
   file_saver: ^0.2.14
+  ## https://pub.dev/packages/share_plus
+  share_plus: ^10.1.0
 
 dev_dependencies:
   flutter_test:

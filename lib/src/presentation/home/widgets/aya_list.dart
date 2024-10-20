@@ -1,6 +1,7 @@
 import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AyaList extends StatelessWidget {
   final int selectableAya;
@@ -127,22 +128,16 @@ class _AyaControls extends StatelessWidget {
 
         return AyaControlWidget(
             onScreenshot: () async {
+              if (!context.mounted) return;
               try {
                 Uint8List? image = await _captureScreenshot(context, pageData);
                 if (image == null) {
-                  if (context.mounted) {
-                    _showMessage(context, "Error capturing screenshot");
-                  }
-                  return;
+                  throw (GeneralException("no image"));
                 }
-                await _saveScreenshot(image, firstAyaIndex);
-                if (context.mounted) {
-                  _showMessage(context, "Screenshot saved");
-                }
-              } catch (_) {
-                if (context.mounted) {
-                  _showMessage(context, "Error capturing screenshot");
-                }
+                await _saveScreenshot(image, _currentSuraIndex(index));
+                _showMessage(context, "Screenshot saved");
+              } catch (e) {
+                _showMessage(context, "Error: ${e.toString()}");
               }
             },
             onCopy: () {
@@ -215,7 +210,7 @@ class _AyaControls extends StatelessWidget {
     QPageData pageData,
   ) async {
     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final widget = _screenshotWidget(pageData);
+    final widget = _ScreenshotWidget(pageData: pageData, index: index);
     final controller = ScreenshotController();
     return await controller.captureFromLongWidget(
       InheritedTheme.captureAll(context, Material(child: widget)),
@@ -226,7 +221,46 @@ class _AyaControls extends StatelessWidget {
     );
   }
 
-  Widget _screenshotWidget(QPageData pageData) {
+  Future _saveScreenshot(Uint8List image, SurahIndex index) async {
+    // display share option if on mobile
+    // download file if on desktop
+    final isWebMobile = kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.iOS ||
+            defaultTargetPlatform == TargetPlatform.android);
+    if (isWebMobile) {
+      return await _saveScreenshotMobile(image, index);
+    }
+    return await _saveScreenshotDesktop(image, index);
+  }
+
+  Future _saveScreenshotMobile(Uint8List image, SurahIndex index) async {
+    try {
+      return await Share.shareXFiles([
+        XFile.fromData(image, mimeType: 'image/png')
+      ], fileNameOverrides: [
+        "quran_${index.human.sura}_${index.human.aya}.png"
+      ]);
+    } catch (_) {}
+    return await _saveScreenshotDesktop(image, index);
+  }
+
+  Future _saveScreenshotDesktop(Uint8List image, SurahIndex index) async {
+    await FileSaver.instance.saveFile(
+        bytes: image, name: "quran_${index.human.sura}_${index.human.aya}.png");
+  }
+}
+
+class _ScreenshotWidget extends StatelessWidget {
+  final QPageData pageData;
+  final int index;
+
+  const _ScreenshotWidget({
+    required this.pageData,
+    required this.index,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final ayaWords = pageData.ayaWords;
     final translations = pageData.translations[0];
     final firstAyaIndex = pageData.page.firstAyaIndex;
@@ -267,10 +301,5 @@ class _AyaControls extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future _saveScreenshot(Uint8List image, SurahIndex index) async {
-    await FileSaver.instance.saveFile(
-        bytes: image, name: "quran_${index.human.sura}_${index.human.aya}.png");
   }
 }
