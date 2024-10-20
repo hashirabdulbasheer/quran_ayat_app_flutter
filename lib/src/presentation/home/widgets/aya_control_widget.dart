@@ -5,6 +5,7 @@ class AyaControlWidget extends StatelessWidget {
   final VoidCallback onBookmarked;
   final VoidCallback onMore;
   final VoidCallback onCopy;
+  final VoidCallback onScreenshot;
 
   const AyaControlWidget({
     super.key,
@@ -12,6 +13,7 @@ class AyaControlWidget extends StatelessWidget {
     required this.onBookmarked,
     required this.onMore,
     required this.onCopy,
+    required this.onScreenshot,
   });
 
   @override
@@ -28,6 +30,12 @@ class AyaControlWidget extends StatelessWidget {
             onPressed: onCopy,
             icon: Icon(
               Icons.copy,
+              color: Theme.of(context).disabledColor,
+            )),
+        IconButton(
+            onPressed: onScreenshot,
+            icon: Icon(
+              Icons.camera_alt_outlined,
               color: Theme.of(context).disabledColor,
             )),
         IconButton(
