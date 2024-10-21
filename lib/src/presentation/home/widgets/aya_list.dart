@@ -183,6 +183,7 @@ class _AyaControls extends StatelessWidget {
   }
 
   void _showMessage(BuildContext context, String message) {
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
   }
@@ -278,6 +279,20 @@ class _ScreenshotWidget extends StatelessWidget {
               translationType: translations.$1,
               textScaleFactor: 1.0,
             ),
+
+            const SizedBox(height: 30),
+
+            /// branding
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  "https://uxquran.com",
+                  style: TextStyle(
+                      color: Theme.of(context).disabledColor, fontSize: 10),
+                ),
+              ],
+            )
           ],
         ),
       ),
