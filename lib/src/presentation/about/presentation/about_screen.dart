@@ -131,6 +131,18 @@ class _LinksDisplay extends StatelessWidget {
           title: "Blog",
         ),
         _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kSpotifyUrl)),
+          title: "Spotify",
+        ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kApplePodcastsUrl)),
+          title: "Apple Podcasts",
+        ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kYouTubeUrl)),
+          title: "YouTube",
+        ),
+        _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kTelegramChatbotUrl)),
           title: "Telegram chatbot",
         )

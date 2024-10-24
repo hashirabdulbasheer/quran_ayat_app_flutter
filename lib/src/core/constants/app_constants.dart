@@ -7,6 +7,12 @@ const kFontScaleFactor = 0.2;
 
 const kBlogUrl = "https://medium.com/@uxquran";
 
+const kSpotifyUrl = "https://open.spotify.com/show/716o2NQ0OS4pISso0TJnx1";
+
+const kApplePodcastsUrl = "https://podcasts.apple.com/sa/podcast/noble-quran-english-with-commentary/id1775983507";
+
+const kYouTubeUrl = "https://www.youtube.com/@uxquran9981";
+
 const kLegacyAppUrl = "https://quran-ayat-c1999.web.app";
 
 const kTelegramChatbotUrl = "https://t.me/quran_chat_bot";
