@@ -56,9 +56,9 @@ class AyaList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (index == 0) ...[
-                    IconButton(
-                      onPressed: onBack,
-                      icon: const Icon(Icons.arrow_forward),
+                    _PageControls(
+                      onBack: onBack,
+                      onCopyPage: () => _copyPage(context),
                     )
                   ],
 
@@ -106,6 +106,49 @@ class AyaList extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _copyPage(BuildContext context) {
+    StringBuffer buffer = StringBuffer();
+    for (var index = 0; index < pageData.translations[0].$2.length; index++) {
+      final aya = pageData.translations[0].$2[index];
+      final suraIndex = SurahIndex(
+        pageData.page.firstAyaIndex.sura,
+        pageData.page.firstAyaIndex.aya + index,
+      );
+      final copyString = _getShareableString(context, suraIndex, aya.text);
+      buffer.write('$copyString\n');
+    }
+    Clipboard.setData(
+      ClipboardData(text: buffer.toString()),
+    ).then((_) {
+      if (context.mounted) {
+        _showMessage(context, "Copied page to clipboard");
+      }
+    });
+  }
+
+  String _getShareableString(
+    BuildContext context,
+    SurahIndex index,
+    String translationText,
+  ) {
+    final bloc = context.read<HomeBloc>();
+    final suraName = (bloc.state as HomeLoadedState)
+        .suraTitles?[index.sura]
+        .transliterationEn;
+    StringBuffer response = StringBuffer();
+    response.write("Sura $suraName - ${index.human.sura}:${index.human.aya}\n");
+    response.write("$translationText\n");
+    response
+        .write("https://uxquran.com/${index.human.sura}/${index.human.aya}\n");
+    return response.toString();
+  }
+
+  void _showMessage(BuildContext context, String message) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 }
 
@@ -296,6 +339,36 @@ class _ScreenshotWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _PageControls extends StatelessWidget {
+  final VoidCallback onBack;
+  final VoidCallback onCopyPage;
+
+  const _PageControls({
+    required this.onBack,
+    required this.onCopyPage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: onCopyPage,
+          icon: Icon(
+            Icons.copy,
+            color: Theme.of(context).disabledColor,
+          ),
+        ),
+        IconButton(
+          onPressed: onBack,
+          icon: const Icon(Icons.arrow_forward),
+        ),
+      ],
     );
   }
 }
