@@ -4,7 +4,7 @@
     <base href=$FLUTTER_BASE_HREF>
     <meta charset=UTF-8>
     <meta content="IE=Edge" http-equiv=X-UA-Compatible>
-    <meta name=description content="App to quickly view the word by word meaning of an ayat">
+    <meta name=description content="We study how to think like the Noble Quran">
     <meta name=apple-mobile-web-app-capable content=yes>
     <meta name=apple-mobile-web-app-status-bar-style content=black>
     <meta name=apple-mobile-web-app-title content="Noble Quran">
@@ -40,7 +40,7 @@
     }
     function beginPreloading(manifestAssets) {
         var loading = document.querySelector("#loading");
-        var assets = ["flutter.js", "main.dart.js?version=v4.2.2", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
+        var assets = ["flutter.js", "main.dart.js?version=v4.2.3", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
         const batchSize = 20;
         async function reportProgress() {
             if (assets.length == 0) {
