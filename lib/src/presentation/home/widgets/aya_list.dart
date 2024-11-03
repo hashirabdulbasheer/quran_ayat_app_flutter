@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:screenshot/screenshot.dart';
@@ -253,13 +255,14 @@ class _AyaControls extends StatelessWidget {
     QPageData pageData,
   ) async {
     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    double width =  MediaQuery.of(context).size.width;
     final widget = _ScreenshotWidget(pageData: pageData, index: index);
     final controller = ScreenshotController();
     return await controller.captureFromLongWidget(
       InheritedTheme.captureAll(context, Material(child: widget)),
       context: context,
       pixelRatio: pixelRatio,
-      constraints: const BoxConstraints(maxWidth: 600, maxHeight: 3000),
+      constraints: BoxConstraints(maxWidth: min(width, 600), maxHeight: 3000),
       delay: const Duration(milliseconds: 100),
     );
   }
