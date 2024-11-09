@@ -21,3 +21,5 @@ const kAboutUsDescription =
     "At uxQuran, we help individuals connect with the Quran as a source of daily guidance. Through innovative tools and experiences, we empower people to learn and think like the Quran, making its wisdom accessible to everyone. Our vision is a world where the Quran shapes everyday decisions, guiding people toward a life aligned with God’s will.\n\nWe study how to think like the Quran.";
 
 const kAboutUsSupportEmail = 'support@uxquran.com';
+
+const kWhatsAppUrl = "https://whatsapp.com/channel/0029VaqdTKVHFxP2KqqCkk0f";

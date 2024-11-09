@@ -145,6 +145,10 @@ class _LinksDisplay extends StatelessWidget {
         _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kTelegramChatbotUrl)),
           title: "Telegram chatbot",
+        ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kWhatsAppUrl)),
+          title: "Whatsapp Channel",
         )
       ].spacerDirectional(height: 5),
     );
