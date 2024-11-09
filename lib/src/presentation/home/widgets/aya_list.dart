@@ -57,6 +57,23 @@ class AyaList extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  if (firstAyaIndex.aya == 0 &&
+                      index == 0 &&
+                      _isBismillahAllowed(pageData.page.firstAyaIndex)) ...[
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            "In the name of God, the Most Gracious, the Most Merciful",
+                            style: TextStyle(fontSize: 12),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+
                   if (index == 0) ...[
                     _PageControls(
                       onBack: onBack,
@@ -108,6 +125,11 @@ class AyaList extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _isBismillahAllowed(SurahIndex index) {
+    /// no bismillah manually for fatihah and tawba sura
+    return index.sura != 0 && index.sura != 8;
   }
 
   void _copyPage(BuildContext context) {
@@ -255,7 +277,7 @@ class _AyaControls extends StatelessWidget {
     QPageData pageData,
   ) async {
     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    double width =  MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     final widget = _ScreenshotWidget(pageData: pageData, index: index);
     final controller = ScreenshotController();
     return await controller.captureFromLongWidget(
