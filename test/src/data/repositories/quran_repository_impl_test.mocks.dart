@@ -6,10 +6,8 @@
 import 'dart:async' as _i4;
 
 import 'package:ayat_app/src/data/local/quran_local_data_source.dart' as _i3;
-import 'package:ayat_app/src/data/models/local/local_sura_title.dart' as _i6;
-import 'package:ayat_app/src/data/models/local/quran_local_data.dart' as _i2;
+import 'package:ayat_app/src/data/models/local/data_local_models.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:noble_quran/noble_quran.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -47,7 +45,7 @@ class MockQuranLocalDataSourceImpl extends _i1.Mock
   @override
   _i4.Future<_i2.QuranLocalData> getPageQuranData({
     required int? pageNo,
-    required _i5.NQTranslation? translationType,
+    required _i2.NQTranslation? translationType,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -72,17 +70,17 @@ class MockQuranLocalDataSourceImpl extends _i1.Mock
       ) as _i4.Future<_i2.QuranLocalData>);
 
   @override
-  _i4.Future<List<_i6.LocalSuraTitle>> getSuraTitles() => (super.noSuchMethod(
+  _i4.Future<List<_i2.LocalSuraTitle>> getSuraTitles() => (super.noSuchMethod(
         Invocation.method(
           #getSuraTitles,
           [],
         ),
         returnValue:
-            _i4.Future<List<_i6.LocalSuraTitle>>.value(<_i6.LocalSuraTitle>[]),
-      ) as _i4.Future<List<_i6.LocalSuraTitle>>);
+            _i4.Future<List<_i2.LocalSuraTitle>>.value(<_i2.LocalSuraTitle>[]),
+      ) as _i4.Future<List<_i2.LocalSuraTitle>>);
 
   @override
-  _i5.NQRuku? getRuku(
+  _i2.NQRuku? getRuku(
     int? sura,
     int? aya,
   ) =>
@@ -92,5 +90,5 @@ class MockQuranLocalDataSourceImpl extends _i1.Mock
           sura,
           aya,
         ],
-      )) as _i5.NQRuku?);
+      )) as _i2.NQRuku?);
 }
