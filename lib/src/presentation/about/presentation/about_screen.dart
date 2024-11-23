@@ -127,8 +127,20 @@ class _LinksDisplay extends StatelessWidget {
       children: [
         const Text("Other Links:"),
         _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kWhatsAppUrl)),
+          title: "Whatsapp Channel",
+        ),
+        _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kBlogUrl)),
           title: "Blog",
+        ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kAndroidApk)),
+          title: "Download android apk",
+        ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kYouTubeUrl)),
+          title: "YouTube",
         ),
         _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kSpotifyUrl)),
@@ -139,17 +151,10 @@ class _LinksDisplay extends StatelessWidget {
           title: "Apple Podcasts",
         ),
         _LinkButton(
-          onTapped: () => launchUrl(Uri.parse(kYouTubeUrl)),
-          title: "YouTube",
-        ),
-        _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kTelegramChatbotUrl)),
           title: "Telegram chatbot",
         ),
-        _LinkButton(
-          onTapped: () => launchUrl(Uri.parse(kWhatsAppUrl)),
-          title: "Whatsapp Channel",
-        )
+        const SizedBox(height: 30,),
       ].spacerDirectional(height: 5),
     );
   }
