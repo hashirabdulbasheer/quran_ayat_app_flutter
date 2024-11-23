@@ -40,7 +40,7 @@
     }
     function beginPreloading(manifestAssets) {
         var loading = document.querySelector("#loading");
-        var assets = ["flutter.js", "main.dart.js?version=v4.2.5", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
+        var assets = ["flutter.js", "main.dart.js?version=v4.2.6", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
         const batchSize = 20;
         async function reportProgress() {
             if (assets.length == 0) {
