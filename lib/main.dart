@@ -3,21 +3,21 @@ import 'package:ayat_app/src/core/navigator/app_router.dart';
 import 'package:ayat_app/src/core/utils/app_bloc_observer.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'src/core/utils/stub.dart'
+    if (kIsWeb) 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-
-void main() {
-  _initialize();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await _initialize();
   runApp(BlocProvider(
       create: (context) => getIt<AppBloc>()..add(AppInitializeEvent()),
       child: const MyApp()));
 }
 
 Future _initialize() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  await setupServicesLocator();
   usePathUrlStrategy();
   configDependencies();
-  setupServicesLocator();
   if (kDebugMode) Bloc.observer = AppBlocObserver();
 }
 

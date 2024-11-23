@@ -11,7 +11,7 @@ final GetIt getIt = GetIt.instance;
 )
 configDependencies() => getIt.init();
 
-setupServicesLocator() async {
+Future setupServicesLocator() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerSingleton<SharedPreferences>(sharedPreferences);
 }
