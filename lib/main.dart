@@ -3,8 +3,9 @@ import 'package:ayat_app/src/core/navigator/app_router.dart';
 import 'package:ayat_app/src/core/utils/app_bloc_observer.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
+
 import 'src/core/utils/stub.dart'
-    if (kIsWeb) 'package:flutter_web_plugins/flutter_web_plugins.dart';
+    if (dart.library.html) 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
