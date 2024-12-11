@@ -33,6 +33,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<TextSizeControlEvent>(_onTextSizeControl);
     on<GoToBookmarkEvent>(_onGoToBookmark);
     on<AddBookmarkEvent>(_onAddBookmark);
+    on<GoToFirstAyaEvent>(_onGotoFirstAya);
 
     _registerListeners();
   }
@@ -138,6 +139,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) {
     saveBookmarkUseCase.call(event.index);
     emit((state as HomeLoadedState).copyWith(bookmarkIndex: event.index));
+  }
+
+  void _onGotoFirstAya(
+    GoToFirstAyaEvent event,
+    Emitter<HomeState> emit,
+  ) {
+    final currentPageData = currentPageData$.value;
+    currentPageData$.add(currentPageData.copyWith(
+      selectedIndex: currentPageData.page.firstAyaIndex,
+    ));
   }
 
   void _onTextSizeControl(

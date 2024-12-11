@@ -80,3 +80,8 @@ class AddBookmarkEvent extends HomeEvent {
   @override
   List<Object?> get props => [index];
 }
+
+class GoToFirstAyaEvent extends HomeEvent {
+  @override
+  List<Object?> get props => [];
+}

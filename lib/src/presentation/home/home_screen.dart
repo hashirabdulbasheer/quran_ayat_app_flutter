@@ -46,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return QBaseScreen(
       title: "Noble Quran",
+      onTitleTapped: () => bloc.add(GoToFirstAyaEvent()),
       navBarActions: [
         TextButton(
             onPressed: () async {
