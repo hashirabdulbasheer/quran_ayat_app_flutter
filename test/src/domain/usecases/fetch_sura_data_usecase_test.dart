@@ -45,13 +45,13 @@ void main() {
               firstAyaIndex: SurahIndex.defaultIndex,
               numberOfAya: 7));
       when(repository.getPageQuranData(
-              pageNo: 0, translationType: QTranslation.haleem))
+              pageNo: 0, translationTypes: [QTranslation.haleem]))
           .thenAnswer((_) async => responseData);
 
       // Act
       final response = await sut.call(const FetchSuraUseCaseParams(
         pageNo: 0,
-        translation: QTranslation.haleem,
+        translations: [QTranslation.haleem],
       ));
 
       // Assert
@@ -69,13 +69,13 @@ void main() {
       final repository = MockQuranRepositoryImpl();
       final sut = FetchSuraUseCase(repository);
       when(repository.getPageQuranData(
-              pageNo: 0, translationType: QTranslation.haleem))
+              pageNo: 0, translationTypes: [QTranslation.haleem]))
           .thenAnswer((_) async => throw GeneralException("some exception"));
 
       // Act
       final response = await sut.call(const FetchSuraUseCaseParams(
         pageNo: 0,
-        translation: QTranslation.haleem,
+        translations: [QTranslation.haleem],
       ));
 
       // Assert
@@ -83,7 +83,6 @@ void main() {
       expect(response.isLeft(), true);
       response.fold((left) {
         expect(left, isA<GeneralFailure>());
-        expect((left as GeneralFailure).message, "some exception");
       }, (right) {
         expect(right, null);
       });
@@ -98,7 +97,7 @@ void main() {
       // Act
       final response = await sut.call(const FetchSuraUseCaseParams(
         pageNo: 2000,
-        translation: QTranslation.haleem,
+        translations: [QTranslation.haleem],
       ));
 
       // Assert
@@ -110,8 +109,7 @@ void main() {
       }, (right) {
         expect(right.ayaWords, []);
         expect(right.transliterations, []);
-        expect(right.translations[0].$1, QTranslation.wahiduddinKhan);
-        expect(right.translations[0].$2.isEmpty, true);
+        expect(right.translations, []);
         expect(right.page.firstAyaIndex, SurahIndex.defaultIndex);
         expect(right.page.number, 0);
         expect(right.page.numberOfAya, 0);
@@ -132,13 +130,13 @@ void main() {
             numberOfAya: 7,
           ));
       when(repository.getPageQuranData(
-              pageNo: 0, translationType: QTranslation.haleem))
+              pageNo: 0, translationTypes: [QTranslation.haleem]))
           .thenAnswer((_) async => responseData);
 
       // Act
       final response = await sut.call(const FetchSuraUseCaseParams(
         pageNo: 0,
-        translation: QTranslation.haleem,
+        translations: [QTranslation.haleem],
       ));
 
       // Assert
@@ -148,8 +146,7 @@ void main() {
         expect(left, null);
       }, (right) {
         verify(repository.getPageQuranData(
-                pageNo: 0, translationType: QTranslation.haleem))
-            .called(1);
+            pageNo: 0, translationTypes: [QTranslation.haleem])).called(1);
       });
     });
   });

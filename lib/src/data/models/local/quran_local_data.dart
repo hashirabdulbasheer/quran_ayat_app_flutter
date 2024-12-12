@@ -3,7 +3,7 @@ import 'package:ayat_app/src/data/models/local/data_local_models.dart';
 class QuranLocalData extends Equatable {
   final List<List<NQWord>> words;
   final List<NQAyat> transliterations;
-  final List<NQAyat> translations;
+  final Map<NQTranslation, List<NQAyat>> translations;
   final LocalPage page;
 
   const QuranLocalData({
@@ -21,7 +21,7 @@ class QuranLocalData extends Equatable {
     ),
     words: [],
     transliterations: [],
-    translations: [],
+    translations: {},
   );
 
   @override

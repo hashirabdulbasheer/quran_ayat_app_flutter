@@ -83,7 +83,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final suraDataResponse = await fetchSuraUseCase.call(
       FetchSuraUseCaseParams(
         pageNo: pageNo,
-        translation: QTranslation.wahiduddinKhan,
+        translations: const [QTranslation.wahiduddinKhan],
       ),
     );
 

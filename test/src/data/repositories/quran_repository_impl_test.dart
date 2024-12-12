@@ -34,7 +34,7 @@ void main() {
       try {
         response = await sut.getPageQuranData(
           pageNo: index,
-          translationType: QTranslation.wahiduddinKhan,
+          translationTypes: [QTranslation.wahiduddinKhan],
         );
       } catch (e) {
         exception = e as Exception;
@@ -57,8 +57,8 @@ void main() {
       QuranRepository sut = QuranRepositoryImpl(dataSource: dataSource);
       const index = 0;
       when(dataSource.getPageQuranData(
-              pageNo: index, translationType: NQTranslation.wahiduddinkhan))
-          .thenAnswer(
+          pageNo: index,
+          translationTypes: [NQTranslation.wahiduddinkhan])).thenAnswer(
         (_) async => const QuranLocalData(
           page: LocalPage(
             pgNo: 0,
@@ -67,20 +67,20 @@ void main() {
           ),
           words: [],
           transliterations: [],
-          translations: [],
+          translations: {},
         ),
       );
 
       // Act
       final _ = await sut.getPageQuranData(
         pageNo: index,
-        translationType: QTranslation.wahiduddinKhan,
+        translationTypes: [QTranslation.wahiduddinKhan],
       );
 
       // Assert
       verify(dataSource.getPageQuranData(
-              pageNo: index, translationType: NQTranslation.wahiduddinkhan))
-          .called(1);
+          pageNo: index,
+          translationTypes: [NQTranslation.wahiduddinkhan])).called(1);
     });
 
     test('Should throw if datasource throws', () async {
@@ -89,8 +89,8 @@ void main() {
       QuranRepository sut = QuranRepositoryImpl(dataSource: dataSource);
       const index = 0;
       when(dataSource.getPageQuranData(
-              pageNo: index, translationType: NQTranslation.wahiduddinkhan))
-          .thenAnswer(
+          pageNo: index,
+          translationTypes: [NQTranslation.wahiduddinkhan])).thenAnswer(
         (_) async => throw (GeneralException("some exception")),
       );
 
@@ -100,7 +100,7 @@ void main() {
       try {
         response = await sut.getPageQuranData(
           pageNo: index,
-          translationType: QTranslation.wahiduddinKhan,
+          translationTypes: [QTranslation.wahiduddinKhan],
         );
       } catch (e) {
         exception = e as Exception;
@@ -118,8 +118,8 @@ void main() {
       QuranRepository sut = QuranRepositoryImpl(dataSource: dataSource);
       const index = 200;
       when(dataSource.getPageQuranData(
-              pageNo: index, translationType: NQTranslation.wahiduddinkhan))
-          .thenAnswer(
+          pageNo: index,
+          translationTypes: [NQTranslation.wahiduddinkhan])).thenAnswer(
         (_) async => throw (GeneralException("some exception")),
       );
 
@@ -129,7 +129,7 @@ void main() {
       try {
         response = await sut.getPageQuranData(
           pageNo: index,
-          translationType: QTranslation.wahiduddinKhan,
+          translationTypes: [QTranslation.wahiduddinKhan],
         );
       } catch (e) {
         exception = e as Exception;
@@ -147,8 +147,8 @@ void main() {
       QuranRepository sut = QuranRepositoryImpl(dataSource: dataSource);
       const index = -200;
       when(dataSource.getPageQuranData(
-              pageNo: index, translationType: NQTranslation.wahiduddinkhan))
-          .thenAnswer(
+          pageNo: index,
+          translationTypes: [NQTranslation.wahiduddinkhan])).thenAnswer(
         (_) async => throw (GeneralException("some exception")),
       );
 
@@ -158,7 +158,7 @@ void main() {
       try {
         response = await sut.getPageQuranData(
           pageNo: index,
-          translationType: QTranslation.wahiduddinKhan,
+          translationTypes: [QTranslation.wahiduddinKhan],
         );
       } catch (e) {
         exception = e as Exception;

@@ -147,7 +147,6 @@ class AppRouter {
                       ..add(HomeInitializeEvent(
                           numberOfAyaPerPage: kNumAyaPerPage,
                           index: SurahIndex.fromHuman(sura: sura, aya: aya)));
-                    ;
                   }),
                 ],
                     child: DetailsScreen(

@@ -6,16 +6,19 @@ abstract class HomeEvent extends Equatable {}
 class HomeInitializeEvent extends HomeEvent {
   final SurahIndex? index;
   final int numberOfAyaPerPage;
+  final bool isDetailed;
 
   HomeInitializeEvent({
     required this.numberOfAyaPerPage,
     this.index,
+    this.isDetailed = false,
   });
 
   @override
   List<Object?> get props => [
         numberOfAyaPerPage,
         index,
+        isDetailed,
       ];
 }
 
