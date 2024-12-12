@@ -24,6 +24,7 @@ class DetailsScreen extends StatelessWidget {
                 return AyaDataTileWidget(
                   pageData: pageData,
                   index: index,
+                  isDetailed: true,
                 );
               })),
     );

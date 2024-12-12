@@ -8,12 +8,14 @@ import 'package:share_plus/share_plus.dart';
 class AyaDataTileWidget extends StatelessWidget {
   final QPageData pageData;
   final SurahIndex index;
+  final bool isDetailed;
   final double textScaleFactor;
 
   const AyaDataTileWidget({
     super.key,
     required this.pageData,
     required this.index,
+    this.isDetailed = false,
     this.textScaleFactor = 1.0,
   });
 
@@ -23,10 +25,11 @@ class AyaDataTileWidget extends StatelessWidget {
     final translations = pageData.translations[0];
 
     return ListTile(
-      onTap: () {
-        context.push(
-            "/details/${index.human.sura}/${index.human.aya}");
-      },
+      onTap: isDetailed
+          ? null
+          : () {
+              context.push("/details/${index.human.sura}/${index.human.aya}");
+            },
       title: Column(
         children: [
           /// index
@@ -36,10 +39,12 @@ class AyaDataTileWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 /// aya controls
-                _AyaControls(
-                  pageData: pageData,
-                  index: index.aya,
-                ),
+                if (!isDetailed) ...[
+                  _AyaControls(
+                    pageData: pageData,
+                    index: index.aya,
+                  ),
+                ],
 
                 /// index
                 Align(
