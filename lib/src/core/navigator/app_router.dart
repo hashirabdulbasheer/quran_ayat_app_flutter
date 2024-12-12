@@ -6,6 +6,7 @@ import 'package:ayat_app/src/domain/models/surah_index.dart';
 import 'package:ayat_app/src/presentation/about/presentation/about_screen.dart';
 import 'package:ayat_app/src/presentation/context/bloc/context_bloc.dart';
 import 'package:ayat_app/src/presentation/context/presentation/context_screen.dart';
+import 'package:ayat_app/src/presentation/details/details_screen.dart';
 import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
 import 'package:ayat_app/src/presentation/home/home_screen.dart';
 import 'package:ayat_app/src/presentation/not_found/not_found_screen.dart';
@@ -124,6 +125,35 @@ class AppRouter {
               },
             ),
           ]),
+
+      ///
+      /// Details
+      ///
+      GoRoute(
+          path: AppRoutes.details.path,
+          name: AppRoutes.details.name,
+          pageBuilder: (context, state) {
+            int sura = int.parse(state.pathParameters['sura'] ?? '1');
+            int aya = int.parse(state.pathParameters['aya'] ?? '1');
+            if (sura < 1 || sura > 114) {
+              sura = 1;
+              aya = 1;
+            }
+            return NoTransitionPage(
+                child: MultiBlocProvider(
+                    providers: [
+                  BlocProvider(create: (context) {
+                    return getIt<HomeBloc>()
+                      ..add(HomeInitializeEvent(
+                          numberOfAyaPerPage: kNumAyaPerPage,
+                          index: SurahIndex.fromHuman(sura: sura, aya: aya)));
+                    ;
+                  }),
+                ],
+                    child: DetailsScreen(
+                      index: SurahIndex.fromHuman(sura: sura, aya: aya),
+                    )));
+          }),
 
       ///
       ///  Context Screen
