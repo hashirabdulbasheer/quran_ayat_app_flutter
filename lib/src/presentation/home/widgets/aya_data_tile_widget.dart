@@ -7,7 +7,7 @@ import 'package:share_plus/share_plus.dart';
 
 class AyaDataTileWidget extends StatelessWidget {
   final QPageData pageData;
-  final int index;
+  final SurahIndex index;
   final double textScaleFactor;
 
   const AyaDataTileWidget({
@@ -22,12 +22,10 @@ class AyaDataTileWidget extends StatelessWidget {
     final ayaWords = pageData.ayaWords;
     final translations = pageData.translations[0];
 
-    final firstAyaIndex = pageData.page.firstAyaIndex;
-
     return ListTile(
       onTap: () {
         context.push(
-            "/details/${firstAyaIndex.human.sura}/${firstAyaIndex.human.aya + index}");
+            "/details/${index.human.sura}/${index.human.aya}");
       },
       title: Column(
         children: [
@@ -40,14 +38,14 @@ class AyaDataTileWidget extends StatelessWidget {
                 /// aya controls
                 _AyaControls(
                   pageData: pageData,
-                  index: index,
+                  index: index.aya,
                 ),
 
                 /// index
                 Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      "${firstAyaIndex.human.sura}:${firstAyaIndex.human.aya + index}",
+                      "${index.human.sura}:${index.human.aya}",
                       style: const TextStyle(fontSize: 12),
                     )),
               ],
@@ -56,7 +54,7 @@ class AyaDataTileWidget extends StatelessWidget {
 
           /// word by word
           WordByWordAya(
-            words: ayaWords[index],
+            words: ayaWords[index.aya],
             textScaleFactor: textScaleFactor,
           ),
 
@@ -64,7 +62,7 @@ class AyaDataTileWidget extends StatelessWidget {
 
           /// translation
           TranslationDisplay(
-            translation: translations.$2[index].text,
+            translation: translations.$2[index.aya].text,
             translationType: translations.$1,
             textScaleFactor: textScaleFactor,
           ),

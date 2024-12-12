@@ -1,7 +1,5 @@
 import 'package:ayat_app/src/presentation/home/home.dart';
 
-import 'aya_data_tile_widget.dart';
-
 class AyaList extends StatelessWidget {
   final int selectableAya;
   final QPageData pageData;
@@ -79,7 +77,8 @@ class AyaList extends StatelessWidget {
                   ],
                   AyaDataTileWidget(
                     pageData: pageData,
-                    index: index,
+                    index: SurahIndex(
+                        firstAyaIndex.sura, firstAyaIndex.aya + index),
                     textScaleFactor: textScaleFactor,
                   ),
                 ],

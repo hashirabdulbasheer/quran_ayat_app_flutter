@@ -10,13 +10,22 @@ class DetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    QPageData? pageData = context.read<HomeBloc>().currentPageData$.hasValue
-        ? context.read<HomeBloc>().currentPageData$.value
-        : null;
-
     return QBaseScreen(
       title: "${index.human.sura}:${index.human.aya}",
-      child: SafeArea(child: Text(pageData?.translations[0].$2[index.aya].text ?? "n/a")),
+      child: SafeArea(
+          child: StreamBuilder<QPageData>(
+              stream: context.read<HomeBloc>().currentPageData$,
+              builder: (context, snapshot) {
+                QPageData? pageData = snapshot.data;
+                if (pageData == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                return AyaDataTileWidget(
+                  pageData: pageData,
+                  index: index,
+                );
+              })),
     );
   }
 }

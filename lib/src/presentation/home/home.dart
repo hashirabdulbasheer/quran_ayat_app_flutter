@@ -45,3 +45,4 @@ export 'package:injectable/injectable.dart';
 export 'package:rxdart/rxdart.dart';
 export 'package:shimmer/shimmer.dart';
 export 'package:url_launcher/url_launcher.dart';
+export 'package:ayat_app/src/presentation/home/widgets/aya_data_tile_widget.dart';
