@@ -44,7 +44,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     return super.close();
   }
 
-  void _onInitialize(HomeInitializeEvent event, Emitter<HomeState> emit) async {
+  void _onInitialize(HomeInitializeEvent event, Emitter<HomeState> emit) async  {
     // reset
     emit(HomeLoadedState(suraTitles: const []));
 

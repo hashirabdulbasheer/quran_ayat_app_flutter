@@ -25,6 +25,7 @@ class AyaDataTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ayaWords = pageData.ayaWords;
+    final indexInPage = index.aya - pageData.page.firstAyaIndex.aya;
 
     return ListTile(
       onTap: isDetailed ? null : () => _navigateToDetails(context, index),
@@ -40,7 +41,7 @@ class AyaDataTileWidget extends StatelessWidget {
                 if (!isDetailed) ...[
                   _AyaControls(
                     pageData: pageData,
-                    index: index.aya,
+                    index: indexInPage,
                   ),
                 ],
 
@@ -57,7 +58,7 @@ class AyaDataTileWidget extends StatelessWidget {
 
           /// word by word
           WordByWordAya(
-            words: ayaWords[index.aya],
+            words: ayaWords[indexInPage],
             textScaleFactor: textScaleFactor,
           ),
 
@@ -68,7 +69,7 @@ class AyaDataTileWidget extends StatelessWidget {
             Column(
               children: [
                 TranslationDisplay(
-                  translation: t.$2[index.aya].text,
+                  translation: t.$2[indexInPage].text,
                   translationType: t.$1,
                   textScaleFactor: textScaleFactor,
                 ),
