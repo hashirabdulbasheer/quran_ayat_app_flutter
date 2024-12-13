@@ -5,6 +5,9 @@ import 'package:file_saver/file_saver.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../core/di/service_locator.dart';
+import '../details_screen.dart';
+
 class AyaDataTileWidget extends StatelessWidget {
   final QPageData pageData;
   final SurahIndex index;
@@ -24,11 +27,7 @@ class AyaDataTileWidget extends StatelessWidget {
     final ayaWords = pageData.ayaWords;
 
     return ListTile(
-      onTap: isDetailed
-          ? null
-          : () {
-              context.push("/details/${index.human.sura}/${index.human.aya}");
-            },
+      onTap: isDetailed ? null : () => _navigateToDetails(context, index),
       title: Column(
         children: [
           /// index
@@ -80,6 +79,26 @@ class AyaDataTileWidget extends StatelessWidget {
               ],
             ),
         ],
+      ),
+    );
+  }
+
+  void _navigateToDetails(BuildContext context, SurahIndex index) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) {
+                return getIt<HomeBloc>()
+                  ..add(HomeInitializeEvent(
+                      numberOfAyaPerPage: kNumAyaPerPage,
+                      isDetailed: true,
+                      index: index));
+              }),
+            ],
+            child: DetailsScreen(
+              index: index,
+            )),
       ),
     );
   }
