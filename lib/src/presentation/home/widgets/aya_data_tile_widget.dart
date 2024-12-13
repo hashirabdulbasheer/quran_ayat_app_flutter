@@ -22,7 +22,6 @@ class AyaDataTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ayaWords = pageData.ayaWords;
-    final translations = pageData.translations[0];
 
     return ListTile(
       onTap: isDetailed
@@ -66,11 +65,20 @@ class AyaDataTileWidget extends StatelessWidget {
           const SizedBox(height: 20),
 
           /// translation
-          TranslationDisplay(
-            translation: translations.$2[index.aya].text,
-            translationType: translations.$1,
-            textScaleFactor: textScaleFactor,
-          ),
+          for (var t in pageData.translations)
+            Column(
+              children: [
+                TranslationDisplay(
+                  translation: t.$2[index.aya].text,
+                  translationType: t.$1,
+                  textScaleFactor: textScaleFactor,
+                ),
+                pageData.translations.length > 1
+                    ? const Divider()
+                    : const SizedBox.shrink(),
+                const SizedBox(height: 10),
+              ],
+            ),
         ],
       ),
     );

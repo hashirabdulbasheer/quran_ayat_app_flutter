@@ -6,7 +6,7 @@ import 'package:ayat_app/src/domain/models/surah_index.dart';
 import 'package:ayat_app/src/presentation/about/presentation/about_screen.dart';
 import 'package:ayat_app/src/presentation/context/bloc/context_bloc.dart';
 import 'package:ayat_app/src/presentation/context/presentation/context_screen.dart';
-import 'package:ayat_app/src/presentation/details/details_screen.dart';
+import 'package:ayat_app/src/presentation/home/details_screen.dart';
 import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
 import 'package:ayat_app/src/presentation/home/home_screen.dart';
 import 'package:ayat_app/src/presentation/not_found/not_found_screen.dart';
@@ -146,6 +146,7 @@ class AppRouter {
                     return getIt<HomeBloc>()
                       ..add(HomeInitializeEvent(
                           numberOfAyaPerPage: kNumAyaPerPage,
+                          isDetailed: true,
                           index: SurahIndex.fromHuman(sura: sura, aya: aya)));
                   }),
                 ],

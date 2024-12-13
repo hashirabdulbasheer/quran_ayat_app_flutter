@@ -63,7 +63,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeErrorState(message: (left as GeneralFailure).message));
     }, (right) async {
       emit(HomeLoadedState(suraTitles: right, bookmarkIndex: bookmarkIndex));
-      add(HomeFetchQuranDataEvent(pageNo: 0, selectedIndex: indexToLoad));
+      add(HomeFetchQuranDataEvent(
+        pageNo: 0,
+        selectedIndex: indexToLoad,
+        isDetailed: event.isDetailed,
+      ));
     });
   }
 
@@ -83,7 +87,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final suraDataResponse = await fetchSuraUseCase.call(
       FetchSuraUseCaseParams(
         pageNo: pageNo,
-        translations: const [QTranslation.wahiduddinKhan],
+        translations: event.isDetailed
+            ? const [
+                QTranslation.wahiduddinKhan,
+                QTranslation.haleem,
+                QTranslation.clear,
+                QTranslation.sahih
+              ]
+            : const [QTranslation.wahiduddinKhan],
       ),
     );
 

@@ -11,7 +11,7 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return QBaseScreen(
-      title: "${index.human.sura}:${index.human.aya}",
+      title: "",
       child: SafeArea(
           child: StreamBuilder<QPageData>(
               stream: context.read<HomeBloc>().currentPageData$,

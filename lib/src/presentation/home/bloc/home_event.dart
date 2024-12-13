@@ -25,16 +25,19 @@ class HomeInitializeEvent extends HomeEvent {
 class HomeFetchQuranDataEvent extends HomeEvent {
   final int pageNo;
   final SurahIndex? selectedIndex;
+  final bool isDetailed;
 
   HomeFetchQuranDataEvent({
     required this.pageNo,
     this.selectedIndex,
+    this.isDetailed = false,
   });
 
   @override
   List<Object?> get props => [
         pageNo,
         selectedIndex,
+        isDetailed,
       ];
 }
 
