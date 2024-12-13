@@ -21,10 +21,12 @@ class DetailsScreen extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                return AyaDataTileWidget(
-                  pageData: pageData,
-                  index: index,
-                  isDetailed: true,
+                return SingleChildScrollView(
+                  child: AyaDataTileWidget(
+                    pageData: pageData,
+                    index: index,
+                    isDetailed: true,
+                  ),
                 );
               })),
     );
