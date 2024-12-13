@@ -33,6 +33,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<TextSizeControlEvent>(_onTextSizeControl);
     on<GoToBookmarkEvent>(_onGoToBookmark);
     on<AddBookmarkEvent>(_onAddBookmark);
+    on<GoToFirstAyaEvent>(_onGotoFirstAya);
 
     _registerListeners();
   }
@@ -43,7 +44,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     return super.close();
   }
 
-  void _onInitialize(HomeInitializeEvent event, Emitter<HomeState> emit) async {
+  void _onInitialize(HomeInitializeEvent event, Emitter<HomeState> emit) async  {
     // reset
     emit(HomeLoadedState(suraTitles: const []));
 
@@ -62,7 +63,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeErrorState(message: (left as GeneralFailure).message));
     }, (right) async {
       emit(HomeLoadedState(suraTitles: right, bookmarkIndex: bookmarkIndex));
-      add(HomeFetchQuranDataEvent(pageNo: 0, selectedIndex: indexToLoad));
+      add(HomeFetchQuranDataEvent(
+        pageNo: 0,
+        selectedIndex: indexToLoad,
+        isDetailed: event.isDetailed,
+      ));
     });
   }
 
@@ -82,7 +87,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final suraDataResponse = await fetchSuraUseCase.call(
       FetchSuraUseCaseParams(
         pageNo: pageNo,
-        translation: QTranslation.wahiduddinKhan,
+        translations: event.isDetailed
+            ? const [
+                QTranslation.wahiduddinKhan,
+                QTranslation.haleem,
+                QTranslation.clear,
+                QTranslation.sahih
+              ]
+            : const [QTranslation.wahiduddinKhan],
       ),
     );
 
@@ -138,6 +150,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) {
     saveBookmarkUseCase.call(event.index);
     emit((state as HomeLoadedState).copyWith(bookmarkIndex: event.index));
+  }
+
+  void _onGotoFirstAya(
+    GoToFirstAyaEvent event,
+    Emitter<HomeState> emit,
+  ) {
+    final currentPageData = currentPageData$.value;
+    currentPageData$.add(currentPageData.copyWith(
+      selectedIndex: currentPageData.page.firstAyaIndex,
+    ));
   }
 
   void _onTextSizeControl(

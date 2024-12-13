@@ -13,6 +13,8 @@ class QuranRepositoryImpl extends QuranRepository {
       NQayatlistToAyalistMapper();
   final QTranslationToNQTranslationMapper _qTranslationToNQTranslationMapper =
       QTranslationToNQTranslationMapper();
+  final NQTranslationToQTranslationMapper _nqTranslationToQTranslationMapper =
+      NQTranslationToQTranslationMapper();
   final NQWordListListToQWordListListMapper
       _nqWordListListToQWordListListMapper =
       NQWordListListToQWordListListMapper();
@@ -23,25 +25,26 @@ class QuranRepositoryImpl extends QuranRepository {
   @override
   Future<QPageData> getPageQuranData({
     required int pageNo,
-    required QTranslation translationType,
+    required List<QTranslation> translationTypes,
   }) async {
     final response = await dataSource.getPageQuranData(
-      pageNo: pageNo,
-      translationType:
-          _qTranslationToNQTranslationMapper.mapFrom(translationType),
-    );
+        pageNo: pageNo,
+        translationTypes: translationTypes
+            .map((e) => _qTranslationToNQTranslationMapper.mapFrom(e))
+            .toList());
 
     return QPageData(
       page: _localPageToQPageMapper.mapFrom(response.page),
       ayaWords: _nqWordListListToQWordListListMapper.mapFrom(response.words),
       transliterations:
           _nQayatlistToAyalistMapper.mapFrom(response.transliterations),
-      translations: [
-        (
-          QTranslation.wahiduddinKhan,
-          _nQayatlistToAyalistMapper.mapFrom(response.translations)
-        )
-      ],
+      translations: response.translations.keys
+          .map((e) => (
+                _nqTranslationToQTranslationMapper.mapFrom(e),
+                _nQayatlistToAyalistMapper
+                    .mapFrom(response.translations[e] ?? [])
+              ))
+          .toList(),
     );
   }
 

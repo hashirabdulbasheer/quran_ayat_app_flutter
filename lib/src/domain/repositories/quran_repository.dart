@@ -3,7 +3,7 @@ import 'package:ayat_app/src/domain/models/domain_models.dart';
 abstract class QuranRepository {
   Future<QPageData> getPageQuranData({
     required int pageNo,
-    required QTranslation translationType,
+    required List<QTranslation> translationTypes,
   });
 
   Future<List<SuraTitle>> getSuraTitles();

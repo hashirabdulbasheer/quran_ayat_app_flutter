@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 abstract class QuranDataSource {
   Future<QuranLocalData> getPageQuranData({
     required int pageNo,
-    required NQTranslation translationType,
+    required List<NQTranslation> translationTypes,
   });
 
   Future<List<LocalSuraTitle>> getSuraTitles();
@@ -17,7 +17,7 @@ class QuranLocalDataSourceImpl extends QuranDataSource {
   @override
   Future<QuranLocalData> getPageQuranData({
     required int pageNo,
-    required NQTranslation translationType,
+    required List<NQTranslation> translationTypes,
   }) async {
     final localRuku = _getRuku(pageNo);
     if (localRuku == null) {
@@ -25,7 +25,11 @@ class QuranLocalDataSourceImpl extends QuranDataSource {
     }
 
     final words = await _getWords(localRuku);
-    final translations = await _getTranslations(localRuku, translationType);
+    // fetch translations of each type
+    Map<NQTranslation, List<NQAyat>> translations = {};
+    for (NQTranslation type in translationTypes) {
+      translations[type] = await _getTranslations(localRuku, type);
+    }
     final transliterations = await _getTransliteration(localRuku);
 
     return QuranLocalData(

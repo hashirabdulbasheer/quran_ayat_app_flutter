@@ -10,16 +10,22 @@ class QBaseScreen extends StatelessWidget {
     this.navBarActions = const [],
     this.bottomSheet,
     this.title,
+    this.onTitleTapped,
   });
 
   final String? title;
   final Widget child;
   final Widget? bottomSheet;
+  final VoidCallback? onTitleTapped;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: QAppBar(actions: navBarActions, title: title),
+      appBar: QAppBar(
+        actions: navBarActions,
+        title: title,
+        onTitlePressed: onTitleTapped,
+      ),
       bottomSheet: bottomSheet,
       body: SafeArea(
         child: Column(

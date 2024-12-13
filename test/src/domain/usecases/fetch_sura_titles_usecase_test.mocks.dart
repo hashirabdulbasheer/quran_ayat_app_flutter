@@ -75,7 +75,7 @@ class MockQuranRepositoryImpl extends _i1.Mock
   @override
   _i5.Future<_i3.QPageData> getPageQuranData({
     required int? pageNo,
-    required _i3.QTranslation? translationType,
+    required List<_i3.QTranslation>? translationTypes,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -83,7 +83,7 @@ class MockQuranRepositoryImpl extends _i1.Mock
           [],
           {
             #pageNo: pageNo,
-            #translationType: translationType,
+            #translationTypes: translationTypes,
           },
         ),
         returnValue: _i5.Future<_i3.QPageData>.value(_FakeQPageData_1(
@@ -93,7 +93,7 @@ class MockQuranRepositoryImpl extends _i1.Mock
             [],
             {
               #pageNo: pageNo,
-              #translationType: translationType,
+              #translationTypes: translationTypes,
             },
           ),
         )),

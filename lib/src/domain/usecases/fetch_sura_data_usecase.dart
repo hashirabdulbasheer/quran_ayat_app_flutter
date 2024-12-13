@@ -13,7 +13,7 @@ class FetchSuraUseCase extends UseCase<QPageData, FetchSuraUseCaseParams> {
     try {
       final response = await _repository.getPageQuranData(
         pageNo: params.pageNo,
-        translationType: params.translation,
+        translationTypes: params.translations,
       );
       return Right(response);
     } catch (e) {
@@ -26,16 +26,16 @@ class FetchSuraUseCase extends UseCase<QPageData, FetchSuraUseCaseParams> {
 
 class FetchSuraUseCaseParams extends Equatable {
   final int pageNo;
-  final QTranslation translation;
+  final List<QTranslation> translations;
 
   const FetchSuraUseCaseParams({
     required this.pageNo,
-    required this.translation,
+    required this.translations,
   });
 
   @override
   List<Object?> get props => [
         pageNo,
-        translation,
+    translations,
       ];
 }

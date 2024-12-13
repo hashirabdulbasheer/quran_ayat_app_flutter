@@ -45,7 +45,7 @@ class MockQuranLocalDataSourceImpl extends _i1.Mock
   @override
   _i4.Future<_i2.QuranLocalData> getPageQuranData({
     required int? pageNo,
-    required _i2.NQTranslation? translationType,
+    required List<_i2.NQTranslation>? translationTypes,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -53,7 +53,7 @@ class MockQuranLocalDataSourceImpl extends _i1.Mock
           [],
           {
             #pageNo: pageNo,
-            #translationType: translationType,
+            #translationTypes: translationTypes,
           },
         ),
         returnValue: _i4.Future<_i2.QuranLocalData>.value(_FakeQuranLocalData_0(
@@ -63,7 +63,7 @@ class MockQuranLocalDataSourceImpl extends _i1.Mock
             [],
             {
               #pageNo: pageNo,
-              #translationType: translationType,
+              #translationTypes: translationTypes,
             },
           ),
         )),

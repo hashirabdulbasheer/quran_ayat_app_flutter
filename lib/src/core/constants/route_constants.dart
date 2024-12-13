@@ -22,6 +22,11 @@ class AppRoutes {
     path: '/:sura/:aya',
   );
 
+  static const AppRoute details = AppRoute(
+    name: 'details',
+    path: '/details/:sura/:aya',
+  );
+
   static const AppRoute context = AppRoute(
     name: 'context',
     path: '/context/:sura/:aya',

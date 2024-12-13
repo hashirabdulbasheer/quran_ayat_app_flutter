@@ -17,13 +17,14 @@ void main() {
       // Act
       QuranLocalData response = await sut.getPageQuranData(
         pageNo: index,
-        translationType: NQTranslation.wahiduddinkhan,
+        translationTypes: [NQTranslation.wahiduddinkhan],
       );
       // Assert
       expect(response.words.isNotEmpty, true);
       expect(response.translations.isNotEmpty, true);
       expect(response.transliterations.isNotEmpty, true);
-      expect(response.translations[0].index, "1");
+      expect(
+          response.translations[NQTranslation.wahiduddinkhan]?[0].index, "1");
       expect(response.transliterations[0].index, "1");
       expect(response.words[0][0].sura, 1);
     });
@@ -35,17 +36,20 @@ void main() {
       // Act
       QuranLocalData response = await sut.getPageQuranData(
         pageNo: index,
-        translationType: NQTranslation.wahiduddinkhan,
+        translationTypes: [NQTranslation.wahiduddinkhan],
       );
       // Assert
       expect(response.page.pgNo, 0);
-      expect(response.translations[0].index, "1");
-      expect(response.translations.length, 7);
-      expect(response.translations[0].index, "1");
-      expect(response.translations[0].text,
+      expect(
+          response.translations[NQTranslation.wahiduddinkhan]?[0].index, "1");
+      expect(response.translations[NQTranslation.wahiduddinkhan]?.length, 7);
+      expect(
+          response.translations[NQTranslation.wahiduddinkhan]?[0].index, "1");
+      expect(response.translations[NQTranslation.wahiduddinkhan]?[0].text,
           "In the name of God, the Most Gracious, the Most Merciful");
-      expect(response.translations[6].index, "7");
-      expect(response.translations[6].text,
+      expect(
+          response.translations[NQTranslation.wahiduddinkhan]?[6].index, "7");
+      expect(response.translations[NQTranslation.wahiduddinkhan]?[6].text,
           "the path of those You have blessed; not of those who have incurred Your wrath, nor of those who have gone astray");
 
       expect(response.transliterations[0].index, "1");
@@ -91,17 +95,20 @@ void main() {
       // Act
       QuranLocalData response = await sut.getPageQuranData(
         pageNo: index,
-        translationType: NQTranslation.wahiduddinkhan,
+        translationTypes: [NQTranslation.wahiduddinkhan],
       );
       // Assert
       expect(response.page.pgNo, 555);
       expect(response.page.firstAyaIndex.sura, 113);
-      expect(response.translations.length, 6);
-      expect(response.translations[0].index, "1");
-      expect(response.translations[0].text,
+      expect(response.translations[NQTranslation.wahiduddinkhan]?.length, 6);
+      expect(
+          response.translations[NQTranslation.wahiduddinkhan]?[0].index, "1");
+      expect(response.translations[NQTranslation.wahiduddinkhan]?[0].text,
           'Say, "I seek refuge in the Lord of people');
-      expect(response.translations[5].index, "6");
-      expect(response.translations[5].text, 'from jinn and men');
+      expect(
+          response.translations[NQTranslation.wahiduddinkhan]?[5].index, "6");
+      expect(response.translations[NQTranslation.wahiduddinkhan]?[5].text,
+          'from jinn and men');
 
       expect(response.transliterations.length, 6);
       expect(response.transliterations[0].index, "1");
@@ -146,7 +153,7 @@ void main() {
       // Act
       QuranLocalData response = await sut.getPageQuranData(
         pageNo: index,
-        translationType: NQTranslation.wahiduddinkhan,
+        translationTypes: [NQTranslation.wahiduddinkhan],
       );
 
       // Assert
@@ -161,7 +168,7 @@ void main() {
       // Act
       QuranLocalData response = await sut.getPageQuranData(
         pageNo: index,
-        translationType: NQTranslation.wahiduddinkhan,
+        translationTypes: [NQTranslation.wahiduddinkhan],
       );
 
       // Assert
