@@ -27,60 +27,71 @@ class AyaDataTileWidget extends StatelessWidget {
     final ayaWords = pageData.ayaWords;
     final indexInPage = index.aya - pageData.page.firstAyaIndex.aya;
 
-    return ListTile(
-      onTap: isDetailed ? null : () => _navigateToDetails(context, index),
-      title: Column(
-        children: [
-          /// index
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                /// aya controls
-                if (!isDetailed) ...[
-                  _AyaControls(
-                    pageData: pageData,
-                    index: indexInPage,
-                  ),
-                ],
-
-                /// index
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      "${index.human.sura}:${index.human.aya}",
-                      style: const TextStyle(fontSize: 12),
-                    )),
-              ],
-            ),
-          ),
-
-          /// word by word
-          WordByWordAya(
-            words: ayaWords[indexInPage],
-            textScaleFactor: textScaleFactor,
-          ),
-
-          const SizedBox(height: 20),
-
-          /// translation
-          for (var t in pageData.translations)
-            Column(
-              children: [
-                TranslationDisplay(
-                  translation: t.$2[indexInPage].text,
-                  translationType: t.$1,
-                  textScaleFactor: textScaleFactor,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /// index
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              /// aya controls
+              if (!isDetailed) ...[
+                _AyaControls(
+                  pageData: pageData,
+                  index: indexInPage,
                 ),
-                pageData.translations.length > 1
-                    ? const Divider()
-                    : const SizedBox.shrink(),
-                const SizedBox(height: 10),
               ],
-            ),
-        ],
-      ),
+
+              /// index
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    "${index.human.sura}:${index.human.aya}",
+                    style: const TextStyle(fontSize: 12),
+                  )),
+            ],
+          ),
+        ),
+
+        /// word by word
+        WordByWordAya(
+          words: ayaWords[indexInPage],
+          textScaleFactor: textScaleFactor,
+        ),
+
+        const SizedBox(height: 20),
+
+        /// translation
+        for (var t in pageData.translations)
+          Column(
+            children: [
+              TranslationDisplay(
+                translation: t.$2[indexInPage].text,
+                translationType: t.$1,
+                textScaleFactor: textScaleFactor,
+              ),
+              pageData.translations.length > 1
+                  ? const Column(
+                      children: [
+                        Divider(),
+                        SizedBox(height: 10),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+            ],
+          ),
+
+        /// more
+        if (!isDetailed)
+          IconButton(
+              onPressed: () => _navigateToDetails(context, index),
+              icon: Icon(
+                Icons.more_horiz,
+                color: Theme.of(context).disabledColor,
+              ))
+      ],
     );
   }
 

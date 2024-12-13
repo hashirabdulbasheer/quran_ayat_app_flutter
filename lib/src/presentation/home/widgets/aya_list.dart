@@ -48,41 +48,38 @@ class AyaList extends StatelessWidget {
               );
             }
 
-            return Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  if (firstAyaIndex.aya == 0 &&
-                      index == 0 &&
-                      _isBismillahAllowed(pageData.page.firstAyaIndex)) ...[
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            "In the name of God, the Most Gracious, the Most Merciful",
-                            style: TextStyle(fontSize: 12),
-                            textAlign: TextAlign.center,
-                          ),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (firstAyaIndex.aya == 0 &&
+                    index == 0 &&
+                    _isBismillahAllowed(pageData.page.firstAyaIndex)) ...[
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          "In the name of God, the Most Gracious, the Most Merciful",
+                          style: TextStyle(fontSize: 12),
+                          textAlign: TextAlign.center,
                         ),
-                      ],
-                    ),
-                  ],
-                  if (index == 0) ...[
-                    _PageControls(
-                      onBack: onBack,
-                      onCopyPage: () => _copyPage(context),
-                    )
-                  ],
-                  AyaDataTileWidget(
-                    pageData: pageData,
-                    index: SurahIndex(
-                        firstAyaIndex.sura, firstAyaIndex.aya + index),
-                    textScaleFactor: textScaleFactor,
+                      ),
+                    ],
                   ),
                 ],
-              ),
+                if (index == 0) ...[
+                  _PageControls(
+                    onBack: onBack,
+                    onCopyPage: () => _copyPage(context),
+                  )
+                ],
+                AyaDataTileWidget(
+                  pageData: pageData,
+                  index:
+                      SurahIndex(firstAyaIndex.sura, firstAyaIndex.aya + index),
+                  textScaleFactor: textScaleFactor,
+                ),
+              ],
             );
           },
         ),
