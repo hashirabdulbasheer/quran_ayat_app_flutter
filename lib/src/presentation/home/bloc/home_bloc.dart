@@ -111,6 +111,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       currentPageData$.add(right.copyWith(
         selectedIndex: event.selectedIndex,
         bookmarkIndex: bookmark,
+        selectedTranslation: selectedTranslation,
       ));
     });
   }
