@@ -109,7 +109,9 @@ class AyaDataTileWidget extends StatelessWidget {
   }
 
   void _navigateToDetails(BuildContext context, SurahIndex index) {
-    Navigator.of(context).push(
+    final bloc = context.read<HomeBloc>();
+    Navigator.of(context)
+        .push(
       MaterialPageRoute(
         builder: (context) => MultiBlocProvider(
             providers: [
@@ -125,7 +127,14 @@ class AyaDataTileWidget extends StatelessWidget {
               index: index,
             )),
       ),
-    );
+    )
+        .then((result) {
+      bloc.add(HomeInitializeEvent(
+        numberOfAyaPerPage: kNumAyaPerPage,
+        isDetailed: false,
+        index: index,
+      ));
+    });
   }
 }
 
