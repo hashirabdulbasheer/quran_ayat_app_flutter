@@ -19,7 +19,7 @@ class TranslationDisplay extends StatelessWidget {
     final theme = Theme.of(context);
     final style = isSelected
         ? theme.textTheme.labelSmall
-            ?.copyWith(color: theme.primaryColor, fontWeight: FontWeight.bold)
+            ?.copyWith(fontWeight: FontWeight.bold)
         : theme.textTheme.labelSmall;
 
     return Column(

@@ -28,8 +28,10 @@ class TextRow extends StatelessWidget {
               _stripHtmlIfNeeded(text),
               textAlign: TextAlign.start,
               style: isSelected
-                  ? TextStyle(
-                      height: 1.5, color: Theme.of(context).primaryColor)
+                  ? const TextStyle(
+                      height: 1.5,
+                      fontWeight: FontWeight.bold,
+                    )
                   : const TextStyle(height: 1.5),
               textScaler: TextScaler.linear(textScaleFactor),
             ),
