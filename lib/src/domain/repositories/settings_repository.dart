@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import '../../presentation/home/home.dart';
 
 abstract class SettingsRepository {
   double getFontScale();
@@ -8,4 +8,8 @@ abstract class SettingsRepository {
   ThemeMode getThemeMode();
 
   Future<void> setThemeMode(ThemeMode mode);
+
+  QTranslation getDefaultTranslation();
+
+  Future<void> setDefaultTranslation(QTranslation translation);
 }
