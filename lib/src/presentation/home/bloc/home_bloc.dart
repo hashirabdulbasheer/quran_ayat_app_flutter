@@ -1,3 +1,4 @@
+import 'package:ayat_app/src/domain/usecases/fetch_default_translation_usecase.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
 
 part 'home_event.dart';
@@ -12,6 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final FetchRukuIndexUseCase fetchRukuIndexUseCase;
   final FetchBookmarkUseCase fetchBookmarkUseCase;
   final SaveBookmarkUseCase saveBookmarkUseCase;
+  final FetchDefaultTranslationUseCase fetchDefaultTranslationUseCase;
 
   final currentPageData$ = BehaviorSubject<QPageData>();
   final settings$ = BehaviorSubject<double>.seeded(1.0);
@@ -24,6 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required this.fetchRukuIndexUseCase,
     required this.fetchBookmarkUseCase,
     required this.saveBookmarkUseCase,
+    required this.fetchDefaultTranslationUseCase,
   }) : super(HomeLoadedState()) {
     on<HomeInitializeEvent>(_onInitialize);
     on<HomeFetchQuranDataEvent>(_onFetchQuranData);
@@ -44,7 +47,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     return super.close();
   }
 
-  void _onInitialize(HomeInitializeEvent event, Emitter<HomeState> emit) async  {
+  void _onInitialize(HomeInitializeEvent event, Emitter<HomeState> emit) async {
     // reset
     emit(HomeLoadedState(suraTitles: const []));
 
@@ -84,6 +87,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             event.pageNo
         : event.pageNo;
 
+    final selectedTranslation = fetchDefaultTranslationUseCase.call();
+
     final suraDataResponse = await fetchSuraUseCase.call(
       FetchSuraUseCaseParams(
         pageNo: pageNo,
@@ -94,7 +99,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 QTranslation.clear,
                 QTranslation.sahih
               ]
-            : const [QTranslation.wahiduddinKhan],
+            : [selectedTranslation],
       ),
     );
 

@@ -51,7 +51,7 @@ class SettingsLocalDataSourceImpl extends SettingsDataSource {
   NQTranslation getDefaultTranslation() {
     String translationTitle =
         sharedPreferences.getString("quran_default_translation") ??
-            NQTranslation.wahiduddinkhan.rawValue;
+            NQTranslation.wahiduddinkhan.title;
     return NobleQuran.getTranslationFromTitle(translationTitle);
   }
 
@@ -59,7 +59,7 @@ class SettingsLocalDataSourceImpl extends SettingsDataSource {
   Future<void> setDefaultTranslation(NQTranslation translation) async {
     await sharedPreferences.setString(
       "quran_default_translation",
-      translation.rawValue,
+      translation.title,
     );
   }
 }
