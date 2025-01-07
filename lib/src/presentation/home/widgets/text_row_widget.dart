@@ -3,11 +3,13 @@ import 'package:ayat_app/src/presentation/home/home.dart';
 class TextRow extends StatelessWidget {
   final String text;
   final double textScaleFactor;
+  final bool isSelected;
 
   const TextRow({
     super.key,
     required this.text,
     this.textScaleFactor = 1.0,
+    this.isSelected = false,
   });
 
   @override
@@ -25,7 +27,10 @@ class TextRow extends StatelessWidget {
             child: SelectableText(
               _stripHtmlIfNeeded(text),
               textAlign: TextAlign.start,
-              style: const TextStyle(height: 1.5),
+              style: isSelected
+                  ? TextStyle(
+                      height: 1.5, color: Theme.of(context).primaryColor)
+                  : const TextStyle(height: 1.5),
               textScaler: TextScaler.linear(textScaleFactor),
             ),
           ),

@@ -4,16 +4,24 @@ class TranslationDisplay extends StatelessWidget {
   final String translation;
   final QTranslation translationType;
   final double textScaleFactor;
+  final bool isSelected;
 
   const TranslationDisplay({
     super.key,
     required this.translation,
     required this.translationType,
     this.textScaleFactor = 1.0,
+    this.isSelected = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = isSelected
+        ? theme.textTheme.labelSmall
+            ?.copyWith(color: theme.primaryColor, fontWeight: FontWeight.bold)
+        : theme.textTheme.labelSmall;
+
     return Column(
       children: [
         Row(
@@ -21,7 +29,7 @@ class TranslationDisplay extends StatelessWidget {
             Expanded(
               child: Text(
                 translationType.title,
-                style: Theme.of(context).textTheme.labelSmall,
+                style: style,
               ),
             ),
           ],
@@ -29,6 +37,7 @@ class TranslationDisplay extends StatelessWidget {
         TextRow(
           text: translation,
           textScaleFactor: textScaleFactor,
+          isSelected: isSelected,
         ),
       ],
     );

@@ -71,6 +71,8 @@ class AyaDataTileWidget extends StatelessWidget {
                 translation: t.$2[indexInPage].text,
                 translationType: t.$1,
                 textScaleFactor: textScaleFactor,
+                isSelected: pageData.translations.length > 1 &&
+                    pageData.selectedTranslation == t.$1,
               ),
               pageData.translations.length > 1
                   ? const Column(
