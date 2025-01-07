@@ -1,5 +1,6 @@
 import 'package:ayat_app/src/data/models/local/enums/local_theme_mode_enum.dart';
 import 'package:injectable/injectable.dart';
+import 'package:noble_quran/noble_quran.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SettingsDataSource {
@@ -10,6 +11,10 @@ abstract class SettingsDataSource {
   LocalThemeMode getThemeMode();
 
   Future<void> setThemeMode(LocalThemeMode mode);
+
+  NQTranslation getDefaultTranslation();
+
+  Future<void> setDefaultTranslation(NQTranslation translation);
 }
 
 @Injectable(as: SettingsDataSource)
@@ -40,5 +45,21 @@ class SettingsLocalDataSourceImpl extends SettingsDataSource {
   @override
   Future<void> setThemeMode(LocalThemeMode mode) async {
     await sharedPreferences.setString("quran_theme_mode", mode.rawString);
+  }
+
+  @override
+  NQTranslation getDefaultTranslation() {
+    String translationTitle =
+        sharedPreferences.getString("quran_default_translation") ??
+            NQTranslation.wahiduddinkhan.rawValue;
+    return NobleQuran.getTranslationFromTitle(translationTitle);
+  }
+
+  @override
+  Future<void> setDefaultTranslation(NQTranslation translation) async {
+    await sharedPreferences.setString(
+      "quran_default_translation",
+      translation.rawValue,
+    );
   }
 }
