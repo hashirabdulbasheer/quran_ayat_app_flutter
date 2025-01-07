@@ -87,6 +87,13 @@ class AyaDataTileWidget extends StatelessWidget {
                             "Set Default",
                             style: Theme.of(context).textTheme.labelSmall,
                           )),
+                    ] else ...[
+                      Text(
+                        "Default",
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      )
                     ],
                     const Divider(),
                     const SizedBox(height: 10),
