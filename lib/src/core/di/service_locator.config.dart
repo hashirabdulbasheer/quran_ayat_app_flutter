@@ -100,6 +100,8 @@ extension GetItInjectableX on _i174.GetIt {
           saveBookmarkUseCase: gh<_i881.SaveBookmarkUseCase>(),
           fetchDefaultTranslationUseCase:
               gh<_i162.FetchDefaultTranslationUseCase>(),
+          saveDefaultTranslationUseCase:
+              gh<_i892.SaveDefaultTranslationUseCase>(),
         ));
     return this;
   }

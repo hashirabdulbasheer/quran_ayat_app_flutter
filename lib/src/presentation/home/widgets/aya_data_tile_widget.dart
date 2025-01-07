@@ -74,14 +74,25 @@ class AyaDataTileWidget extends StatelessWidget {
                 isSelected: pageData.translations.length > 1 &&
                     pageData.selectedTranslation == t.$1,
               ),
-              pageData.translations.length > 1
-                  ? const Column(
-                      children: [
-                        Divider(),
-                        SizedBox(height: 10),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
+              if (pageData.translations.length > 1) ...[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (pageData.selectedTranslation != t.$1) ...[
+                      TextButton(
+                          onPressed: () => context
+                              .read<HomeBloc>()
+                              .add(SelectTranslationEvent(translation: t.$1)),
+                          child: Text(
+                            "Set Default",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          )),
+                    ],
+                    const Divider(),
+                    const SizedBox(height: 10),
+                  ],
+                )
+              ]
             ],
           ),
 
