@@ -71,15 +71,35 @@ class AyaDataTileWidget extends StatelessWidget {
                 translation: t.$2[indexInPage].text,
                 translationType: t.$1,
                 textScaleFactor: textScaleFactor,
+                isSelected: pageData.translations.length > 1 &&
+                    pageData.selectedTranslation == t.$1,
               ),
-              pageData.translations.length > 1
-                  ? const Column(
-                      children: [
-                        Divider(),
-                        SizedBox(height: 10),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
+              if (pageData.translations.length > 1) ...[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (pageData.selectedTranslation != t.$1) ...[
+                      TextButton(
+                          onPressed: () => context
+                              .read<HomeBloc>()
+                              .add(SelectTranslationEvent(translation: t.$1)),
+                          child: Text(
+                            "Set Default",
+                            style: Theme.of(context).textTheme.labelSmall,
+                          )),
+                    ] else ...[
+                      Text(
+                        "Default",
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      )
+                    ],
+                    const Divider(),
+                    const SizedBox(height: 10),
+                  ],
+                )
+              ]
             ],
           ),
 
@@ -96,7 +116,9 @@ class AyaDataTileWidget extends StatelessWidget {
   }
 
   void _navigateToDetails(BuildContext context, SurahIndex index) {
-    Navigator.of(context).push(
+    final bloc = context.read<HomeBloc>();
+    Navigator.of(context)
+        .push(
       MaterialPageRoute(
         builder: (context) => MultiBlocProvider(
             providers: [
@@ -112,7 +134,14 @@ class AyaDataTileWidget extends StatelessWidget {
               index: index,
             )),
       ),
-    );
+    )
+        .then((result) {
+      bloc.add(HomeInitializeEvent(
+        numberOfAyaPerPage: kNumAyaPerPage,
+        isDetailed: false,
+        index: index,
+      ));
+    });
   }
 }
 

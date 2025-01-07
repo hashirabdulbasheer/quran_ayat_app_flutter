@@ -91,3 +91,12 @@ class GoToFirstAyaEvent extends HomeEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SelectTranslationEvent extends HomeEvent {
+  final QTranslation translation;
+
+  SelectTranslationEvent({required this.translation});
+
+  @override
+  List<Object?> get props => [translation];
+}

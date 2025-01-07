@@ -21,12 +21,14 @@ import '../../data/repositories/quran_repository_impl.dart' as _i253;
 import '../../data/repositories/settings_repository_impl.dart' as _i622;
 import '../../domain/models/domain_models.dart' as _i924;
 import '../../domain/usecases/fetch_bookmark_usecase.dart' as _i510;
+import '../../domain/usecases/fetch_default_translation_usecase.dart' as _i162;
 import '../../domain/usecases/fetch_font_scale_usecase.dart' as _i38;
 import '../../domain/usecases/fetch_ruku_index_usecase.dart' as _i961;
 import '../../domain/usecases/fetch_sura_data_usecase.dart' as _i1048;
 import '../../domain/usecases/fetch_sura_titles_usecase.dart' as _i154;
 import '../../domain/usecases/fetch_theme_mode_usecase.dart' as _i468;
 import '../../domain/usecases/save_bookmark_usecase.dart' as _i400;
+import '../../domain/usecases/save_default_translation_usecase.dart' as _i892;
 import '../../domain/usecases/save_theme_mode_usecase.dart' as _i646;
 import '../../domain/usecases/set_font_scale_usecase.dart' as _i734;
 import '../../presentation/context/bloc/context_bloc.dart' as _i537;
@@ -63,6 +65,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i646.SaveThemeModeUseCase(gh<_i924.SettingsRepository>()));
     gh.factory<_i38.FetchFontScaleUseCase>(
         () => _i38.FetchFontScaleUseCase(gh<_i924.SettingsRepository>()));
+    gh.factory<_i892.SaveDefaultTranslationUseCase>(() =>
+        _i892.SaveDefaultTranslationUseCase(gh<_i924.SettingsRepository>()));
+    gh.factory<_i162.FetchDefaultTranslationUseCase>(() =>
+        _i162.FetchDefaultTranslationUseCase(gh<_i924.SettingsRepository>()));
     gh.lazySingleton<_i406.AppBloc>(() => _i406.AppBloc(
           fetchThemeModeUseCase: gh<_i468.FetchThemeModeUseCase>(),
           saveThemeModeUseCase: gh<_i646.SaveThemeModeUseCase>(),
@@ -92,6 +98,10 @@ extension GetItInjectableX on _i174.GetIt {
           fetchRukuIndexUseCase: gh<_i881.FetchRukuIndexUseCase>(),
           fetchBookmarkUseCase: gh<_i881.FetchBookmarkUseCase>(),
           saveBookmarkUseCase: gh<_i881.SaveBookmarkUseCase>(),
+          fetchDefaultTranslationUseCase:
+              gh<_i162.FetchDefaultTranslationUseCase>(),
+          saveDefaultTranslationUseCase:
+              gh<_i892.SaveDefaultTranslationUseCase>(),
         ));
     return this;
   }

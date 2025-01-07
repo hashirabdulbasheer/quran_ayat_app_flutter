@@ -1,3 +1,4 @@
+import 'package:ayat_app/src/core/core.dart';
 import 'package:ayat_app/src/data/models/local/data_local_models.dart';
 import 'package:ayat_app/src/domain/models/domain_models.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,12 @@ class SettingsRepositoryImpl extends SettingsRepository {
   SettingsDataSource dataSource;
 
   SettingsRepositoryImpl({required this.dataSource});
+
+  final NQTranslationToQTranslationMapper _nqTranslationToQTranslationMapper =
+      NQTranslationToQTranslationMapper();
+
+  final QTranslationToNQTranslationMapper _qTranslationToNQTranslationMapper =
+      QTranslationToNQTranslationMapper();
 
   @override
   double getFontScale() {
@@ -31,5 +38,17 @@ class SettingsRepositoryImpl extends SettingsRepository {
     LocalThemeMode localThemeMode =
         mode == ThemeMode.dark ? LocalThemeMode.dark : LocalThemeMode.light;
     return dataSource.setThemeMode(localThemeMode);
+  }
+
+  @override
+  QTranslation getDefaultTranslation() {
+    NQTranslation nqTranslation = dataSource.getDefaultTranslation();
+    return _nqTranslationToQTranslationMapper.mapFrom(nqTranslation);
+  }
+
+  @override
+  Future<void> setDefaultTranslation(QTranslation translation) {
+    return dataSource.setDefaultTranslation(
+        _qTranslationToNQTranslationMapper.mapFrom(translation));
   }
 }

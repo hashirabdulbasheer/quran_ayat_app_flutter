@@ -1,3 +1,5 @@
+import 'package:ayat_app/src/domain/usecases/fetch_default_translation_usecase.dart';
+import 'package:ayat_app/src/domain/usecases/save_default_translation_usecase.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
 
 part 'home_event.dart';
@@ -12,6 +14,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final FetchRukuIndexUseCase fetchRukuIndexUseCase;
   final FetchBookmarkUseCase fetchBookmarkUseCase;
   final SaveBookmarkUseCase saveBookmarkUseCase;
+  final FetchDefaultTranslationUseCase fetchDefaultTranslationUseCase;
+  final SaveDefaultTranslationUseCase saveDefaultTranslationUseCase;
 
   final currentPageData$ = BehaviorSubject<QPageData>();
   final settings$ = BehaviorSubject<double>.seeded(1.0);
@@ -24,6 +28,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required this.fetchRukuIndexUseCase,
     required this.fetchBookmarkUseCase,
     required this.saveBookmarkUseCase,
+    required this.fetchDefaultTranslationUseCase,
+    required this.saveDefaultTranslationUseCase,
   }) : super(HomeLoadedState()) {
     on<HomeInitializeEvent>(_onInitialize);
     on<HomeFetchQuranDataEvent>(_onFetchQuranData);
@@ -34,7 +40,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GoToBookmarkEvent>(_onGoToBookmark);
     on<AddBookmarkEvent>(_onAddBookmark);
     on<GoToFirstAyaEvent>(_onGotoFirstAya);
-
+    on<SelectTranslationEvent>(_onSelectTranslation);
     _registerListeners();
   }
 
@@ -44,7 +50,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     return super.close();
   }
 
-  void _onInitialize(HomeInitializeEvent event, Emitter<HomeState> emit) async  {
+  void _onInitialize(HomeInitializeEvent event, Emitter<HomeState> emit) async {
     // reset
     emit(HomeLoadedState(suraTitles: const []));
 
@@ -84,6 +90,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             event.pageNo
         : event.pageNo;
 
+    final selectedTranslation = fetchDefaultTranslationUseCase.call();
+
     final suraDataResponse = await fetchSuraUseCase.call(
       FetchSuraUseCaseParams(
         pageNo: pageNo,
@@ -94,7 +102,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 QTranslation.clear,
                 QTranslation.sahih
               ]
-            : const [QTranslation.wahiduddinKhan],
+            : [selectedTranslation],
       ),
     );
 
@@ -106,6 +114,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       currentPageData$.add(right.copyWith(
         selectedIndex: event.selectedIndex,
         bookmarkIndex: bookmark,
+        selectedTranslation: selectedTranslation,
       ));
     });
   }
@@ -159,6 +168,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final currentPageData = currentPageData$.value;
     currentPageData$.add(currentPageData.copyWith(
       selectedIndex: currentPageData.page.firstAyaIndex,
+    ));
+  }
+
+  void _onSelectTranslation(
+    SelectTranslationEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    await saveDefaultTranslationUseCase.call(event.translation);
+    QPageData pageData = currentPageData$.value;
+    add(HomeFetchQuranDataEvent(
+      pageNo: pageData.page.number,
+      isDetailed: true,
     ));
   }
 
