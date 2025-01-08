@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:ayat_app/src/core/constants/route_constants.dart';
 import 'package:ayat_app/src/presentation/widgets/error_widget.dart';
 
@@ -12,19 +15,27 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _headerExpansionController = ExpansionTileController();
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
 
   @override
   void initState() {
     super.initState();
     if (kIsWeb) {
       ServicesBinding.instance.keyboard.addHandler(_onKey);
+    } else {
+      _initDeepLinks();
     }
   }
 
   @override
   void dispose() {
     if (kIsWeb) {
+      // web
       ServicesBinding.instance.keyboard.removeHandler(_onKey);
+    } else {
+      // not web
+      _linkSubscription?.cancel();
     }
     super.dispose();
   }
@@ -125,6 +136,18 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return false;
+  }
+
+  Future<void> _initDeepLinks() async {
+    _appLinks = AppLinks();
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      debugPrint('onAppLink: $uri');
+      _openAppLink(uri);
+    });
+  }
+
+  void _openAppLink(Uri uri) {
+    context.push(uri.toString());
   }
 }
 
