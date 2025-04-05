@@ -57,7 +57,7 @@ class AppRouter {
           path: AppRoutes.homeSura.path,
           name: AppRoutes.homeSura.name,
           pageBuilder: (context, state) {
-            int sura = int.parse(state.pathParameters['sura'] ?? '1');
+            int sura = int.tryParse(state.pathParameters['sura'] ?? '1') ?? 1;
             if (sura < 1 || sura > 114) {
               sura = 1;
             }
@@ -91,8 +91,8 @@ class AppRouter {
           path: AppRoutes.homeSuraAya.path,
           name: AppRoutes.homeSuraAya.name,
           pageBuilder: (context, state) {
-            int sura = int.parse(state.pathParameters['sura'] ?? '1');
-            int aya = int.parse(state.pathParameters['aya'] ?? '1');
+            int sura = int.tryParse(state.pathParameters['sura'] ?? '1') ?? 1;
+            int aya = int.tryParse(state.pathParameters['aya'] ?? '1') ?? 1;
             if (sura < 1 || sura > 114) {
               sura = 1;
               aya = 1;
