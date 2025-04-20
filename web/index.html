@@ -8,6 +8,20 @@
     <meta name=apple-mobile-web-app-capable content=yes>
     <meta name=apple-mobile-web-app-status-bar-style content=black>
     <meta name=apple-mobile-web-app-title content="Noble Quran">
+
+    <!-- Open Graph (used by Facebook, WhatsApp, Telegram, etc.) -->
+    <meta property="og:title" content="uxQuran">
+    <meta property="og:description" content="We study how to think like the Noble Quran.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://uxquran.com">
+    <meta property="og:image" content="https://uxquran.com/icons/uxquran.png">
+
+    <!-- Twitter Card (used by Twitter/X and some Android apps) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="uxQuran">
+    <meta name="twitter:description" content="We study how to think like the Noble Quran.">
+    <meta name="twitter:image" content="https://uxquran.com/icons/uxquran.png">
+
     <link rel=apple-touch-icon href=icons/Icon-192.png>
     <link rel=icon type=image/png href="favicon.png"/>
     <title>Noble Quran</title>
@@ -40,7 +54,7 @@
     }
     function beginPreloading(manifestAssets) {
         var loading = document.querySelector("#loading");
-        var assets = ["flutter.js", "main.dart.js?version=v4.3.0", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
+        var assets = ["flutter.js", "main.dart.js?version=v4.3.1", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
         const batchSize = 20;
         async function reportProgress() {
             if (assets.length == 0) {
