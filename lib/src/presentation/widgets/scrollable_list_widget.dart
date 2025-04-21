@@ -64,13 +64,7 @@ class _ListWidgetState extends State<ScrollableListWidget> {
   void _scrollToNextVisibleItem() {
     final positions = _itemPositionsListener.itemPositions.value;
     if (positions.isNotEmpty) {
-      final visibleItems = positions
-          .where((pos) => pos.itemLeadingEdge >= 0 && pos.itemTrailingEdge <= 1)
-          .toList()
-        ..sort((a, b) => a.index.compareTo(b.index));
-
-      final currentIndex =
-          visibleItems.isNotEmpty ? visibleItems.first.index : null;
+      final currentIndex = positions.isNotEmpty ? positions.first.index : null;
       if (currentIndex != null && currentIndex < widget.itemsCount - 1) {
         _itemScrollController.scrollTo(
           index: currentIndex + 1,
