@@ -19,12 +19,12 @@ class ScrollableListWidget extends StatefulWidget {
 
 class _ListWidgetState extends State<ScrollableListWidget> {
   final ItemScrollController _itemScrollController = ItemScrollController();
-  late int currentIndex;
+  final ItemPositionsListener _itemPositionsListener =
+      ItemPositionsListener.create();
 
   @override
   void initState() {
     super.initState();
-    currentIndex = widget.initialIndex ?? 1;
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToAyat());
   }
 
@@ -43,29 +43,41 @@ class _ListWidgetState extends State<ScrollableListWidget> {
       children: [
         ScrollablePositionedList.separated(
           itemScrollController: _itemScrollController,
-          initialScrollIndex: 0,
+          itemPositionsListener: _itemPositionsListener,
+          initialScrollIndex: widget.initialIndex ?? 0,
           itemCount: widget.itemsCount,
           itemBuilder: (context, index) => widget.itemContent(index),
           separatorBuilder: (context, index) => const Divider(thickness: 1),
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
-          child: _NextAyaWidget(onNext: () {
-            if (currentIndex < widget.itemsCount - 1) {
-              currentIndex += 1;
-              _itemScrollController.scrollTo(
-                index: currentIndex,
-                duration: const Duration(milliseconds: 200),
-              );
-            }
-          }),
-        )
+          child: _NextAyaWidget(onNext: _scrollToNextVisibleItem),
+        ),
       ],
     );
   }
 
   void _scrollToAyat() {
     _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
+  }
+
+  void _scrollToNextVisibleItem() {
+    final positions = _itemPositionsListener.itemPositions.value;
+    if (positions.isNotEmpty) {
+      final visibleItems = positions
+          .where((pos) => pos.itemLeadingEdge >= 0 && pos.itemTrailingEdge <= 1)
+          .toList()
+        ..sort((a, b) => a.index.compareTo(b.index));
+
+      final currentIndex =
+          visibleItems.isNotEmpty ? visibleItems.first.index : null;
+      if (currentIndex != null && currentIndex < widget.itemsCount - 1) {
+        _itemScrollController.scrollTo(
+          index: currentIndex + 1,
+          duration: const Duration(milliseconds: 200),
+        );
+      }
+    }
   }
 }
 
@@ -79,9 +91,10 @@ class _NextAyaWidget extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomLeft,
       child: FloatingActionButton.small(
-          backgroundColor: Theme.of(context).primaryColor,
-          onPressed: onNext,
-          child: const Icon(Icons.arrow_drop_down)),
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: onNext,
+        child: const Icon(Icons.arrow_drop_down),
+      ),
     );
   }
 }
