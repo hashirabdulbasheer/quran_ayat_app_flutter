@@ -9,31 +9,46 @@
     <meta name=apple-mobile-web-app-status-bar-style content=black>
     <meta name=apple-mobile-web-app-title content="Noble Quran">
 
+    <!-- SEO Enhancements -->
+    <link rel="canonical" href="https://uxquran.com" />
+    <meta name="robots" content="index, follow">
+
     <!-- Open Graph (used by Facebook, WhatsApp, Telegram, etc.) -->
     <meta property="og:title" content="uxQuran">
     <meta property="og:description" content="We study how to think like the Noble Quran.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://uxquran.com">
     <meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
-    <!--    <meta property="og:image" content="https://uxquran.com/icons/uxquran.png">-->
 
     <!-- Twitter Card (used by Twitter/X and some Android apps) -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="uxQuran">
     <meta name="twitter:description" content="We study how to think like the Noble Quran.">
     <meta property="twitter:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
-    <!--    <meta name="twitter:image" content="https://uxquran.com/icons/uxquran.png">-->
 
     <link rel=apple-touch-icon href=icons/Icon-192.png>
     <link rel=icon type=image/png href="favicon.png"/>
     <title>Noble Quran</title>
     <link rel=manifest href=manifest.json>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "uxQuran",
+            "url": "https://uxquran.com",
+            "description": "We study how to think like the Noble Quran."
+        }
+    </script>
+
     <style>
         body{inset:0;overflow:hidden;margin:0;padding:0;position:fixed}#loading{align-items:center;display:flex;height:100%;justify-content:center;width:100%}#loading img{animation:1s ease-in-out 0s infinite alternate breathe;opacity:.66;transition:opacity .4s}#loading.main_done img{opacity:1}#loading.init_done img{animation:1s ease-in-out 0s 1 forwards zooooom;opacity:.05}@keyframes breathe{from{transform:scale(1)}to{transform:scale(0.95)}}@keyframes zooooom{from{transform:scale(1)}to{transform:scale(0.01)}}.spinner{display:none;justify-content:center;align-items:center;margin:0;position:absolute;top:50%;left:50%;-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.loader{border:2px solid #f3f3f3;border-radius:50%;border:2px solid;border-top:2px solid #888;border-right:2px solid white;border-bottom:2px solid #888;border-left:2px solid white;width:40px;height:40px;-webkit-animation:spin 2s linear infinite;animation:spin 2s linear infinite}@-webkit-keyframes spin{0%{-webkit-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg)}}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
     </style>
     <script>var serviceWorkerVersion='3753215651';</script>
 </head>
 <body>
+<h1 style="position:absolute;left:-9999px;">We study how to think like the Noble Quran – uxQuran</h1>
 <div id=loading>
     <img src=icons/Icon-192.png alt="Loading indicator..."/>
 </div>
@@ -56,7 +71,7 @@
     }
     function beginPreloading(manifestAssets) {
         var loading = document.querySelector("#loading");
-        var assets = ["flutter.js", "main.dart.js?version=v4.3.1", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
+        var assets = ["flutter.js", "main.dart.js?version=v4.3.2", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
         const batchSize = 20;
         async function reportProgress() {
             if (assets.length == 0) {
