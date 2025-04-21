@@ -91,7 +91,8 @@ class _NextAyaWidget extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomLeft,
       child: FloatingActionButton.small(
-        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0,
+        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.9),
         onPressed: onNext,
         child: const Icon(Icons.arrow_drop_down),
       ),
