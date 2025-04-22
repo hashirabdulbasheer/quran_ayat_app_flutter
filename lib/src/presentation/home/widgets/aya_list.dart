@@ -71,6 +71,7 @@ class AyaList extends StatelessWidget {
                   _PageControls(
                     onBack: onBack,
                     onCopyPage: () => _copyPage(context),
+                    onWordByWordTranslationEnable: () {},
                   )
                 ],
                 AyaDataTileWidget(
@@ -139,10 +140,12 @@ class AyaList extends StatelessWidget {
 class _PageControls extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback onCopyPage;
+  final VoidCallback onWordByWordTranslationEnable;
 
   const _PageControls({
     required this.onBack,
     required this.onCopyPage,
+    required this.onWordByWordTranslationEnable,
   });
 
   @override
@@ -150,15 +153,31 @@ class _PageControls extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          onPressed: onCopyPage,
-          icon: Icon(
-            Icons.copy,
-            size: 18,
-            color: Theme.of(context).disabledColor,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              tooltip: "Copy page",
+              onPressed: onCopyPage,
+              icon: Icon(
+                Icons.copy,
+                size: 18,
+                color: Theme.of(context).disabledColor,
+              ),
+            ),
+            IconButton(
+              tooltip: "Toggle Word by word translations",
+              onPressed: onWordByWordTranslationEnable,
+              icon: Icon(
+                Icons.explicit_outlined,
+                size: 18,
+                color: Theme.of(context).disabledColor,
+              ),
+            ),
+          ],
         ),
         IconButton(
+          tooltip: "Back to previous page",
           onPressed: onBack,
           icon: const Icon(
             Icons.arrow_forward,
