@@ -3,11 +3,13 @@ import 'package:ayat_app/src/presentation/home/home.dart';
 class WordByWord extends StatelessWidget {
   final QWord word;
   final double textScaleFactor;
+  final bool isTranslationDisplayed;
 
   const WordByWord({
     super.key,
     required this.word,
     this.textScaleFactor = 1.0,
+    this.isTranslationDisplayed = false,
   });
 
   @override
@@ -20,13 +22,15 @@ class WordByWord extends StatelessWidget {
           text: word.ar,
           textScaleFactor: textScaleFactor,
         ),
-        Directionality(
-          textDirection: TextDirection.ltr,
-          child: BoxedText(
-            text: word.tr,
-            textScaleFactor: textScaleFactor,
+        if (isTranslationDisplayed) ...[
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: BoxedText(
+              text: word.tr,
+              textScaleFactor: textScaleFactor,
+            ),
           ),
-        ),
+        ]
       ],
     );
   }
