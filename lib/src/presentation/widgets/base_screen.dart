@@ -33,6 +33,9 @@ class QBaseScreen extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
+                color: MediaQuery.of(context).size.width >= 1000
+                    ? Theme.of(context).primaryColor.withOpacity(0.1)
+                    : Colors.transparent,
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: child,
               ),

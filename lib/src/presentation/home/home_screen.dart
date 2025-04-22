@@ -56,51 +56,62 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return QBaseScreen(
-      title: "Noble Quran",
-      onTitleTapped: () => bloc.add(GoToFirstAyaEvent()),
-      navBarActions: [
-        TextButton(
-            onPressed: () async {
-              if (!await launchUrl(Uri.parse(kBlogUrl))) {
-                throw Exception('Could not launch $kBlogUrl');
-              }
-            },
-            child: const Text("Blog",
-                style: TextStyle(fontWeight: FontWeight.bold))),
-        IconButton(
-            tooltip: "Go to bookmark",
-            onPressed: () => bloc.add(GoToBookmarkEvent()),
-            icon: Icon(
-              Icons.bookmark_border,
-              color: Theme.of(context).primaryColor,
-            )),
-        const ThemeModeButton(),
-        IconButton(
-            tooltip: "About us",
-            onPressed: () => context.goNamed(AppRoutes.about.name),
-            icon: Icon(
-              Icons.info_outline,
-              color: Theme.of(context).primaryColor,
-            )),
-        const SizedBox(width: 30)
-      ],
-      child: Column(
-        children: [
-          // expansion title for selecting sura/aya
-          _Header(expansionController: _headerExpansionController),
-          // reading progress
-          const _ReadingProgressIndicator(),
-          // space
-          const SizedBox(height: 5),
-          // the quran
-          Expanded(child: _Content(
-            onNavigationTapped: () {
-              _headerExpansionController.collapse();
-            },
-          )),
+        title: "Noble Quran",
+        onTitleTapped: () => bloc.add(GoToFirstAyaEvent()),
+        navBarActions: [
+          TextButton(
+              onPressed: () async {
+                if (!await launchUrl(Uri.parse(kBlogUrl))) {
+                  throw Exception('Could not launch $kBlogUrl');
+                }
+              },
+              child: const Text("Blog",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          IconButton(
+              tooltip: "Go to bookmark",
+              onPressed: () => bloc.add(GoToBookmarkEvent()),
+              icon: Icon(
+                Icons.bookmark_border,
+                color: Theme.of(context).primaryColor,
+              )),
+          const ThemeModeButton(),
+          IconButton(
+              tooltip: "About us",
+              onPressed: () => context.goNamed(AppRoutes.about.name),
+              icon: Icon(
+                Icons.info_outline,
+                color: Theme.of(context).primaryColor,
+              )),
+          const SizedBox(width: 30)
         ],
-      ),
-    );
+        child: Center(
+          child: Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // expansion title for selecting sura/aya
+                    _Header(expansionController: _headerExpansionController),
+                    // reading progress
+                    const _ReadingProgressIndicator(),
+                    // space
+                    const SizedBox(height: 5),
+                    // the quran
+                    Expanded(child: _Content(
+                      onNavigationTapped: () {
+                        _headerExpansionController.collapse();
+                      },
+                    )),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 
   // Handle hardware keyboard events, for web only, to use hardware keyboard
