@@ -24,18 +24,21 @@ class AyaControlWidget extends StatelessWidget {
             onPressed: onMore,
             icon: Icon(
               Icons.more_outlined,
+              size: 18,
               color: Theme.of(context).disabledColor,
             )),
         IconButton(
             onPressed: onCopy,
             icon: Icon(
               Icons.copy,
+              size: 18,
               color: Theme.of(context).disabledColor,
             )),
         IconButton(
             onPressed: onScreenshot,
             icon: Icon(
               Icons.camera_alt_outlined,
+              size: 18,
               color: Theme.of(context).disabledColor,
             )),
         IconButton(
@@ -43,10 +46,12 @@ class AyaControlWidget extends StatelessWidget {
           icon: isBookmarked
               ? Icon(
                   Icons.bookmark_added,
+                  size: 18,
                   color: Theme.of(context).primaryColor,
                 )
               : Icon(
                   Icons.bookmark_add_outlined,
+                  size: 18,
                   color: Theme.of(context).disabledColor,
                 ),
         ),
