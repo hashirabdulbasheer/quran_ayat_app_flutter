@@ -60,6 +60,7 @@ class _TranslationText extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeBloc bloc = context.read<HomeBloc>();
     return StreamBuilder<bool?>(
+        initialData: bloc.wordTranslationStatus$.value,
         stream: bloc.wordTranslationStatus$,
         builder: (context, snapshot) {
           bool isEnabled = snapshot.hasData ? snapshot.data as bool : true;

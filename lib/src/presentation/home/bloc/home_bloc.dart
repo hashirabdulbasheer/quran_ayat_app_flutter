@@ -65,6 +65,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     // fetch settings
     settings$.add(fetchFontScaleUseCase.call());
     wordTranslationStatus$.add(fetchWordTranslationStatusUseCase.call());
+    wordTranslationStatus$.listen((onData) {
+      print("Changed $onData");
+    });
 
     // auto bookmark loading
     SurahIndex? bookmarkIndex = fetchBookmarkUseCase.call();
@@ -223,6 +226,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future _unregisterListeners() async {
     await currentPageData$.close();
     await settings$.close();
+    await wordTranslationStatus$.close();
   }
 
   double getReadingProgress(HomeLoadedState state) {

@@ -186,6 +186,7 @@ class _ToggleWordTranslationStatusButton extends StatelessWidget {
     HomeBloc bloc = context.read<HomeBloc>();
     return StreamBuilder<bool?>(
         stream: bloc.wordTranslationStatus$,
+        initialData: bloc.wordTranslationStatus$.value,
         builder: (context, snapshot) {
           bool isEnabled = snapshot.hasData ? snapshot.data as bool : true;
           return IconButton(
