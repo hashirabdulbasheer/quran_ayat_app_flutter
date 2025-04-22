@@ -69,7 +69,7 @@ class SettingsLocalDataSourceImpl extends SettingsDataSource {
 
   @override
   bool getIsWordByWordTranslationEnabled() {
-    throw sharedPreferences.getBool("quran_word_translation_enabled") ?? true;
+    return sharedPreferences.getBool("quran_word_translation_enabled") ?? true;
   }
 
   @override

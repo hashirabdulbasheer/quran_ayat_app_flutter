@@ -24,17 +24,16 @@ class WordByWordAya extends StatelessWidget {
               runAlignment: WrapAlignment.end,
               children: words
                   .map((e) => Padding(
-                    padding: const EdgeInsets.only(
-                      left: 4,
-                      right: 4,
-                      top: 10,
-                    ),
-                    child: WordByWord(
-                      word: e,
-                      textScaleFactor: textScaleFactor,
-                      isTranslationDisplayed: true,
-                    ),
-                  ))
+                        padding: const EdgeInsets.only(
+                          left: 4,
+                          right: 4,
+                          top: 10,
+                        ),
+                        child: WordByWord(
+                          word: e,
+                          textScaleFactor: textScaleFactor,
+                        ),
+                      ))
                   .toList(),
             ),
           ),

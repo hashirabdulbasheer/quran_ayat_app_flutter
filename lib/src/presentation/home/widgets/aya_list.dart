@@ -71,7 +71,6 @@ class AyaList extends StatelessWidget {
                   _PageControls(
                     onBack: onBack,
                     onCopyPage: () => _copyPage(context),
-                    onWordByWordTranslationEnable: () {},
                   )
                 ],
                 AyaDataTileWidget(
@@ -140,12 +139,10 @@ class AyaList extends StatelessWidget {
 class _PageControls extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback onCopyPage;
-  final VoidCallback onWordByWordTranslationEnable;
 
   const _PageControls({
     required this.onBack,
     required this.onCopyPage,
-    required this.onWordByWordTranslationEnable,
   });
 
   @override
@@ -165,15 +162,7 @@ class _PageControls extends StatelessWidget {
                 color: Theme.of(context).disabledColor,
               ),
             ),
-            IconButton(
-              tooltip: "Toggle Word by word translations",
-              onPressed: onWordByWordTranslationEnable,
-              icon: Icon(
-                Icons.explicit_outlined,
-                size: 18,
-                color: Theme.of(context).disabledColor,
-              ),
-            ),
+            const _ToggleWordTranslationStatusButton(),
           ],
         ),
         IconButton(
@@ -186,5 +175,30 @@ class _PageControls extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _ToggleWordTranslationStatusButton extends StatelessWidget {
+  const _ToggleWordTranslationStatusButton();
+
+  @override
+  Widget build(BuildContext context) {
+    HomeBloc bloc = context.read<HomeBloc>();
+    return StreamBuilder<bool?>(
+        stream: bloc.wordTranslationStatus$,
+        builder: (context, snapshot) {
+          bool isEnabled = snapshot.hasData ? snapshot.data as bool : true;
+          return IconButton(
+            tooltip: "Toggle Word by word translations",
+            onPressed: snapshot.hasData
+                ? () => bloc.add(ToggleWordTranslationStatusEvent())
+                : null,
+            icon: Icon(
+              isEnabled ? Icons.explicit : Icons.explicit_outlined,
+              size: 18,
+              color: Theme.of(context).disabledColor,
+            ),
+          );
+        });
   }
 }

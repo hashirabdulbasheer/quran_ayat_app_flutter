@@ -3,13 +3,11 @@ import 'package:ayat_app/src/presentation/home/home.dart';
 class WordByWord extends StatefulWidget {
   final QWord word;
   final double textScaleFactor;
-  final bool isTranslationDisplayed;
 
   const WordByWord({
     super.key,
     required this.word,
     this.textScaleFactor = 1.0,
-    this.isTranslationDisplayed = false,
   });
 
   @override
@@ -17,20 +15,12 @@ class WordByWord extends StatefulWidget {
 }
 
 class _WordByWordState extends State<WordByWord> {
-  late bool isLocalTranslationDisplayed;
-
-  @override
-  void initState() {
-    super.initState();
-    isLocalTranslationDisplayed = widget.isTranslationDisplayed;
-  }
+  bool isLocalTranslationDisplayed = false;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // if forcefully displayed then no action
-        if (widget.isTranslationDisplayed) return;
         // else
         setState(() {
           isLocalTranslationDisplayed = !isLocalTranslationDisplayed;
@@ -44,12 +34,50 @@ class _WordByWordState extends State<WordByWord> {
             text: widget.word.ar,
             textScaleFactor: widget.textScaleFactor,
           ),
-          AnimatedSize(
+          _TranslationText(
+            isLocalTranslationDisplayed: isLocalTranslationDisplayed,
+            text: widget.word.tr,
+            scaleFactor: widget.textScaleFactor,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TranslationText extends StatelessWidget {
+  final bool isLocalTranslationDisplayed;
+  final String text;
+  final double scaleFactor;
+
+  const _TranslationText({
+    required this.isLocalTranslationDisplayed,
+    required this.text,
+    required this.scaleFactor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    HomeBloc bloc = context.read<HomeBloc>();
+    return StreamBuilder<bool?>(
+        stream: bloc.wordTranslationStatus$,
+        builder: (context, snapshot) {
+          bool isEnabled = snapshot.hasData ? snapshot.data as bool : true;
+          // is enabled shows if the word by word translations have to be displayed or not
+          // if its enabled then we can directly show the translations
+          // if its not enabled then we do the animation
+          if (isEnabled) {
+            return _TranslationBox(
+              text: text,
+              scaleFactor: scaleFactor,
+            );
+          }
+
+          return AnimatedSize(
             duration: const Duration(milliseconds: 100),
             curve: Curves.easeInOut,
-            alignment: Alignment.topCenter, // Key for top-to-bottom expansion
+            alignment: Alignment.topCenter,
             child: AnimatedSlide(
-              // New sliding animation
               offset: isLocalTranslationDisplayed
                   ? Offset.zero
                   : const Offset(0, -0.5),
@@ -59,18 +87,34 @@ class _WordByWordState extends State<WordByWord> {
                 opacity: isLocalTranslationDisplayed ? 1 : 0,
                 duration: const Duration(milliseconds: 100),
                 child: isLocalTranslationDisplayed
-                    ? Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: BoxedText(
-                          text: widget.word.tr,
-                          textScaleFactor: widget.textScaleFactor,
-                        ),
+                    ? _TranslationBox(
+                        text: text,
+                        scaleFactor: scaleFactor,
                       )
                     : const SizedBox.shrink(),
               ),
             ),
-          )
-        ],
+          );
+        });
+  }
+}
+
+class _TranslationBox extends StatelessWidget {
+  final String text;
+  final double scaleFactor;
+
+  const _TranslationBox({
+    required this.text,
+    required this.scaleFactor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: BoxedText(
+        text: text,
+        textScaleFactor: scaleFactor,
       ),
     );
   }
