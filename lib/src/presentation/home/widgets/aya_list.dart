@@ -154,12 +154,16 @@ class _PageControls extends StatelessWidget {
           onPressed: onCopyPage,
           icon: Icon(
             Icons.copy,
+            size: 18,
             color: Theme.of(context).disabledColor,
           ),
         ),
         IconButton(
           onPressed: onBack,
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(
+            Icons.arrow_forward,
+            size: 18,
+          ),
         ),
       ],
     );
