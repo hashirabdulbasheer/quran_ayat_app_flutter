@@ -51,4 +51,14 @@ class SettingsRepositoryImpl extends SettingsRepository {
     return dataSource.setDefaultTranslation(
         _qTranslationToNQTranslationMapper.mapFrom(translation));
   }
+
+  @override
+  bool getIsWordByWordTranslationEnabled() {
+    throw dataSource.getIsWordByWordTranslationEnabled();
+  }
+
+  @override
+  Future<void> setIsWordByWordTranslationEnabled(bool isEnabled) {
+    return dataSource.setIsWordByWordTranslationEnabled(isEnabled);
+  }
 }

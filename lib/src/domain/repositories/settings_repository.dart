@@ -12,4 +12,8 @@ abstract class SettingsRepository {
   QTranslation getDefaultTranslation();
 
   Future<void> setDefaultTranslation(QTranslation translation);
+
+  bool getIsWordByWordTranslationEnabled();
+
+  Future<void> setIsWordByWordTranslationEnabled(bool isEnabled);
 }
