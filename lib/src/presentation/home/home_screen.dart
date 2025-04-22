@@ -84,33 +84,22 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
           const SizedBox(width: 30)
         ],
-        child: Center(
-          child: Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 800),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // expansion title for selecting sura/aya
-                    _Header(expansionController: _headerExpansionController),
-                    // reading progress
-                    const _ReadingProgressIndicator(),
-                    // space
-                    const SizedBox(height: 5),
-                    // the quran
-                    Expanded(child: _Content(
-                      onNavigationTapped: () {
-                        _headerExpansionController.collapse();
-                      },
-                    )),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // expansion title for selecting sura/aya
+            _Header(expansionController: _headerExpansionController),
+            // reading progress
+            const _ReadingProgressIndicator(),
+            // space
+            const SizedBox(height: 5),
+            // the quran
+            Expanded(child: _Content(
+              onNavigationTapped: () {
+                _headerExpansionController.collapse();
+              },
+            )),
+          ],
         ));
   }
 

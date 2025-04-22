@@ -30,6 +30,7 @@ class QBaseScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: Container(
@@ -37,7 +38,16 @@ class QBaseScreen extends StatelessWidget {
                     ? Theme.of(context).primaryColor.withOpacity(0.1)
                     : Colors.transparent,
                 padding: const EdgeInsets.symmetric(horizontal: 32),
-                child: child,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 800),
+                              child: child))),
+                ),
               ),
             ),
           ],
