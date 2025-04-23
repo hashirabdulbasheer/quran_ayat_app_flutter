@@ -1,5 +1,7 @@
 import 'package:ayat_app/src/domain/usecases/fetch_default_translation_usecase.dart';
+import 'package:ayat_app/src/domain/usecases/fetch_word_translation_status_usecase.dart';
 import 'package:ayat_app/src/domain/usecases/save_default_translation_usecase.dart';
+import 'package:ayat_app/src/domain/usecases/save_word_translation_status_usecase.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
 
 part 'home_event.dart';
@@ -16,9 +18,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final SaveBookmarkUseCase saveBookmarkUseCase;
   final FetchDefaultTranslationUseCase fetchDefaultTranslationUseCase;
   final SaveDefaultTranslationUseCase saveDefaultTranslationUseCase;
+  final FetchWordTranslationStatusUseCase fetchWordTranslationStatusUseCase;
+  final SaveWordTranslationStatusUseCase saveWordTranslationStatusUseCase;
 
   final currentPageData$ = BehaviorSubject<QPageData>();
   final settings$ = BehaviorSubject<double>.seeded(1.0);
+  final wordTranslationStatus$ = BehaviorSubject<bool>.seeded(false);
 
   HomeBloc({
     required this.fetchSuraTitlesUseCase,
@@ -30,6 +35,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required this.saveBookmarkUseCase,
     required this.fetchDefaultTranslationUseCase,
     required this.saveDefaultTranslationUseCase,
+    required this.fetchWordTranslationStatusUseCase,
+    required this.saveWordTranslationStatusUseCase,
   }) : super(HomeLoadedState()) {
     on<HomeInitializeEvent>(_onInitialize);
     on<HomeFetchQuranDataEvent>(_onFetchQuranData);
@@ -41,6 +48,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<AddBookmarkEvent>(_onAddBookmark);
     on<GoToFirstAyaEvent>(_onGotoFirstAya);
     on<SelectTranslationEvent>(_onSelectTranslation);
+    on<ToggleWordTranslationStatusEvent>(_onToggleWordTranslationStatusEvent);
     _registerListeners();
   }
 
@@ -56,6 +64,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // fetch settings
     settings$.add(fetchFontScaleUseCase.call());
+    wordTranslationStatus$.add(fetchWordTranslationStatusUseCase.call());
+    wordTranslationStatus$.listen((onData) {
+      print("Changed $onData");
+    });
 
     // auto bookmark loading
     SurahIndex? bookmarkIndex = fetchBookmarkUseCase.call();
@@ -183,6 +195,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ));
   }
 
+  void _onToggleWordTranslationStatusEvent(
+    ToggleWordTranslationStatusEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    bool currentValue = wordTranslationStatus$.value;
+    wordTranslationStatus$.add(!currentValue);
+    await saveWordTranslationStatusUseCase
+        .call(SaveWordTranslationStatusParams(isEnabled: !currentValue));
+  }
+
   void _onTextSizeControl(
     TextSizeControlEvent event,
     Emitter<HomeState> emit,
@@ -204,6 +226,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future _unregisterListeners() async {
     await currentPageData$.close();
     await settings$.close();
+    await wordTranslationStatus$.close();
   }
 
   double getReadingProgress(HomeLoadedState state) {

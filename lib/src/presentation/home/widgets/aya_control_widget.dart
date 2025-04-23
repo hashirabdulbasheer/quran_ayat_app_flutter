@@ -21,32 +21,41 @@ class AyaControlWidget extends StatelessWidget {
     return Row(
       children: [
         IconButton(
+            tooltip: "Navigate to the old app with this verse",
             onPressed: onMore,
             icon: Icon(
               Icons.more_outlined,
+              size: 18,
               color: Theme.of(context).disabledColor,
             )),
         IconButton(
+            tooltip: "Copy this verse",
             onPressed: onCopy,
             icon: Icon(
               Icons.copy,
+              size: 18,
               color: Theme.of(context).disabledColor,
             )),
         IconButton(
+            tooltip: "Save the verse as an photo",
             onPressed: onScreenshot,
             icon: Icon(
               Icons.camera_alt_outlined,
+              size: 18,
               color: Theme.of(context).disabledColor,
             )),
         IconButton(
+          tooltip: "Bookmark this verse",
           onPressed: onBookmarked,
           icon: isBookmarked
               ? Icon(
                   Icons.bookmark_added,
+                  size: 18,
                   color: Theme.of(context).primaryColor,
                 )
               : Icon(
                   Icons.bookmark_add_outlined,
+                  size: 18,
                   color: Theme.of(context).disabledColor,
                 ),
         ),

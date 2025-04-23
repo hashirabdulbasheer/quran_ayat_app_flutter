@@ -27,9 +27,13 @@ import '../../domain/usecases/fetch_ruku_index_usecase.dart' as _i961;
 import '../../domain/usecases/fetch_sura_data_usecase.dart' as _i1048;
 import '../../domain/usecases/fetch_sura_titles_usecase.dart' as _i154;
 import '../../domain/usecases/fetch_theme_mode_usecase.dart' as _i468;
+import '../../domain/usecases/fetch_word_translation_status_usecase.dart'
+    as _i869;
 import '../../domain/usecases/save_bookmark_usecase.dart' as _i400;
 import '../../domain/usecases/save_default_translation_usecase.dart' as _i892;
 import '../../domain/usecases/save_theme_mode_usecase.dart' as _i646;
+import '../../domain/usecases/save_word_translation_status_usecase.dart'
+    as _i990;
 import '../../domain/usecases/set_font_scale_usecase.dart' as _i734;
 import '../../presentation/context/bloc/context_bloc.dart' as _i537;
 import '../../presentation/home/bloc/home_bloc.dart' as _i315;
@@ -69,6 +73,11 @@ extension GetItInjectableX on _i174.GetIt {
         _i892.SaveDefaultTranslationUseCase(gh<_i924.SettingsRepository>()));
     gh.factory<_i162.FetchDefaultTranslationUseCase>(() =>
         _i162.FetchDefaultTranslationUseCase(gh<_i924.SettingsRepository>()));
+    gh.factory<_i990.SaveWordTranslationStatusUseCase>(() =>
+        _i990.SaveWordTranslationStatusUseCase(gh<_i924.SettingsRepository>()));
+    gh.factory<_i869.FetchWordTranslationStatusUseCase>(() =>
+        _i869.FetchWordTranslationStatusUseCase(
+            gh<_i924.SettingsRepository>()));
     gh.lazySingleton<_i406.AppBloc>(() => _i406.AppBloc(
           fetchThemeModeUseCase: gh<_i468.FetchThemeModeUseCase>(),
           saveThemeModeUseCase: gh<_i646.SaveThemeModeUseCase>(),
@@ -102,6 +111,10 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i162.FetchDefaultTranslationUseCase>(),
           saveDefaultTranslationUseCase:
               gh<_i892.SaveDefaultTranslationUseCase>(),
+          fetchWordTranslationStatusUseCase:
+              gh<_i869.FetchWordTranslationStatusUseCase>(),
+          saveWordTranslationStatusUseCase:
+              gh<_i990.SaveWordTranslationStatusUseCase>(),
         ));
     return this;
   }

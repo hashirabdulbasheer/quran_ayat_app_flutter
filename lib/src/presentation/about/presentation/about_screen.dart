@@ -8,17 +8,20 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return QBaseScreen(
         title: "About us",
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              const _LogoDisplay(),
-              const _DescriptionDisplay(),
-              const _ContactUsDisplay(),
-              const _LinksDisplay(),
-            ].spacerDirectional(height: 30),
+        child: ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(height: 10),
+                const _LogoDisplay(),
+                const _DescriptionDisplay(),
+                const _ContactUsDisplay(),
+                const _LinksDisplay(),
+              ].spacerDirectional(height: 30),
+            ),
           ),
         ));
   }
@@ -154,7 +157,9 @@ class _LinksDisplay extends StatelessWidget {
           onTapped: () => launchUrl(Uri.parse(kTelegramChatbotUrl)),
           title: "Telegram chatbot",
         ),
-        const SizedBox(height: 30,),
+        const SizedBox(
+          height: 30,
+        ),
       ].spacerDirectional(height: 5),
     );
   }

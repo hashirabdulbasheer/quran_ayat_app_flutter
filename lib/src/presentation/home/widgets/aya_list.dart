@@ -150,18 +150,58 @@ class _PageControls extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        IconButton(
-          onPressed: onCopyPage,
-          icon: Icon(
-            Icons.copy,
-            color: Theme.of(context).disabledColor,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              tooltip: "Copy page",
+              onPressed: onCopyPage,
+              icon: Icon(
+                Icons.copy,
+                size: 18,
+                color: Theme.of(context).disabledColor,
+              ),
+            ),
+            const _ToggleWordTranslationStatusButton(),
+          ],
         ),
         IconButton(
+          tooltip: "Back to previous page",
           onPressed: onBack,
-          icon: const Icon(Icons.arrow_forward),
+          icon: const Icon(
+            Icons.arrow_forward,
+            size: 18,
+          ),
         ),
       ],
     );
+  }
+}
+
+class _ToggleWordTranslationStatusButton extends StatelessWidget {
+  const _ToggleWordTranslationStatusButton();
+
+  @override
+  Widget build(BuildContext context) {
+    HomeBloc bloc = context.read<HomeBloc>();
+    return StreamBuilder<bool?>(
+        stream: bloc.wordTranslationStatus$,
+        initialData: bloc.wordTranslationStatus$.value,
+        builder: (context, snapshot) {
+          bool isEnabled = snapshot.hasData ? snapshot.data as bool : true;
+          return IconButton(
+            tooltip: "Toggle Word by word translations",
+            onPressed: snapshot.hasData
+                ? () => bloc.add(ToggleWordTranslationStatusEvent())
+                : null,
+            icon: Icon(
+              Icons.language,
+              size: 18,
+              color: isEnabled
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).disabledColor,
+            ),
+          );
+        });
   }
 }

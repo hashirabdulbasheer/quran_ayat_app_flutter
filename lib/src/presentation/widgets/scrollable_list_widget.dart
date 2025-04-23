@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:vibration/vibration.dart';
 
 class ScrollableListWidget extends StatefulWidget {
   final int itemsCount;
@@ -51,7 +52,12 @@ class _ListWidgetState extends State<ScrollableListWidget> {
         ),
         Padding(
           padding: const EdgeInsets.only(bottom: 20),
-          child: _NextAyaWidget(onNext: _scrollToNextVisibleItem),
+          child: _NextAyaWidget(onNext: () {
+            // scroll
+            _scrollToNextVisibleItem();
+            // vibrate
+            _vibrate();
+          }),
         ),
       ],
     );
@@ -64,13 +70,7 @@ class _ListWidgetState extends State<ScrollableListWidget> {
   void _scrollToNextVisibleItem() {
     final positions = _itemPositionsListener.itemPositions.value;
     if (positions.isNotEmpty) {
-      final visibleItems = positions
-          .where((pos) => pos.itemLeadingEdge >= 0 && pos.itemTrailingEdge <= 1)
-          .toList()
-        ..sort((a, b) => a.index.compareTo(b.index));
-
-      final currentIndex =
-          visibleItems.isNotEmpty ? visibleItems.first.index : null;
+      final currentIndex = positions.isNotEmpty ? positions.first.index : null;
       if (currentIndex != null && currentIndex < widget.itemsCount - 1) {
         _itemScrollController.scrollTo(
           index: currentIndex + 1,
@@ -78,6 +78,14 @@ class _ListWidgetState extends State<ScrollableListWidget> {
         );
       }
     }
+  }
+
+  void _vibrate() {
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      if (await Vibration.hasVibrator()) {
+        Vibration.vibrate(duration: 100);
+      }
+    });
   }
 }
 
@@ -91,6 +99,7 @@ class _NextAyaWidget extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomLeft,
       child: FloatingActionButton.small(
+        tooltip: "Next verse",
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor.withOpacity(0.9),
         onPressed: onNext,

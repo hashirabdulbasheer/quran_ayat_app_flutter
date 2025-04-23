@@ -15,6 +15,10 @@ abstract class SettingsDataSource {
   NQTranslation getDefaultTranslation();
 
   Future<void> setDefaultTranslation(NQTranslation translation);
+
+  bool getIsWordByWordTranslationEnabled();
+
+  Future<void> setIsWordByWordTranslationEnabled(bool isEnabled);
 }
 
 @Injectable(as: SettingsDataSource)
@@ -60,6 +64,19 @@ class SettingsLocalDataSourceImpl extends SettingsDataSource {
     await sharedPreferences.setString(
       "quran_default_translation",
       translation.title,
+    );
+  }
+
+  @override
+  bool getIsWordByWordTranslationEnabled() {
+    return sharedPreferences.getBool("quran_word_translation_enabled") ?? false;
+  }
+
+  @override
+  Future<void> setIsWordByWordTranslationEnabled(bool isEnabled) async {
+    await sharedPreferences.setBool(
+      "quran_word_translation_enabled",
+      isEnabled,
     );
   }
 }

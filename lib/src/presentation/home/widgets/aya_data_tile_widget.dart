@@ -106,6 +106,7 @@ class AyaDataTileWidget extends StatelessWidget {
         /// more
         if (!isDetailed)
           IconButton(
+              tooltip: "More translations",
               onPressed: () => _navigateToDetails(context, index),
               icon: Icon(
                 Icons.more_horiz,

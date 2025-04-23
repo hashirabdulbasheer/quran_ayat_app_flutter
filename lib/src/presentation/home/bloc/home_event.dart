@@ -100,3 +100,8 @@ class SelectTranslationEvent extends HomeEvent {
   @override
   List<Object?> get props => [translation];
 }
+
+class ToggleWordTranslationStatusEvent extends HomeEvent {
+  @override
+  List<Object?> get props => [];
+}

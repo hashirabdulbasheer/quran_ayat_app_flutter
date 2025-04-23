@@ -18,13 +18,11 @@
     <meta property="og:description" content="We study how to think like the Noble Quran.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://uxquran.com">
-    <meta property="og:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
 
     <!-- Twitter Card (used by Twitter/X and some Android apps) -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="uxQuran">
     <meta name="twitter:description" content="We study how to think like the Noble Quran.">
-    <meta property="twitter:image" content="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
 
     <link rel=apple-touch-icon href=icons/Icon-192.png>
     <link rel=icon type=image/png href="favicon.png"/>
@@ -71,7 +69,7 @@
     }
     function beginPreloading(manifestAssets) {
         var loading = document.querySelector("#loading");
-        var assets = ["flutter.js", "main.dart.js?version=v4.3.2", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
+        var assets = ["flutter.js", "main.dart.js?version=v4.4.0", "canvaskit/canvaskit.wasm", "canvaskit/canvaskit.js", ...additionalScripts, ...manifestAssets];
         const batchSize = 20;
         async function reportProgress() {
             if (assets.length == 0) {
