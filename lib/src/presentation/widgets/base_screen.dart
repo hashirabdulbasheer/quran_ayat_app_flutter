@@ -37,13 +37,12 @@ class QBaseScreen extends StatelessWidget {
                 color: MediaQuery.of(context).size.width >= 1000
                     ? Theme.of(context).primaryColor.withOpacity(0.1)
                     : Colors.transparent,
-                padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: Container(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
                           child: ConstrainedBox(
                               constraints: const BoxConstraints(maxWidth: 800),
                               child: child))),
