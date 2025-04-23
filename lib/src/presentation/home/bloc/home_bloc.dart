@@ -23,7 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final currentPageData$ = BehaviorSubject<QPageData>();
   final settings$ = BehaviorSubject<double>.seeded(1.0);
-  final wordTranslationStatus$ = BehaviorSubject<bool>.seeded(true);
+  final wordTranslationStatus$ = BehaviorSubject<bool>.seeded(false);
 
   HomeBloc({
     required this.fetchSuraTitlesUseCase,
