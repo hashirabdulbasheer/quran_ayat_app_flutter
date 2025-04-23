@@ -16,14 +16,21 @@ class WordByWord extends StatefulWidget {
 
 class _WordByWordState extends State<WordByWord> {
   bool isLocalTranslationDisplayed = false;
+  static const _translationHideTimeSecs = 4;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // else
+        // show
         setState(() {
           isLocalTranslationDisplayed = !isLocalTranslationDisplayed;
+        });
+        // hide after some time
+        Future.delayed(const Duration(seconds: _translationHideTimeSecs), () {
+          setState(() {
+            isLocalTranslationDisplayed = false;
+          });
         });
       },
       child: Column(
@@ -75,25 +82,18 @@ class _TranslationText extends StatelessWidget {
           }
 
           return AnimatedSize(
-            duration: const Duration(milliseconds: 100),
+            duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             alignment: Alignment.topCenter,
-            child: AnimatedSlide(
-              offset: isLocalTranslationDisplayed
-                  ? Offset.zero
-                  : const Offset(0, -0.5),
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              child: AnimatedOpacity(
-                opacity: isLocalTranslationDisplayed ? 1 : 0,
-                duration: const Duration(milliseconds: 100),
-                child: isLocalTranslationDisplayed
-                    ? _TranslationBox(
-                        text: text,
-                        scaleFactor: scaleFactor,
-                      )
-                    : const SizedBox.shrink(),
-              ),
+            child: AnimatedOpacity(
+              opacity: isLocalTranslationDisplayed ? 1 : 0,
+              duration: const Duration(milliseconds: 100),
+              child: isLocalTranslationDisplayed
+                  ? _TranslationBox(
+                      text: text,
+                      scaleFactor: scaleFactor,
+                    )
+                  : const SizedBox.shrink(),
             ),
           );
         });
