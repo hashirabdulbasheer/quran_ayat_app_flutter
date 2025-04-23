@@ -195,9 +195,11 @@ class _ToggleWordTranslationStatusButton extends StatelessWidget {
                 ? () => bloc.add(ToggleWordTranslationStatusEvent())
                 : null,
             icon: Icon(
-              isEnabled ? Icons.explicit : Icons.explicit_outlined,
+              Icons.language,
               size: 18,
-              color: Theme.of(context).disabledColor,
+              color: isEnabled
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).disabledColor,
             ),
           );
         });
