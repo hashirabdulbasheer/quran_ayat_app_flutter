@@ -42,7 +42,7 @@ class QBaseScreen extends StatelessWidget {
                   child: Container(
                       color: Theme.of(context).scaffoldBackgroundColor,
                       child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
                           child: ConstrainedBox(
                               constraints: const BoxConstraints(maxWidth: 800),
                               child: child))),
