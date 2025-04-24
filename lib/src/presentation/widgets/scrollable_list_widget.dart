@@ -83,7 +83,7 @@ class _ListWidgetState extends State<ScrollableListWidget> {
   void _vibrate() {
     Future.delayed(const Duration(milliseconds: 500), () async {
       if (await Vibration.hasVibrator()) {
-        Vibration.vibrate(duration: 100);
+        Vibration.vibrate(duration: 10);
       }
     });
   }
