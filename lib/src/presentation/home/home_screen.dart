@@ -155,8 +155,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // do not check for updated on web
     if (kIsWeb) return;
     HomeBloc bloc = context.read<HomeBloc>();
-    final version = await bloc.fetchVersion() ?? "";
-    if(!kAppVersion.contains(version)) {
+    final version = await bloc.fetchVersion();
+    if(version != null && !kAppVersion.contains(version)) {
       _showUpdateDialog();
     }
   }
