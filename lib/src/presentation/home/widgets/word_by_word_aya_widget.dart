@@ -3,10 +3,12 @@ import 'package:ayat_app/src/presentation/home/home.dart';
 class WordByWordAya extends StatelessWidget {
   final List<QWord> words;
   final double textScaleFactor;
+  final bool isWordByWordTranslationEnabled;
 
   const WordByWordAya({
     super.key,
     required this.words,
+    required this.isWordByWordTranslationEnabled,
     this.textScaleFactor = 1.0,
   });
 
@@ -32,6 +34,8 @@ class WordByWordAya extends StatelessWidget {
                         child: WordByWord(
                           word: e,
                           textScaleFactor: textScaleFactor,
+                          isWordByWordTranslationEnabled:
+                              isWordByWordTranslationEnabled,
                         ),
                       ))
                   .toList(),

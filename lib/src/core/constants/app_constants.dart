@@ -1,5 +1,5 @@
 // TODO: Update before release
-const String kAppVersion = "v4.4.1";
+const String kAppVersion = "v4.4.2";
 
 const kNumAyaPerPage = 1;
 
@@ -25,3 +25,5 @@ const kAboutUsSupportEmail = 'support@uxquran.com';
 const kWhatsAppUrl = "https://whatsapp.com/channel/0029VaqdTKVHFxP2KqqCkk0f";
 
 const kAndroidApk = "https://github.com/hashirabdulbasheer/quran_ayat_app_flutter/raw/refs/heads/develop/releases/noble-quran.apk";
+
+const kVersionFileUrl = 'https://raw.githubusercontent.com/hashirabdulbasheer/quran_ayat_app_flutter/main/web/version.json';

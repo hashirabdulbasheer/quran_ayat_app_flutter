@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:ayat_app/src/domain/usecases/fetch_default_translation_usecase.dart';
 import 'package:ayat_app/src/domain/usecases/fetch_word_translation_status_usecase.dart';
 import 'package:ayat_app/src/domain/usecases/save_default_translation_usecase.dart';
 import 'package:ayat_app/src/domain/usecases/save_word_translation_status_usecase.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
+import 'package:http/http.dart' as http;
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -23,7 +26,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final currentPageData$ = BehaviorSubject<QPageData>();
   final settings$ = BehaviorSubject<double>.seeded(1.0);
-  final wordTranslationStatus$ = BehaviorSubject<bool>.seeded(false);
+
+  // final wordTranslationStatus$ = BehaviorSubject<bool>.seeded(false);
 
   HomeBloc({
     required this.fetchSuraTitlesUseCase,
@@ -64,10 +68,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // fetch settings
     settings$.add(fetchFontScaleUseCase.call());
-    wordTranslationStatus$.add(fetchWordTranslationStatusUseCase.call());
-    wordTranslationStatus$.listen((onData) {
-      print("Changed $onData");
-    });
 
     // auto bookmark loading
     SurahIndex? bookmarkIndex = fetchBookmarkUseCase.call();
@@ -119,6 +119,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     final bookmark = fetchBookmarkUseCase.call();
+    final isWordByWordTranslation = fetchWordTranslationStatusUseCase.call();
 
     await suraDataResponse.fold((left) async {
       emit(HomeErrorState(message: (left as GeneralFailure).message));
@@ -127,6 +128,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         selectedIndex: event.selectedIndex,
         bookmarkIndex: bookmark,
         selectedTranslation: selectedTranslation,
+        isWordByWordTranslationEnabled: isWordByWordTranslation,
       ));
     });
   }
@@ -199,8 +201,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ToggleWordTranslationStatusEvent event,
     Emitter<HomeState> emit,
   ) async {
-    bool currentValue = wordTranslationStatus$.value;
-    wordTranslationStatus$.add(!currentValue);
+    bool currentValue = currentPageData$.value.isWordByWordTranslationEnabled;
+    currentPageData$.add(currentPageData$.value
+        .copyWith(isWordByWordTranslationEnabled: !currentValue));
     await saveWordTranslationStatusUseCase
         .call(SaveWordTranslationStatusParams(isEnabled: !currentValue));
   }
@@ -226,7 +229,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future _unregisterListeners() async {
     await currentPageData$.close();
     await settings$.close();
-    await wordTranslationStatus$.close();
   }
 
   double getReadingProgress(HomeLoadedState state) {
@@ -235,5 +237,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final title = state.suraTitles?[page.firstAyaIndex.sura];
 
     return title == null ? 0.0 : lastAya / title.totalVerses;
+  }
+
+  Future<String?> fetchVersion() async {
+    try {
+      final response = await http.get(Uri.parse(kVersionFileUrl));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return data['version']?.toString();
+      } else {
+        print(
+            'Failed to load Update JSON. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching version: $e');
+    }
+    return null;
   }
 }

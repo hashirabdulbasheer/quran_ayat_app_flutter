@@ -22,6 +22,7 @@ void main() {
     testGoldens('Display WordByWord correctly', (WidgetTester tester) async {
       const widget = Center(
           child: WordByWord(
+        isWordByWordTranslationEnabled: true,
         word: QWord(
             word: 1, tr: "The Most Merciful", aya: 1, sura: 1, ar: "الرحمان"),
       ));

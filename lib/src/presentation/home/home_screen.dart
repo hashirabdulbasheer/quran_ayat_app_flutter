@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       _initDeepLinks();
     }
+    _checkForUpdates();
   }
 
   @override
@@ -148,6 +149,47 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _openAppLink(Uri uri) {
     context.push(uri.toString());
+  }
+
+  void _checkForUpdates() async {
+    // do not check for updated on web
+    if (kIsWeb) return;
+    HomeBloc bloc = context.read<HomeBloc>();
+    final version = await bloc.fetchVersion();
+    if(version != null && !kAppVersion.contains(version)) {
+      _showUpdateDialog();
+    }
+  }
+
+  Future<void> _showUpdateDialog() {
+    return showDialog(
+      context: context,
+      barrierDismissible: false, // User must tap a button
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Update Available'),
+          content: const Text('There is a new version of the app available.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: const Text('Update'),
+              onPressed: () async {
+                if (await canLaunchUrl(Uri.parse(kAndroidApk))) {
+                  await launchUrl(Uri.parse(kAndroidApk),
+                      mode: LaunchMode.externalApplication);
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 

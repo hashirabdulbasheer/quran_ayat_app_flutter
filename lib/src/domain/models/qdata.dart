@@ -8,6 +8,7 @@ class QPageData extends Equatable {
   final SurahIndex? selectedIndex;
   final bool scrollReachedTop;
   final QTranslation selectedTranslation;
+  final bool isWordByWordTranslationEnabled;
 
   const QPageData({
     required this.ayaWords,
@@ -16,6 +17,7 @@ class QPageData extends Equatable {
     required this.page,
     this.selectedIndex,
     this.scrollReachedTop = false,
+    this.isWordByWordTranslationEnabled = false,
     this.selectedTranslation = QTranslation.wahiduddinKhan,
   });
 
@@ -23,6 +25,7 @@ class QPageData extends Equatable {
     SurahIndex? selectedIndex,
     SurahIndex? bookmarkIndex,
     bool? scrollReachedTop,
+    bool? isWordByWordTranslationEnabled,
     QTranslation? selectedTranslation,
   }) {
     return QPageData(
@@ -33,6 +36,8 @@ class QPageData extends Equatable {
       selectedIndex: selectedIndex ?? this.selectedIndex,
       scrollReachedTop: scrollReachedTop ?? this.scrollReachedTop,
       selectedTranslation: selectedTranslation ?? this.selectedTranslation,
+      isWordByWordTranslationEnabled:
+          isWordByWordTranslationEnabled ?? this.isWordByWordTranslationEnabled,
     );
   }
 
@@ -45,5 +50,6 @@ class QPageData extends Equatable {
         selectedIndex,
         scrollReachedTop,
         selectedTranslation,
+        isWordByWordTranslationEnabled,
       ];
 }
