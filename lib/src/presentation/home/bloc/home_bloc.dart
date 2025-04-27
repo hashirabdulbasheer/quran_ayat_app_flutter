@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:ayat_app/src/domain/usecases/fetch_default_translation_usecase.dart';
 import 'package:ayat_app/src/domain/usecases/fetch_word_translation_status_usecase.dart';
 import 'package:ayat_app/src/domain/usecases/save_default_translation_usecase.dart';
 import 'package:ayat_app/src/domain/usecases/save_word_translation_status_usecase.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
+import 'package:http/http.dart' as http;
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -234,5 +237,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final title = state.suraTitles?[page.firstAyaIndex.sura];
 
     return title == null ? 0.0 : lastAya / title.totalVerses;
+  }
+
+  Future<String?> fetchVersion() async {
+    try {
+      final response = await http.get(Uri.parse(kVersionFileUrl));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return data['version']?.toString();
+      } else {
+        print(
+            'Failed to load Update JSON. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching version: $e');
+    }
+    return null;
   }
 }
