@@ -23,7 +23,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final currentPageData$ = BehaviorSubject<QPageData>();
   final settings$ = BehaviorSubject<double>.seeded(1.0);
-  final wordTranslationStatus$ = BehaviorSubject<bool>.seeded(false);
+
+  // final wordTranslationStatus$ = BehaviorSubject<bool>.seeded(false);
 
   HomeBloc({
     required this.fetchSuraTitlesUseCase,
@@ -64,10 +65,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     // fetch settings
     settings$.add(fetchFontScaleUseCase.call());
-    wordTranslationStatus$.add(fetchWordTranslationStatusUseCase.call());
-    wordTranslationStatus$.listen((onData) {
-      print("Changed $onData");
-    });
 
     // auto bookmark loading
     SurahIndex? bookmarkIndex = fetchBookmarkUseCase.call();
@@ -119,6 +116,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
 
     final bookmark = fetchBookmarkUseCase.call();
+    final isWordByWordTranslation = fetchWordTranslationStatusUseCase.call();
 
     await suraDataResponse.fold((left) async {
       emit(HomeErrorState(message: (left as GeneralFailure).message));
@@ -127,6 +125,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         selectedIndex: event.selectedIndex,
         bookmarkIndex: bookmark,
         selectedTranslation: selectedTranslation,
+        isWordByWordTranslationEnabled: isWordByWordTranslation,
       ));
     });
   }
@@ -199,8 +198,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ToggleWordTranslationStatusEvent event,
     Emitter<HomeState> emit,
   ) async {
-    bool currentValue = wordTranslationStatus$.value;
-    wordTranslationStatus$.add(!currentValue);
+    bool currentValue = currentPageData$.value.isWordByWordTranslationEnabled;
+    currentPageData$.add(currentPageData$.value
+        .copyWith(isWordByWordTranslationEnabled: !currentValue));
     await saveWordTranslationStatusUseCase
         .call(SaveWordTranslationStatusParams(isEnabled: !currentValue));
   }
@@ -226,7 +226,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future _unregisterListeners() async {
     await currentPageData$.close();
     await settings$.close();
-    await wordTranslationStatus$.close();
   }
 
   double getReadingProgress(HomeLoadedState state) {

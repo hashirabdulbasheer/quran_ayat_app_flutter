@@ -59,6 +59,8 @@ class AyaDataTileWidget extends StatelessWidget {
         WordByWordAya(
           words: ayaWords[indexInPage],
           textScaleFactor: textScaleFactor,
+          isWordByWordTranslationEnabled:
+              pageData.isWordByWordTranslationEnabled,
         ),
 
         const SizedBox(height: 20),
@@ -317,6 +319,7 @@ class _ScreenshotWidget extends StatelessWidget {
             WordByWordAya(
               words: ayaWords[index],
               textScaleFactor: 1.0,
+              isWordByWordTranslationEnabled: true, // enabling word by word for screenshots
             ),
 
             const SizedBox(height: 20),

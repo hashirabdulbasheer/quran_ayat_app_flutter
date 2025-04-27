@@ -2,11 +2,13 @@ import 'package:ayat_app/src/presentation/home/home.dart';
 
 class WordByWord extends StatefulWidget {
   final QWord word;
+  final bool isWordByWordTranslationEnabled;
   final double textScaleFactor;
 
   const WordByWord({
     super.key,
     required this.word,
+    required this.isWordByWordTranslationEnabled,
     this.textScaleFactor = 1.0,
   });
 
@@ -19,9 +21,18 @@ class _WordByWordState extends State<WordByWord> {
   static const _translationHideTimeSecs = 4;
 
   @override
+  void initState() {
+    super.initState();
+    isLocalTranslationDisplayed = widget.isWordByWordTranslationEnabled;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        if(widget.isWordByWordTranslationEnabled) {
+          return;
+        }
         // show
         setState(() {
           isLocalTranslationDisplayed = !isLocalTranslationDisplayed;
@@ -65,38 +76,21 @@ class _TranslationText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    HomeBloc bloc = context.read<HomeBloc>();
-    return StreamBuilder<bool?>(
-        initialData: bloc.wordTranslationStatus$.value,
-        stream: bloc.wordTranslationStatus$,
-        builder: (context, snapshot) {
-          bool isEnabled = snapshot.hasData ? snapshot.data as bool : true;
-          // is enabled shows if the word by word translations have to be displayed or not
-          // if its enabled then we can directly show the translations
-          // if its not enabled then we do the animation
-          if (isEnabled) {
-            return _TranslationBox(
-              text: text,
-              scaleFactor: scaleFactor,
-            );
-          }
-
-          return AnimatedSize(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            alignment: Alignment.topCenter,
-            child: AnimatedOpacity(
-              opacity: isLocalTranslationDisplayed ? 1 : 0,
-              duration: const Duration(milliseconds: 100),
-              child: isLocalTranslationDisplayed
-                  ? _TranslationBox(
-                      text: text,
-                      scaleFactor: scaleFactor,
-                    )
-                  : const SizedBox.shrink(),
-            ),
-          );
-        });
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      alignment: Alignment.topCenter,
+      child: AnimatedOpacity(
+        opacity: isLocalTranslationDisplayed ? 1 : 0,
+        duration: const Duration(milliseconds: 100),
+        child: isLocalTranslationDisplayed
+            ? _TranslationBox(
+          text: text,
+          scaleFactor: scaleFactor,
+        )
+            : const SizedBox.shrink(),
+      ),
+    );
   }
 }
 

@@ -184,11 +184,11 @@ class _ToggleWordTranslationStatusButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeBloc bloc = context.read<HomeBloc>();
-    return StreamBuilder<bool?>(
-        stream: bloc.wordTranslationStatus$,
-        initialData: bloc.wordTranslationStatus$.value,
+    return StreamBuilder<QPageData?>(
+        stream: bloc.currentPageData$,
+        initialData: bloc.currentPageData$.value,
         builder: (context, snapshot) {
-          bool isEnabled = snapshot.hasData ? snapshot.data as bool : true;
+          bool isEnabled = snapshot.hasData ? snapshot.data?.isWordByWordTranslationEnabled as bool : true;
           return IconButton(
             tooltip: "Toggle Word by word translations",
             onPressed: snapshot.hasData
