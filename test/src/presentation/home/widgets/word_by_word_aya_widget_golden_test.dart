@@ -23,6 +23,7 @@ void main() {
         (WidgetTester tester) async {
       const widget = Center(
           child: WordByWordAya(
+        isWordByWordTranslationEnabled: true,
         words: [
           QWord(
               word: 1, tr: "The Most Merciful", aya: 1, sura: 1, ar: "الرحيم"),
