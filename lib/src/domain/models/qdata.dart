@@ -17,7 +17,7 @@ class QPageData extends Equatable {
     required this.page,
     this.selectedIndex,
     this.scrollReachedTop = false,
-    this.isWordByWordTranslationEnabled = false,
+    this.isWordByWordTranslationEnabled = true,
     this.selectedTranslation = QTranslation.wahiduddinKhan,
   });
 

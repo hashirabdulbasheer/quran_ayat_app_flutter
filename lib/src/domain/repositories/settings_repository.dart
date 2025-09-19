@@ -13,7 +13,7 @@ abstract class SettingsRepository {
 
   Future<void> setDefaultTranslation(QTranslation translation);
 
-  bool getIsWordByWordTranslationEnabled();
+  bool? getIsWordByWordTranslationEnabled();
 
   Future<void> setIsWordByWordTranslationEnabled(bool isEnabled);
 }

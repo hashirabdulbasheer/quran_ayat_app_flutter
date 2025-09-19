@@ -16,7 +16,7 @@ abstract class SettingsDataSource {
 
   Future<void> setDefaultTranslation(NQTranslation translation);
 
-  bool getIsWordByWordTranslationEnabled();
+  bool? getIsWordByWordTranslationEnabled();
 
   Future<void> setIsWordByWordTranslationEnabled(bool isEnabled);
 }
@@ -68,8 +68,8 @@ class SettingsLocalDataSourceImpl extends SettingsDataSource {
   }
 
   @override
-  bool getIsWordByWordTranslationEnabled() {
-    return sharedPreferences.getBool("quran_word_translation_enabled") ?? false;
+  bool? getIsWordByWordTranslationEnabled() {
+    return sharedPreferences.getBool("quran_word_translation_enabled");
   }
 
   @override

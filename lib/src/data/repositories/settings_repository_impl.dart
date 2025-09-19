@@ -53,7 +53,7 @@ class SettingsRepositoryImpl extends SettingsRepository {
   }
 
   @override
-  bool getIsWordByWordTranslationEnabled() {
+  bool? getIsWordByWordTranslationEnabled() {
     return dataSource.getIsWordByWordTranslationEnabled();
   }
 
