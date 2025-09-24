@@ -52,3 +52,6 @@ GoogleService-Info.plist
 commands.txt
 /ios/firebase_app_id_file.json
 private_commands.txt
+
+key.properties
+keys/
