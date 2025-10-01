@@ -106,7 +106,7 @@ class _DriveScreenState extends State<DriveScreen> {
   /// Utils
   ///
   Future<void> _play() async {
-    Duration? duration;
+    Duration duration;
     try {
       if (_isPlaying) return;
 
