@@ -69,6 +69,21 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Text("Blog",
                   style: TextStyle(fontWeight: FontWeight.bold))),
           IconButton(
+              tooltip: "Drive mode",
+              onPressed: () => context.goNamed(
+                    AppRoutes.drive.name,
+                    pathParameters: {
+                      'sura':
+                          "${bloc.currentPageData$.value.selectedIndex?.human.sura ?? 1}",
+                      'aya':
+                          "${bloc.currentPageData$.value.selectedIndex?.human.aya ?? 1}"
+                    },
+                  ),
+              icon: Icon(
+                Icons.drive_eta,
+                color: Theme.of(context).primaryColor,
+              )),
+          IconButton(
               tooltip: "Go to bookmark",
               onPressed: () => bloc.add(GoToBookmarkEvent()),
               icon: Icon(
