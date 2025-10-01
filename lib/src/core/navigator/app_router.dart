@@ -4,6 +4,7 @@ import 'package:ayat_app/src/core/constants/route_constants.dart';
 import 'package:ayat_app/src/core/di/service_locator.dart';
 import 'package:ayat_app/src/domain/models/surah_index.dart';
 import 'package:ayat_app/src/presentation/about/presentation/about_screen.dart';
+import 'package:ayat_app/src/presentation/drive/drive_screen.dart';
 import 'package:ayat_app/src/presentation/home/bloc/home_bloc.dart';
 import 'package:ayat_app/src/presentation/home/home_screen.dart';
 import 'package:ayat_app/src/presentation/not_found/not_found_screen.dart';
@@ -50,6 +51,25 @@ class AppRouter {
               name: AppRoutes.about.name,
               pageBuilder: (context, state) {
                 return const NoTransitionPage(child: AboutScreen());
+              },
+            ),
+            GoRoute(
+              path: AppRoutes.drive.path,
+              name: AppRoutes.drive.name,
+              pageBuilder: (context, state) {
+                int sura =
+                    int.tryParse(state.pathParameters['sura'] ?? '1') ?? 1;
+                int aya = int.tryParse(state.pathParameters['aya'] ?? '1') ?? 1;
+                if (sura < 1 || sura > 114) {
+                  sura = 1;
+                  aya = 1;
+                }
+                return NoTransitionPage(
+                    child: DriveScreen(
+                        index: SurahIndex.fromHuman(
+                  sura: sura,
+                  aya: aya,
+                )));
               },
             ),
           ]),
