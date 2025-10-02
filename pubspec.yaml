@@ -35,7 +35,7 @@ dependencies:
   ## https://pub.dev/packages/dropdown_search
   rxdart: ^0.28.0
   ## https://pub.dev/packages/shared_preferences
-  shared_preferences: ^2.3.2
+  shared_preferences: ^2.5.3
   ## https://pub.dev/packages/scrollable_positioned_list
   scrollable_positioned_list: ^0.3.8
   ## https://pub.dev/packages/url_launcher
@@ -60,6 +60,10 @@ dependencies:
   carousel_slider: ^5.0.0
   ## https://pub.dev/packages/just_audio
   just_audio: ^0.9.46
+  ## https://pub.dev/packages/universal_html
+  universal_html: ^2.2.4
+  ## https://pub.dev/packages/wakelock_plus
+  wakelock_plus: ^1.4.0
 
 dev_dependencies:
   flutter_test:
