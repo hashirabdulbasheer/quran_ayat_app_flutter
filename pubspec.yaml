@@ -1,7 +1,7 @@
 name: ayat_app
 description: "We study how to think like the Noble Quran"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 4.4.4+1
+version: 4.4.5+1
 
 environment:
   sdk: ^3.5.1
