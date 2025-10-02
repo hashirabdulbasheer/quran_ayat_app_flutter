@@ -1,5 +1,5 @@
 // TODO: Update before release
-const String kAppVersion = "v4.4.4";
+const String kAppVersion = "v4.4.5";
 
 const kNumAyaPerPage = 1;
 

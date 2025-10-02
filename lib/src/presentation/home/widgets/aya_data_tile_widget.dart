@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ayat_app/src/core/constants/route_constants.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:screenshot/screenshot.dart';
@@ -207,7 +208,19 @@ class _AyaControls extends StatelessWidget {
             isBookmarked: _isBookmarked(
               _currentSuraIndex(index),
               (state as HomeLoadedState).bookmarkIndex,
-            ));
+            ),
+            onDriveModePressed: () {
+              context.goNamed(
+                AppRoutes.drive.name,
+                pathParameters: {
+                  'sura':
+                  "${_currentSuraIndex(index).human.sura}",
+                  'aya':
+                  "${_currentSuraIndex(index).human.aya}"
+                },
+              );
+            },
+        );
       },
     );
   }

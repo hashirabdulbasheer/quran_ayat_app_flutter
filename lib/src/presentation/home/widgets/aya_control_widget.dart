@@ -6,6 +6,7 @@ class AyaControlWidget extends StatelessWidget {
   final VoidCallback onMore;
   final VoidCallback onCopy;
   final VoidCallback onScreenshot;
+  final VoidCallback onDriveModePressed;
 
   const AyaControlWidget({
     super.key,
@@ -14,6 +15,7 @@ class AyaControlWidget extends StatelessWidget {
     required this.onMore,
     required this.onCopy,
     required this.onScreenshot,
+    required this.onDriveModePressed,
   });
 
   @override
@@ -58,6 +60,15 @@ class AyaControlWidget extends StatelessWidget {
                   size: 18,
                   color: Theme.of(context).disabledColor,
                 ),
+        ),
+        IconButton(
+          tooltip: "Drive mode",
+          onPressed: onDriveModePressed,
+          icon: Icon(
+            Icons.drive_eta_outlined,
+            size: 20,
+            color: Theme.of(context).disabledColor,
+          ),
         ),
       ],
     );
