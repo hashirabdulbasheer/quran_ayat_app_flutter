@@ -1,7 +1,7 @@
 name: ayat_app
 description: "We study how to think like the Noble Quran"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 4.4.5+1
+version: 4.4.6+1
 
 environment:
   sdk: ^3.5.1
@@ -60,8 +60,6 @@ dependencies:
   carousel_slider: ^5.0.0
   ## https://pub.dev/packages/just_audio
   just_audio: ^0.9.46
-  ## https://pub.dev/packages/universal_html
-  universal_html: ^2.2.4
   ## https://pub.dev/packages/wakelock_plus
   wakelock_plus: ^1.4.0
 

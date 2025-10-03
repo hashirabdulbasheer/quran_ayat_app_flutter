@@ -53,23 +53,36 @@ class AppRouter {
                 return const NoTransitionPage(child: AboutScreen());
               },
             ),
+
+            ///
+            /// Drive Mode
+            ///
             GoRoute(
               path: AppRoutes.drive.path,
               name: AppRoutes.drive.name,
               pageBuilder: (context, state) {
-                int sura =
-                    int.tryParse(state.pathParameters['sura'] ?? '1') ?? 1;
-                int aya = int.tryParse(state.pathParameters['aya'] ?? '1') ?? 1;
+                final extras = state.extra as Map<String, String>?;
+                int sura = int.parse(extras?['sura'] ?? '1');
+                int aya = int.parse(extras?['aya'] ?? '1');
                 if (sura < 1 || sura > 114) {
                   sura = 1;
                   aya = 1;
                 }
                 return NoTransitionPage(
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider(create: (context) {
+                        return getIt<HomeBloc>();
+                      }),
+                    ],
                     child: DriveScreen(
-                        index: SurahIndex.fromHuman(
-                  sura: sura,
-                  aya: aya,
-                )));
+                      index: SurahIndex.fromHuman(
+                        sura: sura,
+                        aya: aya,
+                      ),
+                    ),
+                  ),
+                );
               },
             ),
           ]),
@@ -107,6 +120,7 @@ class AppRouter {
               },
             ),
           ]),
+
       GoRoute(
           path: AppRoutes.homeSuraAya.path,
           name: AppRoutes.homeSuraAya.name,

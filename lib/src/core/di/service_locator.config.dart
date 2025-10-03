@@ -61,6 +61,8 @@ extension GetItInjectableX on _i174.GetIt {
             dataSource: gh<_i70.SettingsDataSource>()));
     gh.factory<_i2.BookmarkDataSource>(
         () => _i2.BookmarkDataSourceImpl(gh<_i460.SharedPreferences>()));
+    gh.factory<_i990.SaveWordTranslationStatusUseCase>(() =>
+        _i990.SaveWordTranslationStatusUseCase(gh<_i924.SettingsRepository>()));
     gh.factory<_i468.FetchThemeModeUseCase>(
         () => _i468.FetchThemeModeUseCase(gh<_i924.SettingsRepository>()));
     gh.factory<_i734.SetFontScaleUseCase>(
@@ -71,13 +73,11 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i38.FetchFontScaleUseCase(gh<_i924.SettingsRepository>()));
     gh.factory<_i892.SaveDefaultTranslationUseCase>(() =>
         _i892.SaveDefaultTranslationUseCase(gh<_i924.SettingsRepository>()));
-    gh.factory<_i162.FetchDefaultTranslationUseCase>(() =>
-        _i162.FetchDefaultTranslationUseCase(gh<_i924.SettingsRepository>()));
-    gh.factory<_i990.SaveWordTranslationStatusUseCase>(() =>
-        _i990.SaveWordTranslationStatusUseCase(gh<_i924.SettingsRepository>()));
     gh.factory<_i869.FetchWordTranslationStatusUseCase>(() =>
         _i869.FetchWordTranslationStatusUseCase(
             gh<_i924.SettingsRepository>()));
+    gh.factory<_i162.FetchDefaultTranslationUseCase>(() =>
+        _i162.FetchDefaultTranslationUseCase(gh<_i924.SettingsRepository>()));
     gh.lazySingleton<_i406.AppBloc>(() => _i406.AppBloc(
           fetchThemeModeUseCase: gh<_i468.FetchThemeModeUseCase>(),
           saveThemeModeUseCase: gh<_i646.SaveThemeModeUseCase>(),
@@ -99,7 +99,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i400.SaveBookmarkUseCase(gh<_i924.BookmarkRepository>()));
     gh.factory<_i510.FetchBookmarkUseCase>(
         () => _i510.FetchBookmarkUseCase(gh<_i924.BookmarkRepository>()));
-    gh.factory<_i315.HomeBloc>(() => _i315.HomeBloc(
+    gh.lazySingleton<_i315.HomeBloc>(() => _i315.HomeBloc(
           fetchSuraTitlesUseCase: gh<_i881.FetchSuraTitlesUseCase>(),
           fetchFontScaleUseCase: gh<_i881.FetchFontScaleUseCase>(),
           setFontScaleUseCase: gh<_i881.SetFontScaleUseCase>(),
