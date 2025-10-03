@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 part 'home_event.dart';
 part 'home_state.dart';
 
-@LazySingleton()
+@injectable
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final FetchFontScaleUseCase fetchFontScaleUseCase;
   final SetFontScaleUseCase setFontScaleUseCase;
