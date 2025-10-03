@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:ayat_app/src/core/constants/route_constants.dart';
+import 'package:ayat_app/src/presentation/drive/drive_screen.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:screenshot/screenshot.dart';
@@ -166,60 +167,53 @@ class _AyaControls extends StatelessWidget {
         final firstAyaIndex = pageData.page.firstAyaIndex;
 
         return AyaControlWidget(
-            onScreenshot: () async {
-              if (!context.mounted) return;
-              try {
-                Uint8List? image = await _captureScreenshot(context, pageData);
-                if (image == null) {
-                  throw (GeneralException("no image"));
-                }
-                await _saveScreenshot(image, _currentSuraIndex(index));
-                _showMessage(context, "Screenshot saved");
-              } catch (e) {
-                _showMessage(context, "Error: ${e.toString()}");
+          onScreenshot: () async {
+            if (!context.mounted) return;
+            try {
+              Uint8List? image = await _captureScreenshot(context, pageData);
+              if (image == null) {
+                throw (GeneralException("no image"));
               }
-            },
-            onCopy: () {
-              String shareableString = _getShareableString(
-                context,
-                _currentSuraIndex(index),
-                translations.$2[index].text,
-              );
-              Clipboard.setData(
-                ClipboardData(text: shareableString),
-              ).then((_) {
-                if (context.mounted) {
-                  _showMessage(context, "Copied to clipboard");
-                }
-              });
-            },
-            onMore: () {
-              launchUrl(
-                  Uri.parse(
-                      "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
-                  mode: LaunchMode.inAppBrowserView);
-            },
-            onBookmarked: () {
-              context.read<HomeBloc>().add(
-                    AddBookmarkEvent(index: _currentSuraIndex(index)),
-                  );
-              _showMessage(context, "Bookmark saved");
-            },
-            isBookmarked: _isBookmarked(
+              await _saveScreenshot(image, _currentSuraIndex(index));
+              _showMessage(context, "Screenshot saved");
+            } catch (e) {
+              _showMessage(context, "Error: ${e.toString()}");
+            }
+          },
+          onCopy: () {
+            String shareableString = _getShareableString(
+              context,
               _currentSuraIndex(index),
-              (state as HomeLoadedState).bookmarkIndex,
-            ),
-            onDriveModePressed: () {
-              final _ = context.goNamed(
-                AppRoutes.drive.name,
-                extra: {
-                  'sura':
-                  "${_currentSuraIndex(index).human.sura}",
-                  'aya':
-                  "${_currentSuraIndex(index).human.aya}"
-                },
-              );
-            },
+              translations.$2[index].text,
+            );
+            Clipboard.setData(
+              ClipboardData(text: shareableString),
+            ).then((_) {
+              if (context.mounted) {
+                _showMessage(context, "Copied to clipboard");
+              }
+            });
+          },
+          onMore: () {
+            launchUrl(
+                Uri.parse(
+                    "$kLegacyAppUrl/${firstAyaIndex.human.sura}/${_currentSuraIndex(index).human.aya}"),
+                mode: LaunchMode.inAppBrowserView);
+          },
+          onBookmarked: () {
+            context.read<HomeBloc>().add(
+                  AddBookmarkEvent(index: _currentSuraIndex(index)),
+                );
+            _showMessage(context, "Bookmark saved");
+          },
+          isBookmarked: _isBookmarked(
+            _currentSuraIndex(index),
+            (state as HomeLoadedState).bookmarkIndex,
+          ),
+          onDriveModePressed: () => _navigateToDrive(
+            context,
+            _currentSuraIndex(index),
+          ),
         );
       },
     );
@@ -293,6 +287,32 @@ class _AyaControls extends StatelessWidget {
     await FileSaver.instance.saveFile(
         bytes: image, name: "quran_${index.human.sura}_${index.human.aya}.png");
   }
+
+  void _navigateToDrive(BuildContext context, SurahIndex index) {
+    final bloc = context.read<HomeBloc>();
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(
+        builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) {
+                return getIt<HomeBloc>()
+                  ..add(HomeInitializeEvent(
+                      numberOfAyaPerPage: kNumAyaPerPage, index: index));
+              }),
+            ],
+            child: DriveScreen(
+              index: index,
+            )),
+      ),
+    )
+        .then((result) {
+      bloc.add(HomeInitializeEvent(
+        numberOfAyaPerPage: kNumAyaPerPage,
+        index: index,
+      ));
+    });
+  }
 }
 
 class _ScreenshotWidget extends StatelessWidget {
@@ -332,7 +352,8 @@ class _ScreenshotWidget extends StatelessWidget {
             WordByWordAya(
               words: ayaWords[index],
               textScaleFactor: 1.0,
-              isWordByWordTranslationEnabled: true, // enabling word by word for screenshots
+              isWordByWordTranslationEnabled:
+                  true, // enabling word by word for screenshots
             ),
 
             const SizedBox(height: 20),
