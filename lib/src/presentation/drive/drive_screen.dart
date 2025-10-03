@@ -5,7 +5,6 @@ import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universal_html/html.dart' as html;
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class DriveScreen extends StatefulWidget {
@@ -200,7 +199,6 @@ class _DriveScreenState extends State<DriveScreen> {
     setState(() {
       _currentIndex = _currentIndex.next(1);
     });
-    updateUrl();
     await _play();
   }
 
@@ -209,7 +207,6 @@ class _DriveScreenState extends State<DriveScreen> {
     setState(() {
       _currentIndex = _currentIndex.previous(1);
     });
-    updateUrl();
     await _play();
   }
 
@@ -232,33 +229,6 @@ class _DriveScreenState extends State<DriveScreen> {
   }
 
   /// Utils
-
-  void updateUrl() {
-    if (!kIsWeb) return;
-
-    try {
-      final currentPath = html.window.location.pathname;
-      if (currentPath == null) return;
-
-      final pathSegments =
-          currentPath.split('/').where((s) => s.isNotEmpty).toList();
-
-      if (pathSegments.isNotEmpty == true) {
-        // Update the last segment with the current aya index
-        pathSegments[pathSegments.length - 1] =
-            _currentIndex.human.aya.toString();
-        final newPath = '/${pathSegments.join('/')}';
-
-        // Update the URL without triggering navigation
-        html.window.history.replaceState({}, '', newPath);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error updating URL: $e');
-      }
-    }
-  }
-
   Future<Uint8List?> _audioBytes(SurahIndex index, String audioUrl) async {
     try {
       // Check if available in cache

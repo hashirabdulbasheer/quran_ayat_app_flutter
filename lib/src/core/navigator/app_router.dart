@@ -61,63 +61,9 @@ class AppRouter {
               path: AppRoutes.drive.path,
               name: AppRoutes.drive.name,
               pageBuilder: (context, state) {
-                return NoTransitionPage(
-                  child: MultiBlocProvider(
-                    providers: [
-                      BlocProvider(create: (context) {
-                        return getIt<HomeBloc>()
-                          ..add(HomeInitializeEvent(
-                            numberOfAyaPerPage: kNumAyaPerPage,
-                          ));
-                      }),
-                    ],
-                    child: const DriveScreen(
-                      index: SurahIndex.fromHuman(
-                        sura: 1,
-                        aya: 1,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-
-            GoRoute(
-              path: AppRoutes.driveSura.path,
-              name: AppRoutes.driveSura.name,
-              pageBuilder: (context, state) {
-                int sura = int.tryParse(state.pathParameters['sura'] ?? '1') ?? 1;
-                if (sura < 1 || sura > 114) {
-                  sura = 1;
-                }
-                return NoTransitionPage(
-                  child: MultiBlocProvider(
-                    providers: [
-                      BlocProvider(create: (context) {
-                        return getIt<HomeBloc>()
-                          ..add(HomeInitializeEvent(
-                            numberOfAyaPerPage: kNumAyaPerPage,
-                          ));
-                      }),
-                    ],
-                    child: DriveScreen(
-                      index: SurahIndex.fromHuman(
-                        sura: sura,
-                        aya: 1,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-
-            GoRoute(
-              path: AppRoutes.driveSuraAya.path,
-              name: AppRoutes.driveSuraAya.name,
-              pageBuilder: (context, state) {
-                int sura =
-                    int.tryParse(state.pathParameters['sura'] ?? '1') ?? 1;
-                int aya = int.tryParse(state.pathParameters['aya'] ?? '1') ?? 1;
+                final extras = state.extra as Map<String, String>?;
+                int sura = int.parse(extras?['sura'] ?? '1');
+                int aya = int.parse(extras?['aya'] ?? '1');
                 if (sura < 1 || sura > 114) {
                   sura = 1;
                   aya = 1;
@@ -142,7 +88,6 @@ class AppRouter {
                 );
               },
             ),
-
           ]),
       GoRoute(
           path: AppRoutes.homeSura.path,
@@ -178,6 +123,7 @@ class AppRouter {
               },
             ),
           ]),
+
       GoRoute(
           path: AppRoutes.homeSuraAya.path,
           name: AppRoutes.homeSuraAya.name,

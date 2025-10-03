@@ -211,8 +211,8 @@ class _AyaControls extends StatelessWidget {
             ),
             onDriveModePressed: () {
               final result = context.goNamed(
-                AppRoutes.driveSuraAya.name,
-                pathParameters: {
+                AppRoutes.drive.name,
+                extra: {
                   'sura':
                   "${_currentSuraIndex(index).human.sura}",
                   'aya':
