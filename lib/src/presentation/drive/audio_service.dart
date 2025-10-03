@@ -27,7 +27,7 @@ class AudioService {
     } else if (audioUrl != null && audioUrl.isNotEmpty) {
       return _playUrl(audioUrl);
     }
-    throw ("Unknown audio source");
+    return false;
   }
 
   Future<void> stop() async {
