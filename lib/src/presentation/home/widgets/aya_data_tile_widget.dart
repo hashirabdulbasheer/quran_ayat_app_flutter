@@ -210,8 +210,8 @@ class _AyaControls extends StatelessWidget {
               (state as HomeLoadedState).bookmarkIndex,
             ),
             onDriveModePressed: () {
-              context.goNamed(
-                AppRoutes.drive.name,
+              final result = context.goNamed(
+                AppRoutes.driveSuraAya.name,
                 pathParameters: {
                   'sura':
                   "${_currentSuraIndex(index).human.sura}",

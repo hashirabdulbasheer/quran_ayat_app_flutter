@@ -53,9 +53,67 @@ class AppRouter {
                 return const NoTransitionPage(child: AboutScreen());
               },
             ),
+
+            ///
+            /// Drive Mode
+            ///
             GoRoute(
               path: AppRoutes.drive.path,
               name: AppRoutes.drive.name,
+              pageBuilder: (context, state) {
+                return NoTransitionPage(
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider(create: (context) {
+                        return getIt<HomeBloc>()
+                          ..add(HomeInitializeEvent(
+                            numberOfAyaPerPage: kNumAyaPerPage,
+                          ));
+                      }),
+                    ],
+                    child: const DriveScreen(
+                      index: SurahIndex.fromHuman(
+                        sura: 1,
+                        aya: 1,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            GoRoute(
+              path: AppRoutes.driveSura.path,
+              name: AppRoutes.driveSura.name,
+              pageBuilder: (context, state) {
+                int sura = int.tryParse(state.pathParameters['sura'] ?? '1') ?? 1;
+                if (sura < 1 || sura > 114) {
+                  sura = 1;
+                }
+                return NoTransitionPage(
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider(create: (context) {
+                        return getIt<HomeBloc>()
+                          ..add(HomeInitializeEvent(
+                            numberOfAyaPerPage: kNumAyaPerPage,
+                          ));
+                      }),
+                    ],
+                    child: DriveScreen(
+                      index: SurahIndex.fromHuman(
+                        sura: sura,
+                        aya: 1,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            GoRoute(
+              path: AppRoutes.driveSuraAya.path,
+              name: AppRoutes.driveSuraAya.name,
               pageBuilder: (context, state) {
                 int sura =
                     int.tryParse(state.pathParameters['sura'] ?? '1') ?? 1;
@@ -65,13 +123,26 @@ class AppRouter {
                   aya = 1;
                 }
                 return NoTransitionPage(
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider(create: (context) {
+                        return getIt<HomeBloc>()
+                          ..add(HomeInitializeEvent(
+                            numberOfAyaPerPage: kNumAyaPerPage,
+                          ));
+                      }),
+                    ],
                     child: DriveScreen(
-                        index: SurahIndex.fromHuman(
-                  sura: sura,
-                  aya: aya,
-                )));
+                      index: SurahIndex.fromHuman(
+                        sura: sura,
+                        aya: aya,
+                      ),
+                    ),
+                  ),
+                );
               },
             ),
+
           ]),
       GoRoute(
           path: AppRoutes.homeSura.path,

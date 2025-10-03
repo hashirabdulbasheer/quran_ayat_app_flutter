@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:ayat_app/src/data/models/local/data_local_models.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
+import 'package:http/http.dart' as http;
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_html/html.dart' as html;
@@ -32,13 +33,29 @@ class _DriveScreenState extends State<DriveScreen> {
     _currentIndex = widget.index;
     _reciter = NobleQuran.getAllReciters()
         .firstWhere((r) => r.name.startsWith("MultiLanguage/Basfar Walk"));
-    _play();
   }
 
   @override
   Widget build(BuildContext context) {
     return QBaseScreen(
         title: "Drive Mode",
+        navBarActions: [
+          IconButton(
+            tooltip: "Bookmark this verse",
+            onPressed: onBookmarked,
+            icon: isBookmarked
+                ? Icon(
+                    Icons.bookmark,
+                    size: 24,
+                    color: Theme.of(context).primaryColor,
+                  )
+                : Icon(
+                    Icons.bookmark_border_outlined,
+                    size: 24,
+                    color: Theme.of(context).disabledColor,
+                  ),
+          )
+        ],
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 30),
           child: Column(
@@ -62,12 +79,35 @@ class _DriveScreenState extends State<DriveScreen> {
     super.dispose();
   }
 
-  Widget get _titleWidget => Text(
-        "${_currentIndex.human.sura}:${_currentIndex.human.aya}",
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
+  Widget get _titleWidget => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            _surahName(context),
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Row(
+            children: [
+              if (_player.playing) ...[
+                const SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(),
+                ),
+              ],
+              Text(
+                "${_currentIndex.human.sura}:${_currentIndex.human.aya}",
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ].spacerDirectional(width: 8),
+          ),
+        ],
       );
 
   Widget get _playAgainWidget => Row(
@@ -77,14 +117,8 @@ class _DriveScreenState extends State<DriveScreen> {
               child: ElevatedButton(
             onPressed: () => _player.playing ? _stop() : _play(),
             child: _player.playing
-                ? const SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ))
-                : Text(
-                    "Play ${_currentIndex.human.sura}:${_currentIndex.human.aya}"),
+                ? const Text("Stop", style: TextStyle(fontSize: 20))
+                : const Text("Play", style: TextStyle(fontSize: 20)),
           )),
         ],
       );
@@ -97,22 +131,47 @@ class _DriveScreenState extends State<DriveScreen> {
             Expanded(
                 child: ElevatedButton(
               onPressed: () => _previous(),
-              child: const Text("Previous"),
+              child: const Text("Previous", style: TextStyle(fontSize: 20)),
             )),
             Expanded(
                 child: ElevatedButton(
               onPressed: () => _next(),
-              child: const Text("Next"),
+              child: const Text("Next", style: TextStyle(fontSize: 20)),
             )),
           ].spacerDirectional(width: 10),
         ),
       );
 
+  /// Bookmark
+  ///
+  void onBookmarked() {
+    context.read<HomeBloc>().add(
+          AddBookmarkEvent(index: _currentIndex),
+        );
+    setState(() {});
+    _showMessage(context, "Bookmark saved");
+  }
+
+  bool get isBookmarked => _isBookmarked(
+        _currentIndex,
+        (context.read<HomeBloc>().state as HomeLoadedState).bookmarkIndex,
+      );
+
+  bool _isBookmarked(SurahIndex current, SurahIndex? bookmark) {
+    return current == bookmark;
+  }
+
+  void _showMessage(BuildContext context, String message) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   /// Utils
   ///
-  Future<void> _play() async {
+  Future<bool> _play() async {
     try {
-      if (_player.playing) return;
+      if (_player.playing) return false;
 
       final audioUrl = NobleQuran.audioRecitationUrl(
         _reciter,
@@ -121,14 +180,15 @@ class _DriveScreenState extends State<DriveScreen> {
       );
 
       final bytes = await _audioBytes(_currentIndex, audioUrl);
-      await _player.setAudioSource(MyCustomSource(bytes!.toList()));
-      await _player.play();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+      if (bytes != null && bytes.isNotEmpty) {
+        await _player.setAudioSource(MyCustomSource(bytes.toList()));
+        await _player.play();
+        return true;
       }
+    } catch (e) {
+      _showMessage(context, "Error playing audio. Tap Play to try again.");
     }
+    return false;
   }
 
   Future<void> _stop() async {
@@ -220,33 +280,50 @@ class _DriveScreenState extends State<DriveScreen> {
     return null;
   }
 
+  String _surahName(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
+    final state = (bloc.state as HomeLoadedState);
+    final title = state.suraTitles?[_currentIndex.sura];
+    if (title == null) return "";
+    return "${title.transliterationEn} / ${title.translationEn}";
+  }
+
   /// Cache
 
   Future<Uint8List?> getCachedAudio(SurahIndex index) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String key = "audio_${index.human.sura}_${index.human.aya}";
+      String key = "audio_${index.human.sura}_${index.human.aya}";
 
-    if (!prefs.containsKey(key)) {
-      return null;
+      if (!prefs.containsKey(key)) {
+        return null;
+      }
+
+      String? base64String = prefs.getString(key);
+      if (base64String == null) {
+        return null;
+      }
+
+      return base64.decode(base64String);
+    } catch (e) {
+      print('Error getting audio from cache: $e');
     }
-
-    String? base64String = prefs.getString(key);
-    if (base64String == null) {
-      return null;
-    }
-
-    return base64.decode(base64String);
+    return null;
   }
 
   Future<void> saveAudioToCache(SurahIndex index, Uint8List bytes) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String key = "audio_${index.human.sura}_${index.human.aya}";
+      String key = "audio_${index.human.sura}_${index.human.aya}";
 
-    String s = base64.encode(bytes);
+      String s = base64.encode(bytes);
 
-    await prefs.setString(key, s);
+      await prefs.setString(key, s);
+    } catch (e) {
+      print('Error saving audio to cache: $e');
+    }
   }
 }
 

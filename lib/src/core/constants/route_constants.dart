@@ -55,8 +55,18 @@ class AppRoutes {
     path: 'about',
   );
 
-  static const AppRoute drive = AppRoute(
-    name: 'drive',
+  static const AppRoute driveSuraAya = AppRoute(
+    name: 'driveSuraAya',
     path: '/drive/:sura/:aya',
   );
+
+  static const AppRoute driveSura = AppRoute(
+    name: 'driveSura',
+    path: '/:sura',
+  );
+  static const AppRoute drive = AppRoute(
+    name: 'drive',
+    path: '/',
+  );
+
 }
