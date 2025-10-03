@@ -21,6 +21,7 @@ class DriveScreen extends StatefulWidget {
 
 class _DriveScreenState extends State<DriveScreen> {
   late SurahIndex _currentIndex;
+  late HomeBloc _bloc;
   late QuranReciter _reciter;
   final _player = AudioPlayer();
 
@@ -28,6 +29,7 @@ class _DriveScreenState extends State<DriveScreen> {
   void initState() {
     super.initState();
     WakelockPlus.enable();
+    _bloc = context.read<HomeBloc>();
     _player.playerStateStream.listen(_audioStateChanged);
     _currentIndex = widget.index;
     _reciter = NobleQuran.getAllReciters()
@@ -82,7 +84,7 @@ class _DriveScreenState extends State<DriveScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            _surahName(context),
+            _surahName,
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -129,12 +131,12 @@ class _DriveScreenState extends State<DriveScreen> {
           children: [
             Expanded(
                 child: ElevatedButton(
-              onPressed: () => _previous(),
+              onPressed: _previous,
               child: const Text("Previous", style: TextStyle(fontSize: 20)),
             )),
             Expanded(
                 child: ElevatedButton(
-              onPressed: () => _next(),
+              onPressed: _next,
               child: const Text("Next", style: TextStyle(fontSize: 20)),
             )),
           ].spacerDirectional(width: 10),
@@ -144,23 +146,21 @@ class _DriveScreenState extends State<DriveScreen> {
   /// Bookmark
   ///
   void onBookmarked() {
-    context.read<HomeBloc>().add(
-          AddBookmarkEvent(index: _currentIndex),
-        );
+    _bloc.add(AddBookmarkEvent(index: _currentIndex));
+    _showMessage("Bookmark saved");
     setState(() {});
-    _showMessage(context, "Bookmark saved");
   }
 
   bool get isBookmarked => _isBookmarked(
         _currentIndex,
-        (context.read<HomeBloc>().state as HomeLoadedState).bookmarkIndex,
+        (_bloc.state as HomeLoadedState).bookmarkIndex,
       );
 
   bool _isBookmarked(SurahIndex current, SurahIndex? bookmark) {
     return current == bookmark;
   }
 
-  void _showMessage(BuildContext context, String message) {
+  void _showMessage(String message) {
     if (!context.mounted) return;
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
@@ -185,7 +185,7 @@ class _DriveScreenState extends State<DriveScreen> {
         return true;
       }
     } catch (e) {
-      _showMessage(context, "Error playing audio. Tap Play to try again.");
+      _showMessage("Error playing audio. Tap Play to try again.");
     }
     return false;
   }
@@ -194,20 +194,54 @@ class _DriveScreenState extends State<DriveScreen> {
     await _player.stop();
   }
 
-  Future<void> _next() async {
+  void _next() {
     if (_player.playing) return;
+
+    if (_bloc.state is! HomeLoadedState) return;
+
+    final state = _bloc.state as HomeLoadedState;
+    final surahTitle = state.suraTitles?[_currentIndex.sura];
+    if (surahTitle == null) return;
+
+    final nextIndex = _currentIndex.next(1);
+    if (nextIndex.aya >= surahTitle.totalVerses) {
+      _showMessage("End of chapter reached");
+      return;
+    }
+    ;
+
     setState(() {
-      _currentIndex = _currentIndex.next(1);
+      _currentIndex = nextIndex;
     });
-    await _play();
+
+    _play();
+
+    _bloc.add(HomeSelectSuraAyaEvent(index: _currentIndex));
   }
 
-  Future<void> _previous() async {
+  void _previous() {
     if (_player.playing) return;
+
+    if (_bloc.state is! HomeLoadedState) return;
+
+    final state = _bloc.state as HomeLoadedState;
+    final surahTitle = state.suraTitles?[_currentIndex.sura];
+    if (surahTitle == null) return;
+
+    final previousIndex = _currentIndex.previous(1);
+    if (previousIndex.aya < 0) {
+      _showMessage("You are on the first verse. No more back.");
+      return;
+    }
+    ;
+
     setState(() {
-      _currentIndex = _currentIndex.previous(1);
+      _currentIndex = previousIndex;
     });
-    await _play();
+
+    _play();
+
+    _bloc.add(HomeSelectSuraAyaEvent(index: _currentIndex));
   }
 
   /// Called when the player state changes.
@@ -250,9 +284,12 @@ class _DriveScreenState extends State<DriveScreen> {
     return null;
   }
 
-  String _surahName(BuildContext context) {
-    final bloc = context.read<HomeBloc>();
-    final state = (bloc.state as HomeLoadedState);
+  String get _surahName {
+    if (_bloc.state is! HomeLoadedState) return "";
+
+    final state = (_bloc.state as HomeLoadedState);
+    if (state.suraTitles?.isEmpty == true) return "";
+
     final title = state.suraTitles?[_currentIndex.sura];
     if (title == null) return "";
     return "${title.transliterationEn} / ${title.translationEn}";

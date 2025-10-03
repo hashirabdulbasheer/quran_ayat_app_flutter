@@ -72,10 +72,7 @@ class AppRouter {
                   child: MultiBlocProvider(
                     providers: [
                       BlocProvider(create: (context) {
-                        return getIt<HomeBloc>()
-                          ..add(HomeInitializeEvent(
-                            numberOfAyaPerPage: kNumAyaPerPage,
-                          ));
+                        return getIt<HomeBloc>();
                       }),
                     ],
                     child: DriveScreen(
