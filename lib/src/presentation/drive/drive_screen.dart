@@ -238,9 +238,7 @@ class _DriveScreenState extends State<DriveScreen> {
         Uint8List bytes = response.bodyBytes;
         await _audioCacheService.saveAudioToCache(index, bytes);
       }
-    } catch (_) {
-      _showMessage("Error playing audio. Try again.");
-    }
+    } catch (_) {}
 
     return;
   }
