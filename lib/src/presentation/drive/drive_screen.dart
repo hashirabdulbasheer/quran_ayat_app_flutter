@@ -1,11 +1,9 @@
-import 'dart:convert';
-
-import 'package:ayat_app/src/data/models/local/data_local_models.dart';
+import 'package:ayat_app/src/presentation/drive/audio_cache_service.dart';
 import 'package:ayat_app/src/presentation/home/home.dart';
 import 'package:http/http.dart' as http;
-import 'package:just_audio/just_audio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+
+import 'audio_service.dart';
 
 class DriveScreen extends StatefulWidget {
   final SurahIndex index;
@@ -22,18 +20,17 @@ class DriveScreen extends StatefulWidget {
 class _DriveScreenState extends State<DriveScreen> {
   late SurahIndex _currentIndex;
   late HomeBloc _bloc;
-  late QuranReciter _reciter;
-  final _player = AudioPlayer();
+  late AudioService _audioService;
+  late AudioCacheService _audioCacheService;
 
   @override
   void initState() {
     super.initState();
     WakelockPlus.enable();
+    _audioService = AudioService(onAudioStatusChanged: _onAudioStatusChanged);
+    _audioCacheService = AudioCacheService();
     _bloc = context.read<HomeBloc>();
-    _player.playerStateStream.listen(_audioStateChanged);
     _currentIndex = widget.index;
-    _reciter = NobleQuran.getAllReciters()
-        .firstWhere((r) => r.name.startsWith("MultiLanguage/Basfar Walk"));
   }
 
   @override
@@ -43,8 +40,8 @@ class _DriveScreenState extends State<DriveScreen> {
         navBarActions: [
           IconButton(
             tooltip: "Bookmark this verse",
-            onPressed: onBookmarked,
-            icon: isBookmarked
+            onPressed: () => onBookmarked(_currentIndex),
+            icon: isBookmarked(_currentIndex)
                 ? Icon(
                     Icons.bookmark,
                     size: 24,
@@ -76,7 +73,7 @@ class _DriveScreenState extends State<DriveScreen> {
   @override
   void dispose() {
     WakelockPlus.disable();
-    _player.dispose();
+    _audioService.dispose();
     super.dispose();
   }
 
@@ -84,7 +81,7 @@ class _DriveScreenState extends State<DriveScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            _surahName,
+            _getSurahName(_currentIndex),
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -92,7 +89,7 @@ class _DriveScreenState extends State<DriveScreen> {
           ),
           Row(
             children: [
-              if (_player.playing) ...[
+              if (_audioService.isPlaying) ...[
                 const SizedBox(
                   width: 14,
                   height: 14,
@@ -100,7 +97,7 @@ class _DriveScreenState extends State<DriveScreen> {
                 ),
               ],
               Text(
-                "${_currentIndex.human.sura}:${_currentIndex.human.aya}",
+                _getIndexString(_currentIndex),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -116,8 +113,10 @@ class _DriveScreenState extends State<DriveScreen> {
         children: [
           Expanded(
               child: ElevatedButton(
-            onPressed: () => _player.playing ? _stop() : _play(),
-            child: _player.playing
+            onPressed: () => _audioService.isPlaying
+                ? _audioService.stop()
+                : _playVerse(_currentIndex),
+            child: _audioService.isPlaying
                 ? const Text("Stop", style: TextStyle(fontSize: 20))
                 : const Text("Play", style: TextStyle(fontSize: 20)),
           )),
@@ -131,28 +130,34 @@ class _DriveScreenState extends State<DriveScreen> {
           children: [
             Expanded(
                 child: ElevatedButton(
-              onPressed: _previous,
+              onPressed: _gotToPreviousVerse,
               child: const Text("Previous", style: TextStyle(fontSize: 20)),
             )),
             Expanded(
                 child: ElevatedButton(
-              onPressed: _next,
+              onPressed: _goToNextVerse,
               child: const Text("Next", style: TextStyle(fontSize: 20)),
             )),
           ].spacerDirectional(width: 10),
         ),
       );
 
+  void _onAudioStatusChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   /// Bookmark
   ///
-  void onBookmarked() {
-    _bloc.add(AddBookmarkEvent(index: _currentIndex));
+  void onBookmarked(SurahIndex index) {
+    _bloc.add(AddBookmarkEvent(index: index));
     _showMessage("Bookmark saved");
     setState(() {});
   }
 
-  bool get isBookmarked => _isBookmarked(
-        _currentIndex,
+  bool isBookmarked(SurahIndex index) => _isBookmarked(
+        index,
         (_bloc.state as HomeLoadedState).bookmarkIndex,
       );
 
@@ -168,34 +173,9 @@ class _DriveScreenState extends State<DriveScreen> {
 
   /// Utils
   ///
-  Future<bool> _play() async {
-    try {
-      if (_player.playing) return false;
 
-      final audioUrl = NobleQuran.audioRecitationUrl(
-        _reciter,
-        _currentIndex.human.sura,
-        _currentIndex.human.aya,
-      );
-
-      final bytes = await _audioBytes(_currentIndex, audioUrl);
-      if (bytes != null && bytes.isNotEmpty) {
-        await _player.setAudioSource(MyCustomSource(bytes.toList()));
-        await _player.play();
-        return true;
-      }
-    } catch (e) {
-      _showMessage("Error playing audio. Tap Play to try again.");
-    }
-    return false;
-  }
-
-  Future<void> _stop() async {
-    await _player.stop();
-  }
-
-  void _next() {
-    if (_player.playing) return;
+  void _goToNextVerse() {
+    if (_audioService.isPlaying) return;
 
     if (_bloc.state is! HomeLoadedState) return;
 
@@ -208,147 +188,80 @@ class _DriveScreenState extends State<DriveScreen> {
       _showMessage("End of chapter reached");
       return;
     }
-    ;
 
     setState(() {
       _currentIndex = nextIndex;
     });
 
-    _play();
+    _playVerse(_currentIndex);
 
     _bloc.add(HomeSelectSuraAyaEvent(index: _currentIndex));
   }
 
-  void _previous() {
-    if (_player.playing) return;
-
+  void _gotToPreviousVerse() {
+    if (_audioService.isPlaying) return;
     if (_bloc.state is! HomeLoadedState) return;
-
-    final state = _bloc.state as HomeLoadedState;
-    final surahTitle = state.suraTitles?[_currentIndex.sura];
-    if (surahTitle == null) return;
 
     final previousIndex = _currentIndex.previous(1);
     if (previousIndex.aya < 0) {
       _showMessage("You are on the first verse. No more back.");
       return;
     }
-    ;
 
     setState(() {
       _currentIndex = previousIndex;
     });
 
-    _play();
+    _playVerse(_currentIndex);
 
     _bloc.add(HomeSelectSuraAyaEvent(index: _currentIndex));
   }
 
-  /// Called when the player state changes.
-  ///
-  /// When the player finishes playing an audio file,
-  /// this function is called to stop the player.
-  ///
-  /// [state] is the new player state.
-  ///
-  /// If the player has finished processing an audio file,
-  /// this function calls [_player.stop] to stop the player.
-  void _audioStateChanged(PlayerState state) {
-    if (mounted) {
-      setState(() {});
-      if (state.processingState == ProcessingState.completed) {
-        _player.stop();
-      }
-    }
-  }
-
-  /// Utils
-  Future<Uint8List?> _audioBytes(SurahIndex index, String audioUrl) async {
+  Future<void> _playVerse(SurahIndex index) async {
     try {
-      // Check if available in cache
-      final cachedAudio = await getCachedAudio(index);
-      if (cachedAudio != null) {
-        return cachedAudio;
+      // if there is audio in the cache then play it
+      final cachedAudio = await _audioCacheService.getCachedAudio(
+        index,
+      );
+      if (cachedAudio != null && cachedAudio.isNotEmpty) {
+        await _audioService.play(audioBytes: cachedAudio);
+        return;
       }
+
+      // if there is no audio in the cache play from url
+      final audioUrl = _audioService.getAudioUrl(index);
+      await _audioService.play(audioUrl: audioUrl);
 
       // Download audio from URL
       final response = await http.get(Uri.parse(audioUrl));
       if (response.statusCode == 200) {
         Uint8List bytes = response.bodyBytes;
-        await saveAudioToCache(index, bytes);
-        return bytes;
+        await _audioCacheService.saveAudioToCache(index, bytes);
       }
-    } catch (e) {
-      print('Error saving audio: $e');
+    } catch (_) {
+      _showMessage("Error playing audio. Try again.");
     }
-    return null;
+
+    return;
   }
 
-  String get _surahName {
+  String _getSurahName(SurahIndex index) {
     if (_bloc.state is! HomeLoadedState) return "";
 
-    final state = (_bloc.state as HomeLoadedState);
-    if (state.suraTitles?.isEmpty == true) return "";
+    final suraTitle = _getSurahTitle(index);
+    if (suraTitle == null) return "";
 
-    final title = state.suraTitles?[_currentIndex.sura];
-    if (title == null) return "";
-    return "${title.transliterationEn} / ${title.translationEn}";
+    return "${suraTitle.transliterationEn} / ${suraTitle.translationEn}";
   }
 
-  /// Cache
+  SuraTitle? _getSurahTitle(SurahIndex index) {
+    if (_bloc.state is! HomeLoadedState) return null;
 
-  Future<Uint8List?> getCachedAudio(SurahIndex index) async {
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      String key = "audio_${index.human.sura}_${index.human.aya}";
-
-      if (!prefs.containsKey(key)) {
-        return null;
-      }
-
-      String? base64String = prefs.getString(key);
-      if (base64String == null) {
-        return null;
-      }
-
-      return base64.decode(base64String);
-    } catch (e) {
-      print('Error getting audio from cache: $e');
-    }
-    return null;
+    final state = _bloc.state as HomeLoadedState;
+    return state.suraTitles?[index.sura];
   }
 
-  Future<void> saveAudioToCache(SurahIndex index, Uint8List bytes) async {
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      String key = "audio_${index.human.sura}_${index.human.aya}";
-
-      String s = base64.encode(bytes);
-
-      await prefs.setString(key, s);
-    } catch (e) {
-      print('Error saving audio to cache: $e');
-    }
-  }
-}
-
-class MyCustomSource extends StreamAudioSource {
-  final List<int> bytes;
-
-  MyCustomSource(this.bytes);
-
-  @override
-  Future<StreamAudioResponse> request([int? start, int? end]) async {
-    start ??= 0;
-    end ??= bytes.length;
-    return StreamAudioResponse(
-      sourceLength: bytes.length,
-      contentLength: end - start,
-      offset: start,
-      stream: Stream.value(bytes.sublist(start, end)),
-      contentType: 'audio/mpeg',
-    );
+  String _getIndexString(SurahIndex index) {
+    return "${index.human.sura}:${index.human.aya}";
   }
 }
