@@ -33,7 +33,6 @@ class AyaList extends StatelessWidget {
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: ScrollableListWidget(
-          key: UniqueKey(),
           initialIndex: (selectableAya - (ayaWords[0][0].aya - 1)).abs(),
           itemsCount: pageData.page.numberOfAya + 1,
           itemContent: (index) {
