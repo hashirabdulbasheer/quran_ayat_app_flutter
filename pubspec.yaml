@@ -12,11 +12,11 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   ## https://pub.dev/packages/go_router
-  go_router: ^14.2.7
+  go_router: ^17.0.1
   ## https://pub.dev/packages/flutter_bloc
-  flutter_bloc: ^8.1.6
+  flutter_bloc: ^9.1.1
   ## https://pub.dev/packages/equatable
-  equatable: ^2.0.5
+  equatable: ^2.0.7
   ## https://github.com/hashirabdulbasheer/noble_quran_flutter_package.git
   noble_quran:
     git:
@@ -27,39 +27,39 @@ dependencies:
   ## https://pub.dev/packages/dartz
   dartz: ^0.10.1
   ## https://pub.dev/packages/get_it
-  get_it: ^7.7.0
+  get_it: ^9.2.0
   ## https://pub.dev/packages/injectable
-  injectable: ^2.4.4
+  injectable: ^2.7.1+4
   ## https://pub.dev/packages/dropdown_search
-  dropdown_search: ^6.0.0
-  ## https://pub.dev/packages/dropdown_search
+  dropdown_search: ^6.0.2
+  ## https://pub.dev/packages/rxdart
   rxdart: ^0.28.0
   ## https://pub.dev/packages/shared_preferences
-  shared_preferences: ^2.5.3
+  shared_preferences: ^2.5.4
   ## https://pub.dev/packages/scrollable_positioned_list
   scrollable_positioned_list: ^0.3.8
   ## https://pub.dev/packages/url_launcher
-  url_launcher: ^6.3.0
+  url_launcher: ^6.3.2
   ## https://pub.dev/packages/shimmer
   shimmer: ^3.0.0
   ## https://pub.dev/packages/flex_color_scheme
-  flex_color_scheme: ^7.3.1
+  flex_color_scheme: ^8.4.0
   ## https://pub.dev/packages/screenshot
   screenshot: ^3.0.0
   ## https://pub.dev/packages/file_saver
-  file_saver: ^0.2.14
+  file_saver: ^0.3.1
   ## https://pub.dev/packages/share_plus
-  share_plus: ^10.1.2
+  share_plus: ^12.0.1
   ## https://pub.dev/packages/app_links
-  app_links: ^6.3.3
+  app_links: ^7.0.0
   ## https://pub.dev/packages/vibration
-  vibration: ^3.1.3
+  vibration: ^3.1.5
   ## https://pub.dev/packages/http
-  http: ^1.3.0
+  http: ^1.6.0
   ## https://pub.dev/packages/carousel_slider
-  carousel_slider: ^5.0.0
+  carousel_slider: ^5.1.1
   ## https://pub.dev/packages/just_audio
-  just_audio: ^0.9.46
+  just_audio: ^0.10.5
   ## https://pub.dev/packages/wakelock_plus
   wakelock_plus: ^1.4.0
 
@@ -68,17 +68,17 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^4.0.0
   ## https://pub.dev/packages/mockito
-  mockito: ^5.4.4
+  mockito: ^5.6.1
   ## https://pub.dev/packages/build_runner
-  build_runner: ^2.4.12
+  build_runner: ^2.10.4
   ## https://pub.dev/packages/bloc_test
-  bloc_test: ^9.1.7
+  bloc_test: ^10.0.0
   ## https://pub.dev/packages/injectable_generator
-  injectable_generator: ^2.6.2
+  injectable_generator: ^2.9.1
   ## https://pub.dev/packages/golden_toolkit/
   golden_toolkit: ^0.15.0
   ## https://pub.dev/packages/hrk_flutter_test_batteries
-  hrk_flutter_test_batteries: ^1.1.0
+  hrk_flutter_test_batteries: ^1.2.0
 
 flutter:
   uses-material-design: true
