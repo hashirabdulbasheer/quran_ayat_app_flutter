@@ -28,12 +28,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ThemeMode>(
-        stream: context.read<AppBloc>().currentThemeMode$,
+        stream: context
+            .read<AppBloc>()
+            .currentThemeMode$,
         builder: (context, snapshot) {
           return MaterialApp.router(
             title: 'Quran',
-            theme: FlexThemeData.light(scheme: FlexScheme.green),
-            darkTheme: FlexThemeData.dark(scheme: FlexScheme.green),
+            theme: FlexThemeData.light(
+              scheme: FlexScheme.green, useMaterial3: false,),
+            darkTheme: FlexThemeData.dark(scheme: FlexScheme.green,
+              useMaterial3: false,),
             themeMode: snapshot.data ?? ThemeMode.light,
             debugShowCheckedModeBanner: false,
             routerConfig: AppRouter.router,
