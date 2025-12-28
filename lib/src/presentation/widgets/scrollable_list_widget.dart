@@ -5,7 +5,6 @@ import 'package:vibration/vibration.dart';
 class ScrollableListWidget extends StatefulWidget {
   final int itemsCount;
   final int? initialIndex;
-  final int pageNumber;
   final Widget Function(int) itemContent;
 
   const ScrollableListWidget({
@@ -13,7 +12,6 @@ class ScrollableListWidget extends StatefulWidget {
     this.initialIndex,
     required this.itemContent,
     required this.itemsCount,
-    required this.pageNumber,
   });
 
   @override
@@ -34,19 +32,6 @@ class _ListWidgetState extends State<ScrollableListWidget> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant ScrollableListWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.pageNumber != widget.pageNumber) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_itemScrollController.isAttached) {
-          _itemScrollController.jumpTo(index: widget.initialIndex ?? 0);
-        }
-      });
-    }
   }
 
   @override
