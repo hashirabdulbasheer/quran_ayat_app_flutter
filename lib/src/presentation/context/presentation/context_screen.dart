@@ -21,7 +21,6 @@ class ContextScreen extends StatelessWidget {
         title: state.title.transliterationEn,
         child: SafeArea(
           child: ScrollableListWidget(
-              pageNumber: 0,
               initialIndex: state.index.aya,
               itemsCount: state.data.translations.length,
               itemContent: (index) => ListTile(
