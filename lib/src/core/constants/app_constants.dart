@@ -30,7 +30,9 @@ const kWhatsAppAminaAndYusufUrl = "https://whatsapp.com/channel/0029VbC5BSZLNSa0
 
 const kWhatsAppAIReflectionsUrl = "https://whatsapp.com/channel/0029Vb6auAK1iUxWqZ14fu3t";
 
-const kWhatsAppFridayUrl = "https://whatsapp.com/channel/0029Vb6auAK1iUxWqZ14fu3t";
+const kWhatsAppFridayUrl = "https://whatsapp.com/channel/0029Vb16OlTKmCPHZsHiGK1E";
+
+const kWhatsAppReadingUniverseUrl = "https://whatsapp.com/channel/0029Vb7CtT86hENxLZGtrg3X";
 
 const kAndroidApk = "https://github.com/hashirabdulbasheer/quran_ayat_app_flutter/raw/refs/heads/develop/releases/noble-quran.apk";
 

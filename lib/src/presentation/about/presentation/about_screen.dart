@@ -145,6 +145,10 @@ class _LinksDisplay extends StatelessWidget {
           onTapped: () => launchUrl(Uri.parse(kWhatsAppFridayUrl)),
           title: "Friday Sermon translation in English",
         ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kWhatsAppReadingUniverseUrl)),
+          title: "Reading universe like a book",
+        ),
         const SizedBox(
           height: 10,
         ),
