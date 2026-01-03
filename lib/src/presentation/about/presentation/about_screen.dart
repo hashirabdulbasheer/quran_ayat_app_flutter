@@ -134,14 +134,18 @@ class _LinksDisplay extends StatelessWidget {
           title: "Daily verses",
         ),
         _LinkButton(
-          onTapped: () => launchUrl(Uri.parse(kWhatsAppAIReflectionsUrl)),
+          onTapped: () => launchUrl(Uri.parse(kWhatsAppAminaAndYusufUrl)),
           title: "Amina and Yusuf fun reflections",
         ),
         _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kWhatsAppAIReflectionsUrl)),
           title: "AI Reflections",
         ),
-        SizedBox(
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kWhatsAppFridayUrl)),
+          title: "Friday Sermon translation in English",
+        ),
+        const SizedBox(
           height: 10,
         ),
         const Text("Other Links:"),
