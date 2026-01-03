@@ -128,14 +128,34 @@ class _LinksDisplay extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Other Links:"),
+        const Text("Whatsapp Channels:"),
         _LinkButton(
-          onTapped: () => launchUrl(Uri.parse(kWhatsAppUrl)),
-          title: "Whatsapp Channel",
+          onTapped: () => launchUrl(Uri.parse(kWhatsAppDailyVersesUrl)),
+          title: "Daily verses",
         ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kWhatsAppAIReflectionsUrl)),
+          title: "Amina and Yusuf fun reflections",
+        ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kWhatsAppAIReflectionsUrl)),
+          title: "AI Reflections",
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        const Text("Other Links:"),
+        // _LinkButton(
+        //   onTapped: () => launchUrl(Uri.parse(kWhatsAppUrl)),
+        //   title: "Whatsapp Channel",
+        // ),
         _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kBlogUrl)),
           title: "Blog",
+        ),
+        _LinkButton(
+          onTapped: () => launchUrl(Uri.parse(kTelegramChatbotUrl)),
+          title: "Telegram chatbot",
         ),
         _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kAndroidApk)),
@@ -152,10 +172,6 @@ class _LinksDisplay extends StatelessWidget {
         _LinkButton(
           onTapped: () => launchUrl(Uri.parse(kApplePodcastsUrl)),
           title: "Apple Podcasts",
-        ),
-        _LinkButton(
-          onTapped: () => launchUrl(Uri.parse(kTelegramChatbotUrl)),
-          title: "Telegram chatbot",
         ),
         const SizedBox(
           height: 30,
